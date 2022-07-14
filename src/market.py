@@ -1,11 +1,11 @@
 from dataclasses import dataclass
-from typing import Optional, List, Union
+from typing import Dict, Optional, List, Union
 
 from pymanifold import ManifoldClient, Market as APIMarket
 
 
 class Rule:
-    def value(self, market: 'Market'):
+    def value(self, market: 'Market') -> Optional[Union[int, Dict[int, float]]]:
         ...
 
 
@@ -35,7 +35,18 @@ class Market:
             rule.value(self) for rule in (self.do_resolve_rules or ())
         ) and not self.market.isResolved
 
-    def resolve_to(self) -> Union[bool, int, str]:
+    def resolve_to(self) -> Union[int, float, str]:
+        """Selects a value to be resolved to
+
+        This is done by iterating through a series of Rules, each of which have
+        opportunity to recommend a value. The first resolved value is resolved to.
+
+        Binary markets must return a float between 0 and 100.
+        Numeric markets must return a float in its correct range.
+        Free response markets must resolve to either a single index integer or
+         a mapping of indices to weights.
+        Any rule may return "CANCEL" to instead refund all orders.
+        """
         chosen = None
         for rule in (self.resolve_to_rules or ()):
             if (chosen := rule.value(self)) is not None:
@@ -47,4 +58,11 @@ class Market:
         return max(self.market.answers, key=lambda x: x['probability'])
 
     def resolve(self):
-        raise NotImplementedError("TODO: PyManifold does not have an implementation yet")
+        """Resolves this market according to our resolution rules
+
+        Returns
+        -------
+        Response
+            How Manifold interprets our request, and some JSON data on it
+        """
+        return self.client.resolve_market(self.market, self.resolve_to())
