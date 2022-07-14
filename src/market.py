@@ -3,10 +3,7 @@ from typing import Dict, Optional, List, Union
 
 from pymanifold import ManifoldClient, Market as APIMarket
 
-
-class Rule:
-    def value(self, market: 'Market') -> Optional[Union[int, Dict[int, float]]]:
-        ...
+from .rule import Rule
 
 
 @dataclass

@@ -1,0 +1,80 @@
+import random
+
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import cast, Any, Dict, Optional, Sequence, Union
+
+
+class Rule:
+    def value(self, market: 'Market') -> Optional[Union[int, float, str, Dict[int, float]]]:
+        raise NotImplementedError()
+
+
+class DoResolveRule(Rule):
+    def value(self, market) -> bool:
+        raise NotImplementedError()
+
+
+@dataclass
+class NegateRule(DoResolveRule):
+    child: DoResolveRule
+
+    def value(self, market) -> bool:
+        return not self.child.value(market)
+
+
+@dataclass
+class EitherRule(DoResolveRule):
+    rule1: DoResolveRule
+    rule2: DoResolveRule
+
+    def value(self, market) -> bool:
+        return self.rule1.value(market) or self.rule2.value(market)
+
+
+@dataclass
+class BothRule(DoResolveRule):
+    rule1: DoResolveRule
+    rule2: DoResolveRule
+
+    def value(self, market) -> bool:
+        return self.rule1.value(market) and self.rule2.value(market)
+
+
+@dataclass
+class ResolveAtTime(DoResolveRule):
+    resolve_at: datetime
+
+    def value(self, market) -> bool:
+        try:
+            return datetime.utcnow() >= self.resolve_at
+        except TypeError:
+            return datetime.now() >= self.resolve_at
+
+
+class ResolutionValueRule(Rule):
+    ...
+
+
+@dataclass
+class ResolveRandomSeed(ResolutionValueRule):
+    seed: Any
+    method: str = 'random'
+    rounds: int = 1
+    args: Sequence[Any] = ()
+    kwargs: Dict[str, Any] = field(default_factory=dict)
+
+    def value(self, market) -> float:
+        source = random.Random(self.seed)
+        method = getattr(source, self.method)
+        for _ in range(self.rounds):
+            ret = method(*self.args, **self.kwargs)
+        return ret
+
+
+class ResolveRandomIndex(ResolveRandomSeed):
+    def __init__(self, seed, size, rounds=1):
+        super().__init__(seed, 'randrange', rounds, (0, size))
+
+    def value(self, market) -> int:
+        return cast(int, super().value(market))
