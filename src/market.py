@@ -3,15 +3,15 @@ from typing import Dict, Optional, List, Union
 
 from pymanifold import ManifoldClient, Market as APIMarket
 
-from .rule import Rule
+from .rule import DoResolveRule, ResolutionValueRule
 
 
 @dataclass
 class Market:
     client: ManifoldClient
     market: APIMarket
-    do_resolve_rules: Optional[List[Rule]] = None
-    resolve_to_rules: Optional[List[Rule]] = None
+    do_resolve_rules: Optional[List[DoResolveRule]] = None
+    resolve_to_rules: Optional[List[ResolutionValueRule]] = None
 
     @property
     def id(self):
