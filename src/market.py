@@ -35,7 +35,7 @@ class Market:
             rule.value(self) for rule in (self.do_resolve_rules or ())
         ) and not self.market.isResolved
 
-    def resolve_to(self) -> Union[int, float, str]:
+    def resolve_to(self) -> Union[int, float, Dict[int, float], str]:
         """Selects a value to be resolved to
 
         This is done by iterating through a series of Rules, each of which have
