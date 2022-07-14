@@ -1,0 +1,3 @@
+[submodule "PyManifold"]
+	path = src/PyManifold
+	url = https://github.com/bcongdon/PyManifold
