@@ -1,9 +1,15 @@
 from dataclasses import dataclass
+from os import getenv
 from typing import Dict, Optional, List, Union
 
-from pymanifold import ManifoldClient, Market as APIMarket
+from pymanifold import ManifoldClient
+from pymanifold.types import Market as APIMarket
 
 from .rule import DoResolveRule, ResolutionValueRule
+
+
+def get_client() -> ManifoldClient:
+    return ManifoldClient(getenv("ManifoldAPIKey"))
 
 
 @dataclass

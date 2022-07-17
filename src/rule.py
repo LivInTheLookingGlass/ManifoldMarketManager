@@ -7,6 +7,7 @@ from typing import cast, Any, Dict, Optional, Sequence, Union
 
 import requests
 
+
 class Rule:
     def value(self, market: 'Market') -> Optional[Union[int, float, str, Dict[int, float]]]:
         raise NotImplementedError()
@@ -68,7 +69,7 @@ class ResolveWithPR(DoResolveRule):
     def value(self, market) -> bool:
         response = requests.get(
             url=f"https://api.github.com/repos/{self.owner}/{self.repo}/issues/{self.number}",
-            headers={"Accept": "application/vnd.github+json", "Authorization": getenv('GitHubToken')}
+            headers={"Accept": "application/vnd.github+json", "Authorization": getenv('GithubAPIKey')}
         )
         json = response.json()
         return "pull_request" in json and json["pull_request"].get("merged_at") is not None
