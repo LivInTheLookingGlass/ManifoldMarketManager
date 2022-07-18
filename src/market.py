@@ -50,7 +50,7 @@ class Market(DictDeserializable):
         ) and not self.market.isResolved
 
     def resolve_to(self) -> Union[int, float, Dict[int, float], str]:
-        """Selects a value to be resolved to
+        """Select a value to be resolved to.
 
         This is done by iterating through a series of Rules, each of which have
         opportunity to recommend a value. The first resolved value is resolved to.
@@ -72,7 +72,7 @@ class Market(DictDeserializable):
         return max(self.market.answers, key=lambda x: x['probability'])
 
     def resolve(self):
-        """Resolves this market according to our resolution rules
+        """Resolves this market according to our resolution rules.
 
         Returns
         -------
