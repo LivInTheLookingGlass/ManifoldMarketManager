@@ -1,21 +1,23 @@
 from dataclasses import dataclass, field
+from functools import lru_cache
 from os import getenv
 from typing import Dict, Optional, List, Union
 
 from pymanifold import ManifoldClient
-from pymanifold.types import Market as APIMarket
+from pymanifold.types import DictDeserializable, Market as APIMarket
 
 from .rule import DoResolveRule, ResolutionValueRule
 
 
+@lru_cache
 def get_client() -> ManifoldClient:
     return ManifoldClient(getenv("ManifoldAPIKey"))
 
 
 @dataclass
-class Market:
-    client: ManifoldClient
+class Market(DictDeserializable):
     market: APIMarket
+    client: ManifoldClient = field(default_factory=get_client)
     notes: str = field(default='')
     do_resolve_rules: List[DoResolveRule] = field(default_factory=list)
     resolve_to_rules: List[ResolutionValueRule] = field(default_factory=list)
@@ -25,14 +27,14 @@ class Market:
         return self.market.id
 
     @classmethod
-    def from_slug(cls, slug: str, client: ManifoldClient, *args, **kwargs):
-        api_market = client.get_market_by_slug(slug)
-        return cls(client, api_market, *args, **kwargs)
+    def from_slug(cls, slug: str, *args, **kwargs):
+        api_market = get_client().get_market_by_slug(slug)
+        return cls(api_market, *args, **kwargs)
 
     @classmethod
-    def from_id(cls, id: str, client: ManifoldClient, *args, **kwargs):
-        api_market = client.get_market_by_id(id)
-        return cls(client, api_market, *args, **kwargs)
+    def from_id(cls, id: str, *args, **kwargs):
+        api_market = get_client().get_market_by_id(id)
+        return cls(api_market, *args, **kwargs)
 
     def should_resolve(self) -> bool:
         return any(
