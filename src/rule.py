@@ -7,8 +7,10 @@ from typing import cast, Any, Dict, Optional, Sequence, Union
 
 import requests
 
+from pymanifold.types import DictDeserializable
 
-class Rule:
+
+class Rule(DictDeserializable):
     def value(self, market: 'Market') -> Optional[Union[int, float, str, Dict[int, float]]]:
         raise NotImplementedError()
 

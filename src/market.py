@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from functools import lru_cache
 from os import getenv
-from typing import Dict, Optional, List, Union
+from typing import Any, Dict, List, Union
 
 from pymanifold import ManifoldClient
 from pymanifold.types import DictDeserializable, Market as APIMarket
@@ -21,6 +21,14 @@ class Market(DictDeserializable):
     notes: str = field(default='')
     do_resolve_rules: List[DoResolveRule] = field(default_factory=list)
     resolve_to_rules: List[ResolutionValueRule] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "market": self.market,
+            "notes": self.notes,
+            "do_resolve_rules": self.do_resolve_rules,
+            "resolve_to_rules": self.resolve_to_rules,
+        }
 
     @property
     def id(self):
