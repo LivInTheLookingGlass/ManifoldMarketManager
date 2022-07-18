@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from os import getenv
 from typing import Dict, Optional, List, Union
 
@@ -16,8 +16,9 @@ def get_client() -> ManifoldClient:
 class Market:
     client: ManifoldClient
     market: APIMarket
-    do_resolve_rules: Optional[List[DoResolveRule]] = None
-    resolve_to_rules: Optional[List[ResolutionValueRule]] = None
+    notes: str = field(default='')
+    do_resolve_rules: List[DoResolveRule] = field(default_factory=list)
+    resolve_to_rules: List[ResolutionValueRule] = field(default_factory=list)
 
     @property
     def id(self):
