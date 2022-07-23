@@ -1,18 +1,11 @@
 from argparse import ArgumentParser
 from datetime import datetime, timedelta
 from pathlib import Path
-from pickle import dumps, loads
 from os import getenv
-from sqlite3 import connect, register_adapter, register_converter, PARSE_COLNAMES, PARSE_DECLTYPES
-from sys import exit
+from sqlite3 import connect, PARSE_COLNAMES, PARSE_DECLTYPES
 from typing import cast, Tuple
 
 from src import (market, rule)
-
-register_adapter(rule.Rule, dumps)
-register_converter("Rule", loads)
-register_adapter(market.Market, dumps)
-register_converter("Market", loads)
 
 
 def require_env(func):
