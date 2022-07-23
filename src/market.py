@@ -1,12 +1,20 @@
 from dataclasses import dataclass, field
+from enum import auto, Enum
 from functools import lru_cache
 from os import getenv
+from time import time
 from typing import Any, Dict, List, Union
 
 from pymanifold import ManifoldClient
 from pymanifold.types import DictDeserializable, Market as APIMarket
 
 from .rule import DoResolveRule, ResolutionValueRule
+
+
+class MarketStatus(Enum):
+    OPEN = auto()
+    CLOSED = auto()
+    RESOLVED = auto()
 
 
 @lru_cache
@@ -34,6 +42,14 @@ class Market(DictDeserializable):
     def id(self):
         return self.market.id
 
+    @property
+    def status(self) -> MarketStatus:
+        if self.market.isResolved:
+            return MarketStatus.RESOLVED
+        elif self.market.closeTime and self.market.closeTime < time() * 1000:
+            return MarketStatus.CLOSED
+        return MarketStatus.OPEN
+
     @classmethod
     def from_slug(cls, slug: str, *args, **kwargs):
         api_market = get_client().get_market_by_slug(slug)
@@ -49,7 +65,7 @@ class Market(DictDeserializable):
             rule.value(self) for rule in (self.do_resolve_rules or ())
         ) and not self.market.isResolved
 
-    def resolve_to(self) -> Union[int, float, Dict[int, float], str]:
+    def resolve_to(self) -> Union[int, float, str, Dict[int, float], Dict[str, Any]]:
         """Select a value to be resolved to.
 
         This is done by iterating through a series of Rules, each of which have
@@ -67,6 +83,9 @@ class Market(DictDeserializable):
                 break
         if chosen is not None:
             return chosen
+        return self.current_answer()
+
+    def current_answer(self) -> Union[int, float, Dict[str, Any]]:
         if self.market.probability is not None:
             return bool(round(self.market.probability))
         return max(self.market.answers, key=lambda x: x['probability'])
@@ -79,4 +98,7 @@ class Market(DictDeserializable):
         Response
             How Manifold interprets our request, and some JSON data on it
         """
-        return self.client.resolve_market(self.market, self.resolve_to())
+        ret = self.client.resolve_market(self.market, self.resolve_to())
+        if ret.status_code < 300:
+            self.market.isResolved = True
+        return ret

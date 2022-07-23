@@ -1,18 +1,12 @@
-from os import getenv
-import random
-
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import cast, Any, Dict, Optional, Sequence, Union
+from os import getenv
+from typing import cast, Any, Dict, Sequence
+import random
 
 import requests
 
-from pymanifold.types import DictDeserializable
-
-
-class Rule(DictDeserializable):
-    def value(self, market: 'Market') -> Optional[Union[int, float, str, Dict[int, float]]]:
-        raise NotImplementedError()
+from . import Rule
 
 
 class DoResolveRule(Rule):
