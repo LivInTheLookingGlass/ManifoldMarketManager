@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
 from enum import auto, Enum
 from functools import lru_cache
+from math import log10
 from os import getenv
 from time import time
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 from pymanifold import ManifoldClient
 from pymanifold.types import DictDeserializable, Market as APIMarket
@@ -29,6 +30,10 @@ class Market(DictDeserializable):
     notes: str = field(default='')
     do_resolve_rules: List[DoResolveRule] = field(default_factory=list)
     resolve_to_rules: List[ResolutionValueRule] = field(default_factory=list)
+    min: Optional[float] = None
+    max: Optional[float] = None
+    isLogScale: Optional[bool] = None
+
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -36,6 +41,9 @@ class Market(DictDeserializable):
             "notes": self.notes,
             "do_resolve_rules": self.do_resolve_rules,
             "resolve_to_rules": self.resolve_to_rules,
+            "min": self.min,
+            "max": self.max,
+            "isLogScale": self.isLogScale,
         }
 
     @property
@@ -86,9 +94,22 @@ class Market(DictDeserializable):
         return self.current_answer()
 
     def current_answer(self) -> Union[int, float, Dict[str, Any]]:
-        if self.market.probability is not None:
+        match self.market.outcomeType:
+            case "BINARY":
             return bool(round(self.market.probability))
+            case "PSEUDO_NUMERIC":
+                # import pdb; pdb.set_trace()
+                pno = self.market.p * self.market.pool['NO']
+                probability = (pno / ((1 - self.market.p) * self.market.pool['YES'] + pno))
+                if self.market.isLogScale:
+                    logValue = log10(self.max - self.min + 1) * probability
+                    return max(self.min, min(self.max, 10**logValue + self.min - 1))
+                else:
+                    return max(self.min, min(self.max, self.min + (self.max - self.min) * probability))
+            case "FREE_RESPONSE":
         return max(self.market.answers, key=lambda x: x['probability'])
+            case _:
+                raise NotImplementedError()
 
     def resolve(self):
         """Resolves this market according to our resolution rules.

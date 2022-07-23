@@ -138,5 +138,5 @@ class ResolveToPRDelta(ResolutionValueRule):
         )
         json = response.json()
         if "pull_request" not in json or json["pull_request"].get("merged_at") is None:
-            return float("inf")
+            return market.market.max
         return (self.start - datetime.fromisoformat(json["pull_request"].get("merged_at"))).days
