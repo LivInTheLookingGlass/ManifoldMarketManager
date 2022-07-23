@@ -43,23 +43,36 @@ def watch_reply(id_, mkt):
 
 
 @require_env
-def main():
+def main(refresh: bool = False):
     conn = register_db()
     mkt: market.Market
     for id_, mkt, check_rate, last_checked in conn.execute("SELECT * FROM markets"):
-        print(f"Currently checking ID {id_}: {mkt.market.question}", end=' ')
-        if not last_checked or (datetime.now() > last_checked + timedelta(hours=check_rate)):
-            print('...', end=' ')
-            if mkt.should_resolve():
-                print('...', end=' ')
+        print(f"Currently checking ID {id_}: {mkt.market.question}")
+        check = (refresh or not last_checked or (datetime.now() > last_checked + timedelta(hours=check_rate)))
+        print(f'  - [{"x" if check else " "}] Is elligible to resolve ...')
+        if check:
+            check = mkt.should_resolve()
+            print(f'  - [{"x" if check else " "}] Is elligible to resolve (to {mkt.resolve_to()})...')
+            if check:
                 watch_reply(id_, mkt)
+
+            if mkt.market.isResolved:
+                print("  - [x] Market resolved, removing from db ...", end='')
+                conn.execute(
+                    "DELETE FROM markets WHERE id = ?;",
+                    (id_, )
+                )
+                conn.commit()
 
         conn.execute(
             "UPDATE markets SET last_checked = ? WHERE id = ?;",
             (datetime.now(), id_)
         )
+        conn.execute(
+            "UPDATE markets SET market = ? WHERE id = ?;",
+            (mkt, id_)
+        )
         conn.commit()
-        print()
 
 
 if __name__ == '__main__':
@@ -67,44 +80,76 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--add-slug', action='store', dest='slug')
     parser.add_argument('-i', '--add-id', action='store', dest='id_')
     parser.add_argument('-u', '--add-url', action='store', dest='url')
-    parser.add_argument('-c', '--check-rate', action='store', dest='rate')
-    parser.add_argument('-pr', '--pull-request', action='store', dest='pr_slug', help='Please give as "owner-repo-num"')
-    parser.add_argument('-rd', '--rel-date', action='store', dest='pr_date', help='Please give as "YEAR-MONTH-DAY"')
+    parser.add_argument('-c', '--check-rate', action='store', dest='rate', help='Check rate in hours')
+
+    parser.add_argument('-mi', '--min', action='store', dest='max')
+    parser.add_argument('-ma', '--max', action='store', dest='min')
+    parser.add_argument('-ls', '--log_scale', action='store_true', dest='isLogScale')
+
+    parser.add_argument('-r', '--refresh', action='store_true', dest='refresh')
+
+    parser.add_argument('-rm', '--remove-id', action='append', dest='rm_id', default=[])
+
+    parser.add_argument('-pl', '--poll', action='store_true', dest='poll')
+    parser.add_argument('-rd', '--rel-date', action='store', dest='rel_date', help='Please give as "year/month/day". Used in: poll, git PR')
+
+    parser.add_argument('-pr', '--pull-request', action='store', dest='pr_slug', help='Please give as "owner/repo/num"')
     parser.add_argument('-pb', '--pull-binary', action='store_true', dest='pr_bin')
 
     args = parser.parse_args()
+
+    for id_ in args.rm_id:
+        conn = register_db()
+        ((mkt, ), ) = conn.execute(
+            "SELECT market FROM markets WHERE id = ?;",
+            (id_, )
+        )
+        if input(f'Are you sure you want to remove {id_}: "{mkt.market.question}" (y/N)?').lower().startswith('y'):
+            conn.execute(
+                "DELETE FROM markets WHERE id = ?;",
+                (id_, )
+            )
+            conn.commit()
 
     if any((args.slug, args.id_, args.url)):
         if args.url:
             args.slug = args.url.split('/')[-1]
 
         if args.slug:
-            mkt = market.Market.from_slug(args.slug)
+            mkt = market.Market.from_slug(args.slug, min=args.min, max=args.max, isLogScale=args.log_scale)
         else:
-            mkt = market.Market.from_id(args.id)
+            mkt = market.Market.from_id(args.id, min=args.min, max=args.max, isLogScale=args.log_scale)
+        if mkt.market.outcomeType == "PSEUDO_NUMERIC" and not all((args.min, args.max)):
+            raise ValueError("Until Manifold returns these values, record them yourself")
 
         if args.pr_slug:
-            pr_ = list(args.pr_slug.split('-'))
+            pr_ = list(args.pr_slug.split('/'))
             pr_[-1] = int(pr_[-1])
             pr = cast(Tuple[str, str, int], tuple(pr_))
             mkt.do_resolve_rules.append(rule.ResolveWithPR(*pr))
-            if args.pr_date:
-                date = cast(Tuple[int, int, int], tuple(int(x) for x in args.pr_date.split('-')))
+            if args.rel_date:
+                date = cast(Tuple[int, int, int], tuple(int(x) for x in args.rel_date.split('/')))
                 mkt.resolve_to_rules.append(rule.ResolveToPRDelta(*pr, datetime(*date)))
             elif args.pr_bin:
                 mkt.resolve_to_rules.append(rule.ResolveToPR(*pr))
             else:
                 raise ValueError("No resolve rule provided")
-        else:
+
+        if args.poll:
+            if not args.rel_date:
+                raise ValueError("No resolve date provided")
+            date = cast(Tuple[int, int, int], tuple(int(x) for x in args.rel_date.split('/')))
+            mkt.do_resolve_rules.append(rule.ResolveAtTime(datetime(*date)))
+
+        if not all(((mkt.resolve_to_rules or args.poll), mkt.do_resolve_rules)):
             raise ValueError("Cannot add unmanaged market")
 
         conn = register_db()
 
-        idx = max(conn.execute("SELECT id FROM markets;")) + 1
+        idx = max(conn.execute("SELECT id FROM markets;"))[0] + 1
         conn.execute("INSERT INTO markets values (?, ?, ?, ?);", (idx, mkt, 1, None))
         conn.commit()
-        ...
-        print("Successfully added!")
-        exit(0)
 
-    main()
+        print(f"Successfully added as ID {idx}!")
+
+    main(args.refresh)
