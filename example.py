@@ -21,7 +21,6 @@ def require_env(func):
 def register_db():
     do_initialize = not Path(getenv("DBName")).exists()
     conn = connect(getenv("DBName"), detect_types=PARSE_COLNAMES | PARSE_DECLTYPES)
-    import pdb; pdb.set_trace()
     if do_initialize:
         conn.execute("CREATE TABLE markets "
                      "(id INTEGER, market Market, check_rate REAL, last_checked TIMESTAMP);")
