@@ -21,6 +21,7 @@ def require_env(func):
 def register_db():
     do_initialize = not Path(getenv("DBName")).exists()
     conn = connect(getenv("DBName"), detect_types=PARSE_COLNAMES | PARSE_DECLTYPES)
+    import pdb; pdb.set_trace()
     if do_initialize:
         conn.execute("CREATE TABLE markets "
                      "(id INTEGER, market Market, check_rate REAL, last_checked TIMESTAMP);")
@@ -31,7 +32,7 @@ def register_db():
 def watch_reply(id_, mkt):
     conn = register_db()
     if input(
-            f"Hey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of "
+            f"\tHey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of "
             f"{mkt.current_answer()}. (y/N)?"
     ).lower().startswith('y'):
         mkt.resolve()
@@ -49,15 +50,15 @@ def main(refresh: bool = False):
     for id_, mkt, check_rate, last_checked in conn.execute("SELECT * FROM markets"):
         print(f"Currently checking ID {id_}: {mkt.market.question}")
         check = (refresh or not last_checked or (datetime.now() > last_checked + timedelta(hours=check_rate)))
-        print(f'  - [{"x" if check else " "}] Is elligible to resolve ...')
+        print(f'  - [{"x" if check else " "}] Should I check?')
         if check:
             check = mkt.should_resolve()
-            print(f'  - [{"x" if check else " "}] Is elligible to resolve (to {mkt.resolve_to()})...')
+            print(f'  - [{"x" if check else " "}] Is elligible to resolve (to {mkt.resolve_to()})?')
             if check:
                 watch_reply(id_, mkt)
 
             if mkt.market.isResolved:
-                print("  - [x] Market resolved, removing from db ...", end='')
+                print("  - [x] Market resolved, removing from db")
                 conn.execute(
                     "DELETE FROM markets WHERE id = ?;",
                     (id_, )
@@ -65,12 +66,8 @@ def main(refresh: bool = False):
                 conn.commit()
 
         conn.execute(
-            "UPDATE markets SET last_checked = ? WHERE id = ?;",
-            (datetime.now(), id_)
-        )
-        conn.execute(
-            "UPDATE markets SET market = ? WHERE id = ?;",
-            (mkt, id_)
+            "UPDATE markets SET last_checked = ?, market = ? WHERE id = ?;",
+            (datetime.now(), mkt, id_)
         )
         conn.commit()
 
@@ -91,10 +88,13 @@ if __name__ == '__main__':
     parser.add_argument('-rm', '--remove-id', action='append', dest='rm_id', default=[])
 
     parser.add_argument('-pl', '--poll', action='store_true', dest='poll')
-    parser.add_argument('-rd', '--rel-date', action='store', dest='rel_date', help='Please give as "year/month/day". Used in: poll, git PR')
+    parser.add_argument('-rd', '--rel-date', action='store', dest='rel_date',
+                        help='Please give as "year/month/day". Used in: poll, git PR')
 
     parser.add_argument('-pr', '--pull-request', action='store', dest='pr_slug', help='Please give as "owner/repo/num"')
     parser.add_argument('-pb', '--pull-binary', action='store_true', dest='pr_bin')
+
+    parser.add_argument('-sk', '--skip', action='store_true')
 
     args = parser.parse_args()
 
@@ -116,9 +116,9 @@ if __name__ == '__main__':
             args.slug = args.url.split('/')[-1]
 
         if args.slug:
-            mkt = market.Market.from_slug(args.slug, min=args.min, max=args.max, isLogScale=args.log_scale)
+            mkt = market.Market.from_slug(args.slug, min=args.min, max=args.max, isLogScale=args.isLogScale)
         else:
-            mkt = market.Market.from_id(args.id, min=args.min, max=args.max, isLogScale=args.log_scale)
+            mkt = market.Market.from_id(args.id, min=args.min, max=args.max, isLogScale=args.isLogScale)
         if mkt.market.outcomeType == "PSEUDO_NUMERIC" and not all((args.min, args.max)):
             raise ValueError("Until Manifold returns these values, record them yourself")
 
@@ -152,4 +152,5 @@ if __name__ == '__main__':
 
         print(f"Successfully added as ID {idx}!")
 
-    main(args.refresh)
+    if not args.skip:
+        main(args.refresh)

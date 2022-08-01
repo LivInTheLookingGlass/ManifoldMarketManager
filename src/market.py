@@ -4,7 +4,7 @@ from functools import lru_cache
 from math import log10
 from os import getenv
 from time import time
-from typing import Any, Dict, List, Optional, Union
+from typing import cast, Any, Dict, List, Optional, Union
 
 from pymanifold import ManifoldClient
 from pymanifold.types import DictDeserializable, Market as APIMarket
@@ -104,22 +104,22 @@ class Market(DictDeserializable):
 
     def current_answer(self) -> Union[int, float, Dict[str, Any]]:
         if self.market.outcomeType == "BINARY":
-                return bool(round(self.market.probability))
+            return bool(round(self.market.probability))
         elif self.market.outcomeType == "PSEUDO_NUMERIC":
-                # import pdb; pdb.set_trace()
-                pno = self.market.p * self.market.pool['NO']
-                probability = (pno / ((1 - self.market.p) * self.market.pool['YES'] + pno))
+            # import pdb; pdb.set_trace()
+            pno = self.market.p * self.market.pool['NO']
+            probability = (pno / ((1 - self.market.p) * self.market.pool['YES'] + pno))
             start = cast(float, self.min)
             end = cast(float, self.max)
-                if self.market.isLogScale:
+            if self.market.isLogScale:
                 logValue = log10(end - start + 1) * probability
                 return max(start, min(end, 10**logValue + start - 1))
-                else:
+            else:
                 return max(start, min(end, start + (end - start) * probability))
         elif self.market.outcomeType == "FREE_RESPONSE":
-                return max(self.market.answers, key=lambda x: x['probability'])
+            return max(self.market.answers, key=lambda x: x['probability'])
         else:
-                raise NotImplementedError()
+            raise NotImplementedError()
 
     def resolve(self):
         """Resolves this market according to our resolution rules.
