@@ -103,21 +103,22 @@ class Market(DictDeserializable):
         return self.current_answer()
 
     def current_answer(self) -> Union[int, float, Dict[str, Any]]:
-        match self.market.outcomeType:
-            case "BINARY":
+        if self.market.outcomeType == "BINARY":
                 return bool(round(self.market.probability))
-            case "PSEUDO_NUMERIC":
+        elif self.market.outcomeType == "PSEUDO_NUMERIC":
                 # import pdb; pdb.set_trace()
                 pno = self.market.p * self.market.pool['NO']
                 probability = (pno / ((1 - self.market.p) * self.market.pool['YES'] + pno))
+            start = cast(float, self.min)
+            end = cast(float, self.max)
                 if self.market.isLogScale:
-                    logValue = log10(self.max - self.min + 1) * probability
-                    return max(self.min, min(self.max, 10**logValue + self.min - 1))
+                logValue = log10(end - start + 1) * probability
+                return max(start, min(end, 10**logValue + start - 1))
                 else:
-                    return max(self.min, min(self.max, self.min + (self.max - self.min) * probability))
-            case "FREE_RESPONSE":
+                return max(start, min(end, start + (end - start) * probability))
+        elif self.market.outcomeType == "FREE_RESPONSE":
                 return max(self.market.answers, key=lambda x: x['probability'])
-            case _:
+        else:
                 raise NotImplementedError()
 
     def resolve(self):
