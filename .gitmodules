@@ -1,3 +1,6 @@
 [submodule "PyManifold"]
 	path = src/PyManifold
 	url = https://github.com/bcongdon/PyManifold
+[submodule "src/test/manifold"]
+	path = src/test/manifold
+	url = https://github.com/manifoldmarkets/manifold/
