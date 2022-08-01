@@ -34,9 +34,15 @@ class Market(DictDeserializable):
     max: Optional[float] = None
     isLogScale: Optional[bool] = None
 
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        del state['client']
+        return state
+
     def __setstate__(self, state):
         self.__dict__.update(state)
-        self.market = get_client().get_market_by_id(self.market.id)
+        self.client = get_client()
+        self.market = self.client.get_market_by_id(self.market.id)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
