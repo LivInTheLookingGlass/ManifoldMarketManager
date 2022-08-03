@@ -78,13 +78,18 @@ if __name__ == '__main__':
     parser.add_argument('-u', '--add-url', action='store', dest='url')
     parser.add_argument('-c', '--check-rate', action='store', dest='rate', help='Check rate in hours')
 
-    parser.add_argument('-mi', '--min', action='store', dest='max')
-    parser.add_argument('-ma', '--max', action='store', dest='min')
-    parser.add_argument('-ls', '--log_scale', action='store_true', dest='isLogScale')
+    parser.add_argument('-mi', '--min', action='store', dest='max',
+                        help="Only used for numeric markets, until they add this to the API")
+    parser.add_argument('-ma', '--max', action='store', dest='min',
+                        help="Only used for numeric markets, until they add this to the API")
+    parser.add_argument('-ls', '--log_scale', action='store_true', dest='isLogScale',
+                        help="Only used for numeric markets, until they add this to the API")
 
-    parser.add_argument('-r', '--refresh', action='store_true', dest='refresh')
+    parser.add_argument('-r', '--refresh', action='store_true', dest='refresh',
+                        help="Ignore time last checked and look at all markets immediately")
 
-    parser.add_argument('-rm', '--remove-id', action='append', dest='rm_id', default=[])
+    parser.add_argument('-rm', '--remove-id', action='append', dest='rm_id', default=[],
+                        help="Remove a specific market from management. May be repeated.")
 
     parser.add_argument('-pl', '--poll', action='store_true', dest='poll')
     parser.add_argument('-rd', '--rel-date', action='store', dest='rel_date',
