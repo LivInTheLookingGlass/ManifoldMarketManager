@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from os import getenv
 from sqlite3 import connect, PARSE_COLNAMES, PARSE_DECLTYPES
-from typing import cast, Tuple
+from typing import cast, Optional, Tuple
 
 from src import (market, rule)
 
@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-pl', '--poll', action='store_true', dest='poll')
     parser.add_argument('-rd', '--rel-date', action='store', dest='rel_date',
-                        help='Please give as "year/month/day". Used in: poll, git PR')
+                        help='Please give as "year/month/day" or "year-month-day". Used in: poll, git PR')
 
     parser.add_argument('-pr', '--pull-request', action='store', dest='pr_slug', help='Please give as "owner/repo/num"')
     parser.add_argument('-pb', '--pull-binary', action='store_true', dest='pr_bin')
@@ -121,13 +121,24 @@ if __name__ == '__main__':
         if mkt.market.outcomeType == "PSEUDO_NUMERIC" and not all((args.min, args.max)):
             raise ValueError("Until Manifold returns these values, record them yourself")
 
+        if args.rel_date:
+            sections = args.rel_date.split('/')
+            if len(sections) == 1:
+                sections = args.rel_date.split('-')
+            try:
+                year, month, day = tuple(int(x) for x in sections)
+            except ValueError:
+                raise
+            date: Optional[Tuple[int, int, int]] = (year, month, day)
+        else:
+            date = None
+
         if args.pr_slug:
             pr_ = list(args.pr_slug.split('/'))
             pr_[-1] = int(pr_[-1])
             pr = cast(Tuple[str, str, int], tuple(pr_))
             mkt.do_resolve_rules.append(rule.ResolveWithPR(*pr))
-            if args.rel_date:
-                date = cast(Tuple[int, int, int], tuple(int(x) for x in args.rel_date.split('/')))
+            if date:
                 mkt.resolve_to_rules.append(rule.ResolveToPRDelta(*pr, datetime(*date)))
             elif args.pr_bin:
                 mkt.resolve_to_rules.append(rule.ResolveToPR(*pr))
@@ -135,9 +146,8 @@ if __name__ == '__main__':
                 raise ValueError("No resolve rule provided")
 
         if args.poll:
-            if not args.rel_date:
+            if not date:
                 raise ValueError("No resolve date provided")
-            date = cast(Tuple[int, int, int], tuple(int(x) for x in args.rel_date.split('/')))
             mkt.do_resolve_rules.append(rule.ResolveAtTime(datetime(*date)))
 
         if not all(((mkt.resolve_to_rules or args.poll), mkt.do_resolve_rules)):
