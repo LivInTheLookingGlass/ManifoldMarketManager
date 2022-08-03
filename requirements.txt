@@ -1,4 +1,2 @@
-flask
-python-gitlab
-github
 requests
+python-telegram-bot>=20.0

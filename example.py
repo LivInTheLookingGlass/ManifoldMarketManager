@@ -1,11 +1,69 @@
 from argparse import ArgumentParser
+from dataclasses import dataclass
 from datetime import datetime, timedelta
+from enum import IntEnum
 from pathlib import Path
 from os import getenv
+from signal import raise_signal, SIGINT
 from sqlite3 import connect, PARSE_COLNAMES, PARSE_DECLTYPES
 from typing import cast, Optional, Tuple
 
+import logging
+
+from telegram import __version__ as TG_VER
+
+try:
+    from telegram import __version_info__
+except ImportError:
+    __version_info__ = (0, 0, 0, 0, 0)  # type: ignore[assignment]
+
+if __version_info__ < (20, 0, 0, "alpha", 1):
+    raise RuntimeError(
+        f"This example is not compatible with your current PTB version {TG_VER}. To view the "
+        f"{TG_VER} version of this example, "
+        f"visit https://docs.python-telegram-bot.org/en/v{TG_VER}/examples.html"
+    )
+
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import Application, CallbackQueryHandler, ContextTypes
+
 from src import (market, rule)
+
+
+class Response(IntEnum):
+    NO_ACTION = 1
+    USE_DEFAULT = 2
+
+
+@dataclass
+class State:
+    application: Application = None  # type: ignore
+    last_response: Response = Response.NO_ACTION
+    last_text: str = ""
+
+
+state = State()
+keyboard1 = [
+    [
+        InlineKeyboardButton("Do Nothing", callback_data="1"),
+        InlineKeyboardButton("Resolve to Default", callback_data="2"),
+    ],
+    [InlineKeyboardButton("Cancel Market", callback_data="3")],
+]
+keyboard2 = [
+    [
+        InlineKeyboardButton("Yes", callback_data="YES"),
+        InlineKeyboardButton("No", callback_data="NO"),
+    ],
+]
+
+
+# Enable logging
+logging.basicConfig(
+
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
 
 def require_env(func):
@@ -28,13 +86,58 @@ def register_db():
     return conn
 
 
+async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Parses the CallbackQuery and updates the message text."""
+    query = update.callback_query
+    if query is None or query.data is None:
+        raise ValueError()
+
+    # CallbackQueries need to be answered, even if no notification to the user is needed
+    # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
+    await query.answer()
+    if query.data in ("YES", "NO"):
+        state.last_text += "\n" + query.data
+        await query.edit_message_text(text=state.last_text)
+        if query.data != "YES":
+            reply_markup = InlineKeyboardMarkup(keyboard1)
+            await query.edit_message_reply_markup(reply_markup=reply_markup)
+        else:
+            raise_signal(SIGINT)  # lets telegram bot know it can stop
+    else:
+        state.last_response = Response(int(query.data))
+        reply_markup = InlineKeyboardMarkup(keyboard2)
+        state.last_text += f"\nSelected option: {state.last_response.name}. Are you sure?"
+        await query.edit_message_text(text=state.last_text)
+        await query.edit_message_reply_markup(reply_markup=reply_markup)
+
+
+@require_env
+def tg_main(text) -> Response:
+    """Run the bot."""
+    async def post_init(self):
+        reply_markup = InlineKeyboardMarkup(keyboard1)
+        await self.bot.send_message(text=text, reply_markup=reply_markup, chat_id=int(getenv("TelegramChatID")))
+
+    application = Application.builder().token(cast(str, getenv("TelegramAPIKey"))).post_init(post_init).build()
+    application.add_handler(CallbackQueryHandler(buttons))
+
+    state.application = application
+    state.last_text = text
+
+    application.run_polling()
+    return state.last_response
+
+
 def watch_reply(id_, mkt):
     conn = register_db()
-    if input(
-            f"\tHey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of "
-            f"{mkt.current_answer()}. (y/N)?"
-    ).lower().startswith('y'):
+    text = f"Hey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of {mkt.current_answer()}."
+    response = tg_main(text)
+    if response == Response.NO_ACTION:
+        return
+    elif response == Response.USE_DEFAULT:
         mkt.resolve()
+    elif response == Response.CANCEL:
+        mkt.cancel()
         conn.execute(
             "DELETE FROM markets WHERE id = ?;",
             (id_, )

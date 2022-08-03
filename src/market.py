@@ -121,7 +121,7 @@ class Market(DictDeserializable):
         else:
             raise NotImplementedError()
 
-    def resolve(self):
+    def resolve(self, override=None):
         """Resolves this market according to our resolution rules.
 
         Returns
@@ -129,7 +129,22 @@ class Market(DictDeserializable):
         Response
             How Manifold interprets our request, and some JSON data on it
         """
-        ret = self.client.resolve_market(self.market, self.resolve_to())
+        if override is None:
+            override = self.resolve_to()
+        ret = self.client.resolve_market(self.market, override)
+        if ret.status_code < 300:
+            self.market.isResolved = True
+        return ret
+
+    def cancel(self):
+        """Cancels this market.
+
+        Returns
+        -------
+        Response
+            How Manifold interprets our request, and some JSON data on it
+        """
+        ret = self.client.cancel_market(self.market)
         if ret.status_code < 300:
             self.market.isResolved = True
         return ret
