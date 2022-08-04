@@ -14,6 +14,7 @@
 - [ ] Testing for the API bindings by spinning up a dev node of Manifold
 - [ ] Resolve based on passage of a US law
 - [ ] Automatic creation of a market when a Pull Request is made
+- [ ] A way to queue creation of markets for when account has enough mana
 
 ## Future Goals
 
