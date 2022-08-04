@@ -4,10 +4,11 @@ while :
 do
 	source env.sh
 	python example.py
-	echo "Press <CTRL+C> to exit before next loop."
+	echo "Press once <CTRL+C> to check now, and twice to exit before next loop."
 	hour=0
 	min=30
 	sec=0
+	trap -- "hour=0;min=0;sec=0;" INT
 	while [ $hour -ge 0 ]; do
 		while [ $min -ge 0 ]; do
 			while [ $sec -gt 0 ]; do
@@ -21,4 +22,5 @@ do
 		min=59
 		let "hour=hour-1"
 	done
+	trap INT
 done
