@@ -33,6 +33,7 @@ from src import (market, rule)
 class Response(IntEnum):
     NO_ACTION = 1
     USE_DEFAULT = 2
+    CANCEL = 3
 
 
 @dataclass
@@ -128,25 +129,35 @@ def tg_main(text) -> Response:
     return state.last_response
 
 
-def watch_reply(id_, mkt):
+def watch_reply(id_, mkt, console_only=False):
     conn = register_db()
     text = f"Hey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of {mkt.current_answer()}."
-    response = tg_main(text)
+    if not console_only:
+        response = tg_main(text)
+    else:
+        if input(text + " Use this default value? (y/N) ").lower().startswith("y"):
+            response = Response.USE_DEFAULT
+        elif input("Cancel the market? (y/N) ").lower().startswith("y"):
+            response = Response.CANCEL
+        else:
+            response = Response.NO_ACTION
+
     if response == Response.NO_ACTION:
         return
     elif response == Response.USE_DEFAULT:
         mkt.resolve()
     elif response == Response.CANCEL:
         mkt.cancel()
-        conn.execute(
-            "DELETE FROM markets WHERE id = ?;",
-            (id_, )
-        )
-        conn.commit()
+
+    conn.execute(
+        "DELETE FROM markets WHERE id = ?;",
+        (id_, )
+    )
+    conn.commit()
 
 
 @require_env
-def main(refresh: bool = False):
+def main(refresh: bool = False, console_only: bool = False):
     conn = register_db()
     mkt: market.Market
     for id_, mkt, check_rate, last_checked in conn.execute("SELECT * FROM markets"):
@@ -157,7 +168,7 @@ def main(refresh: bool = False):
             check = mkt.should_resolve()
             print(f'  - [{"x" if check else " "}] Is elligible to resolve (to {mkt.resolve_to()})?')
             if check:
-                watch_reply(id_, mkt)
+                watch_reply(id_, mkt, console_only)
 
             if mkt.market.isResolved:
                 print("  - [x] Market resolved, removing from db")
@@ -202,6 +213,7 @@ if __name__ == '__main__':
     parser.add_argument('-pb', '--pull-binary', action='store_true', dest='pr_bin')
 
     parser.add_argument('-sk', '--skip', action='store_true')
+    parser.add_argument('-co', '--console-only', action='store_true')
 
     args = parser.parse_args()
 
@@ -270,4 +282,4 @@ if __name__ == '__main__':
         print(f"Successfully added as ID {idx}!")
 
     if not args.skip:
-        main(args.refresh)
+        main(args.refresh, args.console_only)
