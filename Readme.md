@@ -9,7 +9,7 @@
 - Resolve market randomly, like in a lottery
 - Before resolving a market, reach out on Telegram to confirm that's okay
 
-## Imediate Goals
+## Immediate Goals
 
 - [ ] Testing for the API bindings by spinning up a dev node of Manifold
 - [ ] Resolve based on passage of a US law
@@ -34,10 +34,10 @@ The goal of this project is to make a Manifold agent that can manage various for
     - Actually, this might look like a generic Pull Request -> Manifold Market bridge
         - If so, make some for every Manifold PR
 4. Box Office Futures Markets
-    - Note that this could include Rotton Tomatoes scores as well
-    - Feels easily queriable
+    - Note that this could include Rotten Tomatoes scores as well
+    - Feels easily queryable
     - Feels like movies from major studios could be fetched fairly easily
-5. Rotton Tomatoes Markets
+5. Rotten Tomatoes Markets
     - Make it for 1, 4, 10 weeks after release
     - Use https://pypi.org/project/rotten-tomatoes-scraper/
 5. Markets for OSM campaigns and bounties
