@@ -68,7 +68,7 @@ logger = logging.getLogger(__name__)
 
 def require_env(func):
     def foo(*args, **kwargs):
-        if not all(getenv(x) for x in ("ManifoldAPIKey", "GithubAPIKey", "DBName")):
+        if not all(getenv(x) for x in ("ManifoldAPIKey", "GithubAPIKey", "DBName", "TelegramAPIKey", "TelegramChatID")):
             raise EnvironmentError("Please call 'source env.sh' first")
         return func(*args, **kwargs)
 
