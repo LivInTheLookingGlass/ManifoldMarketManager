@@ -2,8 +2,12 @@
 
 while :
 do
-	source env.sh
-	python example.py
+	for file in env*.sh
+	do
+		echo "Running for environment $file"
+		source $file
+		python example.py
+	done
 	echo "Press once <CTRL+C> to check now, and twice to exit before next loop."
 	hour=0
 	min=30
