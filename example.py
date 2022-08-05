@@ -129,9 +129,10 @@ def tg_main(text) -> Response:
     return state.last_response
 
 
-def watch_reply(id_, mkt, console_only=False):
-    conn = register_db()
-    text = f"Hey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of {mkt.current_answer()}."
+def watch_reply(conn, id_, mkt, console_only=False):
+    text = (f"Hey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of {mkt.current_answer()}."
+            f"This market is called: {mkt.market.question}"
+    )
     if not console_only:
         response = tg_main(text)
     else:
@@ -168,7 +169,7 @@ def main(refresh: bool = False, console_only: bool = False):
             check = mkt.should_resolve()
             print(f'  - [{"x" if check else " "}] Is elligible to resolve (to {mkt.resolve_to()})?')
             if check:
-                watch_reply(id_, mkt, console_only)
+                watch_reply(conn, id_, mkt, console_only)
 
             if mkt.market.isResolved:
                 print("  - [x] Market resolved, removing from db")
@@ -192,9 +193,9 @@ if __name__ == '__main__':
     parser.add_argument('-u', '--add-url', action='store', dest='url')
     parser.add_argument('-c', '--check-rate', action='store', dest='rate', help='Check rate in hours')
 
-    parser.add_argument('-mi', '--min', action='store', dest='max',
+    parser.add_argument('-mi', '--min', action='store',
                         help="Only used for numeric markets, until they add this to the API")
-    parser.add_argument('-ma', '--max', action='store', dest='min',
+    parser.add_argument('-ma', '--max', action='store',
                         help="Only used for numeric markets, until they add this to the API")
     parser.add_argument('-ls', '--log_scale', action='store_true', dest='isLogScale',
                         help="Only used for numeric markets, until they add this to the API")
@@ -275,7 +276,7 @@ if __name__ == '__main__':
 
         conn = register_db()
 
-        idx = max(conn.execute("SELECT id FROM markets;"))[0] + 1
+        idx = max(((0, ), *conn.execute("SELECT id FROM markets;")))[0] + 1
         conn.execute("INSERT INTO markets values (?, ?, ?, ?);", (idx, mkt, 1, None))
         conn.commit()
 

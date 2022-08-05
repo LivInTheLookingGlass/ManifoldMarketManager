@@ -106,12 +106,11 @@ class Market(DictDeserializable):
         if self.market.outcomeType == "BINARY":
             return bool(round(self.market.probability))
         elif self.market.outcomeType == "PSEUDO_NUMERIC":
-            # import pdb; pdb.set_trace()
             pno = self.market.p * self.market.pool['NO']
             probability = (pno / ((1 - self.market.p) * self.market.pool['YES'] + pno))
-            start = cast(float, self.min)
-            end = cast(float, self.max)
-            if self.market.isLogScale:
+            start = float(self.min or 0)
+            end = float(self.max or 0)
+            if self.isLogScale:
                 logValue = log10(end - start + 1) * probability
                 return max(start, min(end, 10**logValue + start - 1))
             else:
@@ -131,6 +130,13 @@ class Market(DictDeserializable):
         """
         if override is None:
             override = self.resolve_to()
+        if self.market.outcomeType == "PSEUDO_NUMERIC":
+            start = float(self.min or 0)
+            end = float(self.max or 0)
+            if self.isLogScale:
+                override = (override, log10(override - start + 1) / log10(end - start + 1) * 100)
+            else:
+                override = (override, (override - start) / (end - start) * 100)
         ret = self.client.resolve_market(self.market, override)
         if ret.status_code < 300:
             self.market.isResolved = True
