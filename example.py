@@ -216,6 +216,11 @@ if __name__ == '__main__':
     parser.add_argument('-sk', '--skip', action='store_true')
     parser.add_argument('-co', '--console-only', action='store_true')
 
+    parser.add_argument('-rs', '--random-seed', action='store')
+    parser.add_argument('-rr', '--random-rounds', action='store', type=int, default=1)
+    parser.add_argument('-ri', '--random-index', action='store_true')
+    parser.add_argument('-is', '--index-size', action='store', type=int)
+
     args = parser.parse_args()
 
     for id_ in args.rm_id:
@@ -254,6 +259,9 @@ if __name__ == '__main__':
         else:
             date = None
 
+        if args.random_index:
+            mkt.resolve_to_rules.append(rule.ResolveRandomIndex(args.random_seed, args.index_size, args.random_rounds))
+
         if args.pr_slug:
             pr_ = list(args.pr_slug.split('/'))
             pr_[-1] = int(pr_[-1])
@@ -266,7 +274,7 @@ if __name__ == '__main__':
             else:
                 raise ValueError("No resolve rule provided")
 
-        if args.poll:
+        if not mkt.do_resolve_rules:
             if not date:
                 raise ValueError("No resolve date provided")
             mkt.do_resolve_rules.append(rule.ResolveAtTime(datetime(*date)))

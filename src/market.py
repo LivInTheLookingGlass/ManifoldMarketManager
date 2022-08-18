@@ -96,7 +96,7 @@ class Market(DictDeserializable):
         """
         chosen = None
         for rule in (self.resolve_to_rules or ()):
-            if (chosen := rule.value(self)) is not None:
+            if (chosen := rule.value(self, format=self.market.outcomeType)) is not None:
                 break
         if chosen is not None:
             return chosen
