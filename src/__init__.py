@@ -1,3 +1,4 @@
+from os import getenv
 from pathlib import Path
 from pickle import dumps, loads
 from sqlite3 import register_adapter, register_converter
@@ -26,3 +27,22 @@ register_converter("Market", loads)
 
 __version_info__ = (0, 2, 0, 0, 0)
 __all__ = ("__version_info__", "market", "rule", "Market", "DoResolveRule", "ResolutionValueRule", "Rule")
+
+if getenv("DEBUG"):
+    import sys
+
+    def info(type, value, tb):
+        if hasattr(sys, 'ps1') or not sys.stderr.isatty():
+            # we are in interactive mode or we don't have a tty-like
+            # device, so we call the default hook
+            sys.__excepthook__(type, value, tb)
+        else:
+            import pdb
+            import traceback
+            # we are NOT in interactive mode, print the exception...
+            traceback.print_exception(type, value, tb)
+            print()
+            # ...then start the debugger in post-mortem mode.
+            pdb.post_mortem(tb)
+
+    sys.excepthook = info
