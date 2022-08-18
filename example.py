@@ -8,6 +8,7 @@ from signal import raise_signal, SIGINT
 from sqlite3 import connect, PARSE_COLNAMES, PARSE_DECLTYPES
 from typing import cast, Optional, Tuple
 
+import asyncio
 import logging
 
 from telegram import __version__ as TG_VER
@@ -132,8 +133,7 @@ def tg_main(text) -> Response:
 
 def watch_reply(conn, id_, mkt, console_only=False):
     text = (f"Hey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of {mkt.current_answer()}."
-            f"This market is called: {mkt.market.question}"
-    )
+            f"This market is called: {mkt.market.question}")
     if not console_only:
         response = tg_main(text)
     else:

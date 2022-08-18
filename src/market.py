@@ -4,7 +4,7 @@ from functools import lru_cache
 from math import log10
 from os import getenv
 from time import time
-from typing import cast, Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from pymanifold import ManifoldClient
 from pymanifold.types import DictDeserializable, Market as APIMarket
@@ -116,9 +116,11 @@ class Market(DictDeserializable):
             else:
                 return max(start, min(end, start + (end - start) * probability))
         elif self.market.outcomeType == "FREE_RESPONSE":
-            return max(self.market.answers, key=lambda x: x['probability'])
+            return {max(self.market.answers, key=lambda x: x['probability']): 1}
+        elif self.market.outcomeType == "MULTIPLE_CHOICE":
+            return {max(self.market.pool, key=lambda x: self.market.pool[x]): 1}
         else:
-            raise NotImplementedError()
+            raise NotImplementedError(self.market.outcomeType)
 
     def resolve(self, override=None):
         """Resolves this market according to our resolution rules.
