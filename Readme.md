@@ -7,6 +7,14 @@
 - Resolve a market based on its close date and current answer
 - Resolve a market based on any logical combination of implemented rules
 - Resolve market randomly, like in a lottery
+    - Several methods implemented, including:
+    - Random value
+    - Random index
+        - Weighted or unweighted
+        - Excluding early indices if wanted
+        - Only including the first N indices if wanted
+    - Can also specify the method, arguments yourself
+- Automatically formats rules for the market type
 - Before resolving a market, reach out on Telegram to confirm that's okay
 
 ## Immediate Goals
