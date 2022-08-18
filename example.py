@@ -125,6 +125,7 @@ def tg_main(text) -> Response:
     state.application = application
     state.last_text = text
 
+    asyncio.set_event_loop(asyncio.new_event_loop())
     application.run_polling()
     return state.last_response
 
