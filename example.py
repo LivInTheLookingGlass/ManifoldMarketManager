@@ -1,15 +1,14 @@
 from argparse import ArgumentParser
+from asyncio import new_event_loop, set_event_loop
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import IntEnum
+from logging import basicConfig, getLogger, DEBUG, INFO
 from pathlib import Path
 from os import getenv
 from signal import raise_signal, SIGINT
 from sqlite3 import connect, PARSE_COLNAMES, PARSE_DECLTYPES
 from typing import cast, Optional, Tuple
-
-import asyncio
-import logging
 
 from telegram import __version__ as TG_VER
 
@@ -28,7 +27,15 @@ if __version_info__ < (20, 0, 0, "alpha", 1):
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CallbackQueryHandler, ContextTypes
 
-from src import (market, rule)
+from src import (market, require_env, rule)
+
+# Enable logging
+basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=(INFO if not getenv("DEBUG") else DEBUG),
+    filename=getenv("LogFile"),
+)
+logger = getLogger(__name__)
 
 
 class Response(IntEnum):
@@ -39,7 +46,7 @@ class Response(IntEnum):
 
 @dataclass
 class State:
-    application: Application = None  # type: ignore
+    application: Application = None  # type: ignore[assignment]
     last_response: Response = Response.NO_ACTION
     last_text: str = ""
 
@@ -47,10 +54,10 @@ class State:
 state = State()
 keyboard1 = [
     [
-        InlineKeyboardButton("Do Nothing", callback_data="1"),
-        InlineKeyboardButton("Resolve to Default", callback_data="2"),
+        InlineKeyboardButton("Do Nothing", callback_data=Response.NO_ACTION),
+        InlineKeyboardButton("Resolve to Default", callback_data=Response.USE_DEFAULT),
     ],
-    [InlineKeyboardButton("Cancel Market", callback_data="3")],
+    [InlineKeyboardButton("Cancel Market", callback_data=Response.CANCEL)],
 ]
 keyboard2 = [
     [
@@ -58,23 +65,6 @@ keyboard2 = [
         InlineKeyboardButton("No", callback_data="NO"),
     ],
 ]
-
-
-# Enable logging
-logging.basicConfig(
-
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
-
-
-def require_env(func):
-    def foo(*args, **kwargs):
-        if not all(getenv(x) for x in ("ManifoldAPIKey", "GithubAPIKey", "DBName", "TelegramAPIKey", "TelegramChatID")):
-            raise EnvironmentError("Please call 'source env.sh' first")
-        return func(*args, **kwargs)
-
-    return foo
 
 
 @require_env
@@ -85,11 +75,12 @@ def register_db():
         conn.execute("CREATE TABLE markets "
                      "(id INTEGER, market Market, check_rate REAL, last_checked TIMESTAMP);")
         conn.commit()
+    logger.info("Database up and initialized.")
     return conn
 
 
 async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Parses the CallbackQuery and updates the message text."""
+    """Parse the CallbackQuery and update the message text."""
     query = update.callback_query
     if query is None or query.data is None:
         raise ValueError()
@@ -126,7 +117,7 @@ def tg_main(text) -> Response:
     state.application = application
     state.last_text = text
 
-    asyncio.set_event_loop(asyncio.new_event_loop())
+    set_event_loop(new_event_loop())
     application.run_polling()
     return state.last_response
 
@@ -163,17 +154,21 @@ def main(refresh: bool = False, console_only: bool = False):
     conn = register_db()
     mkt: market.Market
     for id_, mkt, check_rate, last_checked in conn.execute("SELECT * FROM markets"):
-        print(f"Currently checking ID {id_}: {mkt.market.question}")
+        print(msg := f"Currently checking ID {id_}: {mkt.market.question}")
+        logger.info(msg)
         check = (refresh or not last_checked or (datetime.now() > last_checked + timedelta(hours=check_rate)))
-        print(f'  - [{"x" if check else " "}] Should I check?')
+        print(msg := f'  - [{"x" if check else " "}] Should I check?')
+        logger.info(msg)
         if check:
             check = mkt.should_resolve()
-            print(f'  - [{"x" if check else " "}] Is elligible to resolve (to {mkt.resolve_to()})?')
+            print(msg := f'  - [{"x" if check else " "}] Is elligible to resolve (to {mkt.resolve_to()})?')
+            logger.info(msg)
             if check:
                 watch_reply(conn, id_, mkt, console_only)
 
             if mkt.market.isResolved:
-                print("  - [x] Market resolved, removing from db")
+                print(msg := "  - [x] Market resolved, removing from db")
+                logger.info(msg)
                 conn.execute(
                     "DELETE FROM markets WHERE id = ?;",
                     (id_, )
@@ -185,6 +180,7 @@ def main(refresh: bool = False, console_only: bool = False):
             (datetime.now(), mkt, id_)
         )
         conn.commit()
+    conn.close()
 
 
 if __name__ == '__main__':
@@ -236,6 +232,8 @@ if __name__ == '__main__':
                 (id_, )
             )
             conn.commit()
+            logger.info(f"{id_} removed from db")
+        conn.close()
 
     if any((args.slug, args.id_, args.url)):
         if args.url:
@@ -245,18 +243,15 @@ if __name__ == '__main__':
             mkt = market.Market.from_slug(args.slug, min=args.min, max=args.max, isLogScale=args.isLogScale)
         else:
             mkt = market.Market.from_id(args.id, min=args.min, max=args.max, isLogScale=args.isLogScale)
-        if mkt.market.outcomeType == "PSEUDO_NUMERIC" and not all((args.min, args.max)):
-            raise ValueError("Until Manifold returns these values, record them yourself")
 
         if args.rel_date:
             sections = args.rel_date.split('/')
             if len(sections) == 1:
                 sections = args.rel_date.split('-')
             try:
-                year, month, day = tuple(int(x) for x in sections)
+                date: Optional[Tuple[int, int, int]] = tuple(int(x) for x in sections)  # type: ignore[assignment]
             except ValueError:
                 raise
-            date: Optional[Tuple[int, int, int]] = (year, month, day)
         else:
             date = None
 
@@ -280,16 +275,15 @@ if __name__ == '__main__':
                 raise ValueError("No resolve date provided")
             mkt.do_resolve_rules.append(rule.ResolveAtTime(datetime(*date)))
 
-        if not all(((mkt.resolve_to_rules or args.poll), mkt.do_resolve_rules)):
-            raise ValueError("Cannot add unmanaged market")
-
         conn = register_db()
 
         idx = max(((0, ), *conn.execute("SELECT id FROM markets;")))[0] + 1
         conn.execute("INSERT INTO markets values (?, ?, ?, ?);", (idx, mkt, 1, None))
         conn.commit()
 
-        print(f"Successfully added as ID {idx}!")
+        print(msg := f"Successfully added as ID {idx}!")
+        logger.info(msg)
+        conn.close()
 
     if not args.skip:
         main(args.refresh, args.console_only)
