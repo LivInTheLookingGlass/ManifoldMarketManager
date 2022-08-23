@@ -5,10 +5,10 @@ from logging import getLogger, Logger
 from math import log10
 from os import getenv
 from time import time
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Union
 
 from pymanifold import ManifoldClient
-from pymanifold.types import DictDeserializable, Market as APIMarket
+from pymanifold.types import Market as APIMarket
 
 from . import require_env
 from .rule import DoResolveRule, ResolutionValueRule
@@ -22,49 +22,59 @@ def get_client() -> ManifoldClient:
 
 
 class MarketStatus(Enum):
+    """Represent the status of a market at a high level."""
+
     OPEN = auto()
     CLOSED = auto()
     RESOLVED = auto()
 
 
 @dataclass
-class Market(DictDeserializable):
+class Market:
+    """Represent a market and its corresponding rules."""
+
     market: APIMarket
     client: ManifoldClient = field(default_factory=get_client)
     notes: str = field(default='')
     do_resolve_rules: List[DoResolveRule] = field(default_factory=list)
     resolve_to_rules: List[ResolutionValueRule] = field(default_factory=list)
-    min: Optional[float] = None
-    max: Optional[float] = None
-    isLogScale: Optional[bool] = None
+    logger: Logger = field(init=False, default=None, repr=False)  # type: ignore[assignment]
+
+    def __postinit__(self):
+        """Initialize state that doesn't make sense to exist in the init."""
+        self.logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
 
     def __getstate__(self):
+        """Remove sensitive/non-serializable state before dumping to database."""
         state = self.__dict__.copy()
         del state['client']
+        if 'logger' in state:
+            del state['logger']
         return state
 
     def __setstate__(self, state):
+        """Rebuild sensitive/non-serializable state after retrieving from database."""
         self.__dict__.update(state)
         self.client = get_client()
         self.market = self.client.get_market_by_id(self.market.id)
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "market": self.market,
-            "notes": self.notes,
-            "do_resolve_rules": self.do_resolve_rules,
-            "resolve_to_rules": self.resolve_to_rules,
-            "min": self.min,
-            "max": self.max,
-            "isLogScale": self.isLogScale,
-        }
+        self.__postinit__()
+        # if not self.resolve_to_rules:
+        #     match self.market.outcomeType:
+        #         case "BINARY":
+        #             self.resolve_to_rules.append(RoundValueRule())
+        #         case "PSEUDO_NUMERIC":
+        #             self.resolve_to_rules.append(CurrentValueRule())
+        #         case "FREE_RESONSE" | "MULTIPLE_CHOICE":
+        #             self.resolve_to_rules.append(PopularValueRule())
 
     @property
     def id(self):
+        """Return the ID of a market as reported by Manifold."""
         return self.market.id
 
     @property
     def status(self) -> MarketStatus:
+        """Return whether a market is OPEN, CLOSED, or RESOLVED."""
         if self.market.isResolved:
             return MarketStatus.RESOLVED
         elif self.market.closeTime and self.market.closeTime < time() * 1000:
@@ -73,11 +83,13 @@ class Market(DictDeserializable):
 
     @classmethod
     def from_slug(cls, slug: str, *args, **kwargs):
+        """Reconstruct a Market object from the market slug and other arguments."""
         api_market = get_client().get_market_by_slug(slug)
         return cls(api_market, *args, **kwargs)
 
     @classmethod
     def from_id(cls, id: str, *args, **kwargs):
+        """Reconstruct a Market object from the market ID and other arguments."""
         api_market = get_client().get_market_by_id(id)
         return cls(api_market, *args, **kwargs)
 
@@ -109,6 +121,7 @@ class Market(DictDeserializable):
         ...
 
     def should_resolve(self) -> bool:
+        """Return whether the market should resolve, according to our rules."""
         return any(
             rule.value(self) for rule in (self.do_resolve_rules or ())
         ) and not self.market.isResolved
@@ -129,33 +142,36 @@ class Market(DictDeserializable):
         for rule in (self.resolve_to_rules or ()):
             if (chosen := rule.value(self, format=self.market.outcomeType)) is not None:
                 break
-        if chosen is not None:
-            return chosen
-        return self.current_answer()
+        if chosen is None:
+            raise RuntimeError()
+        return chosen
 
-    def current_answer(self) -> Union[int, float, Dict[str, Any]]:
+    def current_answer(self) -> Union[str, int, float, Dict[str, Any]]:
+        """Return the current top (single) answer."""
+        # TODO: move these behaviors to a rule class
         if self.market.outcomeType == "BINARY":
-            return bool(round(self.market.probability))
+            return f"{100 * self.market.probability}%"
         elif self.market.outcomeType == "PSEUDO_NUMERIC":
             pno = self.market.p * self.market.pool['NO']
             probability = (pno / ((1 - self.market.p) * self.market.pool['YES'] + pno))
-            start = float(self.min or 0)
-            end = float(self.max or 0)
-            if self.isLogScale:
+            start = float(self.market.min or 0)
+            end = float(self.market.max or 0)
+            if self.market.isLogScale:
                 logValue = log10(end - start + 1) * probability
                 return max(start, min(end, 10**logValue + start - 1))
             else:
                 return max(start, min(end, start + (end - start) * probability))
         elif self.market.outcomeType == "FREE_RESPONSE":
-            return {max(self.market.answers, key=lambda x: x['probability']): 1}
+            return {idx: x['probability'] for idx, x in enumerate(self.market.answers)}
         elif self.market.outcomeType == "MULTIPLE_CHOICE":
-            return {max(self.market.pool, key=lambda x: self.market.pool[x]): 1}
+            total = sum(self.market.pool.values())
+            return {x: shares / total for x, shares in self.market.pool.items()}
         else:
             raise NotImplementedError(self.market.outcomeType)
 
     @require_env("ManifoldAPIKey")
     def resolve(self, override=None):
-        """Resolves this market according to our resolution rules.
+        """Resolve this market according to our resolution rules.
 
         Returns
         -------
@@ -165,20 +181,21 @@ class Market(DictDeserializable):
         if override is None:
             override = self.resolve_to()
         if self.market.outcomeType == "PSEUDO_NUMERIC":
-            start = float(self.min or 0)
-            end = float(self.max or 0)
-            if self.isLogScale:
+            start = float(self.market.min or 0)
+            end = float(self.market.max or 0)
+            if self.market.isLogScale:
                 override = (override, log10(override - start + 1) / log10(end - start + 1) * 100)
             else:
                 override = (override, (override - start) / (end - start) * 100)
         ret = self.client.resolve_market(self.market, override)
         if ret.status_code < 300:
+            self.logger.info("I was resolved")
             self.market.isResolved = True
         return ret
 
     @require_env("ManifoldAPIKey")
     def cancel(self):
-        """Cancels this market.
+        """Cancel this market.
 
         Returns
         -------
@@ -187,5 +204,6 @@ class Market(DictDeserializable):
         """
         ret = self.client.cancel_market(self.market)
         if ret.status_code < 300:
+            self.logger.info("I was cancelled")
             self.market.isResolved = True
         return ret
