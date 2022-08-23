@@ -1,9 +1,10 @@
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
+from math import log10
 from os import getenv
+from random import Random
 from typing import cast, Any, DefaultDict, Dict, Sequence, Optional
-import random
 
 import requests
 
@@ -11,38 +12,66 @@ from . import require_env, Rule
 
 
 class DoResolveRule(Rule):
+    """The subtype of rule which determines if a market should resolve, returning a bool."""
+
     def value(self, market) -> bool:
         raise NotImplementedError()
 
 
 @dataclass
 class NegateRule(DoResolveRule):
+    """Negate another DoResolveRule."""
+
     child: DoResolveRule
 
     def value(self, market) -> bool:
         return not self.child.value(market)
 
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        return (
+            f"{'  ' * indent}- If the rule below resolves False\n" +
+            self.child.explain_abstract(indent + 1, **kwargs)
+        )
+
 
 @dataclass
 class EitherRule(DoResolveRule):
+    """Return the OR of two other DoResolveRules."""
+
     rule1: DoResolveRule
     rule2: DoResolveRule
 
     def value(self, market) -> bool:
         return self.rule1.value(market) or self.rule2.value(market)
 
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        ret = f"{'  ' * indent}- If either of the rules below resolves True\n"
+        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
+        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
+        return ret
+
 
 @dataclass
 class BothRule(DoResolveRule):
+    """Return the AND of two other DoResolveRules."""
+
     rule1: DoResolveRule
     rule2: DoResolveRule
 
     def value(self, market) -> bool:
         return self.rule1.value(market) and self.rule2.value(market)
 
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        ret = f"{'  ' * indent}- If both of the rules below resolves True\n"
+        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
+        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
+        return ret
+
 
 @dataclass
 class ResolveAtTime(DoResolveRule):
+    """Return True if the specified time is in the past."""
+
     resolve_at: datetime
 
     def value(self, market) -> bool:
@@ -51,9 +80,14 @@ class ResolveAtTime(DoResolveRule):
         except TypeError:
             return datetime.now() >= self.resolve_at
 
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        return f"{'  ' * indent}- If the current time is past {self.resolve_at}\n"
+
 
 @dataclass
 class ResolveWithPR(DoResolveRule):
+    """Return True if the specified PR was merged in the past."""
+
     owner: str
     repo: str
     number: int
@@ -71,10 +105,15 @@ class ResolveWithPR(DoResolveRule):
         json = response.json()
         return "pull_request" in json and json["pull_request"].get("merged_at") is not None
 
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        return f"{'  ' * indent}- If the GitHub PR {self.owner}/{self.repo}#{self.number} was merged in the past.\n"
+
 
 class ResolutionValueRule(Rule):
+    """The subtype of rule which determines what a market should resolve to."""
+
     def __hash__(self) -> int:
-        # yes, I know this is technically unsafe, but they won't
+        """Yes, I know this is technically unsafe, but they won't actually mutate in flight."""
         return hash((type(self), id(self)))
 
     def value(self, market, format='BINARY'):
@@ -117,11 +156,77 @@ class ResolveToValue(ResolutionValueRule):
     resolve_value: Any
 
     def __hash__(self) -> int:
-        # yes, I know this is technically unsafe, but they won't mutuate in practice
+        """Yes, I know this is technically unsafe, but they won't mutuate in practice."""
         return hash((type(self), id(self)))
 
     def _value(self, market):
         return self.resolve_value
+
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        return f"{'  ' * indent}- Resolves to the specific value {self.resolve_value}\n"
+
+
+class CurrentValueRule(ResolutionValueRule):
+    def _value(self, market) -> float:
+        if market.market.outcomeType == "BINARY":
+            return market.market.probability * 100
+        pno = market.market.p * market.market.pool['NO']
+        probability = (pno / ((1 - market.market.p) * market.market.pool['YES'] + pno))
+        start = float(market.market.min or 0)
+        end = float(market.market.max or 0)
+        if market.market.isLogScale:
+            logValue = log10(end - start + 1) * probability
+            return max(start, min(end, 10**logValue + start - 1))
+        else:
+            return max(start, min(end, start + (end - start) * probability))
+
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        return f"{'  ' * indent}- Resolves to the current market value.\n"
+
+
+class RoundValueRule(CurrentValueRule):
+    def _value(self, market) -> float:
+        if market.market.outcomeType == "BINARY":
+            return bool(round(market.market.probability))
+        return round(super()._value(market))
+
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        return f"{'  ' * indent}- Resolves to round(MKT).\n"
+
+
+@dataclass
+class PopularValueRule(ResolutionValueRule):
+    size: int = 1
+
+    def _value(self, market):
+        if market.market.outcomeType == "FREE_RESPONSE":
+            answers = market.market.answers.copy()
+            final_answers = []
+            for _ in range(self.size):
+                next_answer = max(answers, key=lambda x: x['probability'])
+                answers.remove(next_answer)
+                final_answers.append(next_answer)
+            total = sum(float(x['probability']) for x in final_answers)
+            return {
+                answer: float(answer['probability']) / total
+                for answer in final_answers
+            }
+        elif market.market.outcomeType == "MULTIPLE_CHOICE":
+            answers = market.market.pool.copy()
+            final_answers = []
+            for _ in range(self.size):
+                next_answer = max(answers, key=lambda x: answers[x])
+                del answers[next_answer]
+                final_answers.append(next_answer)
+            total = sum(float(market.market.pool[x]) for x in final_answers)
+            return {
+                answer: float(market.market.pool[answer]) / total
+                for answer in final_answers
+            }
+        raise ValueError()
+
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        return f"{'  ' * indent}- Resolves to the {self.size} most probable answers, weighted by their probability.\n"
 
 
 @dataclass
@@ -133,11 +238,11 @@ class ResolveRandomSeed(ResolutionValueRule):
     kwargs: Dict[str, Any] = field(default_factory=dict)
 
     def __hash__(self) -> int:
-        # yes, I know this is technically unsafe, but they won't mutuate in practice
+        """Yes, I know this is technically unsafe, but they won't mutuate in practice."""
         return hash((type(self), id(self)))
 
     def _value(self, market) -> float:
-        source = random.Random(self.seed)
+        source = Random(self.seed)
         method = getattr(source, self.method)
         for _ in range(self.rounds):
             ret = method(*self.args, **self.kwargs)
@@ -150,7 +255,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
     start: int = 0
 
     def __hash__(self) -> int:
-        # yes, I know this is technically unsafe, but they won't mutuate in practice
+        """Yes, I know this is technically unsafe, but they won't mutuate in practice."""
         return hash((type(self), id(self)))
 
     def __init__(self, seed, *args, size=None, start=0, **kwargs):
@@ -171,6 +276,14 @@ class ResolveRandomIndex(ResolveRandomSeed):
             self.kwargs["weights"] = [prob for _, prob in items]
         return cast(int, super()._value(market))
 
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        ret = f"{'  ' * indent}- Resolve to a random index, given some original seed. This one operates on a "
+        if self.method == 'randrange':
+            ret += f"fixed range of integers in ({self.start} <= x < {self.size}).\n"
+        else:
+            ret += f"dynamic range based on the current pool and probabilities, but starting at {self.start}.\n"
+        return ret
+
 
 @dataclass
 class ResolveMultipleValues(ResolutionValueRule):
@@ -182,6 +295,14 @@ class ResolveMultipleValues(ResolutionValueRule):
             for idx, value in rule.value(market, format='FREE_RESPONSE').items():
                 ret[idx] += value * part
             ret.update(rule.value(market, format='FREE_RESPONSE'))
+        return ret
+
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        ret = f"{'  ' * indent}Resolves to the weighted union of multiple other values.\n"
+        indent += 1
+        for rule, weight in self.shares.items():
+            ret += f"{'  ' * indent} - At a weight of {weight}\n"
+            ret += rule.explain_abstract(indent + 1, **kwargs)
         return ret
 
 
@@ -204,6 +325,13 @@ class ResolveToPR(ResolutionValueRule):
         )
         json = response.json()
         return "pull_request" in json and json["pull_request"].get("merged_at") is not None
+
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        ret = f"{'  ' * indent}- Resolves based on GitHub PR {self.owner}/{self.repo}#{self.number}\n"
+        indent += 1
+        ret += f"{'  ' * indent}- If the PR is merged, resolve to YES.\n"
+        ret += f"{'  ' * indent}- Otherwise, resolve to NO.\n"
+        return ret
 
 
 @dataclass
@@ -229,3 +357,11 @@ class ResolveToPRDelta(ResolutionValueRule):
             return market.market.max
         delta = datetime.fromisoformat(json["pull_request"].get("merged_at").rstrip('Z')) - self.start
         return delta.days + (delta.seconds / (24 * 60 * 60))
+
+    def explain_abstract(self, indent=0, max_: float = float('inf'), **kwargs) -> str:
+        ret = f"{'  ' * indent}- Resolves based on GitHub PR {self.owner}/{self.repo}#{self.number}\n"
+        indent += 1
+        ret += (f"{'  ' * indent}- If the PR is merged, resolve to the number of days between {self.start} and the "
+                "resolution time.\n")
+        ret += f"{'  ' * indent}- Otherwise, resolve to MAX ({max_}).\n"
+        return ret

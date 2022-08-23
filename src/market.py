@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from enum import auto, Enum
 from functools import lru_cache
+from logging import getLogger, Logger
 from math import log10
 from os import getenv
 from time import time
@@ -79,6 +80,33 @@ class Market(DictDeserializable):
     def from_id(cls, id: str, *args, **kwargs):
         api_market = get_client().get_market_by_id(id)
         return cls(api_market, *args, **kwargs)
+
+    def explain_abstract(self, **kwargs) -> str:
+        """Explain how the market will resolve and decide to resolve."""
+        # set up potentially necessary information
+        if "max_" not in kwargs:
+            kwargs["max_"] = self.market.max
+
+        # assemble the market contract
+        ret = ""
+        for rule in self.do_resolve_rules:
+            ret += rule.explain_abstract(**kwargs)
+        ret += "\nIt will resolve based on the following decision tree:\n"
+        for rule in self.resolve_to_rules:
+            ret += rule.explain_abstract(**kwargs)
+        ret += (
+            "\nNote that the bot operator reserves the right to resolve contrary to the purely automated rules to "
+            "preserve the spirit of the market."
+            "\n\n"
+            "The operator also reserves the right to trade on this market unless otherwise specified. Even if "
+            "otherwise specified, the operator reserves the right to buy shares for subsidy or to trade for the "
+            "purposes of cashing out liquidity.\n"
+        )
+        return ret
+
+    def explain_specific(self) -> str:
+        """Explain why the market is resolving the way that it is."""
+        ...
 
     def should_resolve(self) -> bool:
         return any(

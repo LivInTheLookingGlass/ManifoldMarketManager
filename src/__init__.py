@@ -8,7 +8,7 @@ In order to use this library, some things need to be loaded in your environment 
 more information on this.
 """
 
-from logging import getLogger
+from logging import getLogger, Logger
 from os import getenv
 from pathlib import Path
 from pickle import dumps, loads
@@ -50,9 +50,20 @@ def require_env(*env: str):
 class Rule(DictDeserializable):
     """The basic unit of market automation, rules defmine how a market should react to given events."""
 
-    def value(self, market: 'Market', format='') -> Optional[Union[int, float, str, Dict[int, float]]]:
+    def __init__(self):
+        self.logger: Logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
+
+    def value(self, market: 'Market') -> Optional[Union[int, float, str, Dict[int, float]]]:
         """Return the formatted value of a rule, whether this is if one should resolve or a resolution value."""
-        raise NotImplementedError()
+        raise NotImplementedError(type(self))
+
+    def explain_abstract(self, indent=0, **kwargs) -> str:
+        """Explain how the market will resolve and decide to resolve."""
+        raise NotImplementedError(type(self))
+
+    def explain_specific(self, market: 'Market', indent=0) -> str:
+        """Explain why the market is resolving the way that it is."""
+        raise NotImplementedError(type(self))
 
 
 from . import market  # noqa: E402
