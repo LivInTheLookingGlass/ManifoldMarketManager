@@ -6,7 +6,6 @@ from enum import IntEnum
 from logging import basicConfig, getLogger, DEBUG, INFO
 from pathlib import Path
 from os import getenv
-from signal import raise_signal, SIGINT
 from sqlite3 import connect, PARSE_COLNAMES, PARSE_DECLTYPES
 from typing import cast, Optional, Tuple
 
@@ -104,8 +103,7 @@ async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await query.edit_message_reply_markup(reply_markup=reply_markup)
         else:
             logger.info("Confirmation received, shutting dowm Telegram subsystem")
-            get_event_loop().stop()
-            # raise_signal(SIGINT)  # lets telegram bot know it can stop
+            get_event_loop().stop()  # lets telegram bot know it can stop
     else:
         state.last_response = Response(int(query.data))
         logger.info("This corresponds to %r", state.last_response)
@@ -272,7 +270,9 @@ if __name__ == '__main__':
             date = None
 
         if args.random_index:
-            mkt.resolve_to_rules.append(rule.ResolveRandomIndex(args.random_seed, size=args.index_size, rounds=args.random_rounds))
+            mkt.resolve_to_rules.append(
+                rule.ResolveRandomIndex(args.random_seed, size=args.index_size, rounds=args.random_rounds)
+            )
 
         if args.round:
             mkt.resolve_to_rules.append(rule.RoundValueRule())

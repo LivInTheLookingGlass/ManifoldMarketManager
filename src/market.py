@@ -146,7 +146,7 @@ class Market:
             raise RuntimeError()
         return chosen
 
-    def current_answer(self) -> Union[str, int, float, Dict[str, Any]]:
+    def current_answer(self) -> Union[str, int, float, Dict[Union[str, int], float]]:
         """Return the current top (single) answer."""
         # TODO: move these behaviors to a rule class
         if self.market.outcomeType == "BINARY":
