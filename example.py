@@ -67,7 +67,7 @@ keyboard2 = [
 ]
 
 
-@require_env
+@require_env("DBName")
 def register_db():
     do_initialize = not Path(getenv("DBName")).exists()
     conn = connect(getenv("DBName"), detect_types=PARSE_COLNAMES | PARSE_DECLTYPES)
@@ -104,7 +104,7 @@ async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await query.edit_message_reply_markup(reply_markup=reply_markup)
 
 
-@require_env
+@require_env("TelegramAPIKey", "TelegramChatID")
 def tg_main(text) -> Response:
     """Run the bot."""
     async def post_init(self):
@@ -149,7 +149,7 @@ def watch_reply(conn, id_, mkt, console_only=False):
     conn.commit()
 
 
-@require_env
+@require_env("ManifoldAPIKey", "DBName")
 def main(refresh: bool = False, console_only: bool = False):
     conn = register_db()
     mkt: market.Market

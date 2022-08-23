@@ -9,18 +9,21 @@ from typing import Any, Dict, List, Optional, Union
 from pymanifold import ManifoldClient
 from pymanifold.types import DictDeserializable, Market as APIMarket
 
+from . import require_env
 from .rule import DoResolveRule, ResolutionValueRule
+
+
+@lru_cache
+@require_env("ManifoldAPIKey")
+def get_client() -> ManifoldClient:
+    """Return a (possibly non-unique) Manifold client."""
+    return ManifoldClient(getenv("ManifoldAPIKey"))
 
 
 class MarketStatus(Enum):
     OPEN = auto()
     CLOSED = auto()
     RESOLVED = auto()
-
-
-@lru_cache
-def get_client() -> ManifoldClient:
-    return ManifoldClient(getenv("ManifoldAPIKey"))
 
 
 @dataclass
@@ -122,6 +125,7 @@ class Market(DictDeserializable):
         else:
             raise NotImplementedError(self.market.outcomeType)
 
+    @require_env("ManifoldAPIKey")
     def resolve(self, override=None):
         """Resolves this market according to our resolution rules.
 
@@ -144,6 +148,7 @@ class Market(DictDeserializable):
             self.market.isResolved = True
         return ret
 
+    @require_env("ManifoldAPIKey")
     def cancel(self):
         """Cancels this market.
 

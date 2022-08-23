@@ -7,7 +7,7 @@ import random
 
 import requests
 
-from . import Rule
+from . import require_env, Rule
 
 
 class DoResolveRule(Rule):
@@ -196,6 +196,7 @@ class ResolveToPR(ResolutionValueRule):
 #   -H "Authorization: token <TOKEN>" \
 #   https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER
 
+    @require_env("GithubAPIKey")
     def _value(self, market) -> bool:
         response = requests.get(
             url=f"https://api.github.com/repos/{self.owner}/{self.repo}/issues/{self.number}",
@@ -217,6 +218,7 @@ class ResolveToPRDelta(ResolutionValueRule):
 #   -H "Authorization: token <TOKEN>" \
 #   https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER
 
+    @require_env("GithubAPIKey")
     def _value(self, market) -> float:
         response = requests.get(
             url=f"https://api.github.com/repos/{self.owner}/{self.repo}/issues/{self.number}",

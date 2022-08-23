@@ -33,16 +33,18 @@ ENVIRONMENT_VARIABLES = [
 # That said, if you use a rule that requires some API and have no key for it, it will fail
 
 
-def require_env(func):
+def require_env(*env: str):
     """Enforce the presence of environment variables that may be necessary for a function to properly run."""
-    def foo(*args, **kwargs):
-        for x in ENVIRONMENT_VARIABLES:
-            if not getenv(x):
-                getLogger(__file__).error(f"Cannot run, as ${x} is not in the environment")
-                raise EnvironmentError("Please call 'source env.sh' first", x)
-        return func(*args, **kwargs)
+    def bar(func):
+        def foo(*args, **kwargs):
+            for x in env:
+                if not getenv(x):
+                    getLogger(__file__).error(f"Cannot run, as ${x} is not in the environment")
+                    raise EnvironmentError("Please call 'source env.sh' first", x)
+            return func(*args, **kwargs)
 
-    return foo
+        return foo
+    return bar
 
 
 class Rule(DictDeserializable):
