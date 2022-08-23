@@ -39,6 +39,8 @@ logger = getLogger(__name__)
 
 
 class Response(IntEnum):
+    """Possible responses from the Telegram Bot, other than YES or NO."""
+
     NO_ACTION = 1
     USE_DEFAULT = 2
     CANCEL = 3
@@ -46,6 +48,8 @@ class Response(IntEnum):
 
 @dataclass
 class State:
+    """Keeps track of global state for while the Telegram Bot is running."""
+
     application: Application = None  # type: ignore[assignment]
     last_response: Response = Response.NO_ACTION
     last_text: str = ""
@@ -69,6 +73,7 @@ keyboard2 = [
 
 @require_env("DBName")
 def register_db():
+    """Get a connection to the appropriate database for this bot."""
     do_initialize = not Path(getenv("DBName")).exists()
     conn = connect(getenv("DBName"), detect_types=PARSE_COLNAMES | PARSE_DECLTYPES)
     if do_initialize:
@@ -81,6 +86,7 @@ def register_db():
 
 async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Parse the CallbackQuery and update the message text."""
+    logger.info("Got into the buttons handler")
     query = update.callback_query
     if query is None or query.data is None:
         raise ValueError()
@@ -88,17 +94,21 @@ async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # CallbackQueries need to be answered, even if no notification to the user is needed
     # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
     await query.answer()
+    logger.info("Got a response from Telegram (%r)", query.data)
     if query.data in ("YES", "NO"):
         state.last_text += "\n" + query.data
         await query.edit_message_text(text=state.last_text)
         if query.data != "YES":
+            logger.info("Was not told yes. Backing out to ask again")
             reply_markup = InlineKeyboardMarkup(keyboard1)
             await query.edit_message_reply_markup(reply_markup=reply_markup)
         else:
+            logger.info("Confirmation received, shutting dowm Telegram subsystem")
             get_event_loop().stop()
             # raise_signal(SIGINT)  # lets telegram bot know it can stop
     else:
         state.last_response = Response(int(query.data))
+        logger.info("This corresponds to %r", state.last_response)
         reply_markup = InlineKeyboardMarkup(keyboard2)
         state.last_text += f"\nSelected option: {state.last_response.name}. Are you sure?"
         await query.edit_message_text(text=state.last_text)
@@ -124,6 +134,7 @@ def tg_main(text) -> Response:
 
 
 def watch_reply(conn, id_, mkt, console_only=False):
+    """Watch for a reply from the bot manager in order to check the bot's work."""
     text = (f"Hey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of {mkt.current_answer()}."
             f"This market is called: {mkt.market.question}")
     if not console_only:
@@ -142,7 +153,8 @@ def watch_reply(conn, id_, mkt, console_only=False):
         mkt.resolve()
     elif response == Response.CANCEL:
         mkt.cancel()
-
+    if mkt.status != market.Status.RESOLVED:
+        raise RuntimeError()
     conn.execute(
         "DELETE FROM markets WHERE id = ?;",
         (id_, )
@@ -152,11 +164,13 @@ def watch_reply(conn, id_, mkt, console_only=False):
 
 @require_env("ManifoldAPIKey", "DBName")
 def main(refresh: bool = False, console_only: bool = False):
+    """Go through watched markets and act on rules (resolve, trade, etc)."""
     conn = register_db()
     mkt: market.Market
     for id_, mkt, check_rate, last_checked in conn.execute("SELECT * FROM markets"):
         print(msg := f"Currently checking ID {id_}: {mkt.market.question}")
         logger.info(msg)
+        # print(mkt.explain_abstract())
         check = (refresh or not last_checked or (datetime.now() > last_checked + timedelta(hours=check_rate)))
         print(msg := f'  - [{"x" if check else " "}] Should I check?')
         logger.info(msg)
@@ -204,7 +218,8 @@ if __name__ == '__main__':
     parser.add_argument('-rm', '--remove-id', action='append', dest='rm_id', default=[],
                         help="Remove a specific market from management. May be repeated.")
 
-    parser.add_argument('-pl', '--poll', action='store_true', dest='poll')
+    parser.add_argument('-rnd', '--round', action='store_true')
+    parser.add_argument('-cur', '--current', action='store_true')
     parser.add_argument('-rd', '--rel-date', action='store', dest='rel_date',
                         help='Please give as "year/month/day" or "year-month-day". Used in: poll, git PR')
 
@@ -241,9 +256,9 @@ if __name__ == '__main__':
             args.slug = args.url.split('/')[-1]
 
         if args.slug:
-            mkt = market.Market.from_slug(args.slug, min=args.min, max=args.max, isLogScale=args.isLogScale)
+            mkt = market.Market.from_slug(args.slug)
         else:
-            mkt = market.Market.from_id(args.id, min=args.min, max=args.max, isLogScale=args.isLogScale)
+            mkt = market.Market.from_id(args.id)
 
         if args.rel_date:
             sections = args.rel_date.split('/')
@@ -257,7 +272,12 @@ if __name__ == '__main__':
             date = None
 
         if args.random_index:
-            mkt.resolve_to_rules.append(rule.ResolveRandomIndex(args.random_seed, args.index_size, args.random_rounds))
+            mkt.resolve_to_rules.append(rule.ResolveRandomIndex(args.random_seed, size=args.index_size, rounds=args.random_rounds))
+
+        if args.round:
+            mkt.resolve_to_rules.append(rule.RoundValueRule())
+        if args.current:
+            mkt.resolve_to_rules.append(rule.CurrentValueRule())
 
         if args.pr_slug:
             pr_ = list(args.pr_slug.split('/'))
