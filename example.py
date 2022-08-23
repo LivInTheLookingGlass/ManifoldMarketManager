@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from asyncio import new_event_loop, set_event_loop
+from asyncio import get_event_loop, new_event_loop, set_event_loop
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import IntEnum
@@ -95,7 +95,8 @@ async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             reply_markup = InlineKeyboardMarkup(keyboard1)
             await query.edit_message_reply_markup(reply_markup=reply_markup)
         else:
-            raise_signal(SIGINT)  # lets telegram bot know it can stop
+            get_event_loop().stop()
+            # raise_signal(SIGINT)  # lets telegram bot know it can stop
     else:
         state.last_response = Response(int(query.data))
         reply_markup = InlineKeyboardMarkup(keyboard2)
