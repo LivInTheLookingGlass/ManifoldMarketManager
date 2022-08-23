@@ -134,7 +134,8 @@ def tg_main(text) -> Response:
 def watch_reply(conn, id_, mkt, console_only=False):
     """Watch for a reply from the bot manager in order to check the bot's work."""
     text = (f"Hey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of {mkt.current_answer()}."
-            f"This market is called: {mkt.market.question}")
+            f"This market is called: {mkt.market.question}\n\n")
+    text += mkt.explain_abstract()
     if not console_only:
         response = tg_main(text)
     else:
@@ -168,7 +169,7 @@ def main(refresh: bool = False, console_only: bool = False):
     for id_, mkt, check_rate, last_checked in conn.execute("SELECT * FROM markets"):
         print(msg := f"Currently checking ID {id_}: {mkt.market.question}")
         logger.info(msg)
-        # print(mkt.explain_abstract())
+        print(mkt.explain_abstract())
         check = (refresh or not last_checked or (datetime.now() > last_checked + timedelta(hours=check_rate)))
         print(msg := f'  - [{"x" if check else " "}] Should I check?')
         logger.info(msg)

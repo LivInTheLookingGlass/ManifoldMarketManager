@@ -100,7 +100,7 @@ class Market:
             kwargs["max_"] = self.market.max
 
         # assemble the market contract
-        ret = ""
+        ret = "This market will resolve if any of the following are true:\n"
         for rule in self.do_resolve_rules:
             ret += rule.explain_abstract(**kwargs)
         ret += "\nIt will resolve based on the following decision tree:\n"
@@ -108,7 +108,7 @@ class Market:
             ret += rule.explain_abstract(**kwargs)
         ret += (
             "\nNote that the bot operator reserves the right to resolve contrary to the purely automated rules to "
-            "preserve the spirit of the market."
+            "preserve the spirit of the market. All resolutions are first verified by the human operator."
             "\n\n"
             "The operator also reserves the right to trade on this market unless otherwise specified. Even if "
             "otherwise specified, the operator reserves the right to buy shares for subsidy or to trade for the "
