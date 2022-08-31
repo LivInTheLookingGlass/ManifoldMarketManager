@@ -76,7 +76,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-__version_info__ = (0, 4, 0, 0, 0)
+__version_info__ = (0, 4, 0, 0, 1)
 __all__ = (
     "__version_info__", "market", "require_env", "rule", "Market", "DoResolveRule", "ResolutionValueRule", "Rule"
 )
