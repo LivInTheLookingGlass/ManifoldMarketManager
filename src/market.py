@@ -11,7 +11,7 @@ from pymanifold import ManifoldClient
 from pymanifold.types import Market as APIMarket
 
 from . import require_env
-from .rule import DoResolveRule, ResolutionValueRule
+from .rule import explain_abstract, DoResolveRule, ResolutionValueRule
 
 
 @lru_cache
@@ -98,23 +98,12 @@ class Market:
         # set up potentially necessary information
         if "max_" not in kwargs:
             kwargs["max_"] = self.market.max
+        if "time_rules" not in kwargs:
+            kwargs["time_rules"] = self.do_resolve_rules
+        if "value_rules" not in kwargs:
+            kwargs["value_rules"] = self.resolve_to_rules
 
-        # assemble the market contract
-        ret = "This market will resolve if any of the following are true:\n"
-        for rule in self.do_resolve_rules:
-            ret += rule.explain_abstract(**kwargs)
-        ret += "\nIt will resolve based on the following decision tree:\n"
-        for rule in self.resolve_to_rules:
-            ret += rule.explain_abstract(**kwargs)
-        ret += (
-            "\nNote that the bot operator reserves the right to resolve contrary to the purely automated rules to "
-            "preserve the spirit of the market. All resolutions are first verified by the human operator."
-            "\n\n"
-            "The operator also reserves the right to trade on this market unless otherwise specified. Even if "
-            "otherwise specified, the operator reserves the right to buy shares for subsidy or to trade for the "
-            "purposes of cashing out liquidity.\n"
-        )
-        return ret
+        return explain_abstract(**kwargs)
 
     def explain_specific(self) -> str:
         """Explain why the market is resolving the way that it is."""

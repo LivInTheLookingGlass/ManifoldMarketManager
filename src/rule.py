@@ -11,6 +11,25 @@ import requests
 from . import require_env, Rule
 
 
+def explain_abstract(**kwargs) -> str:
+    """Explain how the market will resolve and decide to resolve."""
+    ret = "This market will resolve if any of the following are true:\n"
+    for rule in kwargs["time_rules"]:
+        ret += rule.explain_abstract(**kwargs)
+    ret += "\nIt will resolve based on the following decision tree:\n"
+    for rule in kwargs["value_rules"]:
+        ret += rule.explain_abstract(**kwargs)
+    ret += (
+        "\nNote that the bot operator reserves the right to resolve contrary to the purely automated rules to "
+        "preserve the spirit of the market. All resolutions are first verified by the human operator."
+        "\n\n"
+        "The operator also reserves the right to trade on this market unless otherwise specified. Even if "
+        "otherwise specified, the operator reserves the right to buy shares for subsidy or to trade for the "
+        "purposes of cashing out liquidity.\n"
+    )
+    return ret
+
+
 class DoResolveRule(Rule):
     """The subtype of rule which determines if a market should resolve, returning a bool."""
 
@@ -358,10 +377,13 @@ class ResolveToPRDelta(ResolutionValueRule):
         delta = datetime.fromisoformat(json["pull_request"].get("merged_at").rstrip('Z')) - self.start
         return delta.days + (delta.seconds / (24 * 60 * 60))
 
-    def explain_abstract(self, indent=0, max_: float = float('inf'), **kwargs) -> str:
+    def explain_abstract(self, indent=0, max_: Optional[float] = None, **kwargs) -> str:
         ret = f"{'  ' * indent}- Resolves based on GitHub PR {self.owner}/{self.repo}#{self.number}\n"
         indent += 1
         ret += (f"{'  ' * indent}- If the PR is merged, resolve to the number of days between {self.start} and the "
                 "resolution time.\n")
-        ret += f"{'  ' * indent}- Otherwise, resolve to MAX ({max_}).\n"
+        ret += f"{'  ' * indent}- Otherwise, resolve to MAX"
+        if max_ is not None:
+            ret += f" ({max_})"
+        ret += ".\n"
         return ret
