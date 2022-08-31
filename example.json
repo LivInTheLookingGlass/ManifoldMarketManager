@@ -1,0 +1,153 @@
+[
+    {
+        "manifold": {
+            "outcomeType": "BINARY",
+            "question": "Is supersymmetry correct?",
+            "description": {
+                "type": "doc",
+                "content": [{
+                    "type": "paragraph",
+                    "content": [{
+                        "type": "text",
+                        "text": "https://en.wikipedia.org/wiki/Supersymmetry",
+                        "marks": [{
+                            "type": "link",
+                            "attrs": {
+                                "href": "https://en.wikipedia.org/wiki/Supersymmetry",
+                                "target": "_blank",
+                                "class": null
+                            }
+                        }]
+                    }]
+                }]
+            },
+            "closeTime": "2100-12-31T11:59:59",
+
+            "initialProb": 50,
+
+            "minValue": null,
+            "maxValue": null,
+            "isLogScale": null,
+            "initialValue": null,
+            "groups": ["Physics Forecasting", "Olivia"]
+        },
+        "time_rules": [
+            ["ResolveAtTime", {
+                "resolve_at": "2100-12-31T11:59:59"
+            }]
+        ],
+        "value_rules": [
+            ["RoundValueRule", {}]
+        ],
+        "notes": "",
+        "initial_values": {}
+    },
+    {
+        "manifold": {
+            "outcomeType": "PSEUDO_NUMERIC",
+            "question": "When will the next mission to Jupiter be launched?",
+            "description": {
+                "type": "doc",
+                "content": [{
+                    "type": "paragraph",
+                    "content": [{
+                        "type": "text",
+                        "text": "Resolves to the fractional year at which a mission to the Jovian system is launched. This includes flyby missions, orbiters, landers, or any  of these types of mission to a moon in orbit of Jupiter. This does not include any bodies which are in resonance with Jupiter but not in orbit."
+                    }]
+                }],
+                "processed": true
+            },
+            "closeTime": "2100-12-31T11:59:59",
+
+            "initialProb": null,
+
+            "minValue": 2023,
+            "maxValue": 2100,
+            "isLogScale": true,
+            "initialValue": 2035,
+            "groups": ["Space", "Olivia"]
+        },
+        "time_rules": [
+            ["ResolveAtTime", {
+                "resolve_at": "2100-12-31T11:59:59"
+            }]
+        ],
+        "value_rules": [
+            ["CurrentValueRule", {}]
+        ],
+        "notes": "",
+        "initial_values": {}
+    },
+    {
+        "manifold": {
+            "outcomeType": "PSEUDO_NUMERIC",
+            "question": "When will the next mission to a minor body between Mars and the Kuiper Belt be launched?",
+            "description": {
+                "type": "doc",
+                "content": [{
+                    "type": "paragraph",
+                    "content": [{
+                        "type": "text",
+                        "text": "Resolves to the fractional year at which a mission to the Neptunian system is launched. This includes flyby missions, orbiters, landers, or miners. This does not include any bodies which are in orbit of a major planet."
+                    }]
+                }],
+                "processed": true
+            },
+            "closeTime": "2100-12-31T11:59:59",
+
+            "initialProb": null,
+
+            "minValue": 2023,
+            "maxValue": 2100,
+            "isLogScale": true,
+            "initialValue": 2035,
+            "groups": ["Space", "Olivia"]
+        },
+        "time_rules": [
+            ["ResolveAtTime", {
+                "resolve_at": "2100-12-31T11:59:59"
+            }]
+        ],
+        "value_rules": [
+            ["CurrentValueRule", {}]
+        ],
+        "notes": "",
+        "initial_values": {}
+    },
+    {
+        "manifold": {
+            "outcomeType": "PSEUDO_NUMERIC",
+            "question": "When will the next mission to Kuiper Belt be launched?",
+            "description": {
+                "type": "doc",
+                "content": [{
+                    "type": "paragraph",
+                    "content": [{
+                        "type": "text",
+                        "text": "Resolves to the fractional year at which a mission to the Kuiper Belt is launched. This includes any body in the Kuiper Belt that is not considered a major planet or in orbit of a major planet."
+                    }]
+                }],
+                "processed": true
+            },
+            "closeTime": "2100-12-31T11:59:59",
+
+            "initialProb": null,
+
+            "minValue": 2023,
+            "maxValue": 2100,
+            "isLogScale": true,
+            "initialValue": 2035,
+            "groups": ["Space", "Olivia"]
+        },
+        "time_rules": [
+            ["ResolveAtTime", {
+                "resolve_at": "2100-12-31T11:59:59"
+            }]
+        ],
+        "value_rules": [
+            ["CurrentValueRule", {}]
+        ],
+        "notes": "",
+        "initial_values": {}
+    }
+]
