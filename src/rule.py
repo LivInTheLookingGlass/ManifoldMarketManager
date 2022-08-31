@@ -4,7 +4,7 @@ from datetime import datetime
 from math import log10
 from os import getenv
 from random import Random
-from typing import cast, Any, DefaultDict, Dict, Sequence, Optional
+from typing import MutableSequence, Tuple, cast, Any, DefaultDict, Dict, Sequence, Optional
 
 import requests
 
@@ -52,6 +52,17 @@ class NegateRule(DoResolveRule):
             self.child.explain_abstract(indent + 1, **kwargs)
         )
 
+    @classmethod
+    def from_dict(cls, env):
+        """Take a dictionary and return an instance of the associated class."""
+        if "child" in env:
+            try:
+                type_, kwargs = env["child"]
+                env["child"] = globals().get(type_).from_dict(kwargs)
+            except Exception:
+                pass
+        return super().from_dict(env)
+
 
 @dataclass
 class EitherRule(DoResolveRule):
@@ -69,6 +80,18 @@ class EitherRule(DoResolveRule):
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
+    @classmethod
+    def from_dict(cls, env):
+        """Take a dictionary and return an instance of the associated class."""
+        for name in ('rule1', 'rule2'):
+            if name in env:
+                try:
+                    type_, kwargs = env[name]
+                    env[name] = globals().get(type_).from_dict(kwargs)
+                except Exception:
+                    pass
+        return super().from_dict(env)
+
 
 @dataclass
 class BothRule(DoResolveRule):
@@ -85,6 +108,18 @@ class BothRule(DoResolveRule):
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
+
+    @classmethod
+    def from_dict(cls, env):
+        """Take a dictionary and return an instance of the associated class."""
+        for name in ('rule1', 'rule2'):
+            if name in env:
+                try:
+                    type_, kwargs = env[name]
+                    env[name] = globals().get(type_).from_dict(kwargs)
+                except Exception:
+                    pass
+        return super().from_dict(env)
 
 
 @dataclass
@@ -306,11 +341,11 @@ class ResolveRandomIndex(ResolveRandomSeed):
 
 @dataclass
 class ResolveMultipleValues(ResolutionValueRule):
-    shares: DefaultDict[ResolutionValueRule, float] = field(default_factory=lambda: defaultdict(float))
+    shares: MutableSequence[Tuple[ResolutionValueRule, float]] = field(default_factory=list)
 
     def _value(self, market) -> Dict[int, float]:
         ret: DefaultDict[int, float] = defaultdict(float)
-        for rule, part in self.shares.items():
+        for rule, part in self.shares:
             for idx, value in rule.value(market, format='FREE_RESPONSE').items():
                 ret[idx] += value * part
             ret.update(rule.value(market, format='FREE_RESPONSE'))
@@ -319,10 +354,25 @@ class ResolveMultipleValues(ResolutionValueRule):
     def explain_abstract(self, indent=0, **kwargs) -> str:
         ret = f"{'  ' * indent}Resolves to the weighted union of multiple other values.\n"
         indent += 1
-        for rule, weight in self.shares.items():
+        for rule, weight in self.shares:
             ret += f"{'  ' * indent} - At a weight of {weight}\n"
             ret += rule.explain_abstract(indent + 1, **kwargs)
         return ret
+
+    @classmethod
+    def from_dict(cls, env):
+        """Take a dictionary and return an instance of the associated class."""
+        shares: MutableSequence[ResolutionValueRule, float] = env['share']
+        for rule, weight in shares.copy():
+            try:
+                type_, kwargs = rule
+                new_rule = globals().get(type_).from_dict(kwargs)
+                shares.remove(rule)
+                shares.append((new_rule, weight))
+            except Exception:
+                pass
+        env['shares'] = shares
+        return super().from_dict(env)
 
 
 @dataclass
