@@ -17,6 +17,46 @@
 - Automatically formats rules for the market type
 - Before resolving a market, reach out on Telegram to confirm that's okay
 
+## Application Behavior
+
+Every time you run `example.py`, it goes through the following steps:
+
+1. (TODO) If flagged, scan a JSON file
+    1. For each entry:
+        1. If it's a market creation request, add it to `pending`
+        2. If it's an existing market, add it to `markets`
+    2. Clear the file
+2. (TODO) Unless flagged otherwise, for each market in `pending`:
+    1. Check your balance
+    2. If it's less than M$100, break
+    3. If it's less than the `cost` of this market, continue
+    4. Create the market
+    5. Add it to `markets`
+    6. Remove it from `pending`
+3. If flagged, manually remove many markets from `markets`
+4. If flagged, manually add a market to `markets`
+5. Unless flagged otherwise, for each market in `markets`:
+    1. If the time is before `last_checked + check_rate` and refresh is not flagged, continue
+    2. If the market does not meet the resolution criteria, continue
+    3. Ask the operator what action to take (either via Telegram or the console):
+        1. Cancel it, or
+        2. Resolve to the suggested value, or
+        3. Do nothing
+    4. Update check time
+
+## Database Spec
+
+- `markets`
+    - `id`: INTEGER
+    - `market`: A serialized python object with the relevant rules
+    - `check_rate`: REAL, the minimum number of hours between checks
+    - `last_checked`: TIMESTAMP, the time it was last checked (or NULL)
+- `pending`
+    - `id`: INTEGER
+    - `priority`: REAL, lower means you get created sooner
+    - `cost`: INTEGER, cost in mana to create, lower means you get created sooner
+    - `request`: A serialized python object with the relevant rules and info
+
 ## Immediate Goals
 
 - [ ] Testing for the API bindings by spinning up a dev node of Manifold
