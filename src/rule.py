@@ -166,10 +166,6 @@ class ResolveWithPR(DoResolveRule):
 class ResolutionValueRule(Rule):
     """The subtype of rule which determines what a market should resolve to."""
 
-    def __hash__(self) -> int:
-        """Yes, I know this is technically unsafe, but they won't actually mutate in flight."""
-        return hash((type(self), id(self)))
-
     def value(self, market, format='BINARY'):
         ret = self._value(market)
         if ret is None:
@@ -208,10 +204,6 @@ class ResolutionValueRule(Rule):
 @dataclass
 class ResolveToValue(ResolutionValueRule):
     resolve_value: Any
-
-    def __hash__(self) -> int:
-        """Yes, I know this is technically unsafe, but they won't mutuate in practice."""
-        return hash((type(self), id(self)))
 
     def _value(self, market):
         return self.resolve_value
@@ -291,10 +283,6 @@ class ResolveRandomSeed(ResolutionValueRule):
     args: Sequence[Any] = ()
     kwargs: Dict[str, Any] = field(default_factory=dict)
 
-    def __hash__(self) -> int:
-        """Yes, I know this is technically unsafe, but they won't mutuate in practice."""
-        return hash((type(self), id(self)))
-
     def _value(self, market) -> float:
         source = Random(self.seed)
         method = getattr(source, self.method)
@@ -307,10 +295,6 @@ class ResolveRandomSeed(ResolutionValueRule):
 class ResolveRandomIndex(ResolveRandomSeed):
     size: Optional[int] = None
     start: int = 0
-
-    def __hash__(self) -> int:
-        """Yes, I know this is technically unsafe, but they won't mutuate in practice."""
-        return hash((type(self), id(self)))
 
     def __init__(self, seed, *args, size=None, start=0, **kwargs):
         self.start = start
@@ -381,11 +365,6 @@ class ResolveToPR(ResolutionValueRule):
     repo: str
     number: int
 
-# curl \
-#   -H "Accept: application/vnd.github+json" \
-#   -H "Authorization: token <TOKEN>" \
-#   https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER
-
     @require_env("GithubAPIKey")
     def _value(self, market) -> bool:
         response = requests.get(
@@ -409,11 +388,6 @@ class ResolveToPRDelta(ResolutionValueRule):
     repo: str
     number: int
     start: datetime
-
-# curl \
-#   -H "Accept: application/vnd.github+json" \
-#   -H "Authorization: token <TOKEN>" \
-#   https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER
 
     @require_env("GithubAPIKey")
     def _value(self, market) -> float:
