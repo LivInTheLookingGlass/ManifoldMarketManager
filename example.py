@@ -149,11 +149,11 @@ def watch_reply(conn, id_, mkt, console_only=False):
     if response == Response.NO_ACTION:
         return
     elif response == Response.USE_DEFAULT:
-        mkt.resolve()
+        resp = mkt.resolve()
     elif response == Response.CANCEL:
-        mkt.cancel()
-    if mkt.status != market.Status.RESOLVED:
-        raise RuntimeError()
+        resp = mkt.cancel()
+    if mkt.status != market.MarketStatus.RESOLVED:
+        raise RuntimeError(resp)
     conn.execute(
         "DELETE FROM markets WHERE id = ?;",
         (id_, )
