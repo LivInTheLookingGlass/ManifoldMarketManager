@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Literal, Optional, Union
 from src import rule, explain_abstract
 from src.rule import DoResolveRule, ResolutionValueRule
 from src.market import get_client, Market
-from example import register_db
+from src.application import register_db
 
 from pymanifold.types import DictDeserializable
 
