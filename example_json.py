@@ -5,9 +5,9 @@ from json import dump, load
 from re import match
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from src import rule
-from src.rule import explain_abstract, DoResolveRule, ResolutionValueRule
-from src.market import Market, get_client
+from src import rule, explain_abstract
+from src.rule import DoResolveRule, ResolutionValueRule
+from src.market import get_client, Market
 from example import register_db
 
 from pymanifold.types import DictDeserializable
@@ -21,16 +21,19 @@ def main():
         for mkt in obj.copy():
             my_mkt = CreationRequest.from_dict(mkt).create()
             db.execute("INSERT INTO markets VALUES ( (SELECT MAX(id)+1 from markets), ?, 3, NULL);", (my_mkt, ))
+            ((new_id, ), ) = db.execute("SELECT MAX(id) from markets;")
+            print(f"Added as ID {new_id}")
+            print(my_mkt.market.url)
             obj.remove(mkt)
     finally:
         db.commit()
         db.close()
         with open('example.json', 'w') as f:
-            dump(obj, default=date_serialization_hook)
+            dump(obj, f, default=date_serialization_hook, indent="\t")
 
 
 def date_serialization_hook(obj):
-    """JSON serializer for objects not serializable by default json code"""
+    """JSON serializer for objects not serializable by default json code."""
     if isinstance(obj, (datetime, date)):
         return obj.isoformat()
     raise TypeError(f"Type ${type(obj)} not serializable")
@@ -56,13 +59,13 @@ class ManifoldRequest(DictDeserializable):
     description: Union[str, Any]
     closeTime: int
 
-    initialProb: Optional[float]  # Note: probability is multiplied by 100, may only allow integers in binary market
+    initialProb: Optional[float] = None  # Note: probability is multiplied by 100, may only allow integers
 
-    minValue: Optional[float]
-    maxValue: Optional[float]
-    isLogScale: Optional[bool]
-    initialValue: Optional[float]
-    groups: List[str] = field(default_factory=list)
+    minValue: Optional[float] = None
+    maxValue: Optional[float] = None
+    isLogScale: Optional[bool] = None
+    initialValue: Optional[float] = None
+    tags: List[str] = field(default_factory=list)
 
     def __post_init__(self):
         if self.outcomeType == "BINARY":
@@ -91,20 +94,27 @@ class CreationRequest:
     notes: str = ""
     initial_values: Dict[str, int] = field(default_factory=dict)
 
-    def __postinit__(self):
+    def __post_init__(self):
         if not self.manifold.description.get("processed"):
-            for paragraph in explain_abstract(
+            explanation = "\n" + explain_abstract(
                 time_rules=self.time_rules, value_rules=self.value_rules
-            ).splitlines():
-                # if not paragraph:
-                #     continue
-                self.manifold.description["content"].append({
-                    "type": "paragraph",
-                    "content": [{
-                        "type": "text",
-                        "text": paragraph
-                    }]
-                })
+            )
+            for paragraph in explanation.splitlines():
+                if paragraph:
+                    if paragraph.startswith(" "):
+                        for idx, character in enumerate(paragraph):
+                            if character != " ":
+                                break
+                        paragraph = paragraph.replace(" ", "&nbsp;", idx)
+                    self.manifold.description["content"].append({
+                        "type": "paragraph",
+                        "content": [{
+                            "type": "text",
+                            "text": paragraph
+                        }]
+                    })
+                else:
+                    self.manifold.description["content"].append({"type": "paragraph"})
             self.manifold.description["processed"] = True
 
     @classmethod
@@ -139,7 +149,12 @@ class CreationRequest:
         else:
             raise ValueError()
 
-        return Market(market, do_resolve_rules=self.time_rules, resolve_to_rules=self.value_rules, notes=self.notes)
+        return Market(
+            client.get_market_by_id(market.id),
+            do_resolve_rules=self.time_rules,
+            resolve_to_rules=self.value_rules,
+            notes=self.notes
+        )
 
 
 if __name__ == '__main__':

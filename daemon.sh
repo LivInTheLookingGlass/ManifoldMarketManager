@@ -6,7 +6,7 @@ do
 	do
 		echo "Running for environment $file"
 		source $file
-		python example.py
+		python -m src
 	done
 	echo "Press once <CTRL+C> to check now, and twice to exit before next loop."
 	hour=0

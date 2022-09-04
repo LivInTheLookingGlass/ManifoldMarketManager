@@ -47,6 +47,27 @@ def require_env(*env: str):
     return bar
 
 
+def explain_abstract(**kwargs) -> str:
+    """Explain how the market will resolve and decide to resolve."""
+    ret = "This market will resolve if any of the following are true:\n"
+    for rule_ in kwargs["time_rules"]:
+        ret += rule_.explain_abstract(**kwargs)
+    ret += ("\nIt will resolve based on the following decision tree:\n"
+            "- If the human operator agrees:\n")
+    for rule_ in kwargs["value_rules"]:
+        ret += rule_.explain_abstract(indent=1, **kwargs)
+    ret += (
+        "- Otherwise, a manually provided value\n\n"
+        "Note that the bot operator reserves the right to resolve contrary to the purely automated rules to "
+        "preserve the spirit of the market. All resolutions are first verified by the human operator."
+        "\n\n"
+        "The operator also reserves the right to trade on this market unless otherwise specified. Even if "
+        "otherwise specified, the operator reserves the right to buy shares for subsidy or to trade for the "
+        "purposes of cashing out liquidity.\n"
+    )
+    return ret
+
+
 class Rule(DictDeserializable):
     """The basic unit of market automation, rules defmine how a market should react to given events."""
 

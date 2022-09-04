@@ -10,8 +10,8 @@ from typing import Any, Dict, List, Union
 from pymanifold import ManifoldClient
 from pymanifold.types import Market as APIMarket
 
-from . import require_env
-from .rule import explain_abstract, DoResolveRule, ResolutionValueRule
+from . import explain_abstract, require_env
+from .rule import DoResolveRule, ResolutionValueRule
 
 
 @lru_cache
