@@ -106,5 +106,6 @@ The goal of this project is to make a Manifold agent that can manage various for
     3. `TelegramAPIKey`: The API key for your Telegram bot. For more info, see [here](https://github.com/python-telegram-bot/python-telegram-bot/wiki/Introduction-to-the-API)
     4. `TelegramChatID`: The chat ID between your Telegram bot and you. For more info, see [here](https://github.com/python-telegram-bot/python-telegram-bot/wiki/Introduction-to-the-API)
     5. `DBName`: The name of your database file
-5. Add your first markets using the arguments provided in `example.py`. Each market needs at least one DoResolveRule and at least one ResolveToRule. The simplest ResolveToRule is `--poll`. The simplest DoResolve rule is `--rel-date`. More complicated markets may need to have rules constructed manually.
+    6. `LogFile`: The name of a logfile to use
+5. Add your first markets using the arguments provided in `src/__main__.py`. Each market needs at least one DoResolveRule and at least one ResolveToRule. The simplest ResolveToRule is `--round` or `--current`. The simplest DoResolve rule is `--rel-date`. More complicated markets may need to have rules constructed manually.
 6. When you've added all your markets, modify the polling frequency in `daemon.sh`, then run it
