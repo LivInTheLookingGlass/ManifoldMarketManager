@@ -327,16 +327,16 @@ class ResolveMultipleValues(ResolutionValueRule):
     @classmethod
     def from_dict(cls, env):
         """Take a dictionary and return an instance of the associated class."""
-        shares: MutableSequence[ResolutionValueRule, float] = env['share']
-        for rule, weight in shares.copy():
+        shares: MutableSequence[ResolutionValueRule, float] = env['shares']
+        new_shares = []
+        for rule, weight in shares:
             try:
                 type_, kwargs = rule
                 new_rule = globals().get(type_).from_dict(kwargs)
-                shares.remove(rule)
-                shares.append((new_rule, weight))
+                new_shares.append((new_rule, weight))
             except Exception:
                 pass
-        env['shares'] = shares
+        env['shares'] = new_shares
         return super().from_dict(env)
 
 
