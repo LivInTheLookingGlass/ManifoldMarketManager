@@ -21,13 +21,6 @@ parser.add_argument('-i', '--add-id', action='store', dest='id_')
 parser.add_argument('-u', '--add-url', action='store', dest='url')
 parser.add_argument('-c', '--check-rate', action='store', dest='rate', help='Check rate in hours')
 
-parser.add_argument('-mi', '--min', action='store',
-                    help="Only used for numeric markets, until they add this to the API")
-parser.add_argument('-ma', '--max', action='store',
-                    help="Only used for numeric markets, until they add this to the API")
-parser.add_argument('-ls', '--log_scale', action='store_true', dest='isLogScale',
-                    help="Only used for numeric markets, until they add this to the API")
-
 parser.add_argument('-r', '--refresh', action='store_true', dest='refresh',
                     help="Ignore time last checked and look at all markets immediately")
 
