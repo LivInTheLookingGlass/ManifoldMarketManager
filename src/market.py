@@ -176,6 +176,11 @@ class Market:
                 override = (override, log10(override - start + 1) / log10(end - start + 1) * 100)
             else:
                 override = (override, (override - start) / (end - start) * 100)
+        if self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
+            new_override = {}
+            for idx, weight in override.items():
+                new_override[int(self.market.answers[idx]['id'])] = weight
+            override = new_override
         ret = self.client.resolve_market(self.market, override)
         if ret.status_code < 300:
             self.logger.info("I was resolved")
