@@ -66,15 +66,21 @@ class ManifoldRequest(DictDeserializable):
     isLogScale: Optional[bool] = None
     initialValue: Optional[float] = None
     tags: List[str] = field(default_factory=list)
+    answers: Optional[List[str]] = None
 
     def __post_init__(self):
         if self.outcomeType == "BINARY":
             if self.initialProb is None:
                 raise ValueError("Missing initial probability")
 
-        if self.outcomeType == "PSEUDO_NUMERIC":
+        elif self.outcomeType == "PSEUDO_NUMERIC":
             if None in (self.minValue, self.maxValue, self.isLogScale, self.initialValue):
                 raise ValueError("Need a minValue, maxValue, isLogScale, and initialValue")
+
+        elif self.outcomeType == "MULTIPLE_CHOICE":
+            if self.answers is None or len(self.answers) < 2 or any(len(x) < 1 for x in self.answers):
+                print(self.answers)
+                raise ValueError("Invalid answers list")
 
         if isinstance(self.closeTime, datetime):
             self.closeTime = round(self.closeTime.timestamp() * 1000)
@@ -105,7 +111,7 @@ class CreationRequest:
                         for idx, character in enumerate(paragraph):
                             if character != " ":
                                 break
-                        paragraph = paragraph.replace(" ", "&nbsp;", idx)
+                        paragraph = paragraph.replace(" ", "-", idx)
                     self.manifold.description["content"].append({
                         "type": "paragraph",
                         "content": [{
@@ -144,7 +150,7 @@ class CreationRequest:
                 client.create_bet(market.id, weight, answer)
 
         elif self.manifold.outcomeType == "MULTIPLE_CHOICE":
-            raise NotImplementedError()
+            market = client.create_multiple_choice_market(**self.manifold.to_dict())
 
         else:
             raise ValueError()

@@ -188,7 +188,7 @@ The goal of this project is to make a Manifold agent that can manage various for
 }
 ```
 
-## Pseudonumeric Example
+### Pseudonumeric Example
 
 ```json
 {
@@ -224,6 +224,107 @@ The goal of this project is to make a Manifold agent that can manage various for
     ],
     "value_rules": [
         ["CurrentValueRule", {}]
+    ],
+    "notes": ""
+}
+```
+
+### Mutliple Choice Example
+
+```json
+{
+    "manifold": {
+        "outcomeType": "MULTIPLE_CHOICE",
+        "question": "Which character is best?",
+        "description": {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "This market is purely intended as a poll to try and settle an argument. It will resolve to MKT."
+                        }
+                    ]
+                }
+            ],
+            "processed": false
+        },
+        "answers": [
+            "Harry Potter",
+            "Cthulu",
+            "Ririsu/Ririto Ibusuki",
+        ],
+        "closeTime": "2022-09-13T11:59:59"
+    },
+    "time_rules": [
+        [
+            "ResolveAtTime",
+            {"resolve_at": "2022-09-13T11:59:59"}
+        ]
+    ],
+    "value_rules": [
+        [
+            "CurrentValueRule",
+            {}
+        ]
+    ],
+    "notes": ""
+}
+```
+
+### GitHub PR Merge Date
+
+```json
+{
+    "manifold": {
+        "outcomeType": "PSEUDO_NUMERIC",
+        "question": "How many days after Septermber 1st will Manifold PR#830 be merged?",
+        "description": {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Resolves to MAX if rejected at time of check"
+                        }
+                    ]
+                }
+            ],
+            "processed": false
+        },
+        "closeTime": "2025-05-28T11:59:59",
+        "minValue": 0,
+        "maxValue": 1000,
+        "isLogScale": true,
+        "initialValue": 30.639
+    },
+    "time_rules": [
+        [
+            "ResolveAtTime",
+            {"resolve_at": "2025-05-28T11:59:59"}
+        ],
+        [
+            "ResolveWithPR",
+            {
+                "owner": "manifoldmarkets",
+                "repo": "manifold",
+                "number": 830
+            }
+        ]
+    ],
+    "value_rules": [
+        [
+            "ResolveToPRDelta",
+            {
+                "owner": "manifoldmarkets",
+                "repo": "manifold",
+                "number": 830,
+                "start": "2022-09-01"
+            }]
     ],
     "notes": ""
 }
