@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from math import log10
 from typing import Any, Dict, Literal, Union, cast
 
+from pymanifold.lib import ManifoldClient
+
 from .. import ResolutionValueRule
 from ...market import Market
 
@@ -89,7 +91,7 @@ class ResolveToUserProfit(CurrentValueRule):
     field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
 
     def _value(self, market: Market) -> float:
-        user = market.client._get_user_raw(self.user)
+        user = ManifoldClient()._get_user_raw(self.user)
         return user['profitCached'][self.field]
 
     def explain_abstract(self, indent=0, **kwargs) -> str:
@@ -102,7 +104,7 @@ class ResolveToUserCreatedVolume(CurrentValueRule):
     field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
 
     def _value(self, market: Market) -> float:
-        user = market.client._get_user_raw(self.user)
+        user = ManifoldClient()._get_user_raw(self.user)
         return user['creatorVolumeCached'][self.field]
 
     def explain_abstract(self, indent=0, **kwargs) -> str:
