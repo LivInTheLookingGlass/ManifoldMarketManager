@@ -9,13 +9,14 @@ from . import Rule
 
 
 ENVIRONMENT_VARIABLES = [
-    "ManifoldAPIKey",   # REQUIRED. Allows trades, market creation, market resolution
-    "GithubAPIKey",     # Optional. Allows you to query Pull Requests
-    "DBName",           # REQUIRED. The name of the database you wish to use
-    "TelegramAPIKey",   # Optional. If you don't have a Telegram channel you wish to use, delete this line
-                        # and run --console-only
-    "TelegramChatID",   # Optional. See above
-    "LogFile",          # REQUIRED. What file to put the log in
+    "ManifoldAPIKey",     # REQUIRED. Allows trades, market creation, market resolution
+    "GithubUsername",     # Optional. Allows you have a higher rate limit, make authorized requests
+    "GithubAccessToken",  # Optional. See above
+    "DBName",             # REQUIRED. The name of the database you wish to use
+    "TelegramAPIKey",     # Optional. If you don't have a Telegram channel you wish to use, delete this line
+                          # and run --console-only
+    "TelegramChatID",     # Optional. See above
+    "LogFile",            # REQUIRED. What file to put the log in
 ]
 # If you don't need a specific environment variable, delete the line in this list
 # That said, if you use a rule that requires some API and have no key for it, it will fail

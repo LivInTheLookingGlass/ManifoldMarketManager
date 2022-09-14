@@ -1,13 +1,10 @@
 from dataclasses import dataclass
 from datetime import datetime
-from os import getenv
 from typing import Optional
 
-from github3 import login
-
+from . import login
 from .. import ResolutionValueRule
 from ...market import Market
-from ...util import require_env
 
 
 @dataclass
@@ -18,9 +15,8 @@ class ResolveToPR(ResolutionValueRule):
     repo: str
     number: int
 
-    @require_env('GithubAPIKey')
     def _value(self, market: Market) -> bool:
-        issue = login(token=getenv('GithubAPIKey')).issue(self.owner, self.repo, self.number)
+        issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         return pr is not None and pr.merged
 
@@ -32,7 +28,7 @@ class ResolveToPR(ResolutionValueRule):
         return ret
 
     def explain_specific(self, market: Market, indent=0) -> str:
-        issue = login(token=getenv('GithubAPIKey')).issue(self.owner, self.repo, self.number)
+        issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         if pr is None:
             merge_time = None
@@ -51,9 +47,8 @@ class ResolveToPRDelta(ResolutionValueRule):
     number: int
     start: datetime
 
-    @require_env('GithubAPIKey')
     def _value(self, market: Market) -> float:
-        issue = login(token=getenv('GithubAPIKey')).issue(self.owner, self.repo, self.number)
+        issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         if pr is None or pr.merged_at is None:
             return market.market.max
@@ -72,7 +67,7 @@ class ResolveToPRDelta(ResolutionValueRule):
         return ret
 
     def explain_specific(self, market: Market, indent=0) -> str:
-        issue = login(token=getenv('GithubAPIKey')).issue(self.owner, self.repo, self.number)
+        issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         if pr is None:
             merge_time = None
