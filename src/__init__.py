@@ -9,12 +9,14 @@ more information on this.
 """
 
 from abc import abstractmethod, ABC
+from importlib import import_module
 from logging import getLogger, Logger
 from os import getenv
 from pathlib import Path
 from pickle import dumps, loads
 from sqlite3 import register_adapter, register_converter
-from sys import path as _sys_path
+from sys import modules, path as _sys_path
+from traceback import format_exc
 from typing import Dict, Optional, Union
 from warnings import warn
 
@@ -59,10 +61,10 @@ register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
 __version_info__ = (0, 5, 0, 0, 1)
-__all__ = (
+__all__ = [
     "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",
     "ResolutionValueRule", "Rule"
-)
+]
 
 if getenv("DEBUG"):
     import sys
@@ -83,3 +85,16 @@ if getenv("DEBUG"):
             pdb.post_mortem(tb)
 
     sys.excepthook = info
+
+# dynamically load optional plugins where able to
+exempt = ('__init__', '__main__', '__pycache__', 'application', 'test', 'PyManifold', *__all__)
+for entry in Path(__file__).parent.iterdir():
+    name = entry.name.rstrip(".py")
+    if name.startswith('.') or name in exempt:
+        continue
+    try:
+        setattr(modules[__name__], name, import_module("." + name, __name__))
+        __all__.append(name)
+    except ImportError:
+        format_exc()
+        warn(f"Unable to import extension module: {name}")
