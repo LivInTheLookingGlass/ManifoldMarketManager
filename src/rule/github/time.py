@@ -1,8 +1,6 @@
 from dataclasses import dataclass
-from os import getenv
 
-import requests
-
+from . import get_issue
 from .. import DoResolveRule
 from ...market import Market
 
@@ -15,17 +13,8 @@ class ResolveWithPR(DoResolveRule):
     repo: str
     number: int
 
-# curl \
-#   -H "Accept: application/vnd.github+json" \
-#   -H "Authorization: token <TOKEN>" \
-#   https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER
-
     def value(self, market: Market) -> bool:
-        response = requests.get(
-            url=f"https://api.github.com/repos/{self.owner}/{self.repo}/issues/{self.number}",
-            headers={"Accept": "application/vnd.github+json", "Authorization": getenv('GithubAPIKey')}
-        )
-        json = response.json()
+        json = get_issue(self.owner, self.repo, self.number)
         return (
             "pull_request" in json and (
                 (json["pull_request"].get("merged_at") is not None) or (json["state"] != "open")

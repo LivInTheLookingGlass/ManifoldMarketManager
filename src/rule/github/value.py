@@ -1,10 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
-from os import getenv
 from typing import Optional
 
-import requests
-
+from . import get_issue
 from .. import ResolutionValueRule
 from ...market import Market
 from ...util import require_env
@@ -18,11 +16,7 @@ class ResolveToPR(ResolutionValueRule):
 
     @require_env("GithubAPIKey")
     def _value(self, market: Market) -> bool:
-        response = requests.get(
-            url=f"https://api.github.com/repos/{self.owner}/{self.repo}/issues/{self.number}",
-            headers={"Accept": "application/vnd.github+json", "Authorization": getenv('GithubAPIKey')}
-        )
-        json = response.json()
+        json = get_issue(self.owner, self.repo, self.number)
         return "pull_request" in json and json["pull_request"].get("merged_at") is not None
 
     def explain_abstract(self, indent=0, **kwargs) -> str:
@@ -42,11 +36,7 @@ class ResolveToPRDelta(ResolutionValueRule):
 
     @require_env("GithubAPIKey")
     def _value(self, market: Market) -> float:
-        response = requests.get(
-            url=f"https://api.github.com/repos/{self.owner}/{self.repo}/issues/{self.number}",
-            headers={"Accept": "application/vnd.github+json", "Authorization": getenv('GithubAPIKey')}
-        )
-        json = response.json()
+        json = get_issue(self.owner, self.repo, self.number)
         if "pull_request" not in json or json["pull_request"].get("merged_at") is None:
             return market.market.max
         delta = datetime.fromisoformat(json["pull_request"].get("merged_at").rstrip('Z')) - self.start
