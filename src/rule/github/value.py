@@ -5,7 +5,6 @@ from typing import Optional
 from . import get_issue
 from .. import ResolutionValueRule
 from ...market import Market
-from ...util import require_env
 
 
 @dataclass
@@ -14,7 +13,6 @@ class ResolveToPR(ResolutionValueRule):
     repo: str
     number: int
 
-    @require_env("GithubAPIKey")
     def _value(self, market: Market) -> bool:
         json = get_issue(self.owner, self.repo, self.number)
         return "pull_request" in json and json["pull_request"].get("merged_at") is not None
@@ -26,6 +24,12 @@ class ResolveToPR(ResolutionValueRule):
         ret += f"{'  ' * indent}- Otherwise, resolve to NO.\n"
         return ret
 
+    def explain_specific(self, market: Market, indent=0) -> str:
+        json = get_issue(self.owner, self.repo, self.number)
+        merge_time = json.get('pull_request', {}).get('merged_at')
+        return (f"{'  ' * indent}- Is the pull request is merged? (-> {merge_time or 'Not yet merged'} -> "
+                f"{merge_time is not None})\n")
+
 
 @dataclass
 class ResolveToPRDelta(ResolutionValueRule):
@@ -34,7 +38,6 @@ class ResolveToPRDelta(ResolutionValueRule):
     number: int
     start: datetime
 
-    @require_env("GithubAPIKey")
     def _value(self, market: Market) -> float:
         json = get_issue(self.owner, self.repo, self.number)
         if "pull_request" not in json or json["pull_request"].get("merged_at") is None:
@@ -52,3 +55,9 @@ class ResolveToPRDelta(ResolutionValueRule):
             ret += f" ({max_})"
         ret += ".\n"
         return ret
+
+    def explain_specific(self, market: Market, indent=0) -> str:
+        json = get_issue(self.owner, self.repo, self.number)
+        merge_time = json.get('pull_request', {}).get('merged_at')
+        return (f"{'  ' * indent}- How long after {self.start} was the pull request is merged? (-> "
+                f"{merge_time or 'Not yet merged'} -> {self.value(market)})\n")
