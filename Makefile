@@ -58,11 +58,11 @@ _test:
 ifeq ($(MYPY),true)
 # Load dependencies from pypi
 dependencies:
-	@$(PIP) install -r requirements.txt $(USER_FLAG) $(PROXY_ARG)
+	@$(PIP) install -r requirements.txt --pre $(USER_FLAG) $(PROXY_ARG)
 else
 dependencies:
 	@cat requirements.txt | grep -v "mypy" > .requirements.txt
-	@$(PIP) install -r .requirements.txt $(USER_FLAG) $(PROXY_ARG)
+	@$(PIP) install -r .requirements.txt --pre $(USER_FLAG) $(PROXY_ARG)
 endif
 
 .PHONY: run_%
@@ -108,7 +108,7 @@ publish: build
 .PHONY: graph
 # Build a dependency graph of this package
 graph: dependencies
-	@$(PIP) install pydeps
+	@$(PIP) install pydeps $(USER_FLAG)
 	@PYTHONPATH=${PYTHONPATH}:./src/PyManifold $(PY) -m pydeps --noshow --cluster --max-bacon 100 -T png src
 
 .PHONY: import_%
