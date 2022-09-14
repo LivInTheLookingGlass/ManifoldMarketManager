@@ -4,7 +4,7 @@ from datetime import datetime
 from random import Random
 from typing import Any, DefaultDict, Dict, MutableSequence, Optional, Sequence, Tuple, Union, cast
 
-from . import DoResolveRule, ResolutionValueRule
+from . import get_rule, DoResolveRule, ResolutionValueRule
 from ..market import Market
 
 
@@ -29,7 +29,7 @@ class NegateRule(DoResolveRule):
         if "child" in env:
             try:
                 type_, kwargs = env["child"]
-                env["child"] = globals().get(type_).from_dict(kwargs)
+                env["child"] = get_rule(type_).from_dict(kwargs)
             except Exception:
                 pass
         return super().from_dict(env)
@@ -58,7 +58,7 @@ class EitherRule(DoResolveRule):
             if name in env:
                 try:
                     type_, kwargs = env[name]
-                    env[name] = globals().get(type_).from_dict(kwargs)
+                    env[name] = get_rule(type_).from_dict(kwargs)
                 except Exception:
                     pass
         return super().from_dict(env)
@@ -87,7 +87,7 @@ class BothRule(DoResolveRule):
             if name in env:
                 try:
                     type_, kwargs = env[name]
-                    env[name] = globals().get(type_).from_dict(kwargs)
+                    env[name] = get_rule(type_).from_dict(kwargs)
                 except Exception:
                     pass
         return super().from_dict(env)
@@ -120,7 +120,7 @@ class ResolveToValue(ResolutionValueRule):
         return f"{'  ' * indent}- Resolves to the specific value {self.resolve_value}\n"
 
 
-@dataclass
+@dataclass  # type: ignore
 class ResolveRandomSeed(ResolutionValueRule):
     seed: Any
     method: str = 'random'
@@ -172,13 +172,13 @@ class ResolveRandomIndex(ResolveRandomSeed):
 class ResolveMultipleValues(ResolutionValueRule):
     shares: MutableSequence[Tuple[ResolutionValueRule, float]] = field(default_factory=list)
 
-    def _value(self, market) -> Dict[int, float]:
+    def _value(self, market: Market) -> Dict[Union[str, int, float], float]:
         ret: DefaultDict[int, float] = defaultdict(float)
         for rule, part in self.shares:
             val = cast(Dict[Union[str, int], float], rule.value(market, format='FREE_RESPONSE'))
             for idx, value in val.items():
                 ret[int(idx)] += value * part
-        return ret
+        return {key: value for key, value in ret.items()}
 
     def explain_abstract(self, indent=0, **kwargs) -> str:
         ret = f"{'  ' * indent}Resolves to the weighted union of multiple other values.\n"
@@ -196,8 +196,7 @@ class ResolveMultipleValues(ResolutionValueRule):
         for rule, weight in shares:
             try:
                 type_, kwargs = rule
-                # breakpoint()
-                new_rule = globals().get(type_).from_dict(kwargs)
+                new_rule = get_rule(type_).from_dict(kwargs)
                 new_shares.append((new_rule, weight))
             except Exception:
                 pass

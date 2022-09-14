@@ -1,7 +1,15 @@
 from abc import abstractmethod
+from importlib import import_module
 from typing import Literal, Union, Dict, Sequence
 
 from .. import Rule
+
+
+def get_rule(type_):
+    return getattr(
+        import_module(".".join(("", *type_.split(".")[:-1])), __name__),
+        type_.split(".")[-1]
+    )
 
 
 class DoResolveRule(Rule):

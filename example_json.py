@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from datetime import date, datetime
-from importlib import import_module
 from inspect import signature
 from json import dump, load
 from re import match
@@ -8,7 +7,7 @@ from typing import Any, Dict, List, Literal, Optional, Union
 
 from src.application import register_db
 from src.market import Market
-from src.rule import DoResolveRule, ResolutionValueRule
+from src.rule import DoResolveRule, ResolutionValueRule, get_rule
 from src.util import explain_abstract, get_client
 
 from pymanifold.types import DictDeserializable
@@ -129,17 +128,11 @@ class CreationRequest:
         obj = obj.copy()
         manifold = ManifoldRequest.from_dict(obj.pop('manifold'))
         time_rules = [
-            getattr(
-                import_module(".".join(("", *type_.split(".")[:-1])), "src.rule"),
-                type_.split(".")[-1]
-            ).from_dict(kwargs)
+            get_rule(type_).from_dict(kwargs)
             for type_, kwargs in obj.pop('time_rules')
         ]
         value_rules = [
-            getattr(
-                import_module(".".join(("", *type_.split(".")[:-1])), "src.rule"),
-                type_.split(".")[-1]
-            ).from_dict(kwargs)
+            get_rule(type_).from_dict(kwargs)
             for type_, kwargs in obj.pop('value_rules')
         ]
         return cls(
