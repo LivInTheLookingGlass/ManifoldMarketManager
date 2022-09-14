@@ -99,8 +99,8 @@ The goal of this project is to make a Manifold agent that can manage various for
 
 1. First, make sure you are running Python >= 3.7
 2. Load the submodules
-3. Run `pip install -r requirements.txt`
-4. Make a file called `env.sh`. It should contain 5 exports
+3. Run `make dependencies`
+4. Make a file called `env_<name>.sh`. It should contain 6 exports
     1. `GithubAPIKey`: The API key for reading GitHub issues and pull requests. Strictly speaking not needed, so long as you don't use GitHub rules, but the underlying script will check that this exists.
     2. `ManifoldAPIKey`: The API key for managing your Manifold markets. See [here](https://docs.manifold.markets/api) for instructions on how to retrieve it.
     3. `TelegramAPIKey`: The API key for your Telegram bot. For more info, see [here](https://github.com/python-telegram-bot/python-telegram-bot/wiki/Introduction-to-the-API)
@@ -108,7 +108,7 @@ The goal of this project is to make a Manifold agent that can manage various for
     5. `DBName`: The name of your database file
     6. `LogFile`: The name of a logfile to use
 5. Add your first markets using the arguments provided in `src/__main__.py`. Each market needs at least one DoResolveRule and at least one ResolveToRule. The simplest ResolveToRule is `--round` or `--current`. The simplest DoResolve rule is `--rel-date`. More complicated markets may need to have rules constructed manually.
-6. When you've added all your markets, modify the polling frequency in `daemon.sh`, then run it
+6. When you've added all your markets, modify the polling frequency in `daemon.sh`, then run `make daemon`
 
 ## JSON Examples
 
