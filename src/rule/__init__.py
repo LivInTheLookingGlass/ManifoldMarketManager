@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import Literal, Union, Dict, Sequence
 
 from .. import Rule
@@ -6,12 +7,20 @@ from .. import Rule
 class DoResolveRule(Rule):
     """The subtype of rule which determines if a market should resolve, returning a bool."""
 
+    @abstractmethod
     def value(self, market) -> bool:
         raise NotImplementedError()
 
 
 class ResolutionValueRule(Rule):
     """The subtype of rule which determines what a market should resolve to."""
+
+    @abstractmethod
+    def _value(
+        self,
+        market
+    ) -> Union[int, float, str, Dict[Union[str, int, float], float]]:
+        ...
 
     def value(
         self,

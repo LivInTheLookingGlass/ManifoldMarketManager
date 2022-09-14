@@ -8,6 +8,7 @@ In order to use this library, some things need to be loaded in your environment 
 more information on this.
 """
 
+from abc import abstractmethod, ABC
 from logging import getLogger, Logger
 from os import getenv
 from pathlib import Path
@@ -21,12 +22,13 @@ _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
 from pymanifold.types import DictDeserializable  # noqa: E402
 
 
-class Rule(DictDeserializable):
+class Rule(ABC, DictDeserializable):
     """The basic unit of market automation, rules defmine how a market should react to given events."""
 
     def __init__(self):
         self.logger: Logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
 
+    @abstractmethod
     def value(
         self,
         market: 'Market'
@@ -34,6 +36,7 @@ class Rule(DictDeserializable):
         """Return the formatted value of a rule, whether this is if one should resolve or a resolution value."""
         raise NotImplementedError(type(self))
 
+    @abstractmethod
     def explain_abstract(self, indent=0, **kwargs) -> str:
         """Explain how the market will resolve and decide to resolve."""
         raise NotImplementedError(type(self))
@@ -48,12 +51,12 @@ from .rule import DoResolveRule, ResolutionValueRule  # noqa: E402
 from .market import Market  # noqa: E402
 from .util import get_client, require_env  # noqa: E402
 
-register_adapter(rule.Rule, dumps)
+register_adapter(rule.Rule, dumps)  # type: ignore
 register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-__version_info__ = (0, 4, 0, 0, 1)
+__version_info__ = (0, 5, 0, 0, 0)
 __all__ = (
     "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",
     "ResolutionValueRule", "Rule"
