@@ -40,6 +40,7 @@ def date_serialization_hook(obj):
 
 
 def date_deserialization_hook(json_dict):
+    """JSON deserializer for datetime objects."""
     for key, value in json_dict.items():
         if isinstance(value, str):
             if match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d*$', value):
@@ -125,6 +126,7 @@ class CreationRequest:
 
     @classmethod
     def from_dict(cls, obj: Dict[str, Any]) -> 'CreationRequest':
+        """Take a dictionary and return an instance of the associated class."""
         obj = obj.copy()
         manifold = ManifoldRequest.from_dict(obj.pop('manifold'))
         time_rules = [

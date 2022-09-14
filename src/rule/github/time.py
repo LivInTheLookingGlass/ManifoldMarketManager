@@ -18,6 +18,7 @@ class ResolveWithPR(DoResolveRule):
 
     @require_env("GithubAPIKey")
     def value(self, market: Market) -> bool:
+        """Return True if the issue is closed or the PR is merged, otherwise False."""
         issue = login(token=getenv('GithubAPIKey')).issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         return issue.state != 'open' or (pr is not None and pr.merged)

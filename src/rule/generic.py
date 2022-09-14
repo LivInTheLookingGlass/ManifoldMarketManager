@@ -15,6 +15,7 @@ class NegateRule(DoResolveRule):
     child: DoResolveRule
 
     def value(self, market: Market) -> bool:
+        """Return the negation of the underlying rule."""
         return not self.child.value(market)
 
     def explain_abstract(self, indent=0, **kwargs) -> str:
@@ -49,6 +50,7 @@ class EitherRule(DoResolveRule):
     rule2: DoResolveRule
 
     def value(self, market) -> bool:
+        """Return True iff at least one underlying rule returns True."""
         return self.rule1.value(market) or self.rule2.value(market)
 
     def explain_abstract(self, indent=0, **kwargs) -> str:
@@ -84,6 +86,7 @@ class BothRule(DoResolveRule):
     rule2: DoResolveRule
 
     def value(self, market) -> bool:
+        """Return True iff both underlying rules return True."""
         return self.rule1.value(market) and self.rule2.value(market)
 
     def explain_abstract(self, indent=0, **kwargs) -> str:
@@ -118,6 +121,7 @@ class ResolveAtTime(DoResolveRule):
     resolve_at: datetime
 
     def value(self, market) -> bool:
+        """Return True iff the current time is after resolve_at."""
         try:
             return datetime.utcnow() >= self.resolve_at
         except TypeError:
@@ -129,6 +133,8 @@ class ResolveAtTime(DoResolveRule):
 
 @dataclass
 class ResolveToValue(ResolutionValueRule):
+    """Resolve to a pre-specified value."""
+
     resolve_value: Any
 
     def _value(self, market):
@@ -140,6 +146,8 @@ class ResolveToValue(ResolutionValueRule):
 
 @dataclass  # type: ignore
 class ResolveRandomSeed(ResolutionValueRule):
+    """Abstract class that handles the nitty-gritty of the Random object."""
+
     seed: Any
     method: str = 'random'
     rounds: int = 1
@@ -156,6 +164,8 @@ class ResolveRandomSeed(ResolutionValueRule):
 
 @dataclass
 class ResolveRandomIndex(ResolveRandomSeed):
+    """Resolve to a random index in a market."""
+
     size: Optional[int] = None
     start: int = 0
 
@@ -188,6 +198,8 @@ class ResolveRandomIndex(ResolveRandomSeed):
 
 @dataclass
 class ResolveMultipleValues(ResolutionValueRule):
+    """Resolve to multiple values with different shares."""
+
     shares: MutableSequence[Tuple[ResolutionValueRule, float]] = field(default_factory=list)
 
     def _value(self, market: Market) -> Dict[Union[str, int, float], float]:

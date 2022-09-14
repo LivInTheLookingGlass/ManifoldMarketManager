@@ -9,6 +9,8 @@ from ...market import Market
 
 
 class CurrentValueRule(ResolutionValueRule):
+    """Resolve to the current market-consensus value."""
+
     def _value(self, market: Market) -> Union[float, Dict[Any, float]]:
         if market.market.outcomeType == "BINARY":
             return market.market.probability * 100
@@ -28,6 +30,7 @@ class CurrentValueRule(ResolutionValueRule):
                 for answer in market.market.answers
             }
         elif market.market.outcomeType == "MULTIPLE_CHOICE":
+            # TODO: reimplement dpm-2 math so this is actually by probability
             return {
                 answer: float(market.market.pool[answer])
                 for answer in market.market.pool
@@ -39,6 +42,8 @@ class CurrentValueRule(ResolutionValueRule):
 
 
 class RoundValueRule(CurrentValueRule):
+    """Resolve to the current market-consensus value, but rounded."""
+
     def _value(self, market: Market) -> float:
         if market.market.outcomeType in ("MULTIPLE_CHOICE", "FREE_RESPONSE"):
             raise RuntimeError()
@@ -52,6 +57,8 @@ class RoundValueRule(CurrentValueRule):
 
 @dataclass
 class PopularValueRule(ResolutionValueRule):
+    """Resolve to the n most likely market-consensus values, weighted by their probability."""
+
     size: int = 1
 
     def _value(self, market: Market):
@@ -68,6 +75,7 @@ class PopularValueRule(ResolutionValueRule):
                 for answer in final_answers
             }
         elif market.market.outcomeType == "MULTIPLE_CHOICE":
+            # TODO: reimplement dpm-2 math so this is actually by probability
             answers = market.market.pool.copy()
             final_answers = []
             for _ in range(self.size):
@@ -87,6 +95,8 @@ class PopularValueRule(ResolutionValueRule):
 
 @dataclass
 class ResolveToUserProfit(CurrentValueRule):
+    """Resolve to the currently reported profit of a user."""
+
     user: str
     field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
 
@@ -100,6 +110,8 @@ class ResolveToUserProfit(CurrentValueRule):
 
 @dataclass
 class ResolveToUserCreatedVolume(CurrentValueRule):
+    """Resolve to the currently reported created market volume of a user."""
+
     user: str
     field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
 

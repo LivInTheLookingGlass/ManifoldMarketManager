@@ -12,6 +12,8 @@ from ...util import require_env
 
 @dataclass
 class ResolveToPR(ResolutionValueRule):
+    """Resolve to True if the PR is merged, otherwise False."""
+
     owner: str
     repo: str
     number: int
@@ -42,6 +44,8 @@ class ResolveToPR(ResolutionValueRule):
 
 @dataclass
 class ResolveToPRDelta(ResolutionValueRule):
+    """Resolve to the fractional number of days between start and merged date or, if not merged, MAX."""
+
     owner: str
     repo: str
     number: int

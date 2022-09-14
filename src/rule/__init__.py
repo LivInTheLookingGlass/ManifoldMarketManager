@@ -6,6 +6,7 @@ from .. import Rule
 
 
 def get_rule(type_):
+    """Dynamically import and return a rule type by name."""
     return getattr(
         import_module(".".join(("", *type_.split(".")[:-1])), __name__),
         type_.split(".")[-1]
@@ -17,6 +18,7 @@ class DoResolveRule(Rule):
 
     @abstractmethod
     def value(self, market) -> bool:
+        """Return True if a market should resolve."""
         raise NotImplementedError()
 
 
@@ -35,6 +37,7 @@ class ResolutionValueRule(Rule):
         market,
         format: Literal['BINARY', 'PSEUDO_NUMERIC', 'FREE_RESPONSE', 'MULTIPLE_CHOICE'] = 'BINARY'
     ) -> Union[int, float, str, Dict[Union[str, int, float], float]]:
+        """Return the resolution value of a market, appropriately formatted for its market type."""
         ret = self._value(market)
         if ret in (None, 'CANCEL'):
             return ret
