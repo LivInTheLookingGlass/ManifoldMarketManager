@@ -114,7 +114,7 @@ The goal of this project is to make a Manifold agent that can manage various for
 
 ### 50/50 Lottery
 
-```json
+```javascript
 {
     "manifold": {
         "outcomeType": "FREE_RESPONSE",
@@ -150,25 +150,25 @@ The goal of this project is to make a Manifold agent that can manage various for
     // the second entry is a dictionary of keyword arguments for the rule
     "time_rules": [  // rules for when to resolve a market
         [
-            "ResolveAtTime",
+            "generic.ResolveAtTime",
             {"resolve_at": "2022-09-12T11:59:59"}
         ]
     ],
     "value_rules": [  // rules for what to resolve to
         [
-            "ResolveMultipleValues",
+            "generic.ResolveMultipleValues",
             {
                 "shares": [  // format: [<serialized rule>, <relative weight>]
                     [
                         [
-                            "ResolveToValue",
+                            "generic.ResolveToValue",
                             {"resolve_value": 0}
                         ],
                         1
                     ],
                     [
                         [
-                            "ResolveRandomIndex",
+                            "generic.ResolveRandomIndex",
                             {
                                 "start": 1,
                                 "seed": "feijwaopfewa"
@@ -190,7 +190,7 @@ The goal of this project is to make a Manifold agent that can manage various for
 
 ### Pseudonumeric Example
 
-```json
+```javascript
 {
     "manifold": {
         "outcomeType": "PSEUDO_NUMERIC",
@@ -218,12 +218,12 @@ The goal of this project is to make a Manifold agent that can manage various for
     },
     "time_rules": [
         [
-            "ResolveAtTime",
+            "generic.ResolveAtTime",
             {"resolve_at": "2100-12-31T11:59:59"}
         ]
     ],
     "value_rules": [
-        ["CurrentValueRule", {}]
+        ["manifold.value.CurrentValueRule", {}]
     ],
     "notes": ""
 }
@@ -231,7 +231,7 @@ The goal of this project is to make a Manifold agent that can manage various for
 
 ### Mutliple Choice Example
 
-```json
+```javascript
 {
     "manifold": {
         "outcomeType": "MULTIPLE_CHOICE",
@@ -260,13 +260,13 @@ The goal of this project is to make a Manifold agent that can manage various for
     },
     "time_rules": [
         [
-            "ResolveAtTime",
+            "generic.ResolveAtTime",
             {"resolve_at": "2022-09-13T11:59:59"}
         ]
     ],
     "value_rules": [
         [
-            "CurrentValueRule",
+            "manifold.value.CurrentValueRule",
             {}
         ]
     ],
@@ -276,7 +276,7 @@ The goal of this project is to make a Manifold agent that can manage various for
 
 ### GitHub PR Merge Date
 
-```json
+```javascript
 {
     "manifold": {
         "outcomeType": "PSEUDO_NUMERIC",
@@ -304,11 +304,11 @@ The goal of this project is to make a Manifold agent that can manage various for
     },
     "time_rules": [
         [
-            "ResolveAtTime",
+            "generic.ResolveAtTime",
             {"resolve_at": "2025-05-28T11:59:59"}
         ],
         [
-            "ResolveWithPR",
+            "github.time.ResolveWithPR",
             {
                 "owner": "manifoldmarkets",
                 "repo": "manifold",
@@ -318,7 +318,7 @@ The goal of this project is to make a Manifold agent that can manage various for
     ],
     "value_rules": [
         [
-            "ResolveToPRDelta",
+            "github.value.ResolveToPRDelta",
             {
                 "owner": "manifoldmarkets",
                 "repo": "manifold",

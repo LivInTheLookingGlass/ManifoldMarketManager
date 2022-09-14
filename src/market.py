@@ -1,24 +1,15 @@
 from dataclasses import dataclass, field
 from enum import auto, Enum
-from functools import lru_cache
 from logging import getLogger, Logger
 from math import log10
-from os import getenv
 from time import time
 from typing import Any, Dict, List, Union
 
-from pymanifold import ManifoldClient
+from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
 
-from . import explain_abstract, require_env
+from .util import explain_abstract, get_client, require_env
 from .rule import DoResolveRule, ResolutionValueRule
-
-
-@lru_cache
-@require_env("ManifoldAPIKey")
-def get_client() -> ManifoldClient:
-    """Return a (possibly non-unique) Manifold client."""
-    return ManifoldClient(getenv("ManifoldAPIKey"))
 
 
 class MarketStatus(Enum):
@@ -58,14 +49,6 @@ class Market:
         self.client = get_client()
         self.market = self.client.get_market_by_id(self.market.id)
         self.__postinit__()
-        # if not self.resolve_to_rules:
-        #     match self.market.outcomeType:
-        #         case "BINARY":
-        #             self.resolve_to_rules.append(RoundValueRule())
-        #         case "PSEUDO_NUMERIC":
-        #             self.resolve_to_rules.append(CurrentValueRule())
-        #         case "FREE_RESONSE" | "MULTIPLE_CHOICE":
-        #             self.resolve_to_rules.append(PopularValueRule())
 
     @property
     def id(self):
@@ -115,7 +98,7 @@ class Market:
             rule.value(self) for rule in (self.do_resolve_rules or ())
         ) and not self.market.isResolved
 
-    def resolve_to(self) -> Union[int, float, str, Dict[int, float], Dict[str, Any]]:
+    def resolve_to(self) -> Union[int, float, str, Dict[Union[str, int, float], float], Dict[str, Any]]:
         """Select a value to be resolved to.
 
         This is done by iterating through a series of Rules, each of which have
@@ -177,9 +160,14 @@ class Market:
             else:
                 override = (override, (override - start) / (end - start) * 100)
         if self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
+            if self.market.answers is not None:
+                new_override = {}
+                for idx, weight in override.items():
+                    new_override[self.market.answers[idx]['id']] = weight
+                override = new_override
             new_override = {}
             for idx, weight in override.items():
-                new_override[int(self.market.answers[idx]['id'])] = weight
+                new_override[int(idx)] = weight
             override = new_override
         ret = self.client.resolve_market(self.market, override)
         if ret.status_code < 300:

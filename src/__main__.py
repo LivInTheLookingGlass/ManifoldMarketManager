@@ -5,7 +5,11 @@ from os import getenv
 from typing import cast, Optional, Tuple
 
 from .application import register_db, main
-from . import market, rule
+from .market import Market
+from .rule.generic import ResolveAtTime, ResolveRandomIndex
+from .rule.github.time import ResolveWithPR
+from .rule.github.value import ResolveToPR, ResolveToPRDelta
+from .rule.manifold.value import CurrentValueRule, RoundValueRule
 
 # Enable logging
 basicConfig(
@@ -65,9 +69,9 @@ if any((args.slug, args.id_, args.url)):
         args.slug = args.url.split('/')[-1]
 
     if args.slug:
-        mkt = market.Market.from_slug(args.slug)
+        mkt = Market.from_slug(args.slug)
     else:
-        mkt = market.Market.from_id(args.id)
+        mkt = Market.from_id(args.id)
 
     if args.rel_date:
         sections = args.rel_date.split('/')
@@ -82,30 +86,30 @@ if any((args.slug, args.id_, args.url)):
 
     if args.random_index:
         mkt.resolve_to_rules.append(
-            rule.ResolveRandomIndex(args.random_seed, size=args.index_size, rounds=args.random_rounds)
+            ResolveRandomIndex(args.random_seed, size=args.index_size, rounds=args.random_rounds)
         )
 
     if args.round:
-        mkt.resolve_to_rules.append(rule.RoundValueRule())
+        mkt.resolve_to_rules.append(RoundValueRule())
     if args.current:
-        mkt.resolve_to_rules.append(rule.CurrentValueRule())
+        mkt.resolve_to_rules.append(CurrentValueRule())
 
     if args.pr_slug:
         pr_ = list(args.pr_slug.split('/'))
         pr_[-1] = int(pr_[-1])
         pr = cast(Tuple[str, str, int], tuple(pr_))
-        mkt.do_resolve_rules.append(rule.ResolveWithPR(*pr))
+        mkt.do_resolve_rules.append(ResolveWithPR(*pr))
         if date:
-            mkt.resolve_to_rules.append(rule.ResolveToPRDelta(*pr, datetime(*date)))
+            mkt.resolve_to_rules.append(ResolveToPRDelta(*pr, datetime(*date)))
         elif args.pr_bin:
-            mkt.resolve_to_rules.append(rule.ResolveToPR(*pr))
+            mkt.resolve_to_rules.append(ResolveToPR(*pr))
         else:
             raise ValueError("No resolve rule provided")
 
     if not mkt.do_resolve_rules:
         if not date:
             raise ValueError("No resolve date provided")
-        mkt.do_resolve_rules.append(rule.ResolveAtTime(datetime(*date)))
+        mkt.do_resolve_rules.append(ResolveAtTime(datetime(*date)))
 
     conn = register_db()
 
