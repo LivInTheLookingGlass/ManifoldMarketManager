@@ -90,7 +90,23 @@ class Market:
 
     def explain_specific(self) -> str:
         """Explain why the market is resolving the way that it is."""
-        ...
+        if self.should_resolve() is not True:
+            ret = "This market is not resolving, because none of the following are true:\n"
+            for rule_ in self.do_resolve_rules:
+                ret += rule_.explain_specific(market=self, indent=1)
+            ret += "\nWere it to resolve now, it would follow the decision tree below:\n"
+        else:
+            ret = "This market will is resolving because of the following trigger(s):\n"
+            for rule_ in self.do_resolve_rules:
+                if rule_.value(self):
+                    ret += rule_.explain_specific(market=self, indent=1)
+            ret += "\nIt will follow the decision tree below:\n"
+
+        ret += "- If the human operator agrees:\n"
+        for rule_ in self.resolve_to_rules:
+            ret += rule_.explain_specific(market=self, indent=1)
+        ret += f"\nFinal Value: {self.resolve_to()}"
+        return ret
 
     def should_resolve(self) -> bool:
         """Return whether the market should resolve, according to our rules."""

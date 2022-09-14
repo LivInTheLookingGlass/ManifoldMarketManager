@@ -16,6 +16,7 @@ from pickle import dumps, loads
 from sqlite3 import register_adapter, register_converter
 from sys import path as _sys_path
 from typing import Dict, Optional, Union
+from warnings import warn
 
 _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
 
@@ -43,7 +44,8 @@ class Rule(ABC, DictDeserializable):
 
     def explain_specific(self, market: 'Market', indent=0) -> str:
         """Explain why the market is resolving the way that it is."""
-        raise NotImplementedError(type(self))
+        warn("Using a default specific explanation. This probably isn't what you want!")
+        return self.explain_abstract(indent=indent).rstrip('\n') + f" (-> {self.value(market)})\n"
 
 
 from . import market, rule, util  # noqa: E402
@@ -56,7 +58,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-__version_info__ = (0, 5, 0, 0, 0)
+__version_info__ = (0, 5, 0, 0, 1)
 __all__ = (
     "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",
     "ResolutionValueRule", "Rule"

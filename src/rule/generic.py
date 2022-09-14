@@ -23,6 +23,12 @@ class NegateRule(DoResolveRule):
             self.child.explain_abstract(indent + 1, **kwargs)
         )
 
+    def explain_specific(self, market: Market, indent=0) -> str:
+        return (
+            f"{'  ' * indent}- If the rule below resolves False (-> {self.value(market)})\n" +
+            self.child.explain_specific(market, indent + 1)
+        )
+
     @classmethod
     def from_dict(cls, env):
         """Take a dictionary and return an instance of the associated class."""
@@ -49,6 +55,12 @@ class EitherRule(DoResolveRule):
         ret = f"{'  ' * indent}- If either of the rules below resolves True\n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
+        return ret
+
+    def explain_specific(self, market: Market, indent=0) -> str:
+        ret = f"{'  ' * indent}- If either of the rules below resolves True (-> {self.value(market)})\n"
+        ret += self.rule1.explain_specific(market, indent + 1)
+        ret += self.rule2.explain_specific(market, indent + 1)
         return ret
 
     @classmethod
@@ -78,6 +90,12 @@ class BothRule(DoResolveRule):
         ret = f"{'  ' * indent}- If both of the rules below resolves True\n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
+        return ret
+
+    def explain_specific(self, market: Market, indent=0) -> str:
+        ret = f"{'  ' * indent}- If both of the rules below resolves True (-> {self.value(market)})\n"
+        ret += self.rule1.explain_specific(market, indent + 1)
+        ret += self.rule2.explain_specific(market, indent + 1)
         return ret
 
     @classmethod

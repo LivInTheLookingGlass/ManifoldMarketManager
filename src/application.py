@@ -6,6 +6,7 @@ from logging import getLogger
 from pathlib import Path
 from os import getenv
 from sqlite3 import connect, PARSE_COLNAMES, PARSE_DECLTYPES
+from traceback import format_exc
 from typing import cast
 
 from telegram import __version__ as TG_VER
@@ -129,6 +130,11 @@ def watch_reply(conn, id_, mkt, console_only=False):
     text = (f"Hey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of {mkt.current_answer()}."
             f"This market is called: {mkt.market.question}\n\n")
     text += mkt.explain_abstract()
+    try:
+        text += "\n\n" + mkt.explain_specific()
+    except Exception:
+        print(format_exc())
+        logger.exception("Unable to explain a market's resolution automatically")
     if not console_only:
         response = tg_main(text)
     else:
