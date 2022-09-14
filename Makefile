@@ -109,7 +109,7 @@ publish: build
 # Build a dependency graph of this package
 graph: dependencies
 	@$(PIP) install pydeps
-	@PYTHONPATH=${PYTHONPATH}:./src/PyManifold $(PY) -m pydeps --noshow --cluster --max-bacon 100 src
+	@PYTHONPATH=${PYTHONPATH}:./src/PyManifold $(PY) -m pydeps --noshow --cluster --max-bacon 100 -T png src
 
 .PHONY: import_%
 # Create one or more markets from example.json and add them to the specified account
