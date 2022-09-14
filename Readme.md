@@ -110,6 +110,10 @@ The goal of this project is to make a Manifold agent that can manage various for
 5. Add your first markets using the arguments provided in `src/__main__.py`. Each market needs at least one DoResolveRule and at least one ResolveToRule. The simplest ResolveToRule is `--round` or `--current`. The simplest DoResolve rule is `--rel-date`. More complicated markets may need to have rules constructed manually.
 6. When you've added all your markets, modify the polling frequency in `daemon.sh`, then run `make daemon`
 
+## Dependencies
+
+![A graph of my application's dependencies](./src.png)
+
 ## JSON Examples
 
 ### 50/50 Lottery
