@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from importlib import import_module
-from typing import Literal, Union, Dict, Sequence
+from typing import Literal, Mapping, Union, Dict, Sequence
 
 from .. import Rule
 
@@ -39,25 +39,33 @@ class ResolutionValueRule(Rule):
         if ret in (None, 'CANCEL'):
             return ret
         elif format in ('BINARY', 'PSEUDO_NUMERIC'):
+            if isinstance(ret, Sequence) and len(ret) == 1:
+                ret = ret[0]
+            elif isinstance(ret, Mapping) and len(ret) == 1:
+                ret = tuple(ret.items())[0][0]
+
             if isinstance(ret, (int, float, )):
                 return ret
             elif isinstance(ret, str):
                 return float(ret)
-            elif isinstance(ret, Sequence) and len(ret) == 1:
-                return float(ret[0])
-            elif isinstance(ret, dict) and len(ret) == 1:
-                return float(ret.popitem()[0])
-            else:
-                raise TypeError(ret, format, market)
+
+            raise TypeError(ret, format, market)
         elif format in ('FREE_RESPONSE', 'MULTIPLE_CHOICE'):
-            if isinstance(ret, dict):
-                return ret
-            elif isinstance(ret, (str, int, float, )):
-                return {ret: 1}
+            if isinstance(ret, Mapping):
+                return {int(val): share for val, share in ret.items()}
             elif isinstance(ret, Sequence) and len(ret) == 1:
-                return {ret[0]: 1}
-            else:
-                raise TypeError(ret, format, market)
+                ret = ret[0]
+
+            if isinstance(ret, str):
+                return {int(ret): 1}
+            elif isinstance(ret, int):
+                return {ret: 1}
+            elif isinstance(ret, float):
+                if ret.is_integer():
+                    return {int(ret): 1}
+                raise ValueError()
+
+            raise TypeError(ret, format, market)
         raise ValueError()
 
 # from .manifold.value import *
