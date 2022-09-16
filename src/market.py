@@ -171,15 +171,15 @@ class Market:
         """
         if override is None:
             override = self.resolve_to()
-        # if self.market.outcomeType == "PSEUDO_NUMERIC":
-        #     start = float(self.market.min or 0)
-        #     end = float(self.market.max or 0)
-        #     if not isinstance(override, (int, float)):
-        #         raise TypeError()
-            # if self.market.isLogScale:
-            #     override = (override, log10(override - start + 1) / log10(end - start + 1) * 100)
-            # else:
-            #     override = (override, (override - start) / (end - start) * 100)
+        if self.market.outcomeType == "PSEUDO_NUMERIC":
+            start = float(self.market.min or 0)
+            end = float(self.market.max or 0)
+            if not isinstance(override, (int, float)):
+                raise TypeError()
+            if self.market.isLogScale:
+                override = (override, log10(override - start + 1) / log10(end - start + 1) * 100)
+            else:
+                override = (override, (override - start) / (end - start) * 100)
         if self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
             if not isinstance(override, Mapping):
                 raise TypeError()

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Optional, cast
 
 from ...market import Market
@@ -52,7 +52,7 @@ class ResolveToPRDelta(ResolutionValueRule):
         pr = issue.pull_request()
         if pr is None or pr.merged_at is None:
             return cast(float, market.market.max)
-        delta = cast(datetime, pr.merged_at) - self.start
+        delta = cast(datetime, pr.merged_at) - self.start.replace(tzinfo=timezone.utc)
         return delta.days + (delta.seconds / (24 * 60 * 60))
 
     def explain_abstract(self, indent: int = 0, max_: Optional[float] = None, **kwargs: Any) -> str:
