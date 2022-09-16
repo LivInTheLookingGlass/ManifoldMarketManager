@@ -1,10 +1,10 @@
 from argparse import ArgumentParser
 from datetime import datetime
-from logging import basicConfig, getLogger, DEBUG, INFO
+from logging import DEBUG, INFO, basicConfig, getLogger
 from os import getenv
-from typing import cast, Optional, Tuple
+from typing import Optional, Tuple, cast
 
-from .application import register_db, main
+from .application import main, register_db
 from .market import Market
 from .rule.generic import ResolveAtTime, ResolveRandomIndex
 from .rule.github.time import ResolveWithPR

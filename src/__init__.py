@@ -8,16 +8,17 @@ In order to use this library, some things need to be loaded in your environment 
 more information on this.
 """
 
-from abc import abstractmethod, ABC
+from abc import ABC, abstractmethod
 from importlib import import_module
-from logging import getLogger, Logger
+from logging import Logger, getLogger
 from os import getenv
 from pathlib import Path
 from pickle import dumps, loads
 from sqlite3 import register_adapter, register_converter
-from sys import modules, path as _sys_path
+from sys import modules
+from sys import path as _sys_path
 from traceback import format_exc
-from typing import Dict, Optional, Union
+from typing import Any
 from warnings import warn
 
 _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
@@ -28,48 +29,50 @@ from pymanifold.types import DictDeserializable  # noqa: E402
 class Rule(ABC, DictDeserializable):
     """The basic unit of market automation, rules defmine how a market should react to given events."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger: Logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
 
     @abstractmethod
     def value(
         self,
         market: 'Market'
-    ) -> Optional[Union[int, float, str, Dict[Union[str, int, float], float]]]:
+    ) -> 'AnyResolution':
         """Return the formatted value of a rule, whether this is if one should resolve or a resolution value."""
         raise NotImplementedError(type(self))
 
     @abstractmethod
-    def explain_abstract(self, indent=0, **kwargs) -> str:
+    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         """Explain how the market will resolve and decide to resolve."""
         raise NotImplementedError(type(self))
 
-    def explain_specific(self, market: 'Market', indent=0) -> str:
+    def explain_specific(self, market: 'Market', indent: int = 0) -> str:
         """Explain why the market is resolving the way that it is."""
         warn("Using a default specific explanation. This probably isn't what you want!")
         return self.explain_abstract(indent=indent).rstrip('\n') + f" (-> {self.value(market)})\n"
 
 
 from . import market, rule, util  # noqa: E402
-from .rule import DoResolveRule, ResolutionValueRule  # noqa: E402
 from .market import Market  # noqa: E402
-from .util import get_client, require_env  # noqa: E402
+from .rule import DoResolveRule, ResolutionValueRule  # noqa: E402
+from .util import (AnyResolution, BinaryResolution, FreeResponseResolution, MultipleChoiceResolution,  # noqa: E402
+                   PseudoNumericResolution, get_client, require_env)
 
 register_adapter(rule.Rule, dumps)  # type: ignore
 register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
-
+getLogger
 __version_info__ = (0, 5, 0, 0, 1)
 __all__ = [
     "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",
-    "ResolutionValueRule", "Rule"
+    "ResolutionValueRule", "Rule", "AnyResolution", "BinaryResolution", "FreeResponseResolution",
+    "MultipleChoiceResolution", "PseudoNumericResolution"
 ]
 
 if getenv("DEBUG"):
     import sys
 
-    def info(type, value, tb):
+    def info(type, value, tb):  # type: ignore
         """Open a postmortem pdb prompt on exception, if able."""
         if hasattr(sys, 'ps1') or not sys.stderr.isatty():
             # we are in interactive mode or we don't have a tty-like
@@ -78,6 +81,7 @@ if getenv("DEBUG"):
         else:
             import pdb
             import traceback
+
             # we are NOT in interactive mode, print the exception...
             traceback.print_exception(type, value, tb)
             print()

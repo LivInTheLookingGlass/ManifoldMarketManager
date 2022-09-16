@@ -4,8 +4,9 @@ from datetime import datetime
 from random import Random
 from typing import Any, DefaultDict, Dict, MutableSequence, Optional, Sequence, Tuple, Union, cast
 
-from . import get_rule, DoResolveRule, ResolutionValueRule
 from ..market import Market
+from ..util import AnyResolution, FreeResponseResolution, MultipleChoiceResolution
+from . import DoResolveRule, ResolutionValueRule, get_rule
 
 
 @dataclass
@@ -18,20 +19,20 @@ class NegateRule(DoResolveRule):
         """Return the negation of the underlying rule."""
         return not self.child.value(market)
 
-    def explain_abstract(self, indent=0, **kwargs) -> str:
+    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return (
             f"{'  ' * indent}- If the rule below resolves False\n" +
             self.child.explain_abstract(indent + 1, **kwargs)
         )
 
-    def explain_specific(self, market: Market, indent=0) -> str:
+    def explain_specific(self, market: Market, indent: int = 0) -> str:
         return (
             f"{'  ' * indent}- If the rule below resolves False (-> {self.value(market)})\n" +
             self.child.explain_specific(market, indent + 1)
         )
 
     @classmethod
-    def from_dict(cls, env):
+    def from_dict(cls, env: Dict[str, Any]) -> 'NegateRule':
         """Take a dictionary and return an instance of the associated class."""
         if "child" in env:
             try:
@@ -39,7 +40,7 @@ class NegateRule(DoResolveRule):
                 env["child"] = get_rule(type_).from_dict(kwargs)
             except Exception:
                 pass
-        return super().from_dict(env)
+        return cast(NegateRule, super().from_dict(env))
 
 
 @dataclass
@@ -49,24 +50,24 @@ class EitherRule(DoResolveRule):
     rule1: DoResolveRule
     rule2: DoResolveRule
 
-    def value(self, market) -> bool:
+    def value(self, market: Market) -> bool:
         """Return True iff at least one underlying rule returns True."""
         return self.rule1.value(market) or self.rule2.value(market)
 
-    def explain_abstract(self, indent=0, **kwargs) -> str:
+    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- If either of the rules below resolves True\n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
-    def explain_specific(self, market: Market, indent=0) -> str:
+    def explain_specific(self, market: Market, indent: int = 0) -> str:
         ret = f"{'  ' * indent}- If either of the rules below resolves True (-> {self.value(market)})\n"
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
         return ret
 
     @classmethod
-    def from_dict(cls, env):
+    def from_dict(cls, env: Dict[str, Any]) -> 'EitherRule':
         """Take a dictionary and return an instance of the associated class."""
         for name in ('rule1', 'rule2'):
             if name in env:
@@ -75,7 +76,7 @@ class EitherRule(DoResolveRule):
                     env[name] = get_rule(type_).from_dict(kwargs)
                 except Exception:
                     pass
-        return super().from_dict(env)
+        return cast(EitherRule, super().from_dict(env))
 
 
 @dataclass
@@ -85,24 +86,24 @@ class BothRule(DoResolveRule):
     rule1: DoResolveRule
     rule2: DoResolveRule
 
-    def value(self, market) -> bool:
+    def value(self, market: Market) -> bool:
         """Return True iff both underlying rules return True."""
         return self.rule1.value(market) and self.rule2.value(market)
 
-    def explain_abstract(self, indent=0, **kwargs) -> str:
+    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- If both of the rules below resolves True\n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
-    def explain_specific(self, market: Market, indent=0) -> str:
+    def explain_specific(self, market: Market, indent: int = 0) -> str:
         ret = f"{'  ' * indent}- If both of the rules below resolves True (-> {self.value(market)})\n"
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
         return ret
 
     @classmethod
-    def from_dict(cls, env):
+    def from_dict(cls, env: Dict[str, Any]) -> 'BothRule':
         """Take a dictionary and return an instance of the associated class."""
         for name in ('rule1', 'rule2'):
             if name in env:
@@ -111,7 +112,7 @@ class BothRule(DoResolveRule):
                     env[name] = get_rule(type_).from_dict(kwargs)
                 except Exception:
                     pass
-        return super().from_dict(env)
+        return cast(BothRule, super().from_dict(env))
 
 
 @dataclass
@@ -120,14 +121,14 @@ class ResolveAtTime(DoResolveRule):
 
     resolve_at: datetime
 
-    def value(self, market) -> bool:
+    def value(self, market: Market) -> bool:
         """Return True iff the current time is after resolve_at."""
         try:
             return datetime.utcnow() >= self.resolve_at
         except TypeError:
             return datetime.now() >= self.resolve_at
 
-    def explain_abstract(self, indent=0, **kwargs) -> str:
+    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- If the current time is past {self.resolve_at}\n"
 
 
@@ -135,12 +136,12 @@ class ResolveAtTime(DoResolveRule):
 class ResolveToValue(ResolutionValueRule):
     """Resolve to a pre-specified value."""
 
-    resolve_value: Any
+    resolve_value: AnyResolution
 
-    def _value(self, market):
+    def _value(self, market: Market) -> AnyResolution:
         return self.resolve_value
 
-    def explain_abstract(self, indent=0, **kwargs) -> str:
+    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves to the specific value {self.resolve_value}\n"
 
 
@@ -154,7 +155,7 @@ class ResolveRandomSeed(ResolutionValueRule):
     args: Sequence[Any] = ()
     kwargs: Dict[str, Any] = field(default_factory=dict)
 
-    def _value(self, market) -> float:
+    def _value(self, market: Market) -> Any:
         source = Random(self.seed)
         method = getattr(source, self.method)
         for _ in range(self.rounds):
@@ -169,7 +170,14 @@ class ResolveRandomIndex(ResolveRandomSeed):
     size: Optional[int] = None
     start: int = 0
 
-    def __init__(self, seed, *args, size=None, start=0, **kwargs):
+    def __init__(
+        self,
+        seed: Optional[Union[int, float, str, bytes, bytearray]],
+        *args: Any,
+        size: Optional[int] = None,
+        start: int = 0,
+        **kwargs: Any
+    ) -> None:
         self.start = start
         self.size = size
         if size is None:
@@ -178,7 +186,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
             method = 'randrange'
         super().__init__(seed, method, *args, **kwargs)
 
-    def _value(self, market) -> int:
+    def _value(self, market: Market) -> int:
         if self.method == 'randrange':
             self.args = (self.start, self.size)
         else:
@@ -187,7 +195,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
             self.kwargs["weights"] = [prob for _, prob in items]
         return cast(int, super()._value(market))
 
-    def explain_abstract(self, indent=0, **kwargs) -> str:
+    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- Resolve to a random index, given some original seed. This one operates on a "
         if self.method == 'randrange':
             ret += f"fixed range of integers in ({self.start} <= x < {self.size}).\n"
@@ -202,7 +210,7 @@ class ResolveMultipleValues(ResolutionValueRule):
 
     shares: MutableSequence[Tuple[ResolutionValueRule, float]] = field(default_factory=list)
 
-    def _value(self, market: Market) -> Dict[Union[str, int, float], float]:
+    def _value(self, market: Market) -> Union[FreeResponseResolution, MultipleChoiceResolution]:
         ret: DefaultDict[int, float] = defaultdict(float)
         for rule, part in self.shares:
             val = cast(Dict[Union[str, int], float], rule.value(market, format='FREE_RESPONSE'))
@@ -210,7 +218,7 @@ class ResolveMultipleValues(ResolutionValueRule):
                 ret[int(idx)] += value * part
         return {key: value for key, value in ret.items()}
 
-    def explain_abstract(self, indent=0, **kwargs) -> str:
+    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}Resolves to the weighted union of multiple other values.\n"
         indent += 1
         for rule, weight in self.shares:
@@ -219,9 +227,9 @@ class ResolveMultipleValues(ResolutionValueRule):
         return ret
 
     @classmethod
-    def from_dict(cls, env):
+    def from_dict(cls, env: Dict[str, Any]) -> 'ResolveMultipleValues':
         """Take a dictionary and return an instance of the associated class."""
-        shares: MutableSequence[ResolutionValueRule, float] = env['shares']
+        shares: MutableSequence[Tuple[ResolutionValueRule, float]] = env['shares']
         new_shares = []
         for rule, weight in shares:
             try:
@@ -231,4 +239,4 @@ class ResolveMultipleValues(ResolutionValueRule):
             except Exception:
                 pass
         env['shares'] = new_shares
-        return super().from_dict(env)
+        return cast(ResolveMultipleValues, super().from_dict(env))

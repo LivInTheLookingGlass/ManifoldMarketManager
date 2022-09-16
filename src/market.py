@@ -1,15 +1,16 @@
 from dataclasses import dataclass, field
-from enum import auto, Enum
-from logging import getLogger, Logger
+from enum import Enum, auto
+from logging import Logger, getLogger
 from math import log10
 from time import time
-from typing import Any, Dict, List, Union
+from typing import Any, List, Mapping, Optional, Union, cast
 
 from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
+from requests import Response
 
-from .util import explain_abstract, get_client, require_env
 from .rule import DoResolveRule, ResolutionValueRule
+from .util import AnyResolution, explain_abstract, get_client, require_env
 
 
 class MarketStatus(Enum):
@@ -31,11 +32,11 @@ class Market:
     resolve_to_rules: List[ResolutionValueRule] = field(default_factory=list)
     logger: Logger = field(init=False, default=None, repr=False)  # type: ignore[assignment]
 
-    def __postinit__(self):
+    def __postinit__(self) -> None:
         """Initialize state that doesn't make sense to exist in the init."""
         self.logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
 
-    def __getstate__(self):
+    def __getstate__(self) -> Mapping[str, Any]:
         """Remove sensitive/non-serializable state before dumping to database."""
         state = self.__dict__.copy()
         del state['client']
@@ -43,7 +44,7 @@ class Market:
             del state['logger']
         return state
 
-    def __setstate__(self, state):
+    def __setstate__(self, state: Mapping[str, Any]) -> None:
         """Rebuild sensitive/non-serializable state after retrieving from database."""
         self.__dict__.update(state)
         self.client = get_client()
@@ -51,9 +52,9 @@ class Market:
         self.__postinit__()
 
     @property
-    def id(self):
+    def id(self) -> str:
         """Return the ID of a market as reported by Manifold."""
-        return self.market.id
+        return cast(str, self.market.id)
 
     @property
     def status(self) -> MarketStatus:
@@ -65,18 +66,18 @@ class Market:
         return MarketStatus.OPEN
 
     @classmethod
-    def from_slug(cls, slug: str, *args, **kwargs):
+    def from_slug(cls, slug: str, *args: Any, **kwargs: Any) -> 'Market':
         """Reconstruct a Market object from the market slug and other arguments."""
         api_market = get_client().get_market_by_slug(slug)
         return cls(api_market, *args, **kwargs)
 
     @classmethod
-    def from_id(cls, id: str, *args, **kwargs):
+    def from_id(cls, id: str, *args: Any, **kwargs: Any) -> 'Market':
         """Reconstruct a Market object from the market ID and other arguments."""
         api_market = get_client().get_market_by_id(id)
         return cls(api_market, *args, **kwargs)
 
-    def explain_abstract(self, **kwargs) -> str:
+    def explain_abstract(self, **kwargs: Any) -> str:
         """Explain how the market will resolve and decide to resolve."""
         # set up potentially necessary information
         if "max_" not in kwargs:
@@ -114,7 +115,7 @@ class Market:
             rule.value(self) for rule in (self.do_resolve_rules or ())
         ) and not self.market.isResolved
 
-    def resolve_to(self) -> Union[int, float, str, Dict[Union[str, int, float], float], Dict[str, Any]]:
+    def resolve_to(self) -> AnyResolution:
         """Select a value to be resolved to.
 
         This is done by iterating through a series of Rules, each of which have
@@ -134,7 +135,7 @@ class Market:
             raise RuntimeError()
         return chosen
 
-    def current_answer(self) -> Union[str, int, float, Dict[Union[str, int], float]]:
+    def current_answer(self) -> Union[str, AnyResolution]:
         """Return the current top (single) answer."""
         # TODO: move these behaviors to a rule class
         if self.market.outcomeType == "BINARY":
@@ -144,11 +145,13 @@ class Market:
             probability = (pno / ((1 - self.market.p) * self.market.pool['YES'] + pno))
             start = float(self.market.min or 0)
             end = float(self.market.max or 0)
+            ret: float
             if self.market.isLogScale:
                 logValue = log10(end - start + 1) * probability
-                return max(start, min(end, 10**logValue + start - 1))
+                ret = max(start, min(end, 10**logValue + start - 1))
             else:
-                return max(start, min(end, start + (end - start) * probability))
+                ret = max(start, min(end, start + (end - start) * probability))
+            return ret
         elif self.market.outcomeType == "FREE_RESPONSE":
             return {idx: x['probability'] for idx, x in enumerate(self.market.answers)}
         elif self.market.outcomeType == "MULTIPLE_CHOICE":
@@ -158,7 +161,7 @@ class Market:
             raise NotImplementedError(self.market.outcomeType)
 
     @require_env("ManifoldAPIKey")
-    def resolve(self, override=None):
+    def resolve(self, override: Optional[AnyResolution] = None) -> Response:
         """Resolve this market according to our resolution rules.
 
         Returns
@@ -168,31 +171,35 @@ class Market:
         """
         if override is None:
             override = self.resolve_to()
-        if self.market.outcomeType == "PSEUDO_NUMERIC":
-            start = float(self.market.min or 0)
-            end = float(self.market.max or 0)
-            if self.market.isLogScale:
-                override = (override, log10(override - start + 1) / log10(end - start + 1) * 100)
-            else:
-                override = (override, (override - start) / (end - start) * 100)
+        # if self.market.outcomeType == "PSEUDO_NUMERIC":
+        #     start = float(self.market.min or 0)
+        #     end = float(self.market.max or 0)
+        #     if not isinstance(override, (int, float)):
+        #         raise TypeError()
+            # if self.market.isLogScale:
+            #     override = (override, log10(override - start + 1) / log10(end - start + 1) * 100)
+            # else:
+            #     override = (override, (override - start) / (end - start) * 100)
         if self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
-            if self.market.answers is not None:
-                new_override = {}
-                for idx, weight in override.items():
-                    new_override[self.market.answers[idx]['id']] = weight
-                override = new_override
+            if not isinstance(override, Mapping):
+                raise TypeError()
+            # if self.market.answers is not None:
+            #     new_override = {}
+            #     for idx, weight in override.items():
+            #         new_override[self.market.answers[idx]['id']] = weight
+            #     override = new_override
             new_override = {}
             for idx, weight in override.items():
                 new_override[int(idx)] = weight
             override = new_override
-        ret = self.client.resolve_market(self.market, override)
+        ret: Response = self.client.resolve_market(self.market, override)
         if ret.status_code < 300:
             self.logger.info("I was resolved")
             self.market.isResolved = True
         return ret
 
     @require_env("ManifoldAPIKey")
-    def cancel(self):
+    def cancel(self) -> Response:
         """Cancel this market.
 
         Returns
@@ -200,7 +207,7 @@ class Market:
         Response
             How Manifold interprets our request, and some JSON data on it
         """
-        ret = self.client.cancel_market(self.market)
+        ret: Response = self.client.cancel_market(self.market)
         if ret.status_code < 300:
             self.logger.info("I was cancelled")
             self.market.isResolved = True

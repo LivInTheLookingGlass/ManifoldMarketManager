@@ -3,9 +3,9 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import IntEnum
 from logging import getLogger
-from pathlib import Path
 from os import getenv
-from sqlite3 import connect, PARSE_COLNAMES, PARSE_DECLTYPES
+from pathlib import Path
+from sqlite3 import PARSE_COLNAMES, PARSE_DECLTYPES, Connection, connect
 from traceback import format_exc
 from typing import cast
 
@@ -26,7 +26,7 @@ if __version_info__ < (20, 0, 0, "alpha", 1):
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CallbackQueryHandler, ContextTypes
 
-from src import market, require_env
+from src import Market, market, require_env
 
 logger = getLogger(__name__)
 
@@ -43,7 +43,7 @@ class Response(IntEnum):
 class State:
     """Keeps track of global state for while the Telegram Bot is running."""
 
-    application: Application = None  # type: ignore[assignment]
+    application: Application = None  # type: ignore
     last_response: Response = Response.NO_ACTION
     last_text: str = ""
 
@@ -65,10 +65,13 @@ keyboard2 = [
 
 
 @require_env("DBName")
-def register_db():
+def register_db() -> Connection:
     """Get a connection to the appropriate database for this bot."""
-    do_initialize = not Path(getenv("DBName")).exists()
-    conn = connect(getenv("DBName"), detect_types=PARSE_COLNAMES | PARSE_DECLTYPES)
+    name = getenv("DBName")
+    if name is None:
+        raise EnvironmentError()
+    do_initialize = not Path(name).exists()
+    conn = connect(name, detect_types=PARSE_COLNAMES | PARSE_DECLTYPES)
     if do_initialize:
         conn.execute("CREATE TABLE markets "
                      "(id INTEGER, market Market, check_rate REAL, last_checked TIMESTAMP);")
@@ -108,11 +111,14 @@ async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 @require_env("TelegramAPIKey", "TelegramChatID")
-def tg_main(text) -> Response:
+def tg_main(text: str) -> Response:
     """Run the bot."""
-    async def post_init(self):
+    async def post_init(self):  # type: ignore
         reply_markup = InlineKeyboardMarkup(keyboard1)
-        await self.bot.send_message(text=text, reply_markup=reply_markup, chat_id=int(getenv("TelegramChatID")))
+        chat_id = getenv("TelegramChatID")
+        if chat_id is None:
+            raise EnvironmentError()
+        await self.bot.send_message(text=text, reply_markup=reply_markup, chat_id=int(chat_id))
 
     application = Application.builder().token(cast(str, getenv("TelegramAPIKey"))).post_init(post_init).build()
     application.add_handler(CallbackQueryHandler(buttons))
@@ -125,7 +131,7 @@ def tg_main(text) -> Response:
     return state.last_response
 
 
-def watch_reply(conn, id_, mkt, console_only=False):
+def watch_reply(conn: Connection, id_: int, mkt: Market, console_only: bool = False) -> None:
     """Watch for a reply from the bot manager in order to check the bot's work."""
     text = (f"Hey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of {mkt.current_answer()}."
             f"This market is called: {mkt.market.question}\n\n")
@@ -161,7 +167,7 @@ def watch_reply(conn, id_, mkt, console_only=False):
 
 
 @require_env("ManifoldAPIKey", "DBName")
-def main(refresh: bool = False, console_only: bool = False):
+def main(refresh: bool = False, console_only: bool = False) -> None:
     """Go through watched markets and act on rules (resolve, trade, etc)."""
     conn = register_db()
     mkt: market.Market
@@ -169,6 +175,12 @@ def main(refresh: bool = False, console_only: bool = False):
         print(msg := f"Currently checking ID {id_}: {mkt.market.question}")
         logger.info(msg)
         print(mkt.explain_abstract())
+        try:
+            print("\n\n" + mkt.explain_specific() + "\n\n")
+        except Exception:
+            print("\n")
+            format_exc()
+            print("\n\n")
         check = (refresh or not last_checked or (datetime.now() > last_checked + timedelta(hours=check_rate)))
         print(msg := f'  - [{"x" if check else " "}] Should I check?')
         logger.info(msg)

@@ -1,12 +1,17 @@
 from functools import lru_cache
 from logging import getLogger
 from os import getenv
-from typing import Iterable
+from typing import Any, Callable, Iterable, Literal, Mapping, TypeVar, Union
 
 from pymanifold.lib import ManifoldClient
 
 from . import Rule
 
+BinaryResolution = Union[Literal["CANCEL"], bool, float]
+PseudoNumericResolution = Union[Literal["CANCEL"], float]
+FreeResponseResolution = Union[Literal["CANCEL"], Mapping[str, float], Mapping[int, float], Mapping[float, float]]
+MultipleChoiceResolution = FreeResponseResolution
+AnyResolution = Union[BinaryResolution, PseudoNumericResolution, FreeResponseResolution, MultipleChoiceResolution]
 
 ENVIRONMENT_VARIABLES = [
     "ManifoldAPIKey",     # REQUIRED. Allows trades, market creation, market resolution
@@ -21,11 +26,13 @@ ENVIRONMENT_VARIABLES = [
 # If you don't need a specific environment variable, delete the line in this list
 # That said, if you use a rule that requires some API and have no key for it, it will fail
 
+T = TypeVar("T")
 
-def require_env(*env: str):
+
+def require_env(*env: str) -> Callable[[Callable[..., T]], Callable[..., T]]:
     """Enforce the presence of environment variables that may be necessary for a function to properly run."""
-    def bar(func):
-        def foo(*args, **kwargs):
+    def bar(func: Callable[..., T]) -> Callable[..., T]:
+        def foo(*args: Any, **kwargs: Any) -> T:
             for x in env:
                 if not getenv(x):
                     getLogger(__file__).error(f"Cannot run, as ${x} is not in the environment")
@@ -36,14 +43,14 @@ def require_env(*env: str):
     return bar
 
 
-@lru_cache
+@lru_cache(maxsize=None)
 @require_env("ManifoldAPIKey")
 def get_client() -> ManifoldClient:
     """Return a (possibly non-unique) Manifold client."""
     return ManifoldClient(getenv("ManifoldAPIKey"))
 
 
-def explain_abstract(time_rules: Iterable[Rule], value_rules: Iterable[Rule], **kwargs) -> str:
+def explain_abstract(time_rules: Iterable[Rule], value_rules: Iterable[Rule], **kwargs: Any) -> str:
     """Explain how the market will resolve and decide to resolve."""
     ret = "This market will resolve if any of the following are true:\n"
     for rule_ in time_rules:

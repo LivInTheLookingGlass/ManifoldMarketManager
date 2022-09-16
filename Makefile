@@ -52,17 +52,17 @@ test_%:
 
 .PHONY: _test
 _test:
-	@$(PY) -m pytest src $(pytest_args)
+	@PYTHONPATH=${PYTHONPATH}:./src/PyManifold $(PY) -m pytest src $(pytest_args) --ignore=./src/PyManifold --ignore=./src/test/manifold
 
 .PHONY: dependencies
 ifeq ($(MYPY),true)
 # Load dependencies from pypi
 dependencies:
-	@$(PIP) install -r requirements.txt --pre $(USER_FLAG) $(PROXY_ARG)
+	@$(PIP) install -r requirements.txt -U --pre $(USER_FLAG) $(PROXY_ARG)
 else
 dependencies:
 	@cat requirements.txt | grep -v "mypy" > .requirements.txt
-	@$(PIP) install -r .requirements.txt --pre $(USER_FLAG) $(PROXY_ARG)
+	@$(PIP) install -r .requirements.txt -U --pre $(USER_FLAG) $(PROXY_ARG)
 endif
 
 .PHONY: run_%

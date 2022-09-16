@@ -1,9 +1,10 @@
 from dataclasses import dataclass
+from typing import Any
 
-from . import login
-from .. import DoResolveRule
 from ...market import Market
 from ...util import require_env
+from .. import DoResolveRule
+from . import login
 
 
 @dataclass
@@ -21,10 +22,10 @@ class ResolveWithPR(DoResolveRule):
         pr = issue.pull_request()
         return issue.state != 'open' or (pr is not None and pr.merged)
 
-    def explain_abstract(self, indent=0, **kwargs) -> str:
+    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- If the GitHub PR {self.owner}/{self.repo}#{self.number} was merged in the past.\n"
 
-    def explain_specific(self, market: Market, indent=0) -> str:
+    def explain_specific(self, market: Market, indent: int = 0) -> str:
         ret = f"{'  ' * indent}- If either of the conditions below are True (-> {self.value(market)})\n"
         indent += 1
         issue = login().issue(self.owner, self.repo, self.number)

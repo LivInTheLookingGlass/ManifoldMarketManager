@@ -1,23 +1,30 @@
 from abc import abstractmethod
 from importlib import import_module
-from typing import Literal, Mapping, Union, Dict, Sequence
+from typing import TYPE_CHECKING, Literal, Mapping, Optional, Sequence, Type, Union, cast
 
 from .. import Rule
+from ..util import AnyResolution
+
+if TYPE_CHECKING:
+    from ..market import Market
 
 
-def get_rule(type_):
+def get_rule(type_: str) -> Type[Rule]:
     """Dynamically import and return a rule type by name."""
-    return getattr(
+    ret = getattr(
         import_module(".".join(("", *type_.split(".")[:-1])), __name__),
         type_.split(".")[-1]
     )
+    if issubclass(ret, Rule):
+        return cast(Type[Rule], ret)
+    raise NameError()
 
 
 class DoResolveRule(Rule):
     """The subtype of rule which determines if a market should resolve, returning a bool."""
 
     @abstractmethod
-    def value(self, market) -> bool:
+    def value(self, market: "Market") -> bool:
         """Return True if a market should resolve."""
         raise NotImplementedError()
 
@@ -28,29 +35,36 @@ class ResolutionValueRule(Rule):
     @abstractmethod
     def _value(
         self,
-        market
-    ) -> Union[int, float, str, Dict[Union[str, int, float], float]]:
+        market: "Market"
+    ) -> AnyResolution:
         ...
 
     def value(
         self,
-        market,
-        format: Literal['BINARY', 'PSEUDO_NUMERIC', 'FREE_RESPONSE', 'MULTIPLE_CHOICE'] = 'BINARY'
-    ) -> Union[int, float, str, Dict[Union[str, int, float], float]]:
+        market: "Market",
+        format: Optional[Literal['BINARY', 'PSEUDO_NUMERIC', 'FREE_RESPONSE', 'MULTIPLE_CHOICE']] = None
+    ) -> AnyResolution:
         """Return the resolution value of a market, appropriately formatted for its market type."""
-        ret = self._value(market)
-        if ret in (None, 'CANCEL'):
+        if format is None:
+            format = market.market.outcomeType
+        ret: Union[str, AnyResolution] = self._value(market)
+        if ret is None:
+            return ret
+        elif ret == "CANCEL":
             return ret
         elif format in ('BINARY', 'PSEUDO_NUMERIC'):
-            if isinstance(ret, Sequence) and len(ret) == 1:
+            if not isinstance(ret, str) and isinstance(ret, Sequence) and len(ret) == 1:
                 ret = ret[0]
             elif isinstance(ret, Mapping) and len(ret) == 1:
-                ret = tuple(ret.items())[0][0]
+                ret = cast(Union[str, int, float], next(iter(ret.items()))[0])
 
             if isinstance(ret, (int, float, )):
                 return ret
             elif isinstance(ret, str):
-                return float(ret)
+                ret = float(ret)
+                if ret.is_integer():
+                    return int(ret)
+                return ret
 
             raise TypeError(ret, format, market)
         elif format in ('FREE_RESPONSE', 'MULTIPLE_CHOICE'):
