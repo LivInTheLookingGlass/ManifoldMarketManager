@@ -100,7 +100,7 @@ quiet_daemon:
 	done;
 
 .PHONY: build
-# (TODO) Build a package
+# Build a package
 build: dependencies clean LICENSE
 	@$(PIP) install build
 	@$(PY) -m build
@@ -108,8 +108,8 @@ build: dependencies clean LICENSE
 .PHONY: clean
 # Clean up after a build
 clean:
-	@mkdir -p build dist
-	@rm -r build dist *.egg-info
+	@mkdir -p build dist src/.egg-info
+	@rm -r build dist src/*.egg-info
 
 .PHONY: publish
 # (TODO) Publish new version to pypi
