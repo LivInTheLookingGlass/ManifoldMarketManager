@@ -2,8 +2,7 @@ from abc import abstractmethod
 from importlib import import_module
 from typing import TYPE_CHECKING, Literal, Mapping, Optional, Sequence, Type, Union, cast
 
-from .. import Rule
-from ..util import AnyResolution
+from .. import AnyResolution, Rule
 
 if TYPE_CHECKING:
     from ..market import Market

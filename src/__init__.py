@@ -18,12 +18,18 @@ from sqlite3 import register_adapter, register_converter
 from sys import modules
 from sys import path as _sys_path
 from traceback import format_exc
-from typing import Any
+from typing import Any, Literal, Mapping, Union, cast
 from warnings import warn
 
 _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
 
 from pymanifold.types import DictDeserializable  # noqa: E402
+
+BinaryResolution = Union[Literal["CANCEL"], bool, float]
+PseudoNumericResolution = Union[Literal["CANCEL"], float]
+FreeResponseResolution = Union[Literal["CANCEL"], Mapping[str, float], Mapping[int, float], Mapping[float, float]]
+MultipleChoiceResolution = FreeResponseResolution
+AnyResolution = Union[BinaryResolution, PseudoNumericResolution, FreeResponseResolution, MultipleChoiceResolution]
 
 
 class Rule(ABC, DictDeserializable):
@@ -45,17 +51,39 @@ class Rule(ABC, DictDeserializable):
         """Explain how the market will resolve and decide to resolve."""
         raise NotImplementedError(type(self))
 
-    def explain_specific(self, market: 'Market', indent: int = 0) -> str:
+    def explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
         """Explain why the market is resolving the way that it is."""
         warn("Using a default specific explanation. This probably isn't what you want!")
-        return self.explain_abstract(indent=indent).rstrip('\n') + f" (-> {self.value(market)})\n"
+        ret = self.explain_abstract(indent=indent).rstrip('\n')
+        ret += " (-> "
+        val = self.value(market)
+        if val == "CANCEL":
+            ret += "CANCEL)\n"
+            return ret
+        if market.market.outcomeType == "BINARY":
+            if val is True or val == 100:
+                ret += "YES)\n"
+            elif not val:
+                ret += "NO)\n"
+            else:
+                ret += round_sig_figs(cast(float, val) * 100)
+        elif market.market.outcomeType == "PSEUDO_NUMERIC":
+            ret += round_sig_figs(cast(float, val))
+        elif market.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
+            assert not isinstance(val, (float, str))
+            ret += "{"
+            for idx, (key, weight) in enumerate(val.items()):
+                if idx:
+                    ret += ", "
+                ret += f"{key}: {round_sig_figs(weight * 100)}%"
+            ret += "})\n"
+        return ret
 
 
 from . import market, rule, util  # noqa: E402
 from .market import Market  # noqa: E402
 from .rule import DoResolveRule, ResolutionValueRule  # noqa: E402
-from .util import (AnyResolution, BinaryResolution, FreeResponseResolution, MultipleChoiceResolution,  # noqa: E402
-                   PseudoNumericResolution, get_client, require_env)
+from .util import get_client, require_env, round_sig_figs  # noqa: E402
 
 register_adapter(rule.Rule, dumps)  # type: ignore
 register_converter("Rule", loads)

@@ -1,17 +1,11 @@
 from functools import lru_cache
 from logging import getLogger
 from os import getenv
-from typing import Any, Callable, Iterable, Literal, Mapping, TypeVar, Union
+from typing import Any, Callable, Iterable, TypeVar
 
 from pymanifold.lib import ManifoldClient
 
 from . import Rule
-
-BinaryResolution = Union[Literal["CANCEL"], bool, float]
-PseudoNumericResolution = Union[Literal["CANCEL"], float]
-FreeResponseResolution = Union[Literal["CANCEL"], Mapping[str, float], Mapping[int, float], Mapping[float, float]]
-MultipleChoiceResolution = FreeResponseResolution
-AnyResolution = Union[BinaryResolution, PseudoNumericResolution, FreeResponseResolution, MultipleChoiceResolution]
 
 ENVIRONMENT_VARIABLES = [
     "ManifoldAPIKey",     # REQUIRED. Allows trades, market creation, market resolution
@@ -27,6 +21,10 @@ ENVIRONMENT_VARIABLES = [
 # That said, if you use a rule that requires some API and have no key for it, it will fail
 
 T = TypeVar("T")
+
+
+def round_sig_figs(num: float, sig_figs: int = 4) -> str:
+    return f"%.{sig_figs}g" % (num, )
 
 
 def require_env(*env: str) -> Callable[[Callable[..., T]], Callable[..., T]]:

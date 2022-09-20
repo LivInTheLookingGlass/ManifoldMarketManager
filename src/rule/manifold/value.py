@@ -4,8 +4,8 @@ from typing import Any, Dict, Literal, Union, cast
 
 from pymanifold.lib import ManifoldClient
 
+from ... import FreeResponseResolution, MultipleChoiceResolution
 from ...market import Market
-from ...util import FreeResponseResolution, MultipleChoiceResolution
 from .. import ResolutionValueRule
 
 

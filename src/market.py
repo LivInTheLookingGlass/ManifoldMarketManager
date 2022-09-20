@@ -9,8 +9,9 @@ from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
 from requests import Response
 
+from . import AnyResolution
 from .rule import DoResolveRule, ResolutionValueRule
-from .util import AnyResolution, explain_abstract, get_client, require_env
+from .util import explain_abstract, get_client, require_env
 
 
 class MarketStatus(Enum):

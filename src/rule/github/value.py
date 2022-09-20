@@ -27,7 +27,7 @@ class ResolveToPR(ResolutionValueRule):
         ret += f"{'  ' * indent}- Otherwise, resolve to NO.\n"
         return ret
 
-    def explain_specific(self, market: Market, indent: int = 0) -> str:
+    def explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         if pr is None:
@@ -66,7 +66,7 @@ class ResolveToPRDelta(ResolutionValueRule):
         ret += ".\n"
         return ret
 
-    def explain_specific(self, market: Market, indent: int = 0) -> str:
+    def explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         if pr is None:

@@ -4,8 +4,8 @@ from datetime import datetime
 from random import Random
 from typing import Any, DefaultDict, Dict, MutableSequence, Optional, Sequence, Tuple, Union, cast
 
+from .. import AnyResolution, FreeResponseResolution, MultipleChoiceResolution
 from ..market import Market
-from ..util import AnyResolution, FreeResponseResolution, MultipleChoiceResolution
 from . import DoResolveRule, ResolutionValueRule, get_rule
 
 
@@ -25,7 +25,7 @@ class NegateRule(DoResolveRule):
             self.child.explain_abstract(indent + 1, **kwargs)
         )
 
-    def explain_specific(self, market: Market, indent: int = 0) -> str:
+    def explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         return (
             f"{'  ' * indent}- If the rule below resolves False (-> {self.value(market)})\n" +
             self.child.explain_specific(market, indent + 1)
@@ -60,7 +60,7 @@ class EitherRule(DoResolveRule):
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
-    def explain_specific(self, market: Market, indent: int = 0) -> str:
+    def explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         ret = f"{'  ' * indent}- If either of the rules below resolves True (-> {self.value(market)})\n"
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
@@ -96,7 +96,7 @@ class BothRule(DoResolveRule):
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
-    def explain_specific(self, market: Market, indent: int = 0) -> str:
+    def explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         ret = f"{'  ' * indent}- If both of the rules below resolves True (-> {self.value(market)})\n"
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)

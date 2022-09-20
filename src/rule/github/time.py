@@ -25,7 +25,7 @@ class ResolveWithPR(DoResolveRule):
     def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- If the GitHub PR {self.owner}/{self.repo}#{self.number} was merged in the past.\n"
 
-    def explain_specific(self, market: Market, indent: int = 0) -> str:
+    def explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         ret = f"{'  ' * indent}- If either of the conditions below are True (-> {self.value(market)})\n"
         indent += 1
         issue = login().issue(self.owner, self.repo, self.number)
