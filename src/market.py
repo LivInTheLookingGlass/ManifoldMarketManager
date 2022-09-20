@@ -11,7 +11,7 @@ from requests import Response
 
 from . import AnyResolution
 from .rule import DoResolveRule, ResolutionValueRule
-from .util import explain_abstract, get_client, require_env
+from .util import explain_abstract, get_client, require_env, round_sig_figs
 
 
 class MarketStatus(Enum):
@@ -90,24 +90,46 @@ class Market:
 
         return explain_abstract(**kwargs)
 
-    def explain_specific(self) -> str:
+    def explain_specific(self, sig_figs: int = 4) -> str:
         """Explain why the market is resolving the way that it is."""
         if self.should_resolve() is not True:
             ret = "This market is not resolving, because none of the following are true:\n"
             for rule_ in self.do_resolve_rules:
-                ret += rule_.explain_specific(market=self, indent=1)
+                ret += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
             ret += "\nWere it to resolve now, it would follow the decision tree below:\n"
         else:
             ret = "This market is resolving because of the following trigger(s):\n"
             for rule_ in self.do_resolve_rules:
                 if rule_.value(self):
-                    ret += rule_.explain_specific(market=self, indent=1)
+                    ret += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
             ret += "\nIt will follow the decision tree below:\n"
 
         ret += "- If the human operator agrees:\n"
         for rule_ in self.resolve_to_rules:
-            ret += rule_.explain_specific(market=self, indent=1)
-        ret += f"\nFinal Value: {self.resolve_to()}"
+            ret += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
+        ret += "\nFinal Value: "
+        val = self.resolve_to()
+        if val == "CANCEL":
+            ret += "CANCEL"
+            return ret
+        if self.market.outcomeType == "BINARY":
+            if val is True or val == 100:
+                ret += "YES"
+            elif not val:
+                ret += "NO"
+            else:
+                ret += round_sig_figs(cast(float, val) * 100, sig_figs)
+        elif self.market.outcomeType == "PSEUDO_NUMERIC":
+            ret += str(val)
+        elif self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
+            assert not isinstance(val, (float, str))
+            ret += "{"
+            total = sum(val.values())
+            for idx, (key, weight) in enumerate(val.items()):
+                if idx:
+                    ret += ", "
+                ret += f"{key}: {round_sig_figs(weight * 100 / total, sig_figs)}%"
+            ret += "}\n"
         return ret
 
     def should_resolve(self) -> bool:
