@@ -112,7 +112,7 @@ clean:
 	@rm -r build dist src/*.egg-info
 
 .PHONY: publish
-# (TODO) Publish new version to pypi
+# Publish new version to pypi
 publish: build
 	@$(PY) -m twine upload -u gappleto97 -s --sign-with gpg2 dist/*
 
