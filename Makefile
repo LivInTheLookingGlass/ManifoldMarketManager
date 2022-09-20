@@ -102,14 +102,14 @@ quiet_daemon:
 .PHONY: build
 # (TODO) Build a package
 build: dependencies clean LICENSE
-	@$(PY) setup.py bdist_wheel --universal
-	@$(PY) setup.py sdist
+	@$(PIP) install build
+	@$(PY) -m build
 
 .PHONY: clean
 # Clean up after a build
 clean:
 	@mkdir -p build dist
-	@rm -r build dist
+	@rm -r build dist *.egg-info
 
 .PHONY: publish
 # (TODO) Publish new version to pypi

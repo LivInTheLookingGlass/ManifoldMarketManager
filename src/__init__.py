@@ -60,7 +60,7 @@ class Rule(ABC, DictDeserializable):
         if val == "CANCEL":
             ret += "CANCEL)\n"
             return ret
-        if market.market.outcomeType == "BINARY":
+        if isinstance(val, bool) or market.market.outcomeType == "BINARY":
             if val is True or val == 100:
                 ret += "YES)\n"
             elif not val:
@@ -90,7 +90,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.5.0.7"
+VERSION = "0.5.0.12"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",
@@ -120,7 +120,7 @@ if getenv("DEBUG"):
     sys.excepthook = info
 
 # dynamically load optional plugins where able to
-exempt = ('__init__', '__main__', '__pycache__', 'application', 'test', 'PyManifold', *__all__)
+exempt = ('__init__', '__main__', '__pycache__', '__version__', 'application', 'test', 'PyManifold', *__all__)
 for entry in Path(__file__).parent.iterdir():
     name = entry.name.rstrip(".py")
     if name.startswith('.') or name in exempt:
