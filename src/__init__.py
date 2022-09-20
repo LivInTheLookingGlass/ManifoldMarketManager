@@ -89,12 +89,13 @@ register_adapter(rule.Rule, dumps)  # type: ignore
 register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
-getLogger
-__version_info__ = (0, 5, 0, 0, 1)
+
+VERSION = "0.5.0.6"
+__version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",
     "ResolutionValueRule", "Rule", "AnyResolution", "BinaryResolution", "FreeResponseResolution",
-    "MultipleChoiceResolution", "PseudoNumericResolution"
+    "MultipleChoiceResolution", "PseudoNumericResolution", "VERSION"
 ]
 
 if getenv("DEBUG"):

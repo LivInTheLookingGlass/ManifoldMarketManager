@@ -2,33 +2,44 @@ SHELL := /bin/bash
 
 # If specified, open pdb on uncaught exception
 DEBUG?=
-# If specified, run a linter
-LINT?=
 # If specified, use a different python command
 PY?=python3
 # Unless specified otherwise, install python modules as user
 USER_FLAG?=--user
 # If specified, use a different command for pip
 PIP?=$(PY) -m pip
-# If specified, perform type-checking
+# Unless specified otherwise, perform code coverage analysis
+COV?=true
+# Unless specified otherwise, run a linter
+LINT?=true
+# Unless specified otherwise, perform type-checking
 MYPY?=true
+# If specified, perform benchmarking (WARNING: silently disables code coverage)
+BENCHMARK?=false
+# Unless specified otherwise, run tests that are relatively slow
+SLOW?=true
 
-ifneq ($(MYPY),true)
-LINT=less
+pytest_args?= -vl
+
+ifeq ($(BENCHMARK),true)
+pytest_args += --benchmark-min-time=0.05 --benchmark-sort=fullname --benchmark-group-by=fullfunc --benchmark-verbose
+COV=false
 endif
 
-ifeq ($(LINT),false)
-pytest_args?= -vl --benchmark-min-time=0.05 --benchmark-sort=fullname --benchmark-group-by=fullfunc --benchmark-verbose
-else
-ifeq ($(LINT),true)
-pytest_args?= -vl --mypy --mypy-ignore-missing-imports --flake8 --isort -k 'not test_problem and not test_is_prime and not test_groupwise'
-else
-ifeq ($(LINT),less)
-pytest_args?= -vl --flake8 --isort --benchmark-min-time=0.05 --benchmark-sort=fullname --benchmark-group-by=fullfunc --benchmark-verbose
-else
-pytest_args?= -vl --mypy --mypy-ignore-missing-imports --flake8 --isort --benchmark-min-time=0.05 --benchmark-group-by=fullfunc --benchmark-sort=fullname --benchmark-verbose
+ifneq ($(LINT),false)
+pytest_args += --flake8 --isort
 endif
+
+ifneq ($(MYPY),false)
+pytest_args += --mypy --mypy-ignore-missing-imports
 endif
+
+ifneq ($(COV),false)
+pytest_args += --cov=src --cov-branch --cov-report=term
+endif
+
+ifneq ($(SLOW),true)
+pytest_args += -m "not slow"
 endif
 
 ifneq ($(https_proxy), )
@@ -52,17 +63,17 @@ test_%:
 
 .PHONY: _test
 _test:
-	@PYTHONPATH=${PYTHONPATH}:./src/PyManifold $(PY) -m pytest src $(pytest_args) -k 'not mypy-status' --ignore=./src/PyManifold --ignore=./src/test/manifold
+	@source env_personal.sh && PYTHONPATH=${PYTHONPATH}:./src/PyManifold $(PY) -m pytest src $(pytest_args) -k 'not mypy-status' --ignore=./src/PyManifold --ignore=./src/test/manifold
 
 .PHONY: dependencies
 ifeq ($(MYPY),true)
 # Load dependencies from pypi
 dependencies:
-	@$(PIP) install -r requirements.txt --pre $(USER_FLAG) $(PROXY_ARG)
+	@$(PIP) install -r requirements.txt $(USER_FLAG) $(PROXY_ARG)
 else
 dependencies:
 	@cat requirements.txt | grep -v "mypy" > .requirements.txt
-	@$(PIP) install -r .requirements.txt --pre $(USER_FLAG) $(PROXY_ARG)
+	@$(PIP) install -r .requirements.txt $(USER_FLAG) $(PROXY_ARG)
 endif
 
 .PHONY: run_%

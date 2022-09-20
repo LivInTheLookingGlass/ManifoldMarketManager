@@ -115,6 +115,37 @@ The goal of this project is to make a Manifold agent that can manage various for
 
 ![A graph of my application's dependencies](./src.png)
 
+## Recent Coverage Report
+
+```
+---------- coverage: platform linux, python 3.10.5-final-0 -----------
+Name                                    Stmts   Miss Branch BrPart  Cover
+-------------------------------------------------------------------------
+src/PyManifold/pymanifold/__init__.py       4      0      0      0   100%
+src/PyManifold/pymanifold/lib.py          159    118     74      0    18%
+src/PyManifold/pymanifold/types.py         92      2     24      0    95%
+src/__init__.py                            86     38     26      1    49%
+src/__main__.py                            85     85     34      0     0%
+src/application.py                        137    137     40      0     0%
+src/market.py                             140     79     66      3    33%
+src/rule/__init__.py                       55     39     42      2    23%
+src/rule/generic/__init__.py                2      0      0      0   100%
+src/rule/generic/time.py                   85     49     18      0    43%
+src/rule/generic/value.py                  81     47     30      0    38%
+src/rule/github/__init__.py                 9      2      0      0    78%
+src/rule/github/time.py                    26     11      2      0    61%
+src/rule/github/value.py                   57     34     12      0    39%
+src/rule/manifold/__init__.py               0      0      0      0   100%
+src/rule/manifold/value.py                 80     50     48      0    31%
+src/test/__init__.py                        6      0      2      0   100%
+src/test/test_market.py                    35      0     10      0   100%
+src/test/test_rule.py                       9      0      0      0   100%
+src/test/test_util.py                      39      2     16      2    93%
+src/util.py                                33      1      8      0    98%
+-------------------------------------------------------------------------
+TOTAL                                    1220    694    452      8    38%
+```
+
 ## JSON Examples
 
 ### 50/50 Lottery
