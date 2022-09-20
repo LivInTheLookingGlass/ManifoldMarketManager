@@ -3,7 +3,7 @@ from enum import Enum, auto
 from logging import Logger, getLogger
 from math import log10
 from time import time
-from typing import Any, List, Mapping, Optional, Union, cast
+from typing import Any, List, Mapping, Optional, Tuple, Union, cast
 
 from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
@@ -98,7 +98,7 @@ class Market:
                 ret += rule_.explain_specific(market=self, indent=1)
             ret += "\nWere it to resolve now, it would follow the decision tree below:\n"
         else:
-            ret = "This market will is resolving because of the following trigger(s):\n"
+            ret = "This market is resolving because of the following trigger(s):\n"
             for rule_ in self.do_resolve_rules:
                 if rule_.value(self):
                     ret += rule_.explain_specific(market=self, indent=1)
@@ -170,19 +170,22 @@ class Market:
         Response
             How Manifold interprets our request, and some JSON data on it
         """
+        _override: Union[AnyResolution, Tuple[float, float]]
         if override is None:
-            override = self.resolve_to()
+            _override = self.resolve_to()
+        else:
+            _override = override
         if self.market.outcomeType == "PSEUDO_NUMERIC":
             start = float(self.market.min or 0)
             end = float(self.market.max or 0)
-            if not isinstance(override, (int, float)):
+            if not isinstance(_override, (int, float)):
                 raise TypeError()
             if self.market.isLogScale:
-                override = (override, log10(override - start + 1) / log10(end - start + 1) * 100)
+                _override = (_override, log10(_override - start + 1) / log10(end - start + 1) * 100)
             else:
-                override = (override, (override - start) / (end - start) * 100)
+                _override = (_override, (_override - start) / (end - start) * 100)
         if self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
-            if not isinstance(override, Mapping):
+            if not isinstance(_override, Mapping):
                 raise TypeError()
             # if self.market.answers is not None:
             #     new_override = {}
@@ -190,10 +193,10 @@ class Market:
             #         new_override[self.market.answers[idx]['id']] = weight
             #     override = new_override
             new_override = {}
-            for idx, weight in override.items():
+            for idx, weight in _override.items():
                 new_override[int(idx)] = weight
-            override = new_override
-        ret: Response = self.client.resolve_market(self.market, override)
+            _override = new_override
+        ret: Response = self.client.resolve_market(self.market, _override)
         if ret.status_code < 300:
             self.logger.info("I was resolved")
             self.market.isResolved = True
