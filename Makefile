@@ -108,13 +108,14 @@ build: dependencies clean LICENSE
 .PHONY: clean
 # Clean up after a build
 clean:
-	@mkdir -p build dist src/.egg-info
+	@mkdir -p build dist src/a.egg-info
 	@rm -r build dist src/*.egg-info
 
 .PHONY: publish
 # Publish new version to pypi
-publish: build
+publish: test build
 	@$(PY) -m twine upload -u gappleto97 -s --sign-with gpg2 dist/*
+	@$(MAKE) clean $(MFLAGS)
 
 .PHONY: graph
 # Build a dependency graph of this package
@@ -125,7 +126,7 @@ graph: dependencies
 .PHONY: import_%
 # Create one or more markets from example.json and add them to the specified account
 import_%: LICENSE dependencies
-	@$(PY) example_json.py
+	@source env_$*.sh && $(PY) example_json.py
 
 .PHONY: help
 # Show this help.
