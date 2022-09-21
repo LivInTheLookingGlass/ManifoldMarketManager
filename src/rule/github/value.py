@@ -22,14 +22,14 @@ class ResolveToPR(ResolutionValueRule):
         pr = issue.pull_request()
         return pr is not None and pr.merged
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- Resolves based on GitHub PR {self.owner}/{self.repo}#{self.number}\n"
         indent += 1
         ret += f"{'  ' * indent}- If the PR is merged, resolve to YES.\n"
         ret += f"{'  ' * indent}- Otherwise, resolve to NO.\n"
         return ret
 
-    def explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
+    def _explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         if pr is None:
@@ -57,7 +57,7 @@ class ResolveToPRDelta(ResolutionValueRule):
         delta = cast(datetime, pr.merged_at) - self.start.replace(tzinfo=timezone.utc)
         return delta.days + (delta.seconds / (24 * 60 * 60))
 
-    def explain_abstract(self, indent: int = 0, max_: Optional[float] = None, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, max_: Optional[float] = None, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- Resolves based on GitHub PR {self.owner}/{self.repo}#{self.number}\n"
         indent += 1
         ret += (f"{'  ' * indent}- If the PR is merged, resolve to the number of days between {self.start} and the "
@@ -68,7 +68,7 @@ class ResolveToPRDelta(ResolutionValueRule):
         ret += ".\n"
         return ret
 
-    def explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
+    def _explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         if pr is None:

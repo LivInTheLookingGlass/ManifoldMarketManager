@@ -19,7 +19,7 @@ class ResolveToValue(ResolutionValueRule):
     def _value(self, market: 'Market') -> AnyResolution:
         return self.resolve_value
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves to the specific value {self.resolve_value}\n"
 
 
@@ -73,7 +73,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
             self.kwargs["weights"] = [prob for _, prob in items]
         return cast(int, super()._value(market))
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- Resolve to a random index, given some original seed. This one operates on a "
         if self.method == 'randrange':
             ret += f"fixed range of integers in ({self.start} <= x < {self.size}).\n"
@@ -96,7 +96,7 @@ class ResolveMultipleValues(ResolutionValueRule):
                 ret[int(idx)] += value * part
         return {key: value for key, value in ret.items()}
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}Resolves to the weighted union of multiple other values.\n"
         indent += 1
         for rule, weight in self.shares:

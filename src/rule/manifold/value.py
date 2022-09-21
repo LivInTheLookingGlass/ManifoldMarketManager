@@ -42,7 +42,7 @@ class CurrentValueRule(ResolutionValueRule):
             }
         raise ValueError()
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves to the current market value.\n"
 
 
@@ -56,7 +56,7 @@ class RoundValueRule(CurrentValueRule):
             return bool(round(market.market.probability))
         return round(cast(float, super()._value(market)))
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves to round(MKT).\n"
 
 
@@ -94,7 +94,7 @@ class PopularValueRule(ResolutionValueRule):
             }
         raise ValueError()
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves to the {self.size} most probable answers, weighted by their probability.\n"
 
 
@@ -109,7 +109,7 @@ class ResolveToUserProfit(CurrentValueRule):
         user = ManifoldClient()._get_user_raw(self.user)
         return cast(float, user['profitCached'][self.field])
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves to the current reported {self.field} profit of user {self.user}.\n"
 
 
@@ -124,5 +124,5 @@ class ResolveToUserCreatedVolume(CurrentValueRule):
         user = ManifoldClient()._get_user_raw(self.user)
         return cast(float, user['creatorVolumeCached'][self.field])
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves to the current reported {self.field} market volume created by {self.user}.\n"

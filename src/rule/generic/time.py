@@ -18,17 +18,12 @@ class NegateRule(DoResolveRule):
         """Return the negation of the underlying rule."""
         return not self.child.value(market)
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return (
-            f"{'  ' * indent}- If the rule below resolves False\n" +
-            self.child.explain_abstract(indent + 1, **kwargs)
-        )
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        return f"{'  ' * indent}- If the rule below resolves False\n{self.child.explain_abstract(indent + 1, **kwargs)}"
 
-    def explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
-        return (
-            f"{'  ' * indent}- If the rule below resolves False (-> {self.value(market)})\n" +
-            self.child.explain_specific(market, indent + 1)
-        )
+    def _explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
+        return f"{'  ' * indent}- If the rule below resolves False (-> {self.value(market)})\n" +\
+               self.child.explain_specific(market, indent + 1)
 
     @classmethod
     def from_dict(cls, env: Dict[str, Any]) -> 'NegateRule':
@@ -53,13 +48,13 @@ class EitherRule(DoResolveRule):
         """Return True iff at least one underlying rule returns True."""
         return self.rule1.value(market) or self.rule2.value(market)
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- If either of the rules below resolves True\n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
-    def explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
+    def _explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
         ret = f"{'  ' * indent}- If either of the rules below resolves True (-> {self.value(market)})\n"
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
@@ -89,13 +84,13 @@ class BothRule(DoResolveRule):
         """Return True iff both underlying rules return True."""
         return self.rule1.value(market) and self.rule2.value(market)
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- If both of the rules below resolves True\n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
-    def explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
+    def _explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
         ret = f"{'  ' * indent}- If both of the rules below resolves True (-> {self.value(market)})\n"
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
@@ -127,5 +122,5 @@ class ResolveAtTime(DoResolveRule):
         except TypeError:
             return datetime.now() >= self.resolve_at
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- If the current time is past {self.resolve_at}\n"

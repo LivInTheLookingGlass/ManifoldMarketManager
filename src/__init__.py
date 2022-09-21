@@ -47,12 +47,18 @@ class Rule(ABC, DictDeserializable):
         raise NotImplementedError(type(self))
 
     @abstractmethod
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        raise NotImplementedError(type(self))
+
     def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         """Explain how the market will resolve and decide to resolve."""
-        raise NotImplementedError(type(self))
+        return self._explain_abstract(indent, **kwargs)
 
     def explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
         """Explain why the market is resolving the way that it is."""
+        return self._explain_specific(market, indent, sig_figs)
+
+    def _explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
         warn("Using a default specific explanation. This probably isn't what you want!")
         ret = self.explain_abstract(indent=indent).rstrip('\n')
         ret += " (-> "
@@ -60,7 +66,7 @@ class Rule(ABC, DictDeserializable):
         if val == "CANCEL":
             ret += "CANCEL)\n"
             return ret
-        if isinstance(val, bool) or market.market.outcomeType == "BINARY":
+        if isinstance(self, rule.DoResolveRule) or market.market.outcomeType == "BINARY":
             if val is True or val == 100:
                 ret += "YES)\n"
             elif not val:
@@ -90,7 +96,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.5.0.19"
+VERSION = "0.5.0.20"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",

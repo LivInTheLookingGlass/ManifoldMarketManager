@@ -24,10 +24,10 @@ class ResolveWithPR(DoResolveRule):
         pr = issue.pull_request()
         return issue.state != 'open' or (pr is not None and pr.merged)
 
-    def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- If the GitHub PR {self.owner}/{self.repo}#{self.number} was merged in the past.\n"
 
-    def explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
+    def _explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
         ret = f"{'  ' * indent}- If either of the conditions below are True (-> {self.value(market)})\n"
         indent += 1
         issue = login().issue(self.owner, self.repo, self.number)
