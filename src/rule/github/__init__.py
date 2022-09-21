@@ -9,11 +9,13 @@ __all__ = ('login', 'value', 'time', 'unauth_login')
 
 
 def unauth_login() -> GitHub:
+    """Return an unauthorized login to GitHub."""
     return GitHub()
 
 
 @require_env('GithubAccessToken', 'GithubUsername')
 def login() -> GitHub:
+    """Return an authorized login to GitHub."""
     return gh_login(username=getenv('GithubUsername'), token=getenv('GithubAccessToken'))
 
 
