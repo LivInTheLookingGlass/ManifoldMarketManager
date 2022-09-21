@@ -3,15 +3,17 @@ from enum import Enum, auto
 from logging import Logger, getLogger
 from math import log10
 from time import time
-from typing import Any, List, Mapping, Optional, Tuple, Union, cast
+from typing import TYPE_CHECKING, Any, List, Mapping, Optional, Tuple, Union, cast
 
 from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
 from requests import Response
 
 from . import AnyResolution
-from .rule import DoResolveRule, ResolutionValueRule
 from .util import explain_abstract, get_client, require_env, round_sig_figs
+
+if TYPE_CHECKING:
+    from .rule import DoResolveRule, ResolutionValueRule
 
 
 class MarketStatus(Enum):
@@ -29,8 +31,8 @@ class Market:
     market: APIMarket
     client: ManifoldClient = field(default_factory=get_client)
     notes: str = field(default='')
-    do_resolve_rules: List[DoResolveRule] = field(default_factory=list)
-    resolve_to_rules: List[ResolutionValueRule] = field(default_factory=list)
+    do_resolve_rules: List['DoResolveRule'] = field(default_factory=list)
+    resolve_to_rules: List['ResolutionValueRule'] = field(default_factory=list)
     logger: Logger = field(init=False, default=None, repr=False)  # type: ignore[assignment]
 
     def __postinit__(self) -> None:
