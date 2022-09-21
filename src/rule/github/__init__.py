@@ -17,4 +17,4 @@ def login() -> GitHub:
     return gh_login(username=getenv('GithubUsername'), token=getenv('GithubAccessToken'))
 
 
-from . import value, time  # noqa: E402
+from . import time, value  # noqa: E402
