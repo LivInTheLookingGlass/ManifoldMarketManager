@@ -17,7 +17,7 @@ from pickle import dumps, loads
 from sqlite3 import register_adapter, register_converter
 from sys import modules
 from sys import path as _sys_path
-from traceback import format_exc
+from traceback import print_exc
 from typing import Any, Literal, Mapping, Union, cast
 from warnings import warn
 
@@ -90,7 +90,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.5.0.15"
+VERSION = "0.5.0.16"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",
@@ -120,7 +120,7 @@ if getenv("DEBUG"):
     sys.excepthook = info
 
 # dynamically load optional plugins where able to
-exempt = ('__init__', '__main__', '__pycache__', '__version__', 'application', 'test', 'PyManifold', *__all__)
+exempt = {'__init__', '__main__', '__pycache__', 'application', 'test', 'PyManifold', 'py.typed', *__all__}
 for entry in Path(__file__).parent.iterdir():
     name = entry.name.rstrip(".py")
     if name.startswith('.') or name in exempt:
@@ -129,5 +129,5 @@ for entry in Path(__file__).parent.iterdir():
         setattr(modules[__name__], name, import_module("." + name, __name__))
         __all__.append(name)
     except ImportError:
-        format_exc()
+        print_exc()
         warn(f"Unable to import extension module: {name}")

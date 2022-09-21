@@ -1,10 +1,12 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from ...market import Market
 from ...util import require_env
 from .. import DoResolveRule
 from . import login
+
+if TYPE_CHECKING:
+    from ...market import Market
 
 
 @dataclass
@@ -16,7 +18,7 @@ class ResolveWithPR(DoResolveRule):
     number: int
 
     @require_env("GithubAccessToken", "GithubUsername")
-    def value(self, market: Market) -> bool:
+    def value(self, market: 'Market') -> bool:
         """Return True if the issue is closed or the PR is merged, otherwise False."""
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
@@ -25,7 +27,7 @@ class ResolveWithPR(DoResolveRule):
     def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- If the GitHub PR {self.owner}/{self.repo}#{self.number} was merged in the past.\n"
 
-    def explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+    def explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
         ret = f"{'  ' * indent}- If either of the conditions below are True (-> {self.value(market)})\n"
         indent += 1
         issue = login().issue(self.owner, self.repo, self.number)

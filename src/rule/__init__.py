@@ -1,6 +1,10 @@
 from abc import abstractmethod
 from importlib import import_module
+from pathlib import Path
+from sys import modules
+from traceback import print_exc
 from typing import TYPE_CHECKING, Literal, Mapping, Optional, Sequence, Type, Union, cast
+from warnings import warn
 
 from .. import AnyResolution, Rule
 
@@ -84,7 +88,18 @@ class ResolutionValueRule(Rule):
             raise TypeError(ret, format, market)
         raise ValueError()
 
-# from .manifold.value import *
-# from .github.time import *
-# from .github.value import *
-# from .generic import *
+
+__all__ = ['get_rule', 'DoResolveRule', 'ResolutionValueRule']
+
+# dynamically load optional plugins where able to
+exempt = {'__init__', '__main__', '__pycache__'}
+for entry in Path(__file__).parent.iterdir():
+    name = entry.name.rstrip(".py")
+    if name.startswith('.') or name in exempt:
+        continue
+    try:
+        setattr(modules[__name__], name, import_module("." + name, __name__))
+        __all__.append(name)
+    except ImportError:
+        print_exc()
+        warn(f"Unable to import extension module: {name}")

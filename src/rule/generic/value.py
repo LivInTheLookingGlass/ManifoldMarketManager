@@ -1,11 +1,13 @@
 from collections import defaultdict
 from dataclasses import dataclass, field
 from random import Random
-from typing import Any, DefaultDict, Dict, MutableSequence, Optional, Sequence, Tuple, Union, cast
+from typing import TYPE_CHECKING, Any, DefaultDict, Dict, MutableSequence, Optional, Sequence, Tuple, Union, cast
 
 from ... import AnyResolution, FreeResponseResolution, MultipleChoiceResolution
-from ...market import Market
 from .. import ResolutionValueRule, get_rule
+
+if TYPE_CHECKING:
+    from ...market import Market
 
 
 @dataclass
@@ -14,7 +16,7 @@ class ResolveToValue(ResolutionValueRule):
 
     resolve_value: AnyResolution
 
-    def _value(self, market: Market) -> AnyResolution:
+    def _value(self, market: 'Market') -> AnyResolution:
         return self.resolve_value
 
     def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -31,7 +33,7 @@ class ResolveRandomSeed(ResolutionValueRule):
     args: Sequence[Any] = ()
     kwargs: Dict[str, Any] = field(default_factory=dict)
 
-    def _value(self, market: Market) -> Any:
+    def _value(self, market: 'Market') -> Any:
         source = Random(self.seed)
         method = getattr(source, self.method)
         for _ in range(self.rounds):
@@ -62,7 +64,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
             method = 'randrange'
         super().__init__(seed, method, *args, **kwargs)
 
-    def _value(self, market: Market) -> int:
+    def _value(self, market: 'Market') -> int:
         if self.method == 'randrange':
             self.args = (self.start, self.size)
         else:
@@ -86,7 +88,7 @@ class ResolveMultipleValues(ResolutionValueRule):
 
     shares: MutableSequence[Tuple[ResolutionValueRule, float]] = field(default_factory=list)
 
-    def _value(self, market: Market) -> Union[FreeResponseResolution, MultipleChoiceResolution]:
+    def _value(self, market: 'Market') -> Union[FreeResponseResolution, MultipleChoiceResolution]:
         ret: DefaultDict[int, float] = defaultdict(float)
         for rule, part in self.shares:
             val = cast(Dict[Union[str, int], float], rule.value(market, format='FREE_RESPONSE'))

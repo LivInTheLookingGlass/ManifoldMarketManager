@@ -186,25 +186,25 @@ TOTAL                                    1220    694    452      8    38%
     // the second entry is a dictionary of keyword arguments for the rule
     "time_rules": [  // rules for when to resolve a market
         [
-            "generic.ResolveAtTime",
+            "generic.time.ResolveAtTime",
             {"resolve_at": "2022-09-12T11:59:59"}
         ]
     ],
     "value_rules": [  // rules for what to resolve to
         [
-            "generic.ResolveMultipleValues",
+            "generic.value.ResolveMultipleValues",
             {
                 "shares": [  // format: [<serialized rule>, <relative weight>]
                     [
                         [
-                            "generic.ResolveToValue",
+                            "generic.value.ResolveToValue",
                             {"resolve_value": 0}
                         ],
                         1
                     ],
                     [
                         [
-                            "generic.ResolveRandomIndex",
+                            "generic.value.ResolveRandomIndex",
                             {
                                 "start": 1,
                                 "seed": "feijwaopfewa"
@@ -254,7 +254,7 @@ TOTAL                                    1220    694    452      8    38%
     },
     "time_rules": [
         [
-            "generic.ResolveAtTime",
+            "generic.time.ResolveAtTime",
             {"resolve_at": "2100-12-31T11:59:59"}
         ]
     ],
@@ -296,7 +296,7 @@ TOTAL                                    1220    694    452      8    38%
     },
     "time_rules": [
         [
-            "generic.ResolveAtTime",
+            "generic.time.ResolveAtTime",
             {"resolve_at": "2022-09-13T11:59:59"}
         ]
     ],
@@ -340,7 +340,7 @@ TOTAL                                    1220    694    452      8    38%
     },
     "time_rules": [
         [
-            "generic.ResolveAtTime",
+            "generic.time.ResolveAtTime",
             {"resolve_at": "2025-05-28T11:59:59"}
         ],
         [

@@ -5,6 +5,8 @@ from github3 import login as gh_login
 
 from ...util import require_env
 
+__all__ = ('login', 'value', 'time', 'unauth_login')
+
 
 def unauth_login() -> GitHub:
     return GitHub()
@@ -13,3 +15,6 @@ def unauth_login() -> GitHub:
 @require_env('GithubAccessToken', 'GithubUsername')
 def login() -> GitHub:
     return gh_login(username=getenv('GithubUsername'), token=getenv('GithubAccessToken'))
+
+
+from . import value, time  # noqa: E402

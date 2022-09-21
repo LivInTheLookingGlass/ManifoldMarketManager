@@ -1,18 +1,20 @@
 from dataclasses import dataclass
 from math import log10
-from typing import Any, Dict, Literal, Union, cast
+from typing import TYPE_CHECKING, Any, Dict, Literal, Union, cast
 
 from pymanifold.lib import ManifoldClient
 
 from ... import FreeResponseResolution, MultipleChoiceResolution
-from ...market import Market
 from .. import ResolutionValueRule
+
+if TYPE_CHECKING:
+    from ...market import Market
 
 
 class CurrentValueRule(ResolutionValueRule):
     """Resolve to the current market-consensus value."""
 
-    def _value(self, market: Market) -> Union[float, Dict[Any, float]]:
+    def _value(self, market: 'Market') -> Union[float, Dict[Any, float]]:
         if market.market.outcomeType == "BINARY":
             return cast(float, market.market.probability * 100)
         elif market.market.outcomeType == "PSEUDO_NUMERIC":
@@ -47,7 +49,7 @@ class CurrentValueRule(ResolutionValueRule):
 class RoundValueRule(CurrentValueRule):
     """Resolve to the current market-consensus value, but rounded."""
 
-    def _value(self, market: Market) -> float:
+    def _value(self, market: 'Market') -> float:
         if market.market.outcomeType in ("MULTIPLE_CHOICE", "FREE_RESPONSE"):
             raise RuntimeError()
         elif market.market.outcomeType == "BINARY":
@@ -64,7 +66,7 @@ class PopularValueRule(ResolutionValueRule):
 
     size: int = 1
 
-    def _value(self, market: Market) -> Union[FreeResponseResolution, MultipleChoiceResolution]:
+    def _value(self, market: 'Market') -> Union[FreeResponseResolution, MultipleChoiceResolution]:
         if market.market.outcomeType == "FREE_RESPONSE":
             answers = market.market.answers.copy()
             final_answers = []
@@ -103,7 +105,7 @@ class ResolveToUserProfit(CurrentValueRule):
     user: str
     field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
 
-    def _value(self, market: Market) -> float:
+    def _value(self, market: 'Market') -> float:
         user = ManifoldClient()._get_user_raw(self.user)
         return cast(float, user['profitCached'][self.field])
 
@@ -118,7 +120,7 @@ class ResolveToUserCreatedVolume(CurrentValueRule):
     user: str
     field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
 
-    def _value(self, market: Market) -> float:
+    def _value(self, market: 'Market') -> float:
         user = ManifoldClient()._get_user_raw(self.user)
         return cast(float, user['creatorVolumeCached'][self.field])
 
