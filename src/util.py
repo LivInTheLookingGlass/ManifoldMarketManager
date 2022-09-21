@@ -24,7 +24,13 @@ T = TypeVar("T")
 
 
 def round_sig_figs(num: float, sig_figs: int = 4) -> str:
+    """Round a number to the specified number of significant figures, then return it as a str."""
     return f"%.{sig_figs}g" % (num, )
+
+
+def round_sig_figs_f(num: float, sig_figs: int = 4) -> float:
+    """Round a number to the specified number of significant figures, then return it as a float."""
+    return float(round_sig_figs(num, sig_figs))
 
 
 def require_env(*env: str) -> Callable[[Callable[..., T]], Callable[..., T]]:

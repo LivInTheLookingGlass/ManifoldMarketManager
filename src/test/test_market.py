@@ -9,6 +9,7 @@ from . import PytestRequest
 
 @lru_cache(maxsize=None)
 def fetch_slug(slug: str) -> Market:
+    """Fetch a market by slug, but cached."""
     return Market.from_slug(slug)
 
 
@@ -18,10 +19,12 @@ def fetch_slug(slug: str) -> Market:
     "my-partner-and-i-are-considering-mo"
 ))
 def mkt(request: PytestRequest[str]) -> Market:
+    """Generate markets via a fixture."""
     return fetch_slug(request.param)
 
 
 def assert_equality(mkt1: Market, mkt2: Market) -> None:
+    """Ensure that two markets are referring to the same underlying system."""
     for attr in dir(mkt2):
         attr1 = getattr(mkt1, attr)
         attr2 = getattr(mkt2, attr)
@@ -44,11 +47,13 @@ def test_get_state(mkt: Market) -> None:
 
 @mark.slow
 def test_pickling(mkt: Market) -> None:
+    """Make sure Markets can be dumped to disk and reloaded."""
     new_mkt: Market = loads(dumps(mkt))
     assert_equality(mkt, new_mkt)
 
 
 @mark.slow
 def test_from_id(mkt: Market) -> None:
+    """Make sure Markets can be grabbed by ID."""
     mkt2 = Market.from_id(mkt.id)
     assert_equality(mkt, mkt2)

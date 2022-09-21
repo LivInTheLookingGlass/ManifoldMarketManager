@@ -12,6 +12,7 @@ from ..util import explain_abstract, require_env
 
 
 def test_require_env() -> None:
+    """Make sure that we are actually requiring environment variables when specified."""
     for _ in range(10):
         key = token_hex(16)
 
@@ -35,6 +36,7 @@ def test_require_env() -> None:
 
 
 def test_explain_abstract() -> None:
+    """Make sure that explain_abstract() calls to each of its fed Rules."""
     @dataclass
     class MockObject:
         called: bool = False
