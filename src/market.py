@@ -208,11 +208,11 @@ class Market:
         if self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
             if not isinstance(_override, Mapping):
                 raise TypeError()
-            # if self.market.answers is not None:
-            #     new_override = {}
-            #     for idx, weight in override.items():
-            #         new_override[self.market.answers[idx]['id']] = weight
-            #     override = new_override
+            if self.market.outcomeType == "FREE_RESPONSE":
+                new_override = {}
+                for idx, weight in _override.items():
+                    new_override[self.market.answers[idx]['id']] = weight
+                _override = new_override
             new_override = {}
             for idx, weight in _override.items():
                 new_override[int(idx)] = weight
