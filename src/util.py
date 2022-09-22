@@ -1,5 +1,6 @@
 from functools import lru_cache
 from logging import getLogger
+from math import log10
 from os import getenv
 from typing import Any, Callable, Iterable, TypeVar
 
@@ -21,6 +22,30 @@ ENVIRONMENT_VARIABLES = [
 # That said, if you use a rule that requires some API and have no key for it, it will fail
 
 T = TypeVar("T")
+
+
+def fibonacci(start: int = 1) -> Iterable[int]:
+    """Iterate over the fibonacci numbers."""
+    x = 0
+    y = 1
+    for _ in range(start):
+        x, y = y, x + y
+    while True:
+        yield x
+        x, y = y, x + y
+
+
+def pool_to_number(yes: float, no: float, p: float, start: float, end: float, isLogScale: bool = False) -> float:
+    """Go from a pool of probability to a numeric answer."""
+    pno = p * no
+    probability = (pno / ((1 - p) * yes + pno))
+    ret: float
+    if isLogScale:
+        logValue = log10(end - start + 1) * probability
+        ret = max(start, min(end, 10**logValue + start - 1))
+    else:
+        ret = max(start, min(end, start + (end - start) * probability))
+    return ret
 
 
 def round_sig_figs(num: float, sig_figs: int = 4) -> str:

@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from math import log10
 from typing import TYPE_CHECKING, Any, Dict, Literal, Union, cast
 
 from pymanifold.lib import ManifoldClient
 
+from ...util import fibonacci, pool_to_number
 from ... import FreeResponseResolution, MultipleChoiceResolution
 from .. import ResolutionValueRule
 
@@ -18,17 +18,14 @@ class CurrentValueRule(ResolutionValueRule):
         if market.market.outcomeType == "BINARY":
             return cast(float, market.market.probability * 100)
         elif market.market.outcomeType == "PSEUDO_NUMERIC":
-            pno = market.market.p * market.market.pool['NO']
-            probability = (pno / ((1 - market.market.p) * market.market.pool['YES'] + pno))
-            start = float(market.market.min or 0)
-            end = float(market.market.max or 0)
-            ret: float
-            if market.market.isLogScale:
-                logValue = log10(end - start + 1) * probability
-                ret = max(start, min(end, 10**logValue + start - 1))
-            else:
-                ret = max(start, min(end, start + (end - start) * probability))
-            return ret
+            return pool_to_number(
+                market.market.pool['YES'],
+                market.market.pool['NO'],
+                market.market.p,
+                float(market.market.min or 0),
+                float(market.market.max or 0),
+                market.market.isLogScale
+            )
         elif market.market.outcomeType == "FREE_RESPONSE":
             return {
                 cast(str, answer['id']): float(answer['probability'])
@@ -44,6 +41,44 @@ class CurrentValueRule(ResolutionValueRule):
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves to the current market value.\n"
+
+
+@dataclass
+class FibonacciValueRule(ResolutionValueRule):
+    """Resolve each value with a fibonacci weight, ranked by probability."""
+
+    start: int = 0
+    min_rewarded: float = 0.0001
+
+    def _value(self, market: 'Market') -> Union[float, Dict[Any, float]]:
+        if market.market.outcomeType == "FREE_RESPONSE":
+            items = {
+                int(answer['id']): float(answer['probability'])
+                for answer in market.market.answers
+            }
+        elif market.market.outcomeType == "MULTIPLE_CHOICE":
+            # TODO: reimplement dpm-2 math so this is actually by probability
+            pool = {
+                int(answer): float(market.market.pool[answer])
+                for answer in market.market.pool
+            }
+            s_total = sum(shares**2 for shares in pool)
+            items = {key: shares**2 / s_total for key, shares in pool.items()}
+        else:
+            raise TypeError()
+
+        rank = sorted(filter(self.start.__le__, items), key=items.__getitem__)
+        ret = {item: fib for item, fib in zip(rank, fibonacci())}
+        total = sum(ret.values())
+        return {key: val / total for key, val in ret.items()}
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        ret = f"{'  ' * indent}- Weight each* answer to the fibonacci rank of their probability\n"
+        block = '  ' * (indent + 1)
+        ret += f"{block}- Filter out indices below {self.start}, probabilities below {self.min_rewarded * 100}%\n"
+        ret += f"{block}- Sort by probability\n"
+        ret += f"{block}- Iterate over this and the fibonacci numbers in lockstep. Those are the weights\n"
+        return ret
 
 
 class RoundValueRule(CurrentValueRule):

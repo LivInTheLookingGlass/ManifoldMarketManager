@@ -15,6 +15,7 @@ from . import PytestRequest
     "generic.value.ResolveRandomIndex",
     "generic.value.ResolveMultipleValues",
     "manifold.value.CurrentValueRule",
+    "manifold.value.FibonacciValueRule",
     "manifold.value.PopularValueRule",
     "manifold.value.ResolveToUserProfit",
     "manifold.value.ResolveToUserCreatedVolume",

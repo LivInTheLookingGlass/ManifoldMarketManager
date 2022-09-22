@@ -10,7 +10,7 @@ from pymanifold.types import Market as APIMarket
 from requests import Response
 
 from . import AnyResolution
-from .util import explain_abstract, get_client, require_env, round_sig_figs
+from .util import explain_abstract, get_client, pool_to_number, require_env, round_sig_figs
 
 if TYPE_CHECKING:
     from .rule import DoResolveRule, ResolutionValueRule
@@ -166,17 +166,14 @@ class Market:
         if self.market.outcomeType == "BINARY":
             return f"{100 * self.market.probability}%"
         elif self.market.outcomeType == "PSEUDO_NUMERIC":
-            pno = self.market.p * self.market.pool['NO']
-            probability = (pno / ((1 - self.market.p) * self.market.pool['YES'] + pno))
-            start = float(self.market.min or 0)
-            end = float(self.market.max or 0)
-            ret: float
-            if self.market.isLogScale:
-                logValue = log10(end - start + 1) * probability
-                ret = max(start, min(end, 10**logValue + start - 1))
-            else:
-                ret = max(start, min(end, start + (end - start) * probability))
-            return ret
+            return pool_to_number(
+                self.market.pool['YES'],
+                self.market.pool['NO'],
+                self.market.p,
+                float(self.market.min or 0),
+                float(self.market.max or 0),
+                self.market.isLogScale
+            )
         elif self.market.outcomeType == "FREE_RESPONSE":
             return {idx: x['probability'] for idx, x in enumerate(self.market.answers)}
         elif self.market.outcomeType == "MULTIPLE_CHOICE":
