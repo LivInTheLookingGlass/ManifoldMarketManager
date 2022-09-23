@@ -9,15 +9,12 @@ more information on this.
 """
 
 from abc import ABC, abstractmethod
-from importlib import import_module
 from logging import Logger, getLogger
 from os import getenv
 from pathlib import Path
 from pickle import dumps, loads
 from sqlite3 import register_adapter, register_converter
-from sys import modules
 from sys import path as _sys_path
-from traceback import print_exc
 from typing import Any, Literal, Mapping, Union, cast
 from warnings import warn
 
@@ -89,14 +86,14 @@ class Rule(ABC, DictDeserializable):
 from . import market, rule, util  # noqa: E402
 from .market import Market  # noqa: E402
 from .rule import DoResolveRule, ResolutionValueRule  # noqa: E402
-from .util import get_client, require_env, round_sig_figs  # noqa: E402
+from .util import dynamic_import, get_client, require_env, round_sig_figs  # noqa: E402
 
 register_adapter(rule.Rule, dumps)  # type: ignore
 register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.5.0.24"
+VERSION = "0.5.0.25"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",
@@ -127,13 +124,4 @@ if getenv("DEBUG"):
 
 # dynamically load optional plugins where able to
 exempt = {'__init__', '__main__', '__pycache__', 'application', 'test', 'PyManifold', 'py.typed', *__all__}
-for entry in Path(__file__).parent.iterdir():
-    name = entry.name.rstrip(".py")
-    if name.startswith('.') or name in exempt:
-        continue
-    try:
-        setattr(modules[__name__], name, import_module("." + name, __name__))
-        __all__.append(name)
-    except ImportError:
-        print_exc()
-        warn(f"Unable to import extension module: {name}")
+dynamic_import(__file__, __name__, __all__, exempt)

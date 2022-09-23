@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any, Dict, cast
 
 from .. import DoResolveRule, get_rule
@@ -118,7 +118,7 @@ class ResolveAtTime(DoResolveRule):
     def value(self, market: 'Market') -> bool:
         """Return True iff the current time is after resolve_at."""
         try:
-            return datetime.utcnow() >= self.resolve_at
+            return datetime.now(timezone.utc) >= self.resolve_at
         except TypeError:
             return datetime.now() >= self.resolve_at
 
