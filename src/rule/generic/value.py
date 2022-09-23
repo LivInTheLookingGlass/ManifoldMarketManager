@@ -4,6 +4,7 @@ from random import Random
 from typing import TYPE_CHECKING, Any, DefaultDict, Dict, MutableSequence, Optional, Sequence, Tuple, Union, cast
 
 from ... import AnyResolution, FreeResponseResolution, MultipleChoiceResolution
+from ...util import normalize_mapping
 from .. import ResolutionValueRule, get_rule
 
 if TYPE_CHECKING:
@@ -94,7 +95,7 @@ class ResolveMultipleValues(ResolutionValueRule):
             val = cast(Dict[Union[str, int], float], rule.value(market, format='FREE_RESPONSE'))
             for idx, value in val.items():
                 ret[int(idx)] += value * part
-        return {key: value for key, value in ret.items()}
+        return normalize_mapping(ret)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}Resolves to the weighted union of multiple other values.\n"

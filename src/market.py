@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from logging import Logger, getLogger
-from math import log10
 from time import time
 from typing import TYPE_CHECKING, Any, List, Mapping, Optional, Tuple, Union, cast
 
@@ -10,7 +9,7 @@ from pymanifold.types import Market as APIMarket
 from requests import Response
 
 from . import AnyResolution
-from .util import explain_abstract, get_client, pool_to_number, require_env, round_sig_figs
+from .util import explain_abstract, get_client, number_to_prob_cpmm1, pool_to_number_cpmm1, require_env, round_sig_figs
 
 if TYPE_CHECKING:
     from .rule import DoResolveRule, ResolutionValueRule
@@ -113,8 +112,7 @@ class Market:
         val = self.resolve_to()
         if val == "CANCEL":
             ret += "CANCEL"
-            return ret
-        if self.market.outcomeType == "BINARY":
+        elif self.market.outcomeType == "BINARY":
             if val is True or val == 100:
                 ret += "YES"
             elif not val:
@@ -166,7 +164,7 @@ class Market:
         if self.market.outcomeType == "BINARY":
             return f"{100 * self.market.probability}%"
         elif self.market.outcomeType == "PSEUDO_NUMERIC":
-            return pool_to_number(
+            return pool_to_number_cpmm1(
                 self.market.pool['YES'],
                 self.market.pool['NO'],
                 self.market.p,
@@ -196,19 +194,21 @@ class Market:
             _override = self.resolve_to()
         else:
             _override = override
+        if _override == "CANCEL":
+            return self.cancel()
+
         if self.market.outcomeType == "PSEUDO_NUMERIC":
-            start = float(self.market.min or 0)
-            end = float(self.market.max or 0)
             if not isinstance(_override, (int, float)):
                 raise TypeError()
-            if self.market.isLogScale:
-                _override = (_override, log10(_override - start + 1) / log10(end - start + 1) * 100)
-            else:
-                _override = (_override, (_override - start) / (end - start) * 100)
+            _override = (
+                _override,
+                100 * number_to_prob_cpmm1(_override, self.market.min or 0, self.market.max or 0)
+            )
+
         if self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
             if not isinstance(_override, Mapping):
                 raise TypeError()
-            if self.market.outcomeType == "FREE_RESPONSE":
+            if self.market.outcomeType == "MULTIPLE_CHOICE":
                 new_override = {}
                 for idx, weight in _override.items():
                     new_override[self.market.answers[idx]['id']] = weight
@@ -217,6 +217,7 @@ class Market:
             for idx, weight in _override.items():
                 new_override[int(idx)] = weight
             _override = new_override
+
         ret: Response = self.client.resolve_market(self.market, _override)
         if ret.status_code < 300:
             self.logger.info("I was resolved")

@@ -1,10 +1,10 @@
-from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Dict, Literal, Union, cast
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Any, Dict, Literal, Set, Union, cast
 
 from pymanifold.lib import ManifoldClient
 
-from ...util import fibonacci, pool_to_number
 from ... import FreeResponseResolution, MultipleChoiceResolution
+from ...util import fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1
 from .. import ResolutionValueRule
 
 if TYPE_CHECKING:
@@ -18,7 +18,7 @@ class CurrentValueRule(ResolutionValueRule):
         if market.market.outcomeType == "BINARY":
             return cast(float, market.market.probability * 100)
         elif market.market.outcomeType == "PSEUDO_NUMERIC":
-            return pool_to_number(
+            return pool_to_number_cpmm1(
                 market.market.pool['YES'],
                 market.market.pool['NO'],
                 market.market.p,
@@ -26,18 +26,7 @@ class CurrentValueRule(ResolutionValueRule):
                 float(market.market.max or 0),
                 market.market.isLogScale
             )
-        elif market.market.outcomeType == "FREE_RESPONSE":
-            return {
-                cast(str, answer['id']): float(answer['probability'])
-                for answer in market.market.answers
-            }
-        elif market.market.outcomeType == "MULTIPLE_CHOICE":
-            # TODO: reimplement dpm-2 math so this is actually by probability
-            return {
-                answer: float(market.market.pool[answer])
-                for answer in market.market.pool
-            }
-        raise ValueError()
+        return market_to_answer_map(market)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves to the current market value.\n"
@@ -47,35 +36,19 @@ class CurrentValueRule(ResolutionValueRule):
 class FibonacciValueRule(ResolutionValueRule):
     """Resolve each value with a fibonacci weight, ranked by probability."""
 
-    start: int = 0
+    exclude: Set[int] = field(default_factory=set)
     min_rewarded: float = 0.0001
 
     def _value(self, market: 'Market') -> Union[float, Dict[Any, float]]:
-        if market.market.outcomeType == "FREE_RESPONSE":
-            items = {
-                int(answer['id']): float(answer['probability'])
-                for answer in market.market.answers
-            }
-        elif market.market.outcomeType == "MULTIPLE_CHOICE":
-            # TODO: reimplement dpm-2 math so this is actually by probability
-            pool = {
-                int(answer): float(market.market.pool[answer])
-                for answer in market.market.pool
-            }
-            s_total = sum(shares**2 for shares in pool)
-            items = {key: shares**2 / s_total for key, shares in pool.items()}
-        else:
-            raise TypeError()
-
-        rank = sorted(filter(self.start.__le__, items), key=items.__getitem__)
+        items = market_to_answer_map(market, self.exclude, (lambda id_, probability: probability < self.min_rewarded))
+        rank = sorted(items, key=items.__getitem__)
         ret = {item: fib for item, fib in zip(rank, fibonacci())}
-        total = sum(ret.values())
-        return {key: val / total for key, val in ret.items()}
+        return normalize_mapping(ret)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- Weight each* answer to the fibonacci rank of their probability\n"
         block = '  ' * (indent + 1)
-        ret += f"{block}- Filter out indices below {self.start}, probabilities below {self.min_rewarded * 100}%\n"
+        ret += f"{block}- Filter out IDs in {self.exclude}, probabilities below {self.min_rewarded * 100}%\n"
         ret += f"{block}- Sort by probability\n"
         ret += f"{block}- Iterate over this and the fibonacci numbers in lockstep. Those are the weights\n"
         return ret
@@ -102,32 +75,13 @@ class PopularValueRule(ResolutionValueRule):
     size: int = 1
 
     def _value(self, market: 'Market') -> Union[FreeResponseResolution, MultipleChoiceResolution]:
-        if market.market.outcomeType == "FREE_RESPONSE":
-            answers = market.market.answers.copy()
-            final_answers = []
-            for _ in range(self.size):
-                next_answer_fr = max(answers, key=lambda x: cast(float, x['probability']))
-                answers.remove(next_answer_fr)
-                final_answers.append(next_answer_fr)
-            total = sum(float(x['probability']) for x in final_answers)
-            return {
-                cast(str, answer['id']): float(answer['probability']) / total
-                for answer in final_answers
-            }
-        elif market.market.outcomeType == "MULTIPLE_CHOICE":
-            # TODO: reimplement dpm-2 math so this is actually by probability
-            answers = market.market.pool.copy()
-            final_answers = []
-            for _ in range(self.size):
-                next_answer_mc: str = max(answers, key=lambda x: cast(float, answers[x]))
-                del answers[next_answer_mc]
-                final_answers.append(next_answer_mc)
-            total = sum(float(market.market.pool[x]) for x in final_answers)
-            return {
-                answer: float(market.market.pool[answer]) / total
-                for answer in final_answers
-            }
-        raise ValueError()
+        answers = market_to_answer_map(market)
+        final_answers: Dict[int, float] = {}
+        for _ in range(self.size):
+            next_answer = max(answers, key=answers.__getitem__)
+            final_answers[next_answer] = answers[next_answer]
+            del answers[next_answer]
+        return normalize_mapping(final_answers)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves to the {self.size} most probable answers, weighted by their probability.\n"

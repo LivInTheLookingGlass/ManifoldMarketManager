@@ -1,12 +1,17 @@
 from functools import lru_cache
-from logging import getLogger
+from importlib import import_module
+from logging import getLogger, warn
 from math import log10
 from os import getenv
-from typing import Any, Callable, Iterable, TypeVar
+from pathlib import Path
+from sys import modules
+from traceback import print_exc
+from typing import TYPE_CHECKING, Any, Callable, Collection, Dict, Iterable, Mapping, MutableSequence, TypeVar, cast
 
 from pymanifold.lib import ManifoldClient
 
-from . import Rule
+if TYPE_CHECKING:
+    from . import Market, Rule
 
 ENVIRONMENT_VARIABLES = [
     "ManifoldAPIKey",     # REQUIRED. Allows trades, market creation, market resolution
@@ -35,17 +40,87 @@ def fibonacci(start: int = 1) -> Iterable[int]:
         x, y = y, x + y
 
 
-def pool_to_number(yes: float, no: float, p: float, start: float, end: float, isLogScale: bool = False) -> float:
-    """Go from a pool of probability to a numeric answer."""
+def market_to_answer_map(
+    market: 'Market', exclude: Collection[int] = (), *filters: Callable[[int, float], bool]
+) -> Dict[int, float]:
+    """Given a market, grab its current list of answers and put it in a standardized format, applying given filters.
+
+    Parameters
+    ----------
+    market : Market
+        The market wrapper for which we want the current answer pool.
+    exclude : Collection[int], optional
+        Some collection of ids to exclude. Preferrably a set() or range(). by default ()
+    filters : *Callable[[int, float], bool]
+        A collection of functions which will be fed the answer ID and probability. If any return True, that answer
+        is excluded. By default ()
+
+    Returns
+    -------
+    Mapping[int, float]
+        A mapping of integer ids to probabilities in [0...1]. Note that Manifold expects ids as strings, but they are
+        returned as integers for ease of processing. Note also that this mapping is NOT normalized.
+
+    Raises
+    ------
+    RuntimeError
+        If a non-supported market is fed
+    """
+    if market.market.outcomeType == "FREE_RESPONSE":
+        initial = {
+            int(answer['id']): float(answer['probability'])
+            for answer in market.market.answers
+        }
+    elif market.market.outcomeType == "MULTIPLE_CHOICE":
+        # TODO: reimplement dpm-2 math so this is actually by probability
+        pool = cast(Mapping[Any, float], market.market.pool)
+        total = 100**2 + sum(answer**2 for answer in pool.values())
+        initial = {
+            int(answer): weight**2 / total
+            for answer, weight in pool.items()
+        }
+    else:
+        raise RuntimeError("Cannot extract a mapping from binary markets")
+    return {
+        key: value for key, value in initial.items()
+        if key not in exclude and not any(f(key, value) for f in filters)
+    }
+
+
+def normalize_mapping(answers: Mapping[T, float]) -> Dict[T, float]:
+    """Take a mapping of answers and normalize it such that the sum of their weights is 1."""
+    total = sum(answers.values())
+    return {key: value / total for key, value in answers.items()}
+
+
+def pool_to_prob_cpmm1(yes: float, no: float, p: float) -> float:
+    """Go from a pool of YES/NO to a probability using Maniswap."""
+    if yes <= 0 or no <= 0 or not (0 < p < 1):
+        raise ValueError()
     pno = p * no
-    probability = (pno / ((1 - p) * yes + pno))
-    ret: float
+    return pno / ((1 - p) * yes + pno)
+
+
+def pool_to_number_cpmm1(yes: float, no: float, p: float, start: float, end: float, isLogScale: bool = False) -> float:
+    """Go from a pool of probability to a numeric answer."""
+    if start >= end:
+        raise ValueError()
+    probability = pool_to_prob_cpmm1(yes, no, p)
     if isLogScale:
         logValue = log10(end - start + 1) * probability
-        ret = max(start, min(end, 10**logValue + start - 1))
+        ret = 10**logValue + start - 1
     else:
-        ret = max(start, min(end, start + (end - start) * probability))
-    return ret
+        ret = start + (end - start) * probability
+    return max(start, min(end, ret))
+
+
+def number_to_prob_cpmm1(current: float, start: float, end: float, isLogScale: bool = False) -> float:
+    """Go from a numeric answer to a probability."""
+    if not (start <= current <= end):
+        raise ValueError()
+    if isLogScale:
+        return log10(current - start + 1) / log10(end - start + 1)
+    return (current - start) / (end - start)
 
 
 def round_sig_figs(num: float, sig_figs: int = 4) -> str:
@@ -79,7 +154,7 @@ def get_client() -> ManifoldClient:
     return ManifoldClient(getenv("ManifoldAPIKey"))
 
 
-def explain_abstract(time_rules: Iterable[Rule], value_rules: Iterable[Rule], **kwargs: Any) -> str:
+def explain_abstract(time_rules: Iterable['Rule'], value_rules: Iterable['Rule'], **kwargs: Any) -> str:
     """Explain how the market will resolve and decide to resolve."""
     ret = "This market will resolve if any of the following are true:\n"
     for rule_ in time_rules:
@@ -98,3 +173,17 @@ def explain_abstract(time_rules: Iterable[Rule], value_rules: Iterable[Rule], **
         "purposes of cashing out liquidity.\n"
     )
     return ret
+
+
+def dynamic_import(fname: str, mname: str, __all__: MutableSequence[str], exempt: Collection[str]) -> None:
+    """Dynamically import submodules and add them to the export list."""
+    for entry in Path(fname).parent.iterdir():
+        name = entry.name.rstrip(".py")
+        if name.startswith('.') or name in exempt:
+            continue
+        try:
+            setattr(modules[mname], name, import_module("." + name, mname))
+            __all__.append(name)
+        except ImportError:
+            print_exc()
+            warn(f"Unable to import extension module: {mname}.{name}")
