@@ -124,26 +124,29 @@ Name                                    Stmts   Miss Branch BrPart  Cover
 src/PyManifold/pymanifold/__init__.py       4      0      0      0   100%
 src/PyManifold/pymanifold/lib.py          159    118     74      0    18%
 src/PyManifold/pymanifold/types.py         92      2     24      0    95%
-src/__init__.py                            86     38     26      1    49%
+src/__init__.py                            78     39     24      1    43%
 src/__main__.py                            85     85     34      0     0%
-src/application.py                        137    137     40      0     0%
-src/market.py                             140     79     66      3    33%
-src/rule/__init__.py                       55     39     42      2    23%
+src/application.py                        132    132     40      0     0%
+src/market.py                             155     95     86      4    28%
+src/rule/__init__.py                       59     39     42      2    26%
 src/rule/generic/__init__.py                2      0      0      0   100%
-src/rule/generic/time.py                   85     49     18      0    43%
-src/rule/generic/value.py                  81     47     30      0    38%
-src/rule/github/__init__.py                 9      2      0      0    78%
-src/rule/github/time.py                    26     11      2      0    61%
-src/rule/github/value.py                   57     34     12      0    39%
-src/rule/manifold/__init__.py               0      0      0      0   100%
-src/rule/manifold/value.py                 80     50     48      0    31%
+src/rule/generic/time.py                   86     43     20      1    49%
+src/rule/generic/value.py                  83     48     30      1    39%
+src/rule/github/__init__.py                11      2      0      0    82%
+src/rule/github/time.py                    27     12      4      1    58%
+src/rule/github/value.py                   58     35     14      1    39%
+src/rule/manifold/__init__.py               2      0      0      0   100%
+src/rule/manifold/value.py                 73     37     28      1    49%
 src/test/__init__.py                        6      0      2      0   100%
+src/test/rule/__init__.py                   0      0      0      0   100%
+src/test/rule/generic/__init__.py           0      0      0      0   100%
+src/test/rule/generic/test_time.py         43      1     12      1    96%
 src/test/test_market.py                    35      0     10      0   100%
-src/test/test_rule.py                       9      0      0      0   100%
+src/test/test_rule.py                      13      0      4      0   100%
 src/test/test_util.py                      39      2     16      2    93%
-src/util.py                                33      1      8      0    98%
+src/util.py                                92     40     40      1    49%
 -------------------------------------------------------------------------
-TOTAL                                    1220    694    452      8    38%
+TOTAL                                    1334    730    504     16    40%
 ```
 
 ## JSON Examples
