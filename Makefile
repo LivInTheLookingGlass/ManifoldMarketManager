@@ -59,10 +59,11 @@ test: dependencies _test
 .PHONY: test_all
 # Run tests sequentially in all supported python versions
 test_all:
-	@$(MAKE) test PY=python3.8 MYPY=false
-	@$(MAKE) test PY=python3.9 MYPY=false
-	@$(MAKE) test PY=python3.10 MYPY=false
-	@$(MAKE) test PY=python3.11
+	@if command -v python3.8 &> /dev/null; then $(MAKE) test PY=python3.8 MYPY=false $(MFLAGS); else echo "Python 3.8 is not installed - skipping"; fi
+	@if command -v python3.9 &> /dev/null; then $(MAKE) test PY=python3.9 MYPY=false $(MFLAGS); else echo "Python 3.9 is not installed - skipping"; fi
+	@if command -v python3.10 &> /dev/null; then $(MAKE) test PY=python3.10 MYPY=false $(MFLAGS); else echo "Python 3.10 is not installed - skipping"; fi
+	@if command -v python3.11 &> /dev/null; then $(MAKE) test PY=python3.11 $(MFLAGS); else echo "Python 3.11 is not installed - skipping"; fi
+	@if command -v python3.12 &> /dev/null; then $(MAKE) test PY=python3.12 MYPY=false $(MFLAGS); else echo "Python 3.12 is not installed - skipping"; fi
 
 .PHONY: test_%
 # Run tests with a given number of parallel runners
@@ -120,7 +121,7 @@ clean:
 
 .PHONY: publish
 # Publish new version to pypi
-publish: test build
+publish: test_all build upload_coverage
 	@$(PY) -m twine upload -u gappleto97 -s --sign-with gpg2 dist/*
 	@$(MAKE) clean $(MFLAGS)
 
