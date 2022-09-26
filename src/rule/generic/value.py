@@ -5,11 +5,13 @@ from dataclasses import dataclass, field
 from random import Random
 from typing import TYPE_CHECKING, Dict, Union, cast
 
-from ...util import normalize_mapping
+from ... import PseudoNumericResolution
+from ...util import normalize_mapping, round_sig_figs
 from .. import ResolutionValueRule, get_rule
+from . import BinaryRule, VariadicRule
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, DefaultDict, Mapping, MutableSequence, Optional, Sequence
+    from typing import Any, DefaultDict, Literal, Mapping, MutableSequence, Optional, Sequence
 
     from ... import AnyResolution, FreeResponseResolution, MultipleChoiceResolution
     from ...market import Market
@@ -26,6 +28,91 @@ class ResolveToValue(ResolutionValueRule):
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves to the specific value {self.resolve_value}\n"
+
+
+class ModulusRule(BinaryRule[PseudoNumericResolution]):
+    """Return the modulus of two other DoResolveRules."""
+
+    def _value(self, market: Market) -> Literal["CANCEL"] | float:
+        val1, val2 = self.rule1._value(market), self.rule2._value(market)
+        if val1 == "CANCEL" or val2 == "CANCEL":
+            return "CANCEL"
+        return val1 % val2
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        ret = f"{'  ' * indent}- A mod B, where A is the next line and B the line after\n"
+        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
+        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
+        return ret
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        val: str | float = self._value(market)
+        if val != "CANCEL":
+            val = round_sig_figs(cast(float, val), sig_figs)
+        ret = f"{'  ' * indent}- A mod B, where A is the next line and B the line after (-> {val})\n"
+        ret += self.rule1.explain_specific(market, indent + 1)
+        ret += self.rule2.explain_specific(market, indent + 1)
+        return ret
+
+
+class AdditiveRule(VariadicRule[PseudoNumericResolution]):
+    """Return the sum of many other Rules."""
+
+    def _value(self, market: Market) -> Literal["CANCEL"] | float:
+        """Return the sum of the underlying rules."""
+        ret: float = 0
+        for rule in self.rules:
+            val = cast(
+                PseudoNumericResolution,
+                rule.value(market, format='PSEUDO_NUMERIC')
+            )
+            if val == "CANCEL":
+                return "CANCEL"
+            ret += val
+        return ret
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        ret = f"{'  ' * indent}- The sum of the below\n"
+        for rule in self.rules:
+            ret += rule.explain_abstract(indent + 1, **kwargs)
+        return ret
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        val = round_sig_figs(cast(float, self._value(market)), sig_figs)
+        ret = f"{'  ' * indent}- The sum of the below (-> {val})\n"
+        for rule in self.rules:
+            ret += rule.explain_specific(market, indent + 1, sig_figs)
+        return ret
+
+
+class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
+    """Return the product of many other Rules."""
+
+    def _value(self, market: Market) -> Literal["CANCEL"] | float:
+        """Return the product of the underlying rules."""
+        ret: float = 0
+        for rule in self.rules:
+            val = cast(
+                PseudoNumericResolution,
+                rule.value(market, format='PSEUDO_NUMERIC')
+            )
+            if val == "CANCEL":
+                return "CANCEL"
+            ret *= val
+        return ret
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        ret = f"{'  ' * indent}- The product of the below\n"
+        for rule in self.rules:
+            ret += rule.explain_abstract(indent + 1, **kwargs)
+        return ret
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        val = round_sig_figs(cast(float, self._value(market)), sig_figs)
+        ret = f"{'  ' * indent}- The product of the below (-> {val})\n"
+        for rule in self.rules:
+            ret += rule.explain_specific(market, indent + 1, sig_figs)
+        return ret
 
 
 @dataclass  # type: ignore

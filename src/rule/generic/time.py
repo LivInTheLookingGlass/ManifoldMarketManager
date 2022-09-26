@@ -2,24 +2,22 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
-from .. import DoResolveRule, get_rule
+from ... import BinaryResolution
+from .. import DoResolveRule
+from . import BinaryRule, UnaryRule
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Mapping
+    from typing import Any
 
     from ...market import Market
 
 
-@dataclass
-class NegateRule(DoResolveRule):
+class NegateRule(UnaryRule[BinaryResolution]):
     """Negate another DoResolveRule."""
 
-    child: DoResolveRule
-
     def _value(self, market: Market) -> bool:
-        """Return the negation of the underlying rule."""
         return not self.child._value(market)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -29,28 +27,11 @@ class NegateRule(DoResolveRule):
         return f"{'  ' * indent}- If the rule below resolves False (-> {self.value(market)})\n" +\
                self.child.explain_specific(market, indent + 1)
 
-    @classmethod
-    def from_dict(cls, env: Mapping[str, Any]) -> 'NegateRule':
-        """Take a dictionary and return an instance of the associated class."""
-        env_copy = dict(env)
-        if "child" in env:
-            try:
-                type_, kwargs = env["child"]
-                env_copy["child"] = get_rule(type_).from_dict(kwargs)
-            except Exception:
-                pass
-        return cast(NegateRule, super().from_dict(env_copy))
 
-
-@dataclass
-class EitherRule(DoResolveRule):
+class EitherRule(BinaryRule[BinaryResolution]):
     """Return the OR of two other DoResolveRules."""
 
-    rule1: DoResolveRule
-    rule2: DoResolveRule
-
     def _value(self, market: Market) -> bool:
-        """Return True iff at least one underlying rule returns True."""
         return bool(self.rule1._value(market)) or bool(self.rule2._value(market))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -65,29 +46,11 @@ class EitherRule(DoResolveRule):
         ret += self.rule2.explain_specific(market, indent + 1)
         return ret
 
-    @classmethod
-    def from_dict(cls, env: Mapping[str, Any]) -> 'EitherRule':
-        """Take a dictionary and return an instance of the associated class."""
-        env_copy = dict(env)
-        for name in ('rule1', 'rule2'):
-            if name in env:
-                try:
-                    type_, kwargs = env[name]
-                    env_copy[name] = get_rule(type_).from_dict(kwargs)
-                except Exception:
-                    pass
-        return cast(EitherRule, super().from_dict(env_copy))
 
-
-@dataclass
-class BothRule(DoResolveRule):
+class BothRule(BinaryRule[BinaryResolution]):
     """Return the AND of two other DoResolveRules."""
 
-    rule1: DoResolveRule
-    rule2: DoResolveRule
-
     def _value(self, market: Market) -> bool:
-        """Return True iff both underlying rules return True."""
         return bool(self.rule1._value(market)) and bool(self.rule2._value(market))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -102,18 +65,100 @@ class BothRule(DoResolveRule):
         ret += self.rule2.explain_specific(market, indent + 1)
         return ret
 
-    @classmethod
-    def from_dict(cls, env: Mapping[str, Any]) -> 'BothRule':
-        """Take a dictionary and return an instance of the associated class."""
-        env_copy = dict(env)
-        for name in ('rule1', 'rule2'):
-            if name in env:
-                try:
-                    type_, kwargs = env[name]
-                    env_copy[name] = get_rule(type_).from_dict(kwargs)
-                except Exception:
-                    pass
-        return cast(BothRule, super().from_dict(env_copy))
+
+class NANDRule(BinaryRule[BinaryResolution]):
+    """Return the NAND of two other DoResolveRules."""
+
+    def _value(self, market: Market) -> bool:
+        return not (self.rule1._value(market) and self.rule2._value(market))
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        ret = f"{'  ' * indent}- If one or more of the rules below resolves False\n"
+        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
+        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
+        return ret
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        ret = f"{'  ' * indent}- If one or more of the rules below resolves False (-> {self.value(market)})\n"
+        ret += self.rule1.explain_specific(market, indent + 1)
+        ret += self.rule2.explain_specific(market, indent + 1)
+        return ret
+
+
+class NeitherRule(BinaryRule[BinaryResolution]):
+    """Return the NOR of two other DoResolveRules."""
+
+    def _value(self, market: Market) -> bool:
+        return not (self.rule1._value(market) or self.rule2._value(market))
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        ret = f"{'  ' * indent}- If both of the rules below resolves False\n"
+        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
+        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
+        return ret
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        ret = f"{'  ' * indent}- If both of the rules below resolves False (-> {self.value(market)})\n"
+        ret += self.rule1.explain_specific(market, indent + 1)
+        ret += self.rule2.explain_specific(market, indent + 1)
+        return ret
+
+
+class XORRule(BinaryRule[BinaryResolution]):
+    """Return the XOR of two other DoResolveRules."""
+
+    def _value(self, market: Market) -> bool:
+        return bool(bool(self.rule1._value(market)) ^ bool(self.rule2._value(market)))
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        ret = f"{'  ' * indent}- If exactly one of the rules below resolves True\n"
+        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
+        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
+        return ret
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        ret = f"{'  ' * indent}- If exactly one of the rules below resolves True (-> {self.value(market)})\n"
+        ret += self.rule1.explain_specific(market, indent + 1)
+        ret += self.rule2.explain_specific(market, indent + 1)
+        return ret
+
+
+class XNORRule(BinaryRule[BinaryResolution]):
+    """Return the XNOR of two other DoResolveRules."""
+
+    def _value(self, market: Market) -> bool:
+        return bool(self.rule1._value(market)) == bool(self.rule2._value(market))
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        ret = f"{'  ' * indent}- If both of the rules below resolve to the same value\n"
+        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
+        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
+        return ret
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        ret = f"{'  ' * indent}- If both of the rules below resolve to the same value (-> {self.value(market)})\n"
+        ret += self.rule1.explain_specific(market, indent + 1)
+        ret += self.rule2.explain_specific(market, indent + 1)
+        return ret
+
+
+class ImpliesRule(BinaryRule[BinaryResolution]):
+    """Return the implication of two other DoResolveRules."""
+
+    def _value(self, market: Market) -> bool:
+        return not self.rule1._value(market) or bool(self.rule2._value(market))
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        ret = f"{'  ' * indent}- If next rule resolves False, or both below resolve True\n"
+        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
+        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
+        return ret
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        ret = f"{'  ' * indent}- If next rule resolves False, or both below resolve True (-> {self.value(market)})\n"
+        ret += self.rule1.explain_specific(market, indent + 1)
+        ret += self.rule2.explain_specific(market, indent + 1)
+        return ret
 
 
 @dataclass
