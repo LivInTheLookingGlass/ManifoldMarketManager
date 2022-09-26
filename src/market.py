@@ -1,15 +1,22 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from logging import Logger, getLogger
+from logging import getLogger
 from time import time
-from typing import Any, List, Mapping, Optional, Tuple, Union, cast
+from typing import TYPE_CHECKING, cast
 
-from pymanifold.lib import ManifoldClient
-from pymanifold.types import Market as APIMarket
-from requests import Response
-
-from . import AnyResolution, Rule
 from .util import explain_abstract, get_client, number_to_prob_cpmm1, pool_to_number_cpmm1, require_env, round_sig_figs
+
+if TYPE_CHECKING:  # pragma: no cover
+    from logging import Logger
+    from typing import Any, List, Mapping, Optional, Tuple, Union
+
+    from pymanifold.lib import ManifoldClient
+    from pymanifold.types import Market as APIMarket
+    from requests import Response
+
+    from . import AnyResolution, Rule
 
 
 class MarketStatus(Enum):
@@ -27,7 +34,7 @@ class Market:
     market: APIMarket
     client: ManifoldClient = field(default_factory=get_client)
     notes: str = field(default='')
-    do_resolve_rules: List[Rule[bool]] = field(default_factory=list)
+    do_resolve_rules: List[Rule[Optional[bool]]] = field(default_factory=list)
     resolve_to_rules: List[Rule[AnyResolution]] = field(default_factory=list)
     logger: Logger = field(init=False, default=None, repr=False)  # type: ignore[assignment]
 
@@ -65,13 +72,13 @@ class Market:
         return MarketStatus.OPEN
 
     @classmethod
-    def from_slug(cls, slug: str, *args: Any, **kwargs: Any) -> 'Market':
+    def from_slug(cls, slug: str, *args: Any, **kwargs: Any) -> Market:
         """Reconstruct a Market object from the market slug and other arguments."""
         api_market = get_client().get_market_by_slug(slug)
         return cls(api_market, *args, **kwargs)
 
     @classmethod
-    def from_id(cls, id: str, *args: Any, **kwargs: Any) -> 'Market':
+    def from_id(cls, id: str, *args: Any, **kwargs: Any) -> Market:
         """Reconstruct a Market object from the market ID and other arguments."""
         api_market = get_client().get_market_by_id(id)
         return cls(api_market, *args, **kwargs)

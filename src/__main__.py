@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 from argparse import ArgumentParser
 from datetime import datetime
 from logging import DEBUG, INFO, basicConfig, getLogger
 from os import getenv
-from typing import Optional, Tuple, cast
+from typing import TYPE_CHECKING, Tuple, cast
 
 from .application import main, register_db
 from .market import Market
@@ -11,6 +13,9 @@ from .rule.generic.value import ResolveRandomIndex
 from .rule.github.time import ResolveWithPR
 from .rule.github.value import ResolveToPR, ResolveToPRDelta
 from .rule.manifold.value import CurrentValueRule, RoundValueRule
+
+if TYPE_CHECKING:  # pragma: no cover
+    from typing import Optional
 
 # Enable logging
 basicConfig(

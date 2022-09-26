@@ -7,15 +7,16 @@ limits, rather than time sensitive trades. Expect intervals of minutes, not micr
 In order to use this library, some things need to be loaded in your environment variables. See the comments below for
 more information on this.
 """
+from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from logging import Logger, getLogger
+from logging import getLogger
 from os import getenv
 from pathlib import Path
 from pickle import dumps, loads
 from sqlite3 import register_adapter, register_converter
 from sys import path as _sys_path
-from typing import Any, Generic, Literal, Mapping, Optional, Sequence, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Generic, Literal, Mapping, Optional, Sequence, TypeVar, Union, cast
 from warnings import warn
 
 _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
@@ -27,7 +28,11 @@ PseudoNumericResolution = Union[Literal["CANCEL"], float]
 FreeResponseResolution = Union[Literal["CANCEL"], Mapping[str, float], Mapping[int, float], Mapping[float, float]]
 MultipleChoiceResolution = FreeResponseResolution
 AnyResolution = Union[BinaryResolution, PseudoNumericResolution, FreeResponseResolution, MultipleChoiceResolution]
-T = TypeVar("T", bound=AnyResolution)
+T = TypeVar("T", bound=Optional[AnyResolution])
+
+if TYPE_CHECKING:  # pragma: no cover
+    from logging import Logger
+    from typing import Any
 
 
 class Rule(ABC, Generic[T], DictDeserializable):
@@ -39,13 +44,13 @@ class Rule(ABC, Generic[T], DictDeserializable):
     @abstractmethod
     def _value(
         self,
-        market: "Market"
+        market: Market
     ) -> AnyResolution:  # pragma: no cover
         ...
 
     def value(
         self,
-        market: "Market",
+        market: Market,
         format: Optional[Literal['NONE', 'BINARY', 'PSEUDO_NUMERIC', 'FREE_RESPONSE', 'MULTIPLE_CHOICE']] = None
     ) -> AnyResolution:
         """Return the resolution value of a market, appropriately formatted for its market type."""
@@ -60,7 +65,7 @@ class Rule(ABC, Generic[T], DictDeserializable):
             return self._multiple_choice_value(market, ret)
         raise ValueError()
 
-    def _binary_value(self, market: 'Market', ret: Any) -> float:
+    def _binary_value(self, market: Market, ret: Any) -> float:
         if not isinstance(ret, str) and isinstance(ret, Sequence) and len(ret) == 1:
             ret = ret[0]
         elif isinstance(ret, Mapping) and len(ret) == 1:
@@ -76,7 +81,7 @@ class Rule(ABC, Generic[T], DictDeserializable):
 
         raise TypeError(ret, format, market)
 
-    def _multiple_choice_value(self, market: 'Market', ret: Any) -> Mapping[int, float]:
+    def _multiple_choice_value(self, market: Market, ret: Any) -> Mapping[int, float]:
         if isinstance(ret, Mapping):
             return {int(val): share for val, share in ret.items()}
         elif isinstance(ret, Sequence) and len(ret) == 1:
@@ -101,11 +106,11 @@ class Rule(ABC, Generic[T], DictDeserializable):
         """Explain how the market will resolve and decide to resolve."""
         return self._explain_abstract(indent, **kwargs)
 
-    def explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
+    def explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         """Explain why the market is resolving the way that it is."""
         return self._explain_specific(market, indent, sig_figs)
 
-    def _explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         warn("Using a default specific explanation. This probably isn't what you want!")
         ret = self.explain_abstract(indent=indent).rstrip('\n')
         ret += " (-> "
@@ -143,12 +148,12 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.4"
+VERSION = "0.6.0.5"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
-    "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",
-    "ResolutionValueRule", "Rule", "AnyResolution", "BinaryResolution", "FreeResponseResolution",
-    "MultipleChoiceResolution", "PseudoNumericResolution", "VERSION"
+    "__version_info__", "VERSION", "AnyResolution", "BinaryResolution", "DoResolveRule", "FreeResponseResolution",
+    "MultipleChoiceResolution", "PseudoNumericResolution", "ResolutionValueRule", "Rule", "Market", "get_client",
+    "require_env", "rule", "util"
 ]
 
 if getenv("DEBUG"):

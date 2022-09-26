@@ -1,11 +1,15 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Any, Optional, cast
+from typing import TYPE_CHECKING, cast
 
 from .. import ResolutionValueRule
 from . import login
 
 if TYPE_CHECKING:  # pragma: no cover
+    from typing import Any, Optional
+
     from ...market import Market
 
 
@@ -17,7 +21,7 @@ class ResolveToPR(ResolutionValueRule):
     repo: str
     number: int
 
-    def _value(self, market: 'Market') -> bool:
+    def _value(self, market: Market) -> bool:
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         return pr is not None and pr.merged
@@ -29,7 +33,7 @@ class ResolveToPR(ResolutionValueRule):
         ret += f"{'  ' * indent}- Otherwise, resolve to NO.\n"
         return ret
 
-    def _explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         if pr is None:
@@ -49,7 +53,7 @@ class ResolveToPRDelta(ResolutionValueRule):
     number: int
     start: datetime
 
-    def _value(self, market: 'Market') -> float:
+    def _value(self, market: Market) -> float:
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         if pr is None or pr.merged_at is None:
@@ -68,7 +72,7 @@ class ResolveToPRDelta(ResolutionValueRule):
         ret += ".\n"
         return ret
 
-    def _explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
         if pr is None:

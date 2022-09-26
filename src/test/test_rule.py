@@ -1,8 +1,14 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from pytest import fixture, raises
 
 from .. import Rule
 from ..rule import get_rule
-from . import PytestRequest
+
+if TYPE_CHECKING:  # pragma: no cover
+    from . import PytestRequest
 
 
 @fixture(params=(

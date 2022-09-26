@@ -1,20 +1,24 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Dict, Literal, Set, Union, cast
+from typing import TYPE_CHECKING, cast
 
 from pymanifold.lib import ManifoldClient
 
-from ... import FreeResponseResolution, MultipleChoiceResolution
 from ...util import fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1, prob_to_number_cpmm1
 from .. import ResolutionValueRule
 from . import ManifoldMarketMixin
 
 if TYPE_CHECKING:  # pragma: no cover
+    from typing import Any, Dict, Literal, Set, Union
+
+    from ... import FreeResponseResolution, MultipleChoiceResolution
     from ...market import Market
 
 
 @dataclass
 class OtherMarketValue(ResolutionValueRule, ManifoldMarketMixin):
-    def _value(self, market: 'Market') -> Union[float, Dict[Any, float]]:
+    def _value(self, market: Market) -> Union[float, Dict[Any, float]]:
         mkt = self.api_market()
         if mkt.outcomeType == "BINARY":
             if mkt.resolution == "YES":
@@ -38,7 +42,7 @@ class OtherMarketValue(ResolutionValueRule, ManifoldMarketMixin):
 class CurrentValueRule(ResolutionValueRule):
     """Resolve to the current market-consensus value."""
 
-    def _value(self, market: 'Market') -> Union[float, Dict[Any, float]]:
+    def _value(self, market: Market) -> Union[float, Dict[Any, float]]:
         if market.market.outcomeType == "BINARY":
             return cast(float, market.market.probability * 100)
         elif market.market.outcomeType == "PSEUDO_NUMERIC":
@@ -63,7 +67,7 @@ class FibonacciValueRule(ResolutionValueRule):
     exclude: Set[int] = field(default_factory=set)
     min_rewarded: float = 0.0001
 
-    def _value(self, market: 'Market') -> Union[float, Dict[Any, float]]:
+    def _value(self, market: Market) -> Union[float, Dict[Any, float]]:
         items = market_to_answer_map(market, self.exclude, (lambda id_, probability: probability < self.min_rewarded))
         rank = sorted(items, key=items.__getitem__)
         ret = {item: fib for item, fib in zip(rank, fibonacci())}
@@ -81,7 +85,7 @@ class FibonacciValueRule(ResolutionValueRule):
 class RoundValueRule(CurrentValueRule):
     """Resolve to the current market-consensus value, but rounded."""
 
-    def _value(self, market: 'Market') -> float:
+    def _value(self, market: Market) -> float:
         if market.market.outcomeType in ("MULTIPLE_CHOICE", "FREE_RESPONSE"):
             raise RuntimeError()
         elif market.market.outcomeType == "BINARY":
@@ -98,7 +102,7 @@ class PopularValueRule(ResolutionValueRule):
 
     size: int = 1
 
-    def _value(self, market: 'Market') -> Union[FreeResponseResolution, MultipleChoiceResolution]:
+    def _value(self, market: Market) -> Union[FreeResponseResolution, MultipleChoiceResolution]:
         answers = market_to_answer_map(market)
         final_answers: Dict[int, float] = {}
         for _ in range(self.size):
@@ -118,7 +122,7 @@ class ResolveToUserProfit(CurrentValueRule):
     user: str
     field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
 
-    def _value(self, market: 'Market') -> float:
+    def _value(self, market: Market) -> float:
         user = ManifoldClient()._get_user_raw(self.user)
         return cast(float, user['profitCached'][self.field])
 
@@ -133,7 +137,7 @@ class ResolveToUserCreatedVolume(CurrentValueRule):
     user: str
     field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
 
-    def _value(self, market: 'Market') -> float:
+    def _value(self, market: Market) -> float:
         user = ManifoldClient()._get_user_raw(self.user)
         return cast(float, user['creatorVolumeCached'][self.field])
 

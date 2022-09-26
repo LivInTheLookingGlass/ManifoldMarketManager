@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from asyncio import get_event_loop, new_event_loop, set_event_loop
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -5,9 +7,9 @@ from enum import IntEnum
 from logging import getLogger
 from os import getenv
 from pathlib import Path
-from sqlite3 import PARSE_COLNAMES, PARSE_DECLTYPES, Connection, connect
+from sqlite3 import PARSE_COLNAMES, PARSE_DECLTYPES, connect
 from traceback import format_exc
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 from telegram import __version__ as TG_VER
 
@@ -23,10 +25,18 @@ if __version_info__ < (20, 0, 0, "alpha", 1):
         f"visit https://docs.python-telegram-bot.org/en/v{TG_VER}/examples.html"
     )
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import Application, CallbackQueryHandler, ContextTypes
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Application, CallbackQueryHandler
 
-from src import Market, market, require_env
+from src import market, require_env
+
+if TYPE_CHECKING:  # pragma: no cover
+    from sqlite3 import Connection
+
+    from telegram import Update
+    from telegram.ext import ContextTypes
+
+    from src import Market
 
 logger = getLogger(__name__)
 

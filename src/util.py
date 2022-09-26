@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import lru_cache
 from importlib import import_module
 from logging import getLogger, warn
@@ -6,14 +8,17 @@ from os import getenv
 from pathlib import Path
 from sys import modules
 from traceback import print_exc
-from typing import (TYPE_CHECKING, Any, Callable, Collection, Dict, Iterable, Mapping, MutableSequence, TypeVar, Union,
-                    cast)
+from typing import TYPE_CHECKING, Any, Mapping, cast
 
 from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
 
 if TYPE_CHECKING:  # pragma: no cover
+    from typing import Callable, Collection, Dict, Iterable, MutableSequence, TypeVar, Union
+
     from . import Market, Rule
+
+    T = TypeVar("T")
 
 ENVIRONMENT_VARIABLES = [
     "ManifoldAPIKey",     # REQUIRED. Allows trades, market creation, market resolution
@@ -28,8 +33,6 @@ ENVIRONMENT_VARIABLES = [
 # If you don't need a specific environment variable, delete the line in this list
 # That said, if you use a rule that requires some API and have no key for it, it will fail
 
-T = TypeVar("T")
-
 
 def fibonacci(start: int = 1) -> Iterable[int]:
     """Iterate over the fibonacci numbers."""
@@ -43,7 +46,7 @@ def fibonacci(start: int = 1) -> Iterable[int]:
 
 
 def market_to_answer_map(
-    market: Union['Market', 'APIMarket'], exclude: Collection[int] = (), *filters: Callable[[int, float], bool]
+    market: Union[Market, APIMarket], exclude: Collection[int] = (), *filters: Callable[[int, float], bool]
 ) -> Dict[int, float]:
     """Given a market, grab its current list of answers and put it in a standardized format, applying given filters.
 
@@ -165,7 +168,7 @@ def get_client() -> ManifoldClient:
     return ManifoldClient(getenv("ManifoldAPIKey"))
 
 
-def explain_abstract(time_rules: Iterable['Rule[Any]'], value_rules: Iterable['Rule[Any]'], **kwargs: Any) -> str:
+def explain_abstract(time_rules: Iterable[Rule[Any]], value_rules: Iterable[Rule[Any]], **kwargs: Any) -> str:
     """Explain how the market will resolve and decide to resolve."""
     ret = "This market will resolve if any of the following are true:\n"
     for rule_ in time_rules:

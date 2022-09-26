@@ -1,16 +1,24 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from inspect import signature
 from json import dump, load
 from re import match
-from typing import Any, Dict, List, Literal, Optional, Union
+from typing import TYPE_CHECKING
 
 from src.application import register_db
 from src.market import Market
-from src.rule import DoResolveRule, ResolutionValueRule, get_rule
+from src.rule import get_rule
 from src.util import explain_abstract, get_client
 
 from pymanifold.types import DictDeserializable
+
+if TYPE_CHECKING:  # pragma: no cover
+    from typing import Any, Dict, List, Literal, Mapping, Optional, Union
+
+    from src import Rule
+    from src.rule import ResolutionValueRule
 
 
 def main():
@@ -96,7 +104,7 @@ class ManifoldRequest(DictDeserializable):
 @dataclass
 class CreationRequest:
     manifold: ManifoldRequest
-    time_rules: List[DoResolveRule]
+    time_rules: List[Rule[Optional[bool]]]
     value_rules: List[ResolutionValueRule]
     notes: str = ""
     initial_values: Dict[str, int] = field(default_factory=dict)
@@ -125,9 +133,9 @@ class CreationRequest:
             self.manifold.description["processed"] = True
 
     @classmethod
-    def from_dict(cls, obj: Dict[str, Any]) -> 'CreationRequest':
+    def from_dict(cls, obj: Mapping[str, Any]) -> 'CreationRequest':
         """Take a dictionary and return an instance of the associated class."""
-        obj = obj.copy()
+        obj = dict(obj)
         manifold = ManifoldRequest.from_dict(obj.pop('manifold'))
         time_rules = [
             get_rule(type_).from_dict(kwargs)

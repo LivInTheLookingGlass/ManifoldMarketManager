@@ -1,10 +1,15 @@
-from dataclasses import dataclass
-from typing import Optional, cast
+from __future__ import annotations
 
-from pymanifold.lib import ManifoldClient
-from pymanifold.types import Market as APIMarket
+from dataclasses import dataclass
+from typing import TYPE_CHECKING, cast
 
 from ...util import get_client
+
+if TYPE_CHECKING:  # pragma: no cover
+    from typing import Optional
+
+    from pymanifold.lib import ManifoldClient
+    from pymanifold.types import Market as APIMarket
 
 __all__ = ('time', 'value', 'ManifoldMarketMixin')
 

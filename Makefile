@@ -56,6 +56,14 @@ endif
 # Run tests sequentially
 test: dependencies _test
 
+.PHONY: test_all
+# Run tests sequentially in all supported python versions
+test_all:
+	@$(MAKE) test PY=python3.8 MYPY=false
+	@$(MAKE) test PY=python3.9 MYPY=false
+	@$(MAKE) test PY=python3.10 MYPY=false
+	@$(MAKE) test PY=python3.11
+
 .PHONY: test_%
 # Run tests with a given number of parallel runners
 test_%:
