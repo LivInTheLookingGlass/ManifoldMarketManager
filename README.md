@@ -1,5 +1,7 @@
 # Market Manager for Manifold
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/c02f68d7edee3420903f/maintainability)](https://codeclimate.com/github/gappleto97/ManifoldMarketManager/maintainability)
+
 ## Currently Implemented
 
 - Resolve a market based on a GitHub PR
