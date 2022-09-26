@@ -4,11 +4,35 @@ from typing import TYPE_CHECKING, Any, Dict, Literal, Set, Union, cast
 from pymanifold.lib import ManifoldClient
 
 from ... import FreeResponseResolution, MultipleChoiceResolution
-from ...util import fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1
+from ...util import fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1, prob_to_number_cpmm1
 from .. import ResolutionValueRule
+from . import ManifoldMarketMixin
 
 if TYPE_CHECKING:
     from ...market import Market
+
+
+@dataclass
+class OtherMarketValue(ResolutionValueRule, ManifoldMarketMixin):
+    def _value(self, market: 'Market') -> Union[float, Dict[Any, float]]:
+        mkt = self.api_market()
+        if mkt.outcomeType == "BINARY":
+            if mkt.resolution == "YES":
+                return True
+            elif mkt.resolution == "NO":
+                return False
+            return float(mkt.resolutionProbability) * 100
+        elif mkt.outcomeType == "PSEUDO_NUMERIC":
+            return prob_to_number_cpmm1(
+                mkt.resolutionProbability,
+                float(mkt.min or 0),
+                float(mkt.max or 0),
+                mkt.isLogScale
+            )
+        raise NotImplementedError("Doesn't seem to be reported in the API")
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        return f"{'  ' * indent}- Resolves to the current market value of {self.id_} ({self.api_market().question}).\n"
 
 
 class CurrentValueRule(ResolutionValueRule):

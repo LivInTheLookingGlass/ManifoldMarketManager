@@ -14,6 +14,8 @@ from . import PytestRequest
     "generic.value.ResolveRandomSeed",
     "generic.value.ResolveRandomIndex",
     "generic.value.ResolveMultipleValues",
+    "manifold.time.OtherMarketResolved",
+    "manifold.value.OtherMarketValue",
     "manifold.value.CurrentValueRule",
     "manifold.value.FibonacciValueRule",
     "manifold.value.PopularValueRule",
