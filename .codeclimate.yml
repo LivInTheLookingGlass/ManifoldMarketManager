@@ -40,8 +40,8 @@ plugins:
     enabled: true
   pep8:
     enabled: true
-  radon: 
-    enabled: true
+    config:
+      max-line-length: 120
   sonar-python:
     enabled: true
     config:
