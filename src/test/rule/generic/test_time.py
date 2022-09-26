@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 from itertools import chain, product
 from typing import TYPE_CHECKING, Any, Optional, cast
 
+from .... import Rule
 from ....rule.generic.time import BothRule, EitherRule, NegateRule, ResolveAtTime
 
 if TYPE_CHECKING:
@@ -13,41 +14,41 @@ if TYPE_CHECKING:
 class MockRule:
     val: Optional[bool] = None
 
-    def value(self, market: Any) -> Optional[bool]:
+    def _value(self, market: Any) -> Optional[bool]:
         return self.val
 
 
 def test_negate_rule_value() -> None:
     mock_obj = MockRule()
-    obj = NegateRule(mock_obj)
+    obj = NegateRule(cast(Rule[bool], mock_obj))
 
     mock_obj.val = True
-    assert obj.value(cast('Market', None)) is False
+    assert bool(obj._value(cast('Market', None))) is False
 
     mock_obj.val = False
-    assert obj.value(cast('Market', None)) is True
+    assert bool(obj._value(cast('Market', None))) is True
 
 
 def test_either_rule_value() -> None:
     mock_obj1 = MockRule()
     mock_obj2 = MockRule()
-    obj = EitherRule(mock_obj1, mock_obj2)
+    obj = EitherRule(cast(Rule[bool], mock_obj1), cast(Rule[bool], mock_obj2))
 
     for val1, val2 in product([True, False, None], repeat=2):
         mock_obj1.val = val1
         mock_obj2.val = val2
-        assert obj.value(cast('Market', None)) is (val1 or val2)
+        assert bool(obj._value(cast('Market', None))) is bool(val1 or val2)
 
 
 def test_both_rule_value() -> None:
     mock_obj1 = MockRule()
     mock_obj2 = MockRule()
-    obj = BothRule(mock_obj1, mock_obj2)
+    obj = BothRule(cast(Rule[bool], mock_obj1), cast(Rule[bool], mock_obj2))
 
     for val1, val2 in product([True, False, None], repeat=2):
         mock_obj1.val = val1
         mock_obj2.val = val2
-        assert obj.value(cast('Market', None)) is (val1 and val2)
+        assert bool(obj._value(cast('Market', None))) is bool(val1 and val2)
 
 
 def test_at_time_rule_value() -> None:
@@ -62,4 +63,4 @@ def test_at_time_rule_value() -> None:
     )
     for idx, val in enumerate(values):
         obj = ResolveAtTime(val)
-        assert obj.value(cast('Market', None)) is bool(idx % 2)
+        assert bool(obj._value(cast('Market', None))) is bool(idx % 2)

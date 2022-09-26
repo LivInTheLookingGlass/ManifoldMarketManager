@@ -47,7 +47,7 @@ def test_explain_abstract() -> None:
 
     l1 = [MockObject() for _ in range(randrange(20))]
     l2 = [MockObject() for _ in range(randrange(20))]
-    val = explain_abstract(cast(List[Rule], l1), cast(List[Rule], l2))
+    val = explain_abstract(cast(List[Rule[Any]], l1), cast(List[Rule[Any]], l2))
     assert isinstance(val, str)
     for obj in chain(l1, l2):
         assert obj.called

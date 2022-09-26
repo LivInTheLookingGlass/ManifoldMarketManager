@@ -18,7 +18,7 @@ class ResolveWithPR(DoResolveRule):
     number: int
 
     @require_env("GithubAccessToken", "GithubUsername")
-    def value(self, market: 'Market') -> bool:
+    def _value(self, market: 'Market') -> bool:
         """Return True if the issue is closed or the PR is merged, otherwise False."""
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()

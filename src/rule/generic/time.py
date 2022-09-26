@@ -14,9 +14,9 @@ class NegateRule(DoResolveRule):
 
     child: DoResolveRule
 
-    def value(self, market: 'Market') -> bool:
+    def _value(self, market: 'Market') -> bool:
         """Return the negation of the underlying rule."""
-        return not self.child.value(market)
+        return not self.child._value(market)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- If the rule below resolves False\n{self.child.explain_abstract(indent + 1, **kwargs)}"
@@ -44,9 +44,9 @@ class EitherRule(DoResolveRule):
     rule1: DoResolveRule
     rule2: DoResolveRule
 
-    def value(self, market: 'Market') -> bool:
+    def _value(self, market: 'Market') -> bool:
         """Return True iff at least one underlying rule returns True."""
-        return self.rule1.value(market) or self.rule2.value(market)
+        return bool(self.rule1._value(market)) or bool(self.rule2._value(market))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- If either of the rules below resolves True\n"
@@ -55,7 +55,7 @@ class EitherRule(DoResolveRule):
         return ret
 
     def _explain_specific(self, market: 'Market', indent: int = 0, sig_figs: int = 4) -> str:
-        ret = f"{'  ' * indent}- If either of the rules below resolves True (-> {self.value(market)})\n"
+        ret = f"{'  ' * indent}- If either of the rules below resolves True (-> {self.value(market, format='NONE')})\n"
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
         return ret
@@ -80,9 +80,9 @@ class BothRule(DoResolveRule):
     rule1: DoResolveRule
     rule2: DoResolveRule
 
-    def value(self, market: 'Market') -> bool:
+    def _value(self, market: 'Market') -> bool:
         """Return True iff both underlying rules return True."""
-        return self.rule1.value(market) and self.rule2.value(market)
+        return bool(self.rule1._value(market)) and bool(self.rule2._value(market))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- If both of the rules below resolves True\n"
@@ -115,7 +115,7 @@ class ResolveAtTime(DoResolveRule):
 
     resolve_at: datetime
 
-    def value(self, market: 'Market') -> bool:
+    def _value(self, market: 'Market') -> bool:
         """Return True iff the current time is after resolve_at."""
         try:
             return datetime.now(timezone.utc) >= self.resolve_at
