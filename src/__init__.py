@@ -55,37 +55,43 @@ class Rule(ABC, Generic[T], DictDeserializable):
         if (ret is None) or (ret == "CANCEL") or (format == 'NONE'):
             return cast(AnyResolution, ret)
         elif format in ('BINARY', 'PSEUDO_NUMERIC'):
-            if not isinstance(ret, str) and isinstance(ret, Sequence) and len(ret) == 1:
-                ret = ret[0]
-            elif isinstance(ret, Mapping) and len(ret) == 1:
-                ret = cast(Union[str, int, float], next(iter(ret.items()))[0])
-
-            if isinstance(ret, (int, float, )):
-                return ret
-            elif isinstance(ret, str):
-                ret = float(ret)
-                if ret.is_integer():
-                    return int(ret)
-                return ret
-
-            raise TypeError(ret, format, market)
+            return self._binary_value(market, ret)
         elif format in ('FREE_RESPONSE', 'MULTIPLE_CHOICE'):
-            if isinstance(ret, Mapping):
-                return {int(val): share for val, share in ret.items()}
-            elif isinstance(ret, Sequence) and len(ret) == 1:
-                ret = ret[0]
-
-            if isinstance(ret, str):
-                return {int(ret): 1}
-            elif isinstance(ret, int):
-                return {ret: 1}
-            elif isinstance(ret, float):
-                if ret.is_integer():
-                    return {int(ret): 1}
-                raise ValueError()
-
-            raise TypeError(ret, format, market)
+            return self._multiple_choice_value(market, ret)
         raise ValueError()
+
+    def _binary_value(self, market: 'Market', ret: Any) -> float:
+        if not isinstance(ret, str) and isinstance(ret, Sequence) and len(ret) == 1:
+            ret = ret[0]
+        elif isinstance(ret, Mapping) and len(ret) == 1:
+            ret = cast(Union[str, int, float], next(iter(ret.items()))[0])
+
+        if isinstance(ret, (int, float, )):
+            return ret
+        elif isinstance(ret, str):
+            ret = float(ret)
+            if ret.is_integer():
+                return int(ret)
+            return cast(float, ret)
+
+        raise TypeError(ret, format, market)
+
+    def _multiple_choice_value(self, market: 'Market', ret: Any) -> Mapping[int, float]:
+        if isinstance(ret, Mapping):
+            return {int(val): share for val, share in ret.items()}
+        elif isinstance(ret, Sequence) and len(ret) == 1:
+            ret = ret[0]
+
+        if isinstance(ret, str):
+            return {int(ret): 1}
+        elif isinstance(ret, int):
+            return {ret: 1}
+        elif isinstance(ret, float):
+            if ret.is_integer():
+                return {int(ret): 1}
+            raise ValueError()
+
+        raise TypeError(ret, format, market)
 
     @abstractmethod
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -137,7 +143,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.2"
+VERSION = "0.6.0.3"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",
