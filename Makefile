@@ -118,6 +118,7 @@ build: dependencies clean LICENSE
 # Clean up after a build
 clean:
 	@rm -rf build dist logs .benchmarks .pytest_cache src/*.egg-info test-reporter-latest-linux-amd64 .coverage .requirements.txt coverage.xml
+	@mkdir logs
 
 .PHONY: publish
 # Publish new version to pypi
