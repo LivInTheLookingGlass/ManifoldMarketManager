@@ -121,7 +121,7 @@ clean:
 
 .PHONY: publish
 # Publish new version to pypi
-publish: test_all build upload_coverage
+publish: build test_all upload_coverage
 	@$(PY) -m twine upload -u gappleto97 -s --sign-with gpg2 dist/*
 	@$(MAKE) clean $(MFLAGS)
 
