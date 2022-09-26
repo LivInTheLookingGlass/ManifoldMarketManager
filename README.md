@@ -1,6 +1,11 @@
 # Market Manager for Manifold
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/c02f68d7edee3420903f/maintainability)](https://codeclimate.com/github/gappleto97/ManifoldMarketManager/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c02f68d7edee3420903f/maintainability)](https://codeclimate.com/github/gappleto97/ManifoldMarketManager/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/c02f68d7edee3420903f/test_coverage)](https://codeclimate.com/github/gappleto97/ManifoldMarketManager/test_coverage)
+
+What you're reading is only one of many places I host this code at. They are:
+- [GitHub](https://github.com/gappleto97/ManifoldMarketManager)
+- [GitLab](https://gitlab.com/gappleto97/ManifoldMarketManager)
+- [TildeGit](https://tildegit.org/LivInTheLookingGlass/ManifoldMarketManager)
 
 ## Currently Implemented
 
