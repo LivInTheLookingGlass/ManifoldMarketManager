@@ -14,7 +14,7 @@ from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Callable, Collection, Dict, Iterable, MutableSequence, TypeVar, Union
+    from typing import Callable, Collection, Iterable, MutableSequence, TypeVar
 
     from . import Market, Rule
 
@@ -46,8 +46,8 @@ def fibonacci(start: int = 1) -> Iterable[int]:
 
 
 def market_to_answer_map(
-    market: Union[Market, APIMarket], exclude: Collection[int] = (), *filters: Callable[[int, float], bool]
-) -> Dict[int, float]:
+    market: Market | APIMarket, exclude: Collection[int] = (), *filters: Callable[[int, float], bool]
+) -> dict[int, float]:
     """Given a market, grab its current list of answers and put it in a standardized format, applying given filters.
 
     Parameters
@@ -96,7 +96,7 @@ def market_to_answer_map(
     }
 
 
-def normalize_mapping(answers: Mapping[T, float]) -> Dict[T, float]:
+def normalize_mapping(answers: Mapping[T, float]) -> dict[T, float]:
     """Take a mapping of answers and normalize it such that the sum of their weights is 1."""
     total = sum(answers.values())
     return {key: value / total for key, value in answers.items()}

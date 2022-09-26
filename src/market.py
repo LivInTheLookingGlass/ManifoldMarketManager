@@ -10,7 +10,7 @@ from .util import explain_abstract, get_client, number_to_prob_cpmm1, pool_to_nu
 
 if TYPE_CHECKING:  # pragma: no cover
     from logging import Logger
-    from typing import Any, List, Mapping, Optional, Tuple, Union
+    from typing import Any, Mapping, Optional
 
     from pymanifold.lib import ManifoldClient
     from pymanifold.types import Market as APIMarket
@@ -34,8 +34,8 @@ class Market:
     market: APIMarket
     client: ManifoldClient = field(default_factory=get_client)
     notes: str = field(default='')
-    do_resolve_rules: List[Rule[Optional[bool]]] = field(default_factory=list)
-    resolve_to_rules: List[Rule[AnyResolution]] = field(default_factory=list)
+    do_resolve_rules: list[Rule[Optional[bool]]] = field(default_factory=list)
+    resolve_to_rules: list[Rule[AnyResolution]] = field(default_factory=list)
     logger: Logger = field(init=False, default=None, repr=False)  # type: ignore[assignment]
 
     def __postinit__(self) -> None:
@@ -162,7 +162,7 @@ class Market:
             raise RuntimeError()
         return chosen
 
-    def current_answer(self) -> Union[str, AnyResolution]:
+    def current_answer(self) -> str | AnyResolution:
         """Return the current top (single) answer."""
         # TODO: move these behaviors to a rule class
         if self.market.outcomeType == "BINARY":
@@ -193,7 +193,7 @@ class Market:
         Response
             How Manifold interprets our request, and some JSON data on it
         """
-        _override: Union[AnyResolution, Tuple[float, float]]
+        _override: AnyResolution | tuple[float, float]
         if override is None:
             _override = self.resolve_to()
         else:

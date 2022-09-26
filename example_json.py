@@ -15,7 +15,7 @@ from src.util import explain_abstract, get_client
 from pymanifold.types import DictDeserializable
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Dict, List, Literal, Mapping, Optional, Union
+    from typing import Any, Literal, Mapping, Optional
 
     from src import Rule
     from src.rule import ResolutionValueRule
@@ -65,7 +65,7 @@ def date_deserialization_hook(json_dict):
 class ManifoldRequest(DictDeserializable):
     outcomeType: Literal["BINARY", "PSEUDO_NUMERIC", "FREE_RESPONSE", "MULTIPLE_CHOICE"]
     question: str
-    description: Union[str, Any]
+    description: str | Any
     closeTime: int
 
     initialProb: Optional[float] = None  # Note: probability is multiplied by 100, may only allow integers
@@ -74,8 +74,8 @@ class ManifoldRequest(DictDeserializable):
     maxValue: Optional[float] = None
     isLogScale: Optional[bool] = None
     initialValue: Optional[float] = None
-    tags: List[str] = field(default_factory=list)
-    answers: Optional[List[str]] = None
+    tags: list[str] = field(default_factory=list)
+    answers: Optional[list[str]] = None
 
     def __post_init__(self):
         if self.outcomeType == "BINARY":
@@ -94,7 +94,7 @@ class ManifoldRequest(DictDeserializable):
         if isinstance(self.closeTime, datetime):
             self.closeTime = round(self.closeTime.timestamp() * 1000)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             k: v for k, v in self.__dict__.items()
             if k in signature(type(self)).parameters and v is not None and k != "outcomeType"
@@ -104,10 +104,10 @@ class ManifoldRequest(DictDeserializable):
 @dataclass
 class CreationRequest:
     manifold: ManifoldRequest
-    time_rules: List[Rule[Optional[bool]]]
-    value_rules: List[ResolutionValueRule]
+    time_rules: list[Rule[Optional[bool]]]
+    value_rules: list[ResolutionValueRule]
     notes: str = ""
-    initial_values: Dict[str, int] = field(default_factory=dict)
+    initial_values: dict[str, int] = field(default_factory=dict)
 
     def __post_init__(self):
         if not self.manifold.description.get("processed"):

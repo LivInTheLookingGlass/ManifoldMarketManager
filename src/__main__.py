@@ -84,7 +84,7 @@ if any((args.slug, args.id_, args.url)):
         if len(sections) == 1:
             sections = args.rel_date.split('-')
         try:
-            date: Optional[Tuple[int, int, int]] = tuple(int(x) for x in sections)  # type: ignore[assignment]
+            date: Optional[tuple[int, int, int]] = tuple(int(x) for x in sections)  # type: ignore[assignment]
         except ValueError:
             raise
     else:

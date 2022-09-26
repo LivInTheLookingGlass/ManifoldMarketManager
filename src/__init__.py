@@ -54,7 +54,7 @@ class Rule(ABC, Generic[T], DictDeserializable):
         format: Literal['NONE', 'BINARY', 'PSEUDO_NUMERIC', 'FREE_RESPONSE', 'MULTIPLE_CHOICE'] = 'NONE'
     ) -> AnyResolution:
         """Return the resolution value of a market, appropriately formatted for its market type."""
-        ret: Union[str, AnyResolution] = self._value(market)
+        ret: str | AnyResolution = self._value(market)
         if (ret is None) or (ret == "CANCEL") or (format == 'NONE'):
             return cast(AnyResolution, ret)
         elif format in ('BINARY', 'PSEUDO_NUMERIC'):
@@ -146,7 +146,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.8"
+VERSION = "0.6.0.9"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "AnyResolution", "BinaryResolution", "DoResolveRule", "FreeResponseResolution",

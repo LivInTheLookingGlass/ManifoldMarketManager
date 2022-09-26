@@ -10,17 +10,17 @@ from .. import ResolutionValueRule
 from . import ManifoldMarketMixin
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Dict, Literal, Set, Union
+    from typing import Any, Literal
 
     from pymanifold.types import Market as APIMarket
 
-    from ... import BinaryResolution, FreeResponseResolution, MultipleChoiceResolution
+    from ... import FreeResponseResolution, MultipleChoiceResolution
     from ...market import Market
 
 
 @dataclass
 class OtherMarketValue(ResolutionValueRule, ManifoldMarketMixin):
-    def _value(self, market: Market) -> Union[float, Dict[Any, float]]:
+    def _value(self, market: Market) -> float | dict[Any, float]:
         mkt = self.api_market()
         if mkt.outcomeType == "BINARY":
             return self._binary_value(market, mkt)
@@ -33,7 +33,7 @@ class OtherMarketValue(ResolutionValueRule, ManifoldMarketMixin):
             )
         raise NotImplementedError("Doesn't seem to be reported in the API")
 
-    def _binary_value(self, market: Market, mkt: APIMarket) -> BinaryResolution:
+    def _binary_value(self, market: Market, mkt: APIMarket) -> bool | float:
         if mkt.resolution == "YES":
             return True
         elif mkt.resolution == "NO":
@@ -47,7 +47,7 @@ class OtherMarketValue(ResolutionValueRule, ManifoldMarketMixin):
 class CurrentValueRule(ResolutionValueRule):
     """Resolve to the current market-consensus value."""
 
-    def _value(self, market: Market) -> Union[float, Dict[Any, float]]:
+    def _value(self, market: Market) -> float | dict[Any, float]:
         if market.market.outcomeType == "BINARY":
             return cast(float, market.market.probability * 100)
         elif market.market.outcomeType == "PSEUDO_NUMERIC":
@@ -69,10 +69,10 @@ class CurrentValueRule(ResolutionValueRule):
 class FibonacciValueRule(ResolutionValueRule):
     """Resolve each value with a fibonacci weight, ranked by probability."""
 
-    exclude: Set[int] = field(default_factory=set)
+    exclude: set[int] = field(default_factory=set)
     min_rewarded: float = 0.0001
 
-    def _value(self, market: Market) -> Union[float, Dict[Any, float]]:
+    def _value(self, market: Market) -> float | dict[Any, float]:
         items = market_to_answer_map(market, self.exclude, (lambda id_, probability: probability < self.min_rewarded))
         rank = sorted(items, key=items.__getitem__)
         ret = {item: fib for item, fib in zip(rank, fibonacci())}
@@ -107,9 +107,9 @@ class PopularValueRule(ResolutionValueRule):
 
     size: int = 1
 
-    def _value(self, market: Market) -> Union[FreeResponseResolution, MultipleChoiceResolution]:
+    def _value(self, market: Market) -> FreeResponseResolution | MultipleChoiceResolution:
         answers = market_to_answer_map(market)
-        final_answers: Dict[int, float] = {}
+        final_answers: dict[int, float] = {}
         for _ in range(self.size):
             next_answer = max(answers, key=answers.__getitem__)
             final_answers[next_answer] = answers[next_answer]

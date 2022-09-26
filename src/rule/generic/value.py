@@ -9,7 +9,7 @@ from ...util import normalize_mapping
 from .. import ResolutionValueRule, get_rule
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, DefaultDict, Mapping, MutableSequence, Optional, Sequence, Tuple
+    from typing import Any, DefaultDict, Mapping, MutableSequence, Optional, Sequence
 
     from ... import AnyResolution, FreeResponseResolution, MultipleChoiceResolution
     from ...market import Market
@@ -36,7 +36,7 @@ class ResolveRandomSeed(ResolutionValueRule):
     method: str = 'random'
     rounds: int = 1
     args: Sequence[Any] = ()
-    kwargs: Dict[str, Any] = field(default_factory=dict)
+    kwargs: dict[str, Any] = field(default_factory=dict)
 
     def _value(self, market: Market) -> Any:
         source = Random(self.seed)
@@ -55,7 +55,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
 
     def __init__(
         self,
-        seed: Optional[Union[int, float, str, bytes, bytearray]],
+        seed: None | int | float | str | bytes | bytearray,
         *args: Any,
         size: Optional[int] = None,
         start: int = 0,
@@ -91,9 +91,9 @@ class ResolveRandomIndex(ResolveRandomSeed):
 class ResolveMultipleValues(ResolutionValueRule):
     """Resolve to multiple values with different shares."""
 
-    shares: MutableSequence[Tuple[ResolutionValueRule, float]] = field(default_factory=list)
+    shares: MutableSequence[tuple[ResolutionValueRule, float]] = field(default_factory=list)
 
-    def _value(self, market: Market) -> Union[FreeResponseResolution, MultipleChoiceResolution]:
+    def _value(self, market: Market) -> FreeResponseResolution | MultipleChoiceResolution:
         ret: DefaultDict[int, float] = defaultdict(float)
         for rule, part in self.shares:
             val = cast(Dict[Union[str, int], float], rule.value(market, format='FREE_RESPONSE'))
@@ -112,8 +112,8 @@ class ResolveMultipleValues(ResolutionValueRule):
     @classmethod
     def from_dict(cls, env: Mapping[str, Any]) -> 'ResolveMultipleValues':
         """Take a dictionary and return an instance of the associated class."""
-        env_copy: Dict[str, Any] = dict(env)
-        shares: MutableSequence[Tuple[ResolutionValueRule, float]] = env['shares']
+        env_copy: dict[str, Any] = dict(env)
+        shares: MutableSequence[tuple[ResolutionValueRule, float]] = env['shares']
         new_shares = []
         for rule, weight in shares:
             try:
