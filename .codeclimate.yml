@@ -49,7 +49,5 @@ plugins:
         - src/test/**
   git-legal:
     enabled: true
-  markdownlint:
-    enabled: true
   shellcheck:
     enabled: true
