@@ -12,7 +12,7 @@ from typing import (TYPE_CHECKING, Any, Callable, Collection, Dict, Iterable, Ma
 from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from . import Market, Rule
 
 ENVIRONMENT_VARIABLES = [
@@ -195,6 +195,6 @@ def dynamic_import(fname: str, mname: str, __all__: MutableSequence[str], exempt
         try:
             setattr(modules[mname], name, import_module("." + name, mname))
             __all__.append(name)
-        except ImportError:
+        except ImportError:  # pragma: no cover
             print_exc()
             warn(f"Unable to import extension module: {mname}.{name}")

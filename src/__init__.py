@@ -40,7 +40,7 @@ class Rule(ABC, Generic[T], DictDeserializable):
     def _value(
         self,
         market: "Market"
-    ) -> AnyResolution:
+    ) -> AnyResolution:  # pragma: no cover
         ...
 
     def value(
@@ -143,7 +143,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.3"
+VERSION = "0.6.0.4"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",
@@ -154,7 +154,7 @@ __all__ = [
 if getenv("DEBUG"):
     import sys
 
-    def info(type, value, tb):  # type: ignore
+    def info(type, value, tb):  # type: ignore  # pragma: no cover
         """Open a postmortem pdb prompt on exception, if able."""
         if hasattr(sys, 'ps1') or not sys.stderr.isatty():
             # we are in interactive mode or we don't have a tty-like

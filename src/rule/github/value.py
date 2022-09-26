@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any, Optional, cast
 from .. import ResolutionValueRule
 from . import login
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from ...market import Market
 
 

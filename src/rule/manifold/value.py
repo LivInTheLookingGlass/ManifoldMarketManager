@@ -8,7 +8,7 @@ from ...util import fibonacci, market_to_answer_map, normalize_mapping, pool_to_
 from .. import ResolutionValueRule
 from . import ManifoldMarketMixin
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from ...market import Market
 
 

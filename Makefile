@@ -128,6 +128,14 @@ graph: dependencies
 import_%: LICENSE dependencies
 	@source env_$*.sh && $(PY) example_json.py
 
+.PHONY: upload_coverage
+# Upload coverage reports to codeclimate
+upload_coverage: .coverage
+	@coverage xml
+	@python -m coverage xml
+	@wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+	@./test-reporter-latest-linux-amd64 after-build -t coverage.py -r edb8346708ccd2734dd8ba11e7e9775ae67f4fb61cef327679d7b6e3c2123945
+
 .PHONY: help
 # Show this help.
 help:

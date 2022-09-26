@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Any
 from .. import DoResolveRule
 from . import ManifoldMarketMixin
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from ...market import Market
 
 

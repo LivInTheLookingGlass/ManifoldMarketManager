@@ -5,7 +5,7 @@ from ...util import require_env
 from .. import DoResolveRule
 from . import login
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from ...market import Market
 
 
