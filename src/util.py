@@ -6,9 +6,11 @@ from os import getenv
 from pathlib import Path
 from sys import modules
 from traceback import print_exc
-from typing import TYPE_CHECKING, Any, Callable, Collection, Dict, Iterable, Mapping, MutableSequence, TypeVar, cast
+from typing import (TYPE_CHECKING, Any, Callable, Collection, Dict, Iterable, Mapping, MutableSequence, TypeVar, Union,
+                    cast)
 
 from pymanifold.lib import ManifoldClient
+from pymanifold.types import Market as APIMarket
 
 if TYPE_CHECKING:
     from . import Market, Rule
@@ -41,13 +43,13 @@ def fibonacci(start: int = 1) -> Iterable[int]:
 
 
 def market_to_answer_map(
-    market: 'Market', exclude: Collection[int] = (), *filters: Callable[[int, float], bool]
+    market: Union['Market', 'APIMarket'], exclude: Collection[int] = (), *filters: Callable[[int, float], bool]
 ) -> Dict[int, float]:
     """Given a market, grab its current list of answers and put it in a standardized format, applying given filters.
 
     Parameters
     ----------
-    market : Market
+    market : Market | PyManifold.lib.Market
         The market wrapper for which we want the current answer pool.
     exclude : Collection[int], optional
         Some collection of ids to exclude. Preferrably a set() or range(). by default ()
@@ -66,15 +68,19 @@ def market_to_answer_map(
     RuntimeError
         If a non-supported market is fed
     """
-    if market.market.outcomeType == "FREE_RESPONSE":
+    if isinstance(market, APIMarket):
+        mkt: APIMarket = market
+    else:
+        mkt = market.market
+    if mkt.outcomeType == "FREE_RESPONSE":
         initial = {
             int(answer['id']): float(answer['probability'])
-            for answer in market.market.answers
+            for answer in mkt.answers
         }
-    elif market.market.outcomeType == "MULTIPLE_CHOICE":
+    elif mkt.outcomeType == "MULTIPLE_CHOICE":
         # TODO: reimplement dpm-2 math so this is actually by probability
-        pool = cast(Mapping[Any, float], market.market.pool)
-        total = 100**2 + sum(answer**2 for answer in pool.values())
+        pool = cast(Mapping[Any, float], mkt.pool)
+        total = sum(answer**2 for answer in pool.values()) + 100**2
         initial = {
             int(answer): weight**2 / total
             for answer, weight in pool.items()
@@ -106,12 +112,17 @@ def pool_to_number_cpmm1(yes: float, no: float, p: float, start: float, end: flo
     if start >= end:
         raise ValueError()
     probability = pool_to_prob_cpmm1(yes, no, p)
+    return prob_to_number_cpmm1(probability, start, end, isLogScale)
+
+
+def prob_to_number_cpmm1(probability: float, start: float, end: float, isLogScale: bool = False) -> float:
+    """Go from a probability to a numeric answer."""
     if isLogScale:
-        logValue = log10(end - start + 1) * probability
-        ret = 10**logValue + start - 1
+        ret: float = (end - start + 1)**probability + start - 1
     else:
         ret = start + (end - start) * probability
-    return max(start, min(end, ret))
+    ret = max(start, min(end, ret))
+    return ret
 
 
 def number_to_prob_cpmm1(current: float, start: float, end: float, isLogScale: bool = False) -> float:
@@ -154,7 +165,7 @@ def get_client() -> ManifoldClient:
     return ManifoldClient(getenv("ManifoldAPIKey"))
 
 
-def explain_abstract(time_rules: Iterable['Rule'], value_rules: Iterable['Rule'], **kwargs: Any) -> str:
+def explain_abstract(time_rules: Iterable['Rule[Any]'], value_rules: Iterable['Rule[Any]'], **kwargs: Any) -> str:
     """Explain how the market will resolve and decide to resolve."""
     ret = "This market will resolve if any of the following are true:\n"
     for rule_ in time_rules:

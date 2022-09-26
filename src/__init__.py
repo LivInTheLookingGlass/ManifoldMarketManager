@@ -15,7 +15,7 @@ from pathlib import Path
 from pickle import dumps, loads
 from sqlite3 import register_adapter, register_converter
 from sys import path as _sys_path
-from typing import Any, Literal, Mapping, Union, cast
+from typing import Any, Generic, Literal, Mapping, Optional, Sequence, TypeVar, Union, cast
 from warnings import warn
 
 _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
@@ -27,21 +27,65 @@ PseudoNumericResolution = Union[Literal["CANCEL"], float]
 FreeResponseResolution = Union[Literal["CANCEL"], Mapping[str, float], Mapping[int, float], Mapping[float, float]]
 MultipleChoiceResolution = FreeResponseResolution
 AnyResolution = Union[BinaryResolution, PseudoNumericResolution, FreeResponseResolution, MultipleChoiceResolution]
+T = TypeVar("T", bound=AnyResolution)
 
 
-class Rule(ABC, DictDeserializable):
+class Rule(ABC, Generic[T], DictDeserializable):
     """The basic unit of market automation, rules defmine how a market should react to given events."""
 
     def __init__(self) -> None:
         self.logger: Logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
 
     @abstractmethod
+    def _value(
+        self,
+        market: "Market"
+    ) -> AnyResolution:
+        ...
+
     def value(
         self,
-        market: 'Market'
-    ) -> 'AnyResolution':
-        """Return the formatted value of a rule, whether this is if one should resolve or a resolution value."""
-        raise NotImplementedError(type(self))
+        market: "Market",
+        format: Optional[Literal['NONE', 'BINARY', 'PSEUDO_NUMERIC', 'FREE_RESPONSE', 'MULTIPLE_CHOICE']] = None
+    ) -> AnyResolution:
+        """Return the resolution value of a market, appropriately formatted for its market type."""
+        if format is None:
+            format = market.market.outcomeType
+        ret: Union[str, AnyResolution] = self._value(market)
+        if (ret is None) or (ret == "CANCEL") or (format == 'NONE'):
+            return cast(AnyResolution, ret)
+        elif format in ('BINARY', 'PSEUDO_NUMERIC'):
+            if not isinstance(ret, str) and isinstance(ret, Sequence) and len(ret) == 1:
+                ret = ret[0]
+            elif isinstance(ret, Mapping) and len(ret) == 1:
+                ret = cast(Union[str, int, float], next(iter(ret.items()))[0])
+
+            if isinstance(ret, (int, float, )):
+                return ret
+            elif isinstance(ret, str):
+                ret = float(ret)
+                if ret.is_integer():
+                    return int(ret)
+                return ret
+
+            raise TypeError(ret, format, market)
+        elif format in ('FREE_RESPONSE', 'MULTIPLE_CHOICE'):
+            if isinstance(ret, Mapping):
+                return {int(val): share for val, share in ret.items()}
+            elif isinstance(ret, Sequence) and len(ret) == 1:
+                ret = ret[0]
+
+            if isinstance(ret, str):
+                return {int(ret): 1}
+            elif isinstance(ret, int):
+                return {ret: 1}
+            elif isinstance(ret, float):
+                if ret.is_integer():
+                    return {int(ret): 1}
+                raise ValueError()
+
+            raise TypeError(ret, format, market)
+        raise ValueError()
 
     @abstractmethod
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -59,7 +103,7 @@ class Rule(ABC, DictDeserializable):
         warn("Using a default specific explanation. This probably isn't what you want!")
         ret = self.explain_abstract(indent=indent).rstrip('\n')
         ret += " (-> "
-        val = self.value(market)
+        val = self._value(market)
         if val == "CANCEL":
             ret += "CANCEL)\n"
             return ret
@@ -93,7 +137,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.5.0.27"
+VERSION = "0.5.0.28"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "get_client", "market", "require_env", "rule", "util", "Market", "DoResolveRule",
