@@ -116,8 +116,7 @@ build: dependencies clean LICENSE
 .PHONY: clean
 # Clean up after a build
 clean:
-	@mkdir -p build dist src/a.egg-info
-	@rm -r build dist src/*.egg-info
+	@rm -rf build dist logs .benchmarks .pytest_cache src/*.egg-info test-reporter-latest-linux-amd64 .coverage .requirements.txt coverage.xml
 
 .PHONY: publish
 # Publish new version to pypi
@@ -141,7 +140,7 @@ import_%: LICENSE dependencies
 upload_coverage: .coverage
 	@coverage xml
 	@python -m coverage xml
-	@wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+	@if [ ! -f ./test-reporter-latest-linux-amd64 ]; then wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64; chmod +x ./test-reporter-latest-linux-amd64; fi
 	@./test-reporter-latest-linux-amd64 after-build -t coverage.py -r edb8346708ccd2734dd8ba11e7e9775ae67f4fb61cef327679d7b6e3c2123945
 
 .PHONY: help
