@@ -11,3 +11,4 @@ pytest-xdist
 python-telegram-bot>=20.0a4
 requests
 twine
+types-requests
