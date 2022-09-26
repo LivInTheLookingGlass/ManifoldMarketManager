@@ -191,9 +191,9 @@ def explain_abstract(time_rules: Iterable[Rule[Any]], value_rules: Iterable[Rule
 
 def dynamic_import(fname: str, mname: str, __all__: MutableSequence[str], exempt: Collection[str]) -> None:
     """Dynamically import submodules and add them to the export list."""
-    for entry in Path(fname).parent.iterdir():
+    for entry in Path(fname).parent.glob("[!.]*"):
         name = entry.name.rstrip(".py")
-        if name.startswith('.') or name in exempt:
+        if name in exempt:
             continue
         try:
             setattr(modules[mname], name, import_module("." + name, mname))

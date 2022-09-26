@@ -51,21 +51,19 @@ class Rule(ABC, Generic[T], DictDeserializable):
     def value(
         self,
         market: Market,
-        format: Optional[Literal['NONE', 'BINARY', 'PSEUDO_NUMERIC', 'FREE_RESPONSE', 'MULTIPLE_CHOICE']] = None
+        format: Literal['NONE', 'BINARY', 'PSEUDO_NUMERIC', 'FREE_RESPONSE', 'MULTIPLE_CHOICE'] = 'NONE'
     ) -> AnyResolution:
         """Return the resolution value of a market, appropriately formatted for its market type."""
-        if format is None:
-            format = market.market.outcomeType
         ret: Union[str, AnyResolution] = self._value(market)
         if (ret is None) or (ret == "CANCEL") or (format == 'NONE'):
             return cast(AnyResolution, ret)
         elif format in ('BINARY', 'PSEUDO_NUMERIC'):
-            return self._binary_value(market, ret)
+            return self.__binary_value(market, ret)
         elif format in ('FREE_RESPONSE', 'MULTIPLE_CHOICE'):
-            return self._multiple_choice_value(market, ret)
+            return self.__multiple_choice_value(market, ret)
         raise ValueError()
 
-    def _binary_value(self, market: Market, ret: Any) -> float:
+    def __binary_value(self, market: Market, ret: Any) -> float:
         if not isinstance(ret, str) and isinstance(ret, Sequence) and len(ret) == 1:
             ret = ret[0]
         elif isinstance(ret, Mapping) and len(ret) == 1:
@@ -81,7 +79,7 @@ class Rule(ABC, Generic[T], DictDeserializable):
 
         raise TypeError(ret, format, market)
 
-    def _multiple_choice_value(self, market: Market, ret: Any) -> Mapping[int, float]:
+    def __multiple_choice_value(self, market: Market, ret: Any) -> Mapping[int, float]:
         if isinstance(ret, Mapping):
             return {int(val): share for val, share in ret.items()}
         elif isinstance(ret, Sequence) and len(ret) == 1:
@@ -148,7 +146,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.7"
+VERSION = "0.6.0.8"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "AnyResolution", "BinaryResolution", "DoResolveRule", "FreeResponseResolution",

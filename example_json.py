@@ -116,16 +116,12 @@ class CreationRequest:
             )
             for paragraph in explanation.splitlines():
                 if paragraph:
-                    if paragraph.startswith(" "):
-                        for idx, character in enumerate(paragraph):
-                            if character != " ":
-                                break
-                        paragraph = paragraph.replace(" ", "-", idx)
+                    s_par = paragraph.lstrip()
                     self.manifold.description["content"].append({
                         "type": "paragraph",
                         "content": [{
                             "type": "text",
-                            "text": paragraph
+                            "text": "-" * (len(paragraph) - len(s_par)) + s_par
                         }]
                     })
                 else:
