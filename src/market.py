@@ -6,7 +6,8 @@ from logging import getLogger
 from time import time
 from typing import TYPE_CHECKING, cast
 
-from .util import explain_abstract, get_client, number_to_prob_cpmm1, pool_to_number_cpmm1, require_env, round_sig_figs
+from .util import (explain_abstract, get_client, market_to_answer_map, number_to_prob_cpmm1, pool_to_number_cpmm1,
+                   require_env, round_sig_figs)
 
 if TYPE_CHECKING:  # pragma: no cover
     from logging import Logger
@@ -176,13 +177,9 @@ class Market:
                 float(self.market.max or 0),
                 self.market.isLogScale
             )
-        elif self.market.outcomeType == "FREE_RESPONSE":
-            return {idx: x['probability'] for idx, x in enumerate(self.market.answers)}
-        elif self.market.outcomeType == "MULTIPLE_CHOICE":
-            total = sum(self.market.pool.values())
-            return {x: shares / total for x, shares in self.market.pool.items()}
-        else:
-            raise NotImplementedError(self.market.outcomeType)
+        elif self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
+            market_to_answer_map(self.market)
+        raise NotImplementedError(self.market.outcomeType)
 
     @require_env("ManifoldAPIKey")
     def resolve(self, override: Optional[AnyResolution] = None) -> Response:

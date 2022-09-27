@@ -151,10 +151,9 @@ def require_env(*env: str) -> Callable[[Callable[..., T]], Callable[..., T]]:
     """Enforce the presence of environment variables that may be necessary for a function to properly run."""
     def bar(func: Callable[..., T]) -> Callable[..., T]:
         def foo(*args: Any, **kwargs: Any) -> T:
-            for x in env:
-                if not getenv(x):
-                    getLogger(__file__).error(f"Cannot run, as ${x} is not in the environment")
-                    raise EnvironmentError("Please call 'source env.sh' first", x)
+            if not all(getenv(x) for x in env):
+                getLogger(__file__).error(f"Cannot run, as one of ${env} is not in the environment")
+                raise EnvironmentError("Please call 'source env.sh' first", env)
             return func(*args, **kwargs)
 
         return foo
