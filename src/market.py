@@ -117,15 +117,16 @@ class Market:
     def __format_resolve_to(self, sig_figs: int) -> str:
         val = self.resolve_to()
         if val == "CANCEL":
-            return "CANCEL"
+            ret = "CANCEL"
         elif self.market.outcomeType == "BINARY":
-            if val is True or val == 100:
-                return "YES"
-            elif not val:
-                return "NO"
-            return round_sig_figs(cast(float, val) * 100, sig_figs)
-        elif self.market.outcomeType == "PSEUDO_NUMERIC":
-            return str(val)
+            defaults: dict[AnyResolution, str] = {
+                True: "YES", 100: "YES", 100.0: "YES",
+                False: "NO"
+            }
+            if val in defaults:
+                ret = defaults[val]
+            else:
+                ret = round_sig_figs(cast(float, val) * 100, sig_figs)
         elif self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
             assert not isinstance(val, (float, str))
             ret = "{"
@@ -134,8 +135,9 @@ class Market:
                 ret += ", " * bool(idx)
                 ret += f"{key}: {round_sig_figs(weight * 100 / total, sig_figs)}%"
             ret += "}\n"
-            return ret
-        raise ValueError("Unkown market type")
+        else:
+            ret = str(val)
+        return ret
 
     def should_resolve(self) -> bool:
         """Return whether the market should resolve, according to our rules."""
