@@ -98,44 +98,44 @@ class Market:
 
     def explain_specific(self, sig_figs: int = 4) -> str:
         """Explain why the market is resolving the way that it is."""
+        shim = ""
+        for rule_ in self.do_resolve_rules:
+            shim += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
         if self.should_resolve() is not True:
-            ret = "This market is not resolving, because none of the following are true:\n"
-            for rule_ in self.do_resolve_rules:
-                ret += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
-            ret += "\nWere it to resolve now, it would follow the decision tree below:\n"
+            ret = (f"This market is not resolving, because none of the following are true:\n{shim}\nWere it to "
+                   "resolve now, it would follow the decision tree below:\n")
         else:
-            ret = "This market is resolving because of the following trigger(s):\n"
-            for rule_ in self.do_resolve_rules:
-                if rule_.value(self):
-                    ret += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
-            ret += "\nIt will follow the decision tree below:\n"
-
+            ret = (f"This market is resolving because of the following trigger(s):\n{shim}\nIt will follow the "
+                   "decision tree below:\n")
         ret += "- If the human operator agrees:\n"
         for rule_ in self.resolve_to_rules:
             ret += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
         ret += "\nFinal Value: "
+        ret += self.__format_resolve_to(sig_figs)
+        return ret
+
+    def __format_resolve_to(self, sig_figs: int) -> str:
         val = self.resolve_to()
         if val == "CANCEL":
-            ret += "CANCEL"
+            return "CANCEL"
         elif self.market.outcomeType == "BINARY":
             if val is True or val == 100:
-                ret += "YES"
+                return "YES"
             elif not val:
-                ret += "NO"
-            else:
-                ret += round_sig_figs(cast(float, val) * 100, sig_figs)
+                return "NO"
+            return round_sig_figs(cast(float, val) * 100, sig_figs)
         elif self.market.outcomeType == "PSEUDO_NUMERIC":
-            ret += str(val)
+            return str(val)
         elif self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
             assert not isinstance(val, (float, str))
-            ret += "{"
+            ret = "{"
             total = sum(val.values())
             for idx, (key, weight) in enumerate(val.items()):
-                if idx:
-                    ret += ", "
+                ret += ", " * bool(idx)
                 ret += f"{key}: {round_sig_figs(weight * 100 / total, sig_figs)}%"
             ret += "}\n"
-        return ret
+            return ret
+        raise ValueError("Unkown market type")
 
     def should_resolve(self) -> bool:
         """Return whether the market should resolve, according to our rules."""
@@ -199,31 +199,37 @@ class Market:
             return self.cancel()
 
         if self.market.outcomeType == "PSEUDO_NUMERIC":
-            if not isinstance(_override, (int, float)):
-                raise TypeError()
-            _override = (
-                _override,
-                100 * number_to_prob_cpmm1(_override, self.market.min or 0, self.market.max or 0)
-            )
+            _override = self.__format_request_resolve_numeric(_override)
 
         if self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
-            if not isinstance(_override, Mapping):
-                raise TypeError()
-            if self.market.outcomeType == "MULTIPLE_CHOICE":
-                new_override = {}
-                for idx, weight in _override.items():
-                    new_override[self.market.answers[idx]['id']] = weight
-                _override = new_override
-            new_override = {}
-            for idx, weight in _override.items():
-                new_override[int(idx)] = weight
-            _override = new_override
+            _override = self.__format_request_resolve_mapping(_override)
 
         ret: Response = self.client.resolve_market(self.market, _override)
-        if ret.status_code < 300:
-            self.logger.info("I was resolved")
-            self.market.isResolved = True
+        ret.raise_for_status()
+        self.logger.info("I was resolved")
+        self.market.isResolved = True
         return ret
+
+    def __format_request_resolve_numeric(self, _override: AnyResolution | tuple[float, float]) -> tuple[float, float]:
+        if not isinstance(_override, (int, float)):
+            raise TypeError()
+        return (
+            _override,
+            100 * number_to_prob_cpmm1(_override, self.market.min or 0, self.market.max or 0)
+        )
+
+    def __format_request_resolve_mapping(self, _override: AnyResolution | tuple[float, float]) -> dict[int, float]:
+        if not isinstance(_override, Mapping):
+            raise TypeError()
+        if self.market.outcomeType == "MULTIPLE_CHOICE":
+            new_override = {}
+            for idx, weight in _override.items():
+                new_override[self.market.answers[idx]['id']] = weight
+            _override = new_override
+        new_override = {}
+        for idx, weight in _override.items():
+            new_override[int(idx)] = weight
+        return new_override
 
     @require_env("ManifoldAPIKey")
     def cancel(self) -> Response:
@@ -235,7 +241,7 @@ class Market:
             How Manifold interprets our request, and some JSON data on it
         """
         ret: Response = self.client.cancel_market(self.market)
-        if ret.status_code < 300:
-            self.logger.info("I was cancelled")
-            self.market.isResolved = True
+        ret.raise_for_status()
+        self.logger.info("I was cancelled")
+        self.market.isResolved = True
         return ret
