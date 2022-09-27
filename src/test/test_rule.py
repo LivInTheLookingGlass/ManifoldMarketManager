@@ -28,6 +28,8 @@ if TYPE_CHECKING:  # pragma: no cover
     "generic.value.ResolveRandomSeed",
     "generic.value.ResolveRandomIndex",
     "generic.value.ResolveMultipleValues",
+    "manifold.time.ThisMarketClosed",
+    "manifold.time.OtherMarketClosed",
     "manifold.time.OtherMarketResolved",
     "manifold.value.OtherMarketValue",
     "manifold.value.CurrentValueRule",
