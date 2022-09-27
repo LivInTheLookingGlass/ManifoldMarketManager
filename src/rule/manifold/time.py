@@ -15,7 +15,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 class ThisMarketClosed(DoResolveRule):
     def _value(self, market: Market) -> bool:
-        return market.market.closeTime < time() * 1000
+        return bool(market.market.closeTime < time() * 1000)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves true iff this market is closed.\n"
@@ -24,7 +24,7 @@ class ThisMarketClosed(DoResolveRule):
 @dataclass
 class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
     def _value(self, market: Market) -> bool:
-        return self.api_market().closeTime < time() * 1000
+        return bool(self.api_market().closeTime < time() * 1000)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves true iff `{self.id_}` is closed ({self.api_market().question}).\n"
