@@ -72,9 +72,8 @@ for id_ in args.rm_id:
 
 if any((args.slug, args.id_, args.url)):
     if args.url:
-        args.slug = args.url.split('/')[-1]
-
-    if args.slug:
+        mkt = Market.from_url(args.url)
+    elif args.slug:
         mkt = Market.from_slug(args.slug)
     else:
         mkt = Market.from_id(args.id)

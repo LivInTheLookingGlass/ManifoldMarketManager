@@ -73,6 +73,12 @@ class Market:
         return MarketStatus.OPEN
 
     @classmethod
+    def from_url(cls, url: str, *args: Any, **kwargs: Any) -> Market:
+        """Reconstruct a Market object from the market url and other arguments."""
+        api_market = get_client().get_market_by_url(url)
+        return cls(api_market, *args, **kwargs)
+
+    @classmethod
     def from_slug(cls, slug: str, *args: Any, **kwargs: Any) -> Market:
         """Reconstruct a Market object from the market slug and other arguments."""
         api_market = get_client().get_market_by_slug(slug)
