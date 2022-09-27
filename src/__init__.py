@@ -64,35 +64,30 @@ class Rule(ABC, Generic[T], DictDeserializable):
         raise ValueError()
 
     def __binary_value(self, market: Market, ret: Any) -> float:
-        if not isinstance(ret, str) and isinstance(ret, Sequence) and len(ret) == 1:
-            ret = ret[0]
+        if not isinstance(ret, str) and isinstance(ret, Sequence):
+            (ret, ) = ret
         elif isinstance(ret, Mapping) and len(ret) == 1:
             ret = cast(Union[str, int, float], next(iter(ret.items()))[0])
 
         if isinstance(ret, (int, float, )):
             return ret
         elif isinstance(ret, str):
-            ret = float(ret)
-            if ret.is_integer():
-                return int(ret)
-            return cast(float, ret)
+            return float(ret)
 
         raise TypeError(ret, format, market)
 
     def __multiple_choice_value(self, market: Market, ret: Any) -> Mapping[int, float]:
         if isinstance(ret, Mapping):
             return {int(val): share for val, share in ret.items()}
-        elif isinstance(ret, Sequence) and len(ret) == 1:
-            ret = ret[0]
+        elif not isinstance(ret, str) and isinstance(ret, Sequence):
+            return normalize_mapping({int(val): 1 for val in ret})
 
         if isinstance(ret, str):
             return {int(ret): 1}
         elif isinstance(ret, int):
             return {ret: 1}
-        elif isinstance(ret, float):
-            if ret.is_integer():
-                return {int(ret): 1}
-            raise ValueError()
+        elif isinstance(ret, float) and ret.is_integer():
+            return {int(ret): 1}
 
         raise TypeError(ret, format, market)
 
@@ -139,14 +134,14 @@ class Rule(ABC, Generic[T], DictDeserializable):
 from . import market, rule, util  # noqa: E402
 from .market import Market  # noqa: E402
 from .rule import DoResolveRule, ResolutionValueRule  # noqa: E402
-from .util import dynamic_import, get_client, require_env, round_sig_figs  # noqa: E402
+from .util import dynamic_import, get_client, normalize_mapping, require_env, round_sig_figs  # noqa: E402
 
 register_adapter(rule.Rule, dumps)  # type: ignore
 register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.13"
+VERSION = "0.6.0.14"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "AnyResolution", "BinaryResolution", "DoResolveRule", "FreeResponseResolution",
