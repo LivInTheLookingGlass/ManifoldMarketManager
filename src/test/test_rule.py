@@ -32,6 +32,7 @@ if TYPE_CHECKING:  # pragma: no cover
     "manifold.time.OtherMarketClosed",
     "manifold.time.OtherMarketResolved",
     "manifold.value.OtherMarketValue",
+    "manifold.value.AmplifiedOddsRule",
     "manifold.value.CurrentValueRule",
     "manifold.value.FibonacciValueRule",
     "manifold.value.PopularValueRule",

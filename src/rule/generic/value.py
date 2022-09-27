@@ -119,7 +119,7 @@ class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
 class ResolveRandomSeed(ResolutionValueRule):
     """Abstract class that handles the nitty-gritty of the Random object."""
 
-    seed: Any
+    seed: None | int | float | str | bytes | bytearray = None
     method: str = 'random'
     rounds: int = 1
     args: Sequence[Any] = ()
