@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, cast
-from Manifold.src import BinaryResolution
 
 from pymanifold.lib import ManifoldClient
 
@@ -17,14 +16,16 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from pymanifold.types import Market as APIMarket
 
-    from ... import FreeResponseResolution, MultipleChoiceResolution
+    from ... import BinaryResolution, FreeResponseResolution, MultipleChoiceResolution
     from ...market import Market
 
 
 class OtherMarketValue(ManifoldMarketMixin, ResolutionValueRule):
-    def _value(self, market: Market) -> float | dict[Any, float]:
+    def _value(self, market: Market) -> BinaryResolution:
         mkt = self.api_market()
-        if mkt.outcomeType == "BINARY":
+        if mkt.resolution == "CANCEL":
+            return "CANCEL"
+        elif mkt.outcomeType == "BINARY":
             return self._binary_value(market, mkt)
         elif mkt.outcomeType == "PSEUDO_NUMERIC":
             return prob_to_number_cpmm1(

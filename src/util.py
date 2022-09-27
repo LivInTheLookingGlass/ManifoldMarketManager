@@ -71,9 +71,8 @@ def market_to_answer_map(
     RuntimeError
         If a non-supported market is fed
     """
-    if isinstance(market, APIMarket):
-        mkt: APIMarket = market
-    else:
+    mkt: APIMarket = market  # type: ignore[assignment]
+    if hasattr(market, 'market'):
         mkt = market.market
     if mkt.outcomeType == "FREE_RESPONSE":
         initial = {
