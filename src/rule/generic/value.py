@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass, field
+from os import urandom
 from random import Random
 from typing import TYPE_CHECKING, Dict, Union, cast
 
@@ -119,7 +120,7 @@ class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
 class ResolveRandomSeed(ResolutionValueRule):
     """Abstract class that handles the nitty-gritty of the Random object."""
 
-    seed: None | int | float | str | bytes | bytearray = None
+    seed: int | float | str | bytes | bytearray = urandom(16)
     method: str = 'random'
     rounds: int = 1
     args: Sequence[Any] = ()
@@ -142,7 +143,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
 
     def __init__(
         self,
-        seed: None | int | float | str | bytes | bytearray,
+        seed: int | float | str | bytes | bytearray,
         *args: Any,
         size: Optional[int] = None,
         start: int = 0,
