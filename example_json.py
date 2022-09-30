@@ -51,9 +51,7 @@ def date_deserialization_hook(json_dict):
     """JSON deserializer for datetime objects."""
     for key, value in json_dict.items():
         if isinstance(value, str):
-            if match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d*$', value):
-                json_dict[key] = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-            elif match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$', value):
+            if match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$', value):
                 json_dict[key] = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
             elif match(r'^\d{4}-\d{2}-\d{2}$', value):
                 json_dict[key] = datetime.strptime(value, "%Y-%m-%d")
@@ -78,21 +76,27 @@ class ManifoldRequest(DictDeserializable):
     answers: Optional[list[str]] = None
 
     def __post_init__(self):
-        if self.outcomeType == "BINARY":
-            if self.initialProb is None:
-                raise ValueError("Missing initial probability")
-
-        elif self.outcomeType == "PSEUDO_NUMERIC":
-            if None in (self.minValue, self.maxValue, self.isLogScale, self.initialValue):
-                raise ValueError("Need a minValue, maxValue, isLogScale, and initialValue")
-
-        elif self.outcomeType == "MULTIPLE_CHOICE":
-            if self.answers is None or len(self.answers) < 2 or any(len(x) < 1 for x in self.answers):
-                print(self.answers)
-                raise ValueError("Invalid answers list")
-
         if isinstance(self.closeTime, datetime):
             self.closeTime = round(self.closeTime.timestamp() * 1000)
+
+        if self.outcomeType == "BINARY":
+            self._validate_binary()
+        elif self.outcomeType == "PSEUDO_NUMERIC":
+            self.validate_pseudo_numeric()
+        elif self.outcomeType == "MULTIPLE_CHOICE":
+            self._validate_multiple_choice()
+
+    def _validate_binary(self) -> None:
+        if self.initialProb is None:
+            raise ValueError("Missing initial probability")
+
+    def _validate_pseudo_numeric(self) -> None:
+        if None in (self.minValue, self.maxValue, self.isLogScale, self.initialValue):
+            raise ValueError("Need a minValue, maxValue, isLogScale, and initialValue")
+
+    def _validate_multiple_choice(self) -> None:
+        if self.answers is None or len(self.answers) < 2 or any(len(x) < 1 for x in self.answers):
+            raise ValueError("Invalid answers list")
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -115,17 +119,17 @@ class CreationRequest:
                 time_rules=self.time_rules, value_rules=self.value_rules
             )
             for paragraph in explanation.splitlines():
-                if paragraph:
-                    s_par = paragraph.lstrip()
-                    self.manifold.description["content"].append({
-                        "type": "paragraph",
-                        "content": [{
-                            "type": "text",
-                            "text": "-" * (len(paragraph) - len(s_par)) + s_par
-                        }]
-                    })
-                else:
-                    self.manifold.description["content"].append({"type": "paragraph"})
+                # if paragraph:
+                s_par = paragraph.lstrip()
+                self.manifold.description["content"].append({
+                    "type": "paragraph",
+                    "content": [{
+                        "type": "text",
+                        "text": "-" * (len(paragraph) - len(s_par)) + s_par
+                    }]
+                })
+                # else:
+                #     self.manifold.description["content"].append({"type": "paragraph"})
             self.manifold.description["processed"] = True
 
     @classmethod
@@ -149,20 +153,20 @@ class CreationRequest:
         )
 
     def create(self):
+        """Create a market, given its request object."""
         client = get_client()
-        if self.manifold.outcomeType == "BINARY":
-            market = client.create_binary_market(**self.manifold.to_dict())
-
-        elif self.manifold.outcomeType == "PSEUDO_NUMERIC":
-            market = client.create_numeric_market(**self.manifold.to_dict())
-
-        elif self.manifold.outcomeType == "FREE_RESPONSE":
+        if self.manifold.outcomeType == "FREE_RESPONSE":  # requires extra actions
             market = client.create_free_response_market(**self.manifold.to_dict())
             for answer, weight in self.initial_values.items():
                 client.create_bet(market.id, weight, answer)
 
-        elif self.manifold.outcomeType == "MULTIPLE_CHOICE":
-            market = client.create_multiple_choice_market(**self.manifold.to_dict())
+        elif self.manifold.outcomeType in ("BINARY", "PSEUDO_NUMERIC", "MULTIPLE_CHOICE"):  # simple markets
+            func = {
+                "BINARY": client.create_binary_market,
+                "PSEUDO_NUMERIC": client.create_numeric_market,
+                "MULTIPLE_CHOICE": client.create_multiple_choice_market
+            }[self.manifold.outcomeType]
+            market = func(**self.manifold.to_dict())
 
         else:
             raise ValueError()
