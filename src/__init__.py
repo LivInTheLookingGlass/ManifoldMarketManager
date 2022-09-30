@@ -10,6 +10,7 @@ more information on this.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
 from logging import getLogger
 from os import getenv
 from pathlib import Path
@@ -23,6 +24,8 @@ _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
 
 from pymanifold.types import DictDeserializable  # noqa: E402
 
+from .util import time_cache  # noqa: E402
+
 BinaryResolution = Union[Literal["CANCEL"], bool, float]
 PseudoNumericResolution = Union[Literal["CANCEL"], float]
 FreeResponseResolution = Union[Literal["CANCEL"], Mapping[str, float], Mapping[int, float], Mapping[float, float]]
@@ -35,11 +38,14 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import Any
 
 
+@dataclass  # type: ignore
 class Rule(ABC, Generic[T], DictDeserializable):
     """The basic unit of market automation, rules defmine how a market should react to given events."""
 
-    def __init__(self) -> None:
-        self.logger: Logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
+    logger: Logger = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
 
     @abstractmethod
     def _value(
@@ -48,10 +54,12 @@ class Rule(ABC, Generic[T], DictDeserializable):
     ) -> T:  # pragma: no cover
         ...
 
+    @time_cache(seconds=30)
     def value(
         self,
         market: Market,
-        format: Literal['NONE', 'BINARY', 'PSEUDO_NUMERIC', 'FREE_RESPONSE', 'MULTIPLE_CHOICE'] = 'NONE'
+        format: Literal['NONE', 'BINARY', 'PSEUDO_NUMERIC', 'FREE_RESPONSE', 'MULTIPLE_CHOICE'] = 'NONE',
+        refresh: bool = False
     ) -> AnyResolution:
         """Return the resolution value of a market, appropriately formatted for its market type."""
         ret = self._value(market)
@@ -117,13 +125,13 @@ class Rule(ABC, Generic[T], DictDeserializable):
             elif not val:
                 ret += "NO)\n"
             else:
-                ret += round_sig_figs(cast(float, val) * 100)
+                ret += f"{round_sig_figs(cast(float, val))}%)\n"
         elif market.market.outcomeType == "PSEUDO_NUMERIC":
             ret += round_sig_figs(cast(float, val))
         elif market.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
-            assert not isinstance(val, (float, str))
+            val_ = cast(Mapping[int, float], val)
             ret += "{"
-            for idx, (key, weight) in enumerate(val.items()):
+            for idx, (key, weight) in enumerate(val_.items()):
                 if idx:
                     ret += ", "
                 ret += f"{key}: {round_sig_figs(weight * 100)}%"
@@ -141,7 +149,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.19"
+VERSION = "0.6.0.20"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "AnyResolution", "BinaryResolution", "DoResolveRule", "FreeResponseResolution",
