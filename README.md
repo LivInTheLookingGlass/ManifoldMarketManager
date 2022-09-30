@@ -375,3 +375,41 @@ TOTAL                                    1334    730    504     16    40%
     "notes": ""
 }
 ```
+
+### Derivative Market Example
+
+```javascript
+{
+    "manifold": {
+        "outcomeType": "BINARY",
+        "question": "(ABC does not call control of the House by midnight PT on election day) == (control will go to Democrats)",
+        "description": {
+            "type": "doc",
+            "content": [],
+            "processed": false
+        },
+        "closeTime": "2100-12-31T11:59:59",
+        "initialProb": 50
+    },
+    "time_rules": [
+        ["manifold.time.ThisMarketClosed", {}],
+        ["generic.time.BothRule", {
+            "rule1": ["manifold.time.OtherMarketClosed", {"url": "https://manifold.markets/BoltonBailey/will-abc-news-call-control-of-the-h"}],
+            "rule2": ["manifold.time.OtherMarketClosed", {"url": "https://manifold.markets/BoltonBailey/will-democrats-maintain-control-of"}]
+        }]
+    ],
+    "value_rules": [
+        [
+            "generic.time.XNORRule",
+            {
+                "rule1": [
+                    "generic.time.NegateRule",
+                    {"child": ["manifold.value.OtherMarketValue", {"url": "https://manifold.markets/BoltonBailey/will-abc-news-call-control-of-the-h"}]}
+                ],
+                "rule2": ["manifold.value.OtherMarketValue", {"url": "https://manifold.markets/BoltonBailey/will-democrats-maintain-control-of"}]
+            }
+        ]
+    ],
+    "notes": ""
+}
+```
