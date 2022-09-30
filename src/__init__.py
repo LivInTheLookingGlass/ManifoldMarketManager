@@ -87,9 +87,9 @@ class Rule(ABC, Generic[T], DictDeserializable):
     def __multiple_choice_value(self, market: Market, ret: Any) -> Mapping[int, float]:
         if isinstance(ret, Mapping):
             return {int(val): share for val, share in ret.items()}
-        elif isinstance(ret, int):
-            return {ret: 1}
-        elif isinstance(ret, str) or (isinstance(ret, float) and ret.is_integer()):
+        elif isinstance(ret, (int, str)):
+            return {int(ret): 1}
+        elif isinstance(ret, float) and ret.is_integer():
             return {int(ret): 1}
         elif isinstance(ret, Iterable):
             return normalize_mapping({int(val): 1 for val in ret})
@@ -146,7 +146,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.25"
+VERSION = "0.6.0.26"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "AnyResolution", "BinaryResolution", "DoResolveRule", "FreeResponseResolution",
