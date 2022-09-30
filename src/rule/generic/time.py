@@ -21,10 +21,11 @@ class NegateRule(UnaryRule[BinaryResolution]):
         return not self.child._value(market)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- If the rule below resolves False\n{self.child.explain_abstract(indent + 1, **kwargs)}"
+        return f"{'  ' * indent}- Resolve False if the below is True, and vice versa\n" +\
+               self.child.explain_abstract(indent + 1, **kwargs)
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        return f"{'  ' * indent}- If the rule below resolves False (-> {self.value(market)})\n" +\
+        return f"{'  ' * indent}-  (-> {self.value(market)})\n" +\
                self.child.explain_specific(market, indent + 1)
 
 
@@ -35,13 +36,14 @@ class EitherRule(BinaryRule[BinaryResolution]):
         return bool(self.rule1._value(market)) or bool(self.rule2._value(market))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- If either of the rules below resolves True\n"
+        ret = f"{'  ' * indent}- \n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = f"{'  ' * indent}- If either of the rules below resolves True (-> {self.value(market, format='NONE')})\n"
+        ret = (f"{'  ' * indent}- Resolve True if either of the below resolves True, otherwise resolve False (-> "
+               f"{self.value(market, format='NONE')})\n")
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
         return ret
@@ -54,13 +56,14 @@ class BothRule(BinaryRule[BinaryResolution]):
         return bool(self.rule1._value(market)) and bool(self.rule2._value(market))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- If both of the rules below resolves True\n"
+        ret = f"{'  ' * indent}- \n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = f"{'  ' * indent}- If both of the rules below resolves True (-> {self.value(market)})\n"
+        ret = (f"{'  ' * indent}- Resolve True if both of the below resolve to True, otherwise resolve False (-> "
+               f"{self.value(market)})\n")
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
         return ret
@@ -73,13 +76,14 @@ class NANDRule(BinaryRule[BinaryResolution]):
         return not (self.rule1._value(market) and self.rule2._value(market))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- If one or more of the rules below resolves False\n"
+        ret = f"{'  ' * indent}- \n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = f"{'  ' * indent}- If one or more of the rules below resolves False (-> {self.value(market)})\n"
+        ret = (f"{'  ' * indent}- Resolve True if one or more of the below resolves False, otherwise resolve False "
+               f"(-> {self.value(market)})\n")
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
         return ret
@@ -92,13 +96,14 @@ class NeitherRule(BinaryRule[BinaryResolution]):
         return not (self.rule1._value(market) or self.rule2._value(market))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- If both of the rules below resolves False\n"
+        ret = f"{'  ' * indent}- Resolve False if either of the below resolve to True, otherwise resolve True\n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = f"{'  ' * indent}- If both of the rules below resolves False (-> {self.value(market)})\n"
+        ret = (f"{'  ' * indent}- Resolve False if either of the below resolve to True, otherwise resolve True (-> "
+               f"{self.value(market)})\n")
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
         return ret
@@ -111,13 +116,14 @@ class XORRule(BinaryRule[BinaryResolution]):
         return bool(bool(self.rule1._value(market)) ^ bool(self.rule2._value(market)))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- If exactly one of the rules below resolves True\n"
+        ret = f"{'  ' * indent}- Resolve False if the below resolve to the same value, otherwise resolve True\n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = f"{'  ' * indent}- If exactly one of the rules below resolves True (-> {self.value(market)})\n"
+        ret = (f"{'  ' * indent}- Resolve False if the below resolve to the same value, otherwise resolve True (-> "
+               f"{self.value(market)})\n")
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
         return ret
@@ -130,13 +136,14 @@ class XNORRule(BinaryRule[BinaryResolution]):
         return bool(self.rule1._value(market)) == bool(self.rule2._value(market))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- If both of the rules below resolve to the same value\n"
+        ret = f"{'  ' * indent}- Resolve True if the below resolve to the same value, otherwise resolve False\n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = f"{'  ' * indent}- If both of the rules below resolve to the same value (-> {self.value(market)})\n"
+        ret = (f"{'  ' * indent}- Resolve True if the below resolve to the same value, otherwise resolve False (-> "
+               f"{self.value(market)})\n")
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
         return ret
@@ -149,13 +156,14 @@ class ImpliesRule(BinaryRule[BinaryResolution]):
         return not self.rule1._value(market) or bool(self.rule2._value(market))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- If next rule resolves False, or both below resolve True\n"
+        ret = f"{'  ' * indent}- \n"
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = f"{'  ' * indent}- If next rule resolves False, or both below resolve True (-> {self.value(market)})\n"
+        ret = (f"{'  ' * indent}- Resolve True if the next line resolves False, otherwise resolves to the value of "
+               f"the item after (-> {self.value(market)})\n")
         ret += self.rule1.explain_specific(market, indent + 1)
         ret += self.rule2.explain_specific(market, indent + 1)
         return ret
@@ -175,4 +183,4 @@ class ResolveAtTime(DoResolveRule):
             return datetime.now() >= self.resolve_at
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- If the current time is past {self.resolve_at}\n"
+        return f"{'  ' * indent}- Resolve True if the current time is past {self.resolve_at}, otherwise resolve False\n"

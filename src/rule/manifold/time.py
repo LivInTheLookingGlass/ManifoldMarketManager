@@ -20,7 +20,7 @@ class ThisMarketClosed(DoResolveRule):
         return bool(market.market.closeTime < time() * 1000)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- Resolves true iff this market is closed.\n"
+        return f"{'  ' * indent}- If this market reaches its close date\n"
 
 
 @dataclass
@@ -30,7 +30,7 @@ class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
         return bool(self.api_market().closeTime < time() * 1000)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- Resolves true iff `{self.id_}` is closed ({self.api_market().question}).\n"
+        return f"{'  ' * indent}- If `{self.id_}` closes ({self.api_market().question}).\n"
 
 
 @dataclass
@@ -40,4 +40,4 @@ class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
         return bool(self.api_market().isResolved)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- Resolves true iff `{self.id_}` is resolved ({self.api_market().question}).\n"
+        return f"{'  ' * indent}- If `{self.id_}` is resolved ({self.api_market().question}).\n"

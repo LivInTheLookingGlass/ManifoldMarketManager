@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, cast
 from pymanifold.lib import ManifoldClient
 
 from ...util import (fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1, prob_to_number_cpmm1,
-                     round_sig_figs)
+                     round_sig_figs, time_cache)
 from .. import ResolutionValueRule
 from ..generic.value import ResolveRandomSeed
 from . import ManifoldMarketMixin
@@ -20,31 +20,49 @@ if TYPE_CHECKING:  # pragma: no cover
     from ...market import Market
 
 
+@dataclass
 class OtherMarketValue(ManifoldMarketMixin, ResolutionValueRule):
+    @time_cache()
     def _value(self, market: Market) -> BinaryResolution:
         mkt = self.api_market()
         if mkt.resolution == "CANCEL":
             return "CANCEL"
         elif mkt.outcomeType == "BINARY":
-            return self._binary_value(market, mkt)
+            return self._binary_value(market, mkt) * 100
         elif mkt.outcomeType == "PSEUDO_NUMERIC":
             return prob_to_number_cpmm1(
-                mkt.resolutionProbability,
+                self._binary_value(market, mkt),
                 float(mkt.min or 0),
                 float(mkt.max or 0),
                 mkt.isLogScale
             )
         raise NotImplementedError("Doesn't seem to be reported in the API")
 
-    def _binary_value(self, market: Market, mkt: APIMarket) -> bool | float:
-        if mkt.resolution == "YES":
-            return True
-        elif mkt.resolution == "NO":
-            return False
-        return float(mkt.resolutionProbability) * 100
+    def _binary_value(self, market: Market, mkt: APIMarket) -> float:
+        if mkt.isResolved:
+            if mkt.resolution == "YES":
+                return True
+            elif mkt.resolution == "NO":
+                return False
+            return float(mkt.resolutionProbability)
+        return float(mkt.probability)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- Resolves to the current market value of {self.id_} ({self.api_market().question}).\n"
+        return (f"{'  ' * indent}- Resolved (or current, if not resolved) value of `{self.id_}` "
+                f"({self.api_market().question}).\n")
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        ret = (f"{'  ' * indent}- Resolved (or current, if not resolved) value of `{self.id_}` "
+               f"({self.api_market().question}) (-> ")
+        mkt = self.api_market()
+        val = self._value(market)
+        if val == "CANCEL":
+            ret += "CANCEL)\n"
+        else:
+            ret += f"{round_sig_figs(val, sig_figs)}"
+        if mkt.outcomeType == "BINARY":
+            ret += "%"
+        return ret + ")\n"
 
 
 @dataclass
@@ -79,43 +97,55 @@ class AmplifiedOddsRule(OtherMarketValue, ResolveRandomSeed):
 
     a: int = 1
 
+    @time_cache()
     def _value(self, market: Market) -> BinaryResolution:
-        val = OtherMarketValue._value(self, market)
+        val = OtherMarketValue._binary_value(self, market, self.api_market())
         if val is True:
             return True
         if val is False:
             if ResolveRandomSeed._value(self, market) < (1 / self.a):
                 return False
             return "CANCEL"
-        raise NotImplementedError()
+        return val / (val + (1 - val) / self.a) * 100
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- Amplified odds:\n"
         indent += 1
         ret += f"{'  ' * indent}- If the referenced market resolves YES, resolve YES\n"
-        ret += OtherMarketValue._explain_abstract(self, indent + 1, **kwargs)
-        ret += f"{'  ' * indent}- Otherwise, generate a random number using a predetermined seed\n"
-        ret += f"{'  ' * indent}- If it is less than `1 / a` ({self.a} -> ~{round_sig_figs(1 / self.a)}), resolve NO\n"
+        ret += super()._explain_abstract(indent + 1, **kwargs)
+        ret += f"{'  ' * indent}- If it resolved NO, generate a random number using a predetermined seed\n"
+        indent += 1
+        a_recip = round_sig_figs(1 / self.a)
+        ret += f"{'  ' * indent}- If the number is less than `1 / a` ({self.a} -> ~{a_recip}), resolve NO\n"
         ret += f"{'  ' * indent}- Otherwise, resolve N/A\n"
+        indent -= 1
+        ret += f"{'  ' * indent}- Otherwise, resolve to the equivalent price of the reference market\n"
         return ret
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = f"{'  ' * indent}- Amplified odds: (-> {self._value(market)})\n"
+        val = self._value(market)
+        ret = f"{'  ' * indent}- Amplified odds: (-> "
+        if val == "CANCEL":
+            ret += "CANCEL)\n"
+        else:
+            ret += f"{round_sig_figs(val, 4)}%)\n"
         indent += 1
-        ret += f"{'  ' * indent}- If the referenced market resolves YES, resolve YES\n"
-        ret += OtherMarketValue._explain_specific(self, market, indent + 1, sig_figs)
-        rand_val = ResolveRandomSeed._value(self, market)
-        ret += (f"{'  ' * indent}- Otherwise, generate a random number ({round_sig_figs(rand_val, sig_figs)}) using "
-                f"seed {self.seed!r}\n")
-        ret += (f"{'  ' * indent}- If it is less than `1 / a` ({self.a} -> {round_sig_figs(1 / self.a, sig_figs)}), "
-                "resolve NO\n")
+        ret += f"{'  ' * indent}- If the referenced market resolves True, resolve True\n"
+        ret += OtherMarketValue._explain_specific(cast(OtherMarketValue, super()), market, indent + 1, sig_figs)
+        ret += f"{'  ' * indent}- If it resolved NO, generate a random number using a predetermined seed\n"
+        indent += 1
+        a_recip = round_sig_figs(1 / self.a, sig_figs)
+        ret += f"{'  ' * indent}- If the number is less than `1 / a` ({self.a} -> ~{a_recip}), resolve NO\n"
         ret += f"{'  ' * indent}- Otherwise, resolve N/A\n"
+        indent -= 1
+        ret += f"{'  ' * indent}- Otherwise, resolve to the equivalent price of the reference market\n"
         return ret
 
 
 class CurrentValueRule(ResolutionValueRule):
     """Resolve to the current market-consensus value."""
 
+    @time_cache()
     def _value(self, market: Market) -> float | dict[Any, float]:
         if market.market.outcomeType == "BINARY":
             return cast(float, market.market.probability * 100)
@@ -141,6 +171,7 @@ class FibonacciValueRule(ResolutionValueRule):
     exclude: set[int] = field(default_factory=set)
     min_rewarded: float = 0.0001
 
+    @time_cache()
     def _value(self, market: Market) -> float | dict[Any, float]:
         items = market_to_answer_map(market, self.exclude, (lambda id_, probability: probability < self.min_rewarded))
         rank = sorted(items, key=items.__getitem__)
@@ -159,6 +190,7 @@ class FibonacciValueRule(ResolutionValueRule):
 class RoundValueRule(CurrentValueRule):
     """Resolve to the current market-consensus value, but rounded."""
 
+    @time_cache()
     def _value(self, market: Market) -> float:
         if market.market.outcomeType in ("MULTIPLE_CHOICE", "FREE_RESPONSE"):
             raise RuntimeError()
@@ -176,6 +208,7 @@ class PopularValueRule(ResolutionValueRule):
 
     size: int = 1
 
+    @time_cache()
     def _value(self, market: Market) -> FreeResponseResolution | MultipleChoiceResolution:
         answers = market_to_answer_map(market)
         final_answers: dict[int, float] = {}
@@ -196,6 +229,7 @@ class ResolveToUserProfit(CurrentValueRule):
     user: str
     field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
 
+    @time_cache()
     def _value(self, market: Market) -> float:
         user = ManifoldClient()._get_user_raw(self.user)
         return cast(float, user['profitCached'][self.field])
@@ -211,6 +245,7 @@ class ResolveToUserCreatedVolume(CurrentValueRule):
     user: str
     field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
 
+    @time_cache()
     def _value(self, market: Market) -> float:
         user = ManifoldClient()._get_user_raw(self.user)
         return cast(float, user['creatorVolumeCached'][self.field])

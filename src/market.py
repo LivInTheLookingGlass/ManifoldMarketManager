@@ -132,7 +132,7 @@ class Market:
             if val in defaults:
                 ret = defaults[val]
             else:
-                ret = round_sig_figs(cast(float, val) * 100, sig_figs)
+                ret = round_sig_figs(cast(float, val), sig_figs) + "%"
         elif self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
             assert not isinstance(val, (float, str))
             ret = "{"
@@ -140,7 +140,7 @@ class Market:
             for idx, (key, weight) in enumerate(val.items()):
                 ret += ", " * bool(idx)
                 ret += f"{key}: {round_sig_figs(weight * 100 / total, sig_figs)}%"
-            ret += "}\n"
+            ret += "}"
         else:
             ret = str(val)
         return ret
