@@ -17,7 +17,7 @@ from pathlib import Path
 from pickle import dumps, loads
 from sqlite3 import register_adapter, register_converter
 from sys import path as _sys_path
-from typing import TYPE_CHECKING, Generic, Literal, Mapping, Optional, Sequence, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Generic, Iterable, Literal, Mapping, Optional, Sequence, TypeVar, Union, cast
 from warnings import warn
 
 _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
@@ -87,15 +87,12 @@ class Rule(ABC, Generic[T], DictDeserializable):
     def __multiple_choice_value(self, market: Market, ret: Any) -> Mapping[int, float]:
         if isinstance(ret, Mapping):
             return {int(val): share for val, share in ret.items()}
-        elif not isinstance(ret, str) and isinstance(ret, Sequence):
-            return normalize_mapping({int(val): 1 for val in ret})
-
-        if isinstance(ret, str):
-            return {int(ret): 1}
         elif isinstance(ret, int):
             return {ret: 1}
-        elif isinstance(ret, float) and ret.is_integer():
+        elif isinstance(ret, str) or (isinstance(ret, float) and ret.is_integer()):
             return {int(ret): 1}
+        elif isinstance(ret, Iterable):
+            return normalize_mapping({int(val): 1 for val in ret})
 
         raise TypeError(ret, format, market)
 
@@ -149,7 +146,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.24"
+VERSION = "0.6.0.25"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "AnyResolution", "BinaryResolution", "DoResolveRule", "FreeResponseResolution",
