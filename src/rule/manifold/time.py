@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from time import time
 from typing import TYPE_CHECKING
 
+from ...util import time_cache
 from .. import DoResolveRule
 from . import ManifoldMarketMixin
 
@@ -14,6 +15,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 class ThisMarketClosed(DoResolveRule):
+    @time_cache()
     def _value(self, market: Market) -> bool:
         return bool(market.market.closeTime < time() * 1000)
 
@@ -23,6 +25,7 @@ class ThisMarketClosed(DoResolveRule):
 
 @dataclass
 class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
+    @time_cache()
     def _value(self, market: Market) -> bool:
         return bool(self.api_market().closeTime < time() * 1000)
 
@@ -32,6 +35,7 @@ class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
 
 @dataclass
 class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
+    @time_cache()
     def _value(self, market: Market) -> bool:
         return bool(self.api_market().isResolved)
 

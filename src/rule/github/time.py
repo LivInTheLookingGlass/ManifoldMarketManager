@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from ...util import require_env
+from ...util import require_env, time_cache
 from .. import DoResolveRule
 from . import login
 
@@ -21,6 +21,7 @@ class ResolveWithPR(DoResolveRule):
     repo: str
     number: int
 
+    @time_cache()
     @require_env("GithubAccessToken", "GithubUsername")
     def _value(self, market: Market) -> bool:
         """Return True if the issue is closed or the PR is merged, otherwise False."""

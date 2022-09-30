@@ -7,8 +7,9 @@ from math import log10
 from os import getenv
 from pathlib import Path
 from sys import modules
+from time import monotonic as time_monotonic
 from traceback import print_exc
-from typing import TYPE_CHECKING, Any, Mapping, cast
+from typing import TYPE_CHECKING, Any, Mapping
 
 from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
@@ -144,6 +145,24 @@ def round_sig_figs(num: float, sig_figs: int = 4) -> str:
 def round_sig_figs_f(num: float, sig_figs: int = 4) -> float:
     """Round a number to the specified number of significant figures, then return it as a float."""
     return float(round_sig_figs(num, sig_figs))
+
+
+def time_cache(seconds: float = 30) -> Callable[[Callable[..., T]], Callable[..., T]]:
+    """Cache the return value of a function for some number of seconds."""
+    def bar(func: Callable[..., T]) -> Callable[..., T]:
+        cached_time: float = 0
+        cached_value: T = None  # type: ignore[assignment]
+
+        def foo(*args: Any, **kwargs: Any) -> T:
+            nonlocal cached_value, cached_time
+            t = time_monotonic()
+            if cached_time + seconds < t:
+                cached_value = func(*args, **kwargs)
+                cached_time = t
+            return cached_value
+
+        return foo
+    return bar
 
 
 def require_env(*env: str) -> Callable[[Callable[..., T]], Callable[..., T]]:

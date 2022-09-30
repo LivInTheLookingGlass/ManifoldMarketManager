@@ -5,7 +5,7 @@ from os import getenv
 from github3 import GitHub
 from github3 import login as gh_login
 
-from ...util import require_env
+from ...util import require_env, time_cache
 
 __all__ = ('login', 'value', 'time', 'unauth_login')
 
@@ -15,6 +15,7 @@ def unauth_login() -> GitHub:
     return GitHub()
 
 
+@time_cache()
 @require_env('GithubAccessToken', 'GithubUsername')
 def login() -> GitHub:
     """Return an authorized login to GitHub."""

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING, cast
 
+from ...util import time_cache
 from .. import ResolutionValueRule
 from . import login
 
@@ -21,6 +22,7 @@ class ResolveToPR(ResolutionValueRule):
     repo: str
     number: int
 
+    @time_cache()
     def _value(self, market: Market) -> bool:
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
@@ -53,6 +55,7 @@ class ResolveToPRDelta(ResolutionValueRule):
     number: int
     start: datetime
 
+    @time_cache()
     def _value(self, market: Market) -> float:
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
