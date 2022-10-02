@@ -8,8 +8,7 @@ from typing import TYPE_CHECKING, Tuple, cast
 
 from .application import main, register_db
 from .market import Market
-from .rule.generic.time import ResolveAtTime
-from .rule.generic.value import ResolveRandomIndex
+from .rule.generic import ResolveAtTime, ResolveRandomIndex
 from .rule.github.time import ResolveWithPR
 from .rule.github.value import ResolveToPR, ResolveToPRDelta
 from .rule.manifold.value import CurrentValueRule, RoundValueRule

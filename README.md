@@ -196,25 +196,25 @@ TOTAL                                    1334    730    504     16    40%
     // the second entry is a dictionary of keyword arguments for the rule
     "time_rules": [  // rules for when to resolve a market
         [
-            "generic.time.ResolveAtTime",
+            "generic.ResolveAtTime",
             {"resolve_at": "2022-09-12T11:59:59"}
         ]
     ],
     "value_rules": [  // rules for what to resolve to
         [
-            "generic.value.ResolveMultipleValues",
+            "generic.ResolveMultipleValues",
             {
                 "shares": [  // format: [<serialized rule>, <relative weight>]
                     [
                         [
-                            "generic.value.ResolveToValue",
+                            "generic.ResolveToValue",
                             {"resolve_value": 0}
                         ],
                         1
                     ],
                     [
                         [
-                            "generic.value.ResolveRandomIndex",
+                            "generic.ResolveRandomIndex",
                             {
                                 "start": 1,
                                 "seed": "feijwaopfewa"
@@ -264,7 +264,7 @@ TOTAL                                    1334    730    504     16    40%
     },
     "time_rules": [
         [
-            "generic.time.ResolveAtTime",
+            "generic.ResolveAtTime",
             {"resolve_at": "2100-12-31T11:59:59"}
         ]
     ],
@@ -306,7 +306,7 @@ TOTAL                                    1334    730    504     16    40%
     },
     "time_rules": [
         [
-            "generic.time.ResolveAtTime",
+            "generic.ResolveAtTime",
             {"resolve_at": "2022-09-13T11:59:59"}
         ]
     ],
@@ -350,7 +350,7 @@ TOTAL                                    1334    730    504     16    40%
     },
     "time_rules": [
         [
-            "generic.time.ResolveAtTime",
+            "generic.ResolveAtTime",
             {"resolve_at": "2025-05-28T11:59:59"}
         ],
         [
@@ -393,17 +393,17 @@ TOTAL                                    1334    730    504     16    40%
     },
     "time_rules": [
         ["manifold.time.ThisMarketClosed", {}],
-        ["generic.time.BothRule", {
+        ["generic.BothRule", {
             "rule1": ["manifold.time.OtherMarketClosed", {"url": "https://manifold.markets/BoltonBailey/will-abc-news-call-control-of-the-h"}],
             "rule2": ["manifold.time.OtherMarketClosed", {"url": "https://manifold.markets/BoltonBailey/will-democrats-maintain-control-of"}]
         }]
     ],
     "value_rules": [
         [
-            "generic.time.XNORRule",
+            "generic.XNORRule",
             {
                 "rule1": [
-                    "generic.time.NegateRule",
+                    "generic.NegateRule",
                     {"child": ["manifold.value.OtherMarketValue", {"url": "https://manifold.markets/BoltonBailey/will-abc-news-call-control-of-the-h"}]}
                 ],
                 "rule2": ["manifold.value.OtherMarketValue", {"url": "https://manifold.markets/BoltonBailey/will-democrats-maintain-control-of"}]

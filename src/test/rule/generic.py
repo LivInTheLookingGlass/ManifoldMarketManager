@@ -5,9 +5,9 @@ from datetime import datetime, timedelta, timezone
 from itertools import chain, product
 from typing import TYPE_CHECKING, cast
 
-from .... import Rule
-from ....market import Market
-from ....rule.generic.time import BothRule, EitherRule, NegateRule, ResolveAtTime
+from ... import Rule
+from ...market import Market
+from ...rule.generic import BothRule, EitherRule, NegateRule, ResolveAtTime
 
 if TYPE_CHECKING:
     from typing import Any, Optional

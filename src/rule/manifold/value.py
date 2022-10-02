@@ -8,7 +8,7 @@ from pymanifold.lib import ManifoldClient
 from ...util import (fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1, prob_to_number_cpmm1,
                      round_sig_figs, time_cache)
 from .. import ResolutionValueRule
-from ..generic.value import ResolveRandomSeed
+from ..generic import ResolveRandomSeed
 from . import ManifoldMarketMixin
 
 if TYPE_CHECKING:  # pragma: no cover
