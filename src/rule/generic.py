@@ -28,8 +28,8 @@ class NegateRule(UnaryRule[BinaryResolution]):
                self.child.explain_abstract(indent + 1, **kwargs)
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        return f"{'  ' * indent}-  (-> {self.value(market)})\n" +\
-               self.child.explain_specific(market, indent + 1)
+        return (f"{'  ' * indent}- Resolve True if the below resolves False, otherwise resolve True (-> "
+                f"{self.value(market, format='NONE')})\n") + self.child.explain_specific(market, indent + 1, sig_figs)
 
 
 class EitherRule(BinaryRule[BinaryResolution]):
@@ -47,8 +47,8 @@ class EitherRule(BinaryRule[BinaryResolution]):
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         ret = (f"{'  ' * indent}- Resolve True if either of the below resolves True, otherwise resolve False (-> "
                f"{self.value(market, format='NONE')})\n")
-        ret += self.rule1.explain_specific(market, indent + 1)
-        ret += self.rule2.explain_specific(market, indent + 1)
+        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
+        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
         return ret
 
 
@@ -67,8 +67,8 @@ class BothRule(BinaryRule[BinaryResolution]):
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         ret = (f"{'  ' * indent}- Resolve True if both of the below resolve to True, otherwise resolve False (-> "
                f"{self.value(market)})\n")
-        ret += self.rule1.explain_specific(market, indent + 1)
-        ret += self.rule2.explain_specific(market, indent + 1)
+        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
+        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
         return ret
 
 
@@ -87,8 +87,8 @@ class NANDRule(BinaryRule[BinaryResolution]):
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         ret = (f"{'  ' * indent}- Resolve True if one or more of the below resolves False, otherwise resolve False "
                f"(-> {self.value(market)})\n")
-        ret += self.rule1.explain_specific(market, indent + 1)
-        ret += self.rule2.explain_specific(market, indent + 1)
+        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
+        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
         return ret
 
 
@@ -107,8 +107,8 @@ class NeitherRule(BinaryRule[BinaryResolution]):
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         ret = (f"{'  ' * indent}- Resolve False if either of the below resolve to True, otherwise resolve True (-> "
                f"{self.value(market)})\n")
-        ret += self.rule1.explain_specific(market, indent + 1)
-        ret += self.rule2.explain_specific(market, indent + 1)
+        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
+        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
         return ret
 
 
@@ -127,8 +127,8 @@ class XORRule(BinaryRule[BinaryResolution]):
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         ret = (f"{'  ' * indent}- Resolve False if the below resolve to the same value, otherwise resolve True (-> "
                f"{self.value(market)})\n")
-        ret += self.rule1.explain_specific(market, indent + 1)
-        ret += self.rule2.explain_specific(market, indent + 1)
+        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
+        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
         return ret
 
 
@@ -147,8 +147,8 @@ class XNORRule(BinaryRule[BinaryResolution]):
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         ret = (f"{'  ' * indent}- Resolve True if the below resolve to the same value, otherwise resolve False (-> "
                f"{self.value(market)})\n")
-        ret += self.rule1.explain_specific(market, indent + 1)
-        ret += self.rule2.explain_specific(market, indent + 1)
+        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
+        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
         return ret
 
 
@@ -167,8 +167,8 @@ class ImpliesRule(BinaryRule[BinaryResolution]):
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         ret = (f"{'  ' * indent}- Resolve True if the next line resolves False, otherwise resolves to the value of "
                f"the item after (-> {self.value(market)})\n")
-        ret += self.rule1.explain_specific(market, indent + 1)
-        ret += self.rule2.explain_specific(market, indent + 1)
+        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
+        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
         return ret
 
 
@@ -222,8 +222,8 @@ class ModulusRule(BinaryRule[PseudoNumericResolution]):
         if val != "CANCEL":
             val = round_sig_figs(cast(float, val), sig_figs)
         ret = f"{'  ' * indent}- A mod B, where A is the next line and B the line after (-> {val})\n"
-        ret += self.rule1.explain_specific(market, indent + 1)
-        ret += self.rule2.explain_specific(market, indent + 1)
+        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
+        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
         return ret
 
 
