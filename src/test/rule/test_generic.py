@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
 from itertools import chain, product
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, List, cast
 
 from ...market import Market
 from ...rule.generic import BothRule, EitherRule, NegateRule, ResolveAtTime, ResolveToValue
@@ -27,7 +27,7 @@ def test_either_rule_value() -> None:
     mock_obj2 = ResolveToValue(None)
     obj = EitherRule(mock_obj1, mock_obj2)
 
-    for val1, val2 in product(cast(list[bool], [True, False, None]), repeat=2):
+    for val1, val2 in product(cast(List[bool], [True, False, None]), repeat=2):
         mock_obj1.resolve_value = val1
         mock_obj2.resolve_value = val2
         assert bool(obj._value(cast(Market, None))) is bool(val1 or val2)
@@ -38,7 +38,7 @@ def test_both_rule_value() -> None:
     mock_obj2 = ResolveToValue(None)
     obj = BothRule(mock_obj1, mock_obj2)
 
-    for val1, val2 in product(cast(list[bool], [True, False, None]), repeat=2):
+    for val1, val2 in product(cast(List[bool], [True, False, None]), repeat=2):
         mock_obj1.resolve_value = val1
         mock_obj2.resolve_value = val2
         assert bool(obj._value(cast(Market, None))) is bool(val1 and val2)
