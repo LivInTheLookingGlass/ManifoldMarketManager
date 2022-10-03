@@ -11,7 +11,7 @@ from .market import Market
 from .rule.generic import ResolveAtTime, ResolveRandomIndex
 from .rule.github.time import ResolveWithPR
 from .rule.github.value import ResolveToPR, ResolveToPRDelta
-from .rule.manifold.value import CurrentValueRule, RoundValueRule
+from .rule.manifold.this import CurrentValueRule, RoundValueRule
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Optional

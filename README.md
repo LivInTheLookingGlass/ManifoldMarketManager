@@ -196,8 +196,8 @@ TOTAL                                    1334    730    504     16    40%
     // the second entry is a dictionary of keyword arguments for the rule
     "time_rules": [  // rules for when to resolve a market
         [
-            "generic.ResolveAtTime",
-            {"resolve_at": "2022-09-12T11:59:59"}
+            "manifold.this.ThisMarketClosed",
+            {}
         ]
     ],
     "value_rules": [  // rules for what to resolve to
@@ -264,12 +264,12 @@ TOTAL                                    1334    730    504     16    40%
     },
     "time_rules": [
         [
-            "generic.ResolveAtTime",
-            {"resolve_at": "2100-12-31T11:59:59"}
+            "maniifold.this.ThisMarketClosed",
+            {}
         ]
     ],
     "value_rules": [
-        ["manifold.value.CurrentValueRule", {}]
+        ["manifold.this.CurrentValueRule", {}]
     ],
     "notes": ""
 }
@@ -306,13 +306,13 @@ TOTAL                                    1334    730    504     16    40%
     },
     "time_rules": [
         [
-            "generic.ResolveAtTime",
-            {"resolve_at": "2022-09-13T11:59:59"}
+            "manifold.this.ThisMarketClosed",
+            {}
         ]
     ],
     "value_rules": [
         [
-            "manifold.value.CurrentValueRule",
+            "manifold.this.CurrentValueRule",
             {}
         ]
     ],
@@ -350,7 +350,7 @@ TOTAL                                    1334    730    504     16    40%
     },
     "time_rules": [
         [
-            "generic.ResolveAtTime",
+            "manifold.this.ThisMarketClosed",
             {"resolve_at": "2025-05-28T11:59:59"}
         ],
         [
@@ -392,10 +392,10 @@ TOTAL                                    1334    730    504     16    40%
         "initialProb": 50
     },
     "time_rules": [
-        ["manifold.time.ThisMarketClosed", {}],
+        ["manifold.this.ThisMarketClosed", {}],
         ["generic.BothRule", {
-            "rule1": ["manifold.time.OtherMarketClosed", {"url": "https://manifold.markets/BoltonBailey/will-abc-news-call-control-of-the-h"}],
-            "rule2": ["manifold.time.OtherMarketClosed", {"url": "https://manifold.markets/BoltonBailey/will-democrats-maintain-control-of"}]
+            "rule1": ["manifold.other.OtherMarketClosed", {"url": "https://manifold.markets/BoltonBailey/will-abc-news-call-control-of-the-h"}],
+            "rule2": ["manifold.other.OtherMarketClosed", {"url": "https://manifold.markets/BoltonBailey/will-democrats-maintain-control-of"}]
         }]
     ],
     "value_rules": [
@@ -404,9 +404,9 @@ TOTAL                                    1334    730    504     16    40%
             {
                 "rule1": [
                     "generic.NegateRule",
-                    {"child": ["manifold.value.OtherMarketValue", {"url": "https://manifold.markets/BoltonBailey/will-abc-news-call-control-of-the-h"}]}
+                    {"child": ["manifold.other.OtherMarketValue", {"url": "https://manifold.markets/BoltonBailey/will-abc-news-call-control-of-the-h"}]}
                 ],
-                "rule2": ["manifold.value.OtherMarketValue", {"url": "https://manifold.markets/BoltonBailey/will-democrats-maintain-control-of"}]
+                "rule2": ["manifold.other.OtherMarketValue", {"url": "https://manifold.markets/BoltonBailey/will-democrats-maintain-control-of"}]
             }
         ]
     ],

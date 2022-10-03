@@ -3,71 +3,18 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from os import urandom
-from random import Random
-from sys import modules
 from typing import TYPE_CHECKING, Dict, Union, cast
 
+from .. import BinaryResolution, PseudoNumericResolution
 from ..util import normalize_mapping, round_sig_figs
-from .. import BinaryResolution, PseudoNumericResolution, Rule, T
 from . import DoResolveRule, ResolutionValueRule, get_rule
-
-modules[__name__].time = modules[__name__]  # type: ignore
-modules[__name__].value = modules[__name__]  # type: ignore
+from .abstract import BinaryRule, ResolveRandomSeed, UnaryRule, VariadicRule
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, DefaultDict, Literal, Mapping, MutableSequence, Optional, Sequence
+    from typing import Any, DefaultDict, Literal, Mapping, MutableSequence, Optional
 
     from .. import AnyResolution, FreeResponseResolution, MultipleChoiceResolution
     from ..market import Market
-
-
-@dataclass  # type: ignore
-class UnaryRule(Rule[T]):
-    """Perform a unary operation on another DoResolveRule."""
-
-    child: Rule[T]
-
-    @classmethod
-    def from_dict(cls, env: Mapping[str, Any]) -> 'UnaryRule[T]':
-        """Take a dictionary and return an instance of the associated class."""
-        env_copy = dict(env)
-        type_, kwargs = env["child"]
-        env_copy["child"] = get_rule(type_).from_dict(kwargs)
-        return cast(UnaryRule[T], super().from_dict(env_copy))
-
-
-@dataclass  # type: ignore
-class BinaryRule(Rule[T]):
-    """Perform a binary operation on two Rules."""
-
-    rule1: Rule[T]
-    rule2: Rule[T]
-
-    @classmethod
-    def from_dict(cls, env: Mapping[str, Any]) -> 'BinaryRule[T]':
-        """Take a dictionary and return an instance of the associated class."""
-        env_copy = dict(env)
-        for name in ('rule1', 'rule2'):
-            type_, kwargs = env[name]
-            env_copy[name] = get_rule(type_).from_dict(kwargs)
-        return cast(BinaryRule[T], super().from_dict(env_copy))
-
-
-@dataclass  # type: ignore
-class VariadicRule(Rule[T]):
-    """Perform a variadic operation on many Rules."""
-
-    rules: list[Rule[T]] = field(default_factory=list)
-
-    @classmethod
-    def from_dict(cls, env: Mapping[str, Any]) -> 'VariadicRule[T]':
-        """Take a dictionary and return an instance of the associated class."""
-        env_copy = dict(env)
-        arr = env["rules"]
-        for idx, (type_, kwargs) in enumerate(arr):
-            env_copy["rules"][idx] = get_rule(type_).from_dict(kwargs)
-        return cast(VariadicRule[T], super().from_dict(env_copy))
 
 
 class NegateRule(UnaryRule[BinaryResolution]):
@@ -337,24 +284,6 @@ class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
         ret = f"{'  ' * indent}- The product of the below (-> {val})\n"
         for rule in self.rules:
             ret += rule.explain_specific(market, indent + 1, sig_figs)
-        return ret
-
-
-@dataclass  # type: ignore
-class ResolveRandomSeed(ResolutionValueRule):
-    """Abstract class that handles the nitty-gritty of the Random object."""
-
-    seed: int | float | str | bytes | bytearray = urandom(16)
-    method: str = 'random'
-    rounds: int = 1
-    args: Sequence[Any] = ()
-    kwargs: dict[str, Any] = field(default_factory=dict)
-
-    def _value(self, market: Market) -> Any:
-        source = Random(self.seed)
-        method = getattr(source, self.method)
-        for _ in range(self.rounds):
-            ret = method(*self.args, **self.kwargs)
         return ret
 
 

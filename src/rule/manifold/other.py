@@ -1,23 +1,41 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from time import time
 from typing import TYPE_CHECKING, cast
 
-from pymanifold.lib import ManifoldClient
-
-from ...util import (fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1, prob_to_number_cpmm1,
-                     round_sig_figs, time_cache)
-from .. import ResolutionValueRule
-from ..generic import ResolveRandomSeed
+from ...util import prob_to_number_cpmm1, round_sig_figs, time_cache
+from .. import DoResolveRule, ResolutionValueRule
+from ..abstract import ResolveRandomSeed
 from . import ManifoldMarketMixin
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Literal
+    from typing import Any
 
     from pymanifold.types import Market as APIMarket
 
-    from ... import BinaryResolution, FreeResponseResolution, MultipleChoiceResolution
+    from ... import BinaryResolution
     from ...market import Market
+
+
+@dataclass
+class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
+    @time_cache()
+    def _value(self, market: Market) -> bool:
+        return bool(self.api_market().closeTime < time() * 1000)
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        return f"{'  ' * indent}- If `{self.id_}` closes ({self.api_market().question}).\n"
+
+
+@dataclass
+class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
+    @time_cache()
+    def _value(self, market: Market) -> bool:
+        return bool(self.api_market().isResolved)
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        return f"{'  ' * indent}- If `{self.id_}` is resolved ({self.api_market().question}).\n"
 
 
 @dataclass
@@ -140,115 +158,3 @@ class AmplifiedOddsRule(OtherMarketValue, ResolveRandomSeed):
         indent -= 1
         ret += f"{'  ' * indent}- Otherwise, resolve to the equivalent price of the reference market\n"
         return ret
-
-
-class CurrentValueRule(ResolutionValueRule):
-    """Resolve to the current market-consensus value."""
-
-    @time_cache()
-    def _value(self, market: Market) -> float | dict[Any, float]:
-        if market.market.outcomeType == "BINARY":
-            return cast(float, market.market.probability * 100)
-        elif market.market.outcomeType == "PSEUDO_NUMERIC":
-            return pool_to_number_cpmm1(
-                market.market.pool['YES'],
-                market.market.pool['NO'],
-                market.market.p,
-                float(market.market.min or 0),
-                float(market.market.max or 0),
-                market.market.isLogScale
-            )
-        return market_to_answer_map(market)
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- Resolves to the current market value.\n"
-
-
-@dataclass
-class FibonacciValueRule(ResolutionValueRule):
-    """Resolve each value with a fibonacci weight, ranked by probability."""
-
-    exclude: set[int] = field(default_factory=set)
-    min_rewarded: float = 0.0001
-
-    @time_cache()
-    def _value(self, market: Market) -> float | dict[Any, float]:
-        items = market_to_answer_map(market, self.exclude, (lambda id_, probability: probability < self.min_rewarded))
-        rank = sorted(items, key=items.__getitem__)
-        ret = {item: fib for item, fib in zip(rank, fibonacci())}
-        return normalize_mapping(ret)
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- Weight each* answer to the fibonacci rank of their probability\n"
-        block = '  ' * (indent + 1)
-        ret += f"{block}- Filter out IDs in {self.exclude}, probabilities below {self.min_rewarded * 100}%\n"
-        ret += f"{block}- Sort by probability\n"
-        ret += f"{block}- Iterate over this and the fibonacci numbers in lockstep. Those are the weights\n"
-        return ret
-
-
-class RoundValueRule(CurrentValueRule):
-    """Resolve to the current market-consensus value, but rounded."""
-
-    @time_cache()
-    def _value(self, market: Market) -> float:
-        if market.market.outcomeType in ("MULTIPLE_CHOICE", "FREE_RESPONSE"):
-            raise RuntimeError()
-        elif market.market.outcomeType == "BINARY":
-            return bool(round(market.market.probability))
-        return round(cast(float, super()._value(market)))
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- Resolves to round(MKT).\n"
-
-
-@dataclass
-class PopularValueRule(ResolutionValueRule):
-    """Resolve to the n most likely market-consensus values, weighted by their probability."""
-
-    size: int = 1
-
-    @time_cache()
-    def _value(self, market: Market) -> FreeResponseResolution | MultipleChoiceResolution:
-        answers = market_to_answer_map(market)
-        final_answers: dict[int, float] = {}
-        for _ in range(self.size):
-            next_answer = max(answers, key=answers.__getitem__)
-            final_answers[next_answer] = answers[next_answer]
-            del answers[next_answer]
-        return normalize_mapping(final_answers)
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- Resolves to the {self.size} most probable answers, weighted by their probability.\n"
-
-
-@dataclass
-class ResolveToUserProfit(CurrentValueRule):
-    """Resolve to the currently reported profit of a user."""
-
-    user: str
-    field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
-
-    @time_cache()
-    def _value(self, market: Market) -> float:
-        user = ManifoldClient()._get_user_raw(self.user)
-        return cast(float, user['profitCached'][self.field])
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- Resolves to the current reported {self.field} profit of user {self.user}.\n"
-
-
-@dataclass
-class ResolveToUserCreatedVolume(CurrentValueRule):
-    """Resolve to the currently reported created market volume of a user."""
-
-    user: str
-    field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
-
-    @time_cache()
-    def _value(self, market: Market) -> float:
-        user = ManifoldClient()._get_user_raw(self.user)
-        return cast(float, user['creatorVolumeCached'][self.field])
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- Resolves to the current reported {self.field} market volume created by {self.user}.\n"

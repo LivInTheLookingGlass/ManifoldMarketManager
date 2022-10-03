@@ -11,7 +11,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from pymanifold.lib import ManifoldClient
     from pymanifold.types import Market as APIMarket
 
-__all__ = ('time', 'value', 'ManifoldMarketMixin')
+__all__ = ('this', 'other', 'user', 'ManifoldMarketMixin')
 
 
 @dataclass
@@ -36,4 +36,4 @@ class ManifoldMarketMixin:
         return client.get_market_by_id(self.id_)
 
 
-from . import time, value  # noqa: E402
+from . import other, this, user  # noqa: E402
