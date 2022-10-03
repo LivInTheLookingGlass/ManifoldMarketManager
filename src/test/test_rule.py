@@ -28,6 +28,9 @@ if TYPE_CHECKING:  # pragma: no cover
     "generic.ResolveRandomSeed",
     "generic.ResolveRandomIndex",
     "generic.ResolveMultipleValues",
+    "github.ResolveWithPR",
+    "github.ResolveToPR",
+    "github.ResolveToPRDelta",
     "manifold.this.CurrentValueRule",
     "manifold.this.FibonacciValueRule",
     "manifold.this.PopularValueRule",
@@ -38,9 +41,6 @@ if TYPE_CHECKING:  # pragma: no cover
     "manifold.other.OtherMarketValue",
     "manifold.user.ResolveToUserProfit",
     "manifold.user.ResolveToUserCreatedVolume",
-    "github.time.ResolveWithPR",
-    "github.value.ResolveToPR",
-    "github.value.ResolveToPRDelta",
 ))
 def rule_name(request: PytestRequest[str]) -> str:
     """Return the name of an existing rule."""

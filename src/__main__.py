@@ -9,8 +9,7 @@ from typing import TYPE_CHECKING, Tuple, cast
 from .application import main, register_db
 from .market import Market
 from .rule.generic import ResolveAtTime, ResolveRandomIndex
-from .rule.github.time import ResolveWithPR
-from .rule.github.value import ResolveToPR, ResolveToPRDelta
+from .rule.github import ResolveToPR, ResolveToPRDelta, ResolveWithPR
 from .rule.manifold.this import CurrentValueRule, RoundValueRule
 
 if TYPE_CHECKING:  # pragma: no cover

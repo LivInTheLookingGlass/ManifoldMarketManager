@@ -264,7 +264,7 @@ TOTAL                                    1334    730    504     16    40%
     },
     "time_rules": [
         [
-            "maniifold.this.ThisMarketClosed",
+            "manifold.this.ThisMarketClosed",
             {}
         ]
     ],
@@ -354,7 +354,7 @@ TOTAL                                    1334    730    504     16    40%
             {"resolve_at": "2025-05-28T11:59:59"}
         ],
         [
-            "github.time.ResolveWithPR",
+            "github.ResolveWithPR",
             {
                 "owner": "manifoldmarkets",
                 "repo": "manifold",
@@ -364,7 +364,7 @@ TOTAL                                    1334    730    504     16    40%
     ],
     "value_rules": [
         [
-            "github.value.ResolveToPRDelta",
+            "github.ResolveToPRDelta",
             {
                 "owner": "manifoldmarkets",
                 "repo": "manifold",

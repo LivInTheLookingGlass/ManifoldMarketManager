@@ -10,8 +10,8 @@ from .. import DoResolveRule, ResolutionValueRule
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any
 
-    from ...market import Market
     from ... import FreeResponseResolution, MultipleChoiceResolution
+    from ...market import Market
 
 
 class ThisMarketClosed(DoResolveRule):
