@@ -72,7 +72,7 @@ test_%:
 
 .PHONY: _test
 _test:
-	@source env_personal.sh && PYTHONPATH=${PYTHONPATH}:./src/PyManifold $(PY) -m pytest src $(pytest_args) -k 'not mypy-status' --ignore=./src/PyManifold --ignore=./src/test/manifold
+	@source env_personal.sh && PYTHONPATH=${PYTHONPATH}:./src/PyManifold $(PY) -m pytest src $(pytest_args) -k 'not mypy-status' --ignore=./src/test/manifold
 
 .PHONY: dependencies
 ifeq ($(MYPY),true)
