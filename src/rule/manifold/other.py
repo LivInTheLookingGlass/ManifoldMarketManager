@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from time import time
 from typing import TYPE_CHECKING, cast
+
+from attrs import define
 
 from ...util import prob_to_number_cpmm1, round_sig_figs, time_cache
 from .. import DoResolveRule, ResolutionValueRule
@@ -18,7 +19,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from ...market import Market
 
 
-@dataclass
+@define
 class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
     @time_cache()
     def _value(self, market: Market) -> bool:
@@ -28,7 +29,7 @@ class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
         return f"{'  ' * indent}- If `{self.id_}` closes ({self.api_market().question}).\n"
 
 
-@dataclass
+@define
 class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
     @time_cache()
     def _value(self, market: Market) -> bool:
@@ -38,7 +39,7 @@ class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
         return f"{'  ' * indent}- If `{self.id_}` is resolved ({self.api_market().question}).\n"
 
 
-@dataclass
+@define
 class OtherMarketValue(ManifoldMarketMixin, ResolutionValueRule):
     @time_cache()
     def _value(self, market: Market) -> BinaryResolution:
@@ -83,7 +84,7 @@ class OtherMarketValue(ManifoldMarketMixin, ResolutionValueRule):
         return ret + ")\n"
 
 
-@dataclass
+@define
 class AmplifiedOddsRule(OtherMarketValue, ResolveRandomSeed):
     """Immitate the amplified odds scheme deployed by @Tetraspace.
 
@@ -114,6 +115,17 @@ class AmplifiedOddsRule(OtherMarketValue, ResolveRandomSeed):
     """
 
     a: int = 1
+
+    # def __init__(
+    #     self,
+    #     seed: int | float | str | bytes | bytearray = urandom(16),
+    #     rounds: int = 1,
+    #     id_: Optional[str] = None,
+    #     slug: Optional[str] = None,
+    #     url: Optional[str] = None
+    # ) -> None:
+    #     ResolveRandomSeed.__init__(self, seed=seed, rounds=rounds)
+    #     OtherMarketValue.__init__(self, id_=id_, slug=slug, url=url)
 
     @time_cache()
     def _value(self, market: Market) -> BinaryResolution:

@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from os import urandom
 from random import Random
 from typing import TYPE_CHECKING, cast
+
+from attrs import Factory, define
 
 from .. import Rule, T
 from . import ResolutionValueRule, get_rule
@@ -14,7 +15,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from ..market import Market
 
 
-@dataclass  # type: ignore
+@define  # type: ignore
 class UnaryRule(Rule[T]):
     """Perform a unary operation on another DoResolveRule."""
 
@@ -29,7 +30,7 @@ class UnaryRule(Rule[T]):
         return cast(UnaryRule[T], super().from_dict(env_copy))
 
 
-@dataclass  # type: ignore
+@define  # type: ignore
 class BinaryRule(Rule[T]):
     """Perform a binary operation on two Rules."""
 
@@ -46,11 +47,11 @@ class BinaryRule(Rule[T]):
         return cast(BinaryRule[T], super().from_dict(env_copy))
 
 
-@dataclass  # type: ignore
+@define  # type: ignore
 class VariadicRule(Rule[T]):
     """Perform a variadic operation on many Rules."""
 
-    rules: list[Rule[T]] = field(default_factory=list)
+    rules: list[Rule[T]] = Factory(list)
 
     @classmethod
     def from_dict(cls, env: Mapping[str, Any]) -> 'VariadicRule[T]':
@@ -62,7 +63,7 @@ class VariadicRule(Rule[T]):
         return cast(VariadicRule[T], super().from_dict(env_copy))
 
 
-@dataclass  # type: ignore
+@define  # type: ignore
 class ResolveRandomSeed(ResolutionValueRule):
     """Abstract class that handles the nitty-gritty of the Random object."""
 
@@ -70,7 +71,7 @@ class ResolveRandomSeed(ResolutionValueRule):
     method: str = 'random'
     rounds: int = 1
     args: Sequence[Any] = ()
-    kwargs: dict[str, Any] = field(default_factory=dict)
+    kwargs: dict[str, Any] = Factory(dict)
 
     def _value(self, market: Market) -> Any:
         source = Random(self.seed)

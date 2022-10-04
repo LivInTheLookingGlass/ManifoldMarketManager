@@ -10,7 +10,6 @@ more information on this.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
 from logging import getLogger
 from os import getenv
 from pathlib import Path
@@ -19,6 +18,8 @@ from sqlite3 import register_adapter, register_converter
 from sys import path as _sys_path
 from typing import TYPE_CHECKING, Generic, Iterable, Literal, Mapping, Optional, Sequence, TypeVar, Union, cast
 from warnings import warn
+
+from attrs import define, field
 
 _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
 
@@ -38,13 +39,13 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import Any
 
 
-@dataclass  # type: ignore
+@define  # type: ignore
 class Rule(ABC, Generic[T], DictDeserializable):
     """The basic unit of market automation, rules defmine how a market should react to given events."""
 
     logger: Logger = field(init=False)
 
-    def __post_init__(self) -> None:
+    def __attrs_post_init__(self) -> None:
         self.logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
 
     @abstractmethod
@@ -146,7 +147,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.34"
+VERSION = "0.6.0.35"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "AnyResolution", "BinaryResolution", "DoResolveRule", "FreeResponseResolution",

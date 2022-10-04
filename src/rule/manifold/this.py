@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from time import time
 from typing import TYPE_CHECKING, cast
+
+from attrs import Factory, define
 
 from ...util import fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1, time_cache
 from .. import DoResolveRule, ResolutionValueRule
@@ -14,6 +15,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from ...market import Market
 
 
+@define
 class ThisMarketClosed(DoResolveRule):
     @time_cache()
     def _value(self, market: Market) -> bool:
@@ -23,6 +25,7 @@ class ThisMarketClosed(DoResolveRule):
         return f"{'  ' * indent}- If this market reaches its close date\n"
 
 
+@define
 class CurrentValueRule(ResolutionValueRule):
     """Resolve to the current market-consensus value."""
 
@@ -45,11 +48,11 @@ class CurrentValueRule(ResolutionValueRule):
         return f"{'  ' * indent}- Resolves to the current market value.\n"
 
 
-@dataclass
+@define
 class FibonacciValueRule(ResolutionValueRule):
     """Resolve each value with a fibonacci weight, ranked by probability."""
 
-    exclude: set[int] = field(default_factory=set)
+    exclude: set[int] = Factory(set)
     min_rewarded: float = 0.0001
 
     @time_cache()
@@ -68,6 +71,7 @@ class FibonacciValueRule(ResolutionValueRule):
         return ret
 
 
+@define
 class RoundValueRule(CurrentValueRule):
     """Resolve to the current market-consensus value, but rounded."""
 
@@ -83,7 +87,7 @@ class RoundValueRule(CurrentValueRule):
         return f"{'  ' * indent}- Resolves to round(MKT).\n"
 
 
-@dataclass
+@define
 class PopularValueRule(ResolutionValueRule):
     """Resolve to the n most likely market-consensus values, weighted by their probability."""
 

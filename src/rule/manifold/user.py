@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import TYPE_CHECKING, cast
 
+from attrs import define
 from pymanifold.lib import ManifoldClient
 
 from ...util import time_cache
@@ -14,7 +14,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from ...market import Market
 
 
-@dataclass
+@define
 class ResolveToUserProfit(ResolutionValueRule):
     """Resolve to the currently reported profit of a user."""
 
@@ -30,7 +30,7 @@ class ResolveToUserProfit(ResolutionValueRule):
         return f"{'  ' * indent}- Resolves to the current reported {self.field} profit of user {self.user}.\n"
 
 
-@dataclass
+@define
 class ResolveToUserCreatedVolume(ResolutionValueRule):
     """Resolve to the currently reported created market volume of a user."""
 

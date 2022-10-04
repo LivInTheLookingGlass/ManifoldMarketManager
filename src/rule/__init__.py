@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from importlib import import_module
 from typing import Any, Type, cast
+
+from attrs import define
 
 from .. import AnyResolution, Rule
 from ..util import dynamic_import
@@ -19,12 +20,12 @@ def get_rule(type_: str) -> Type[Rule[Any]]:
     raise NameError()
 
 
-@dataclass  # type: ignore
+@define  # type: ignore
 class DoResolveRule(Rule[bool]):
     """The subtype of rule which determines if a market should resolve, returning a bool."""
 
 
-@dataclass  # type: ignore
+@define  # type: ignore
 class ResolutionValueRule(Rule[AnyResolution]):
     """The subtype of rule which determines what a market should resolve to."""
 

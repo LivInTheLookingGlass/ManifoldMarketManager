@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from datetime import datetime, timezone
 from os import getenv
 from typing import TYPE_CHECKING, cast
 
+from attrs import define
 from github3 import GitHub
 from github3 import login as gh_login
 
@@ -29,7 +29,7 @@ def login() -> GitHub:
     return gh_login(username=getenv('GithubUsername'), token=getenv('GithubAccessToken'))
 
 
-@dataclass
+@define
 class ResolveWithPR(DoResolveRule):
     """Return True if the specified PR was merged in the past."""
 
@@ -58,7 +58,7 @@ class ResolveWithPR(DoResolveRule):
         return ret
 
 
-@dataclass
+@define
 class ResolveToPR(ResolutionValueRule):
     """Resolve to True if the PR is merged, otherwise False."""
 
@@ -90,7 +90,7 @@ class ResolveToPR(ResolutionValueRule):
                 f"{merge_time is not None})\n")
 
 
-@dataclass
+@define
 class ResolveToPRDelta(ResolutionValueRule):
     """Resolve to the fractional number of days between start and merged date or, if not merged, MAX."""
 

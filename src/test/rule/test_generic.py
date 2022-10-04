@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, List, cast
 from ...market import Market
 from ...rule.generic import BothRule, EitherRule, NegateRule, ResolveAtTime, ResolveToValue
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     ...
 
 

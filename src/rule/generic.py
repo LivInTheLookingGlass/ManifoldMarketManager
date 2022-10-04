@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Dict, Union, cast
+
+from attrs import Factory, define
 
 from .. import BinaryResolution, PseudoNumericResolution
 from ..util import normalize_mapping, round_sig_figs
@@ -17,6 +18,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from ..market import Market
 
 
+@define
 class NegateRule(UnaryRule[BinaryResolution]):
     """Negate another DoResolveRule."""
 
@@ -32,6 +34,7 @@ class NegateRule(UnaryRule[BinaryResolution]):
                 f"{self.value(market, format='NONE')})\n") + self.child.explain_specific(market, indent + 1, sig_figs)
 
 
+@define
 class EitherRule(BinaryRule[BinaryResolution]):
     """Return the OR of two other DoResolveRules."""
 
@@ -52,6 +55,7 @@ class EitherRule(BinaryRule[BinaryResolution]):
         return ret
 
 
+@define
 class BothRule(BinaryRule[BinaryResolution]):
     """Return the AND of two other DoResolveRules."""
 
@@ -72,6 +76,7 @@ class BothRule(BinaryRule[BinaryResolution]):
         return ret
 
 
+@define
 class NANDRule(BinaryRule[BinaryResolution]):
     """Return the NAND of two other DoResolveRules."""
 
@@ -92,6 +97,7 @@ class NANDRule(BinaryRule[BinaryResolution]):
         return ret
 
 
+@define
 class NeitherRule(BinaryRule[BinaryResolution]):
     """Return the NOR of two other DoResolveRules."""
 
@@ -112,6 +118,7 @@ class NeitherRule(BinaryRule[BinaryResolution]):
         return ret
 
 
+@define
 class XORRule(BinaryRule[BinaryResolution]):
     """Return the XOR of two other DoResolveRules."""
 
@@ -132,6 +139,7 @@ class XORRule(BinaryRule[BinaryResolution]):
         return ret
 
 
+@define
 class XNORRule(BinaryRule[BinaryResolution]):
     """Return the XNOR of two other DoResolveRules."""
 
@@ -152,6 +160,7 @@ class XNORRule(BinaryRule[BinaryResolution]):
         return ret
 
 
+@define
 class ImpliesRule(BinaryRule[BinaryResolution]):
     """Return the implication of two other DoResolveRules."""
 
@@ -172,7 +181,7 @@ class ImpliesRule(BinaryRule[BinaryResolution]):
         return ret
 
 
-@dataclass
+@define
 class ResolveAtTime(DoResolveRule):
     """Return True if the specified time is in the past."""
 
@@ -189,7 +198,7 @@ class ResolveAtTime(DoResolveRule):
         return f"{'  ' * indent}- Resolve True if the current time is past {self.resolve_at}, otherwise resolve False\n"
 
 
-@dataclass
+@define
 class ResolveToValue(ResolutionValueRule):
     """Resolve to a pre-specified value."""
 
@@ -202,6 +211,7 @@ class ResolveToValue(ResolutionValueRule):
         return f"{'  ' * indent}- Resolves to the specific value {self.resolve_value}\n"
 
 
+@define
 class ModulusRule(BinaryRule[PseudoNumericResolution]):
     """Return the modulus of two other DoResolveRules."""
 
@@ -227,6 +237,7 @@ class ModulusRule(BinaryRule[PseudoNumericResolution]):
         return ret
 
 
+@define
 class AdditiveRule(VariadicRule[PseudoNumericResolution]):
     """Return the sum of many other Rules."""
 
@@ -257,6 +268,7 @@ class AdditiveRule(VariadicRule[PseudoNumericResolution]):
         return ret
 
 
+@define
 class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
     """Return the product of many other Rules."""
 
@@ -287,7 +299,7 @@ class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
         return ret
 
 
-@dataclass
+@define
 class ResolveRandomIndex(ResolveRandomSeed):
     """Resolve to a random index in a market."""
 
@@ -328,11 +340,11 @@ class ResolveRandomIndex(ResolveRandomSeed):
         return ret
 
 
-@dataclass
+@define
 class ResolveMultipleValues(ResolutionValueRule):
     """Resolve to multiple values with different shares."""
 
-    shares: MutableSequence[tuple[ResolutionValueRule, float]] = field(default_factory=list)
+    shares: MutableSequence[tuple[ResolutionValueRule, float]] = Factory(list)
 
     def _value(self, market: Market) -> FreeResponseResolution | MultipleChoiceResolution:
         ret: DefaultDict[int, float] = defaultdict(float)
