@@ -119,17 +119,17 @@ class CreationRequest:
                 time_rules=self.time_rules, value_rules=self.value_rules
             )
             for paragraph in explanation.splitlines():
-                # if paragraph:
-                s_par = paragraph.lstrip()
-                self.manifold.description["content"].append({
-                    "type": "paragraph",
-                    "content": [{
-                        "type": "text",
-                        "text": "-" * (len(paragraph) - len(s_par)) + s_par
-                    }]
-                })
-                # else:
-                #     self.manifold.description["content"].append({"type": "paragraph"})
+                if paragraph:
+                    s_par = paragraph.lstrip()
+                    self.manifold.description["content"].append({
+                        "type": "paragraph",
+                        "content": [{
+                            "type": "text",
+                            "text": "-" * (len(paragraph) - len(s_par)) + s_par
+                        }]
+                    })
+                else:
+                    self.manifold.description["content"].append({"type": "paragraph"})
             self.manifold.description["processed"] = True
 
     @classmethod
