@@ -61,8 +61,8 @@ test: dependencies _test
 test_all:
 	@if command -v python3.8 &> /dev/null; then $(MAKE) test PY=python3.8 MYPY=false $(MFLAGS); else echo "Python 3.8 is not installed - skipping"; fi
 	@if command -v python3.9 &> /dev/null; then $(MAKE) test PY=python3.9 MYPY=false $(MFLAGS); else echo "Python 3.9 is not installed - skipping"; fi
-	@if command -v python3.10 &> /dev/null; then $(MAKE) test PY=python3.10 MYPY=false $(MFLAGS); else echo "Python 3.10 is not installed - skipping"; fi
-	@if command -v python3.11 &> /dev/null; then $(MAKE) test PY=python3.11 $(MFLAGS); else echo "Python 3.11 is not installed - skipping"; fi
+	@if command -v python3.10 &> /dev/null; then $(MAKE) test PY=python3.10 $(MFLAGS); else echo "Python 3.10 is not installed - skipping"; fi
+	@if command -v python3.11 &> /dev/null; then $(MAKE) test PY=python3.11 MYPY=false $(MFLAGS); else echo "Python 3.11 is not installed - skipping"; fi
 	@if command -v python3.12 &> /dev/null; then $(MAKE) test PY=python3.12 MYPY=false $(MFLAGS); else echo "Python 3.12 is not installed - skipping"; fi
 
 .PHONY: test_%
