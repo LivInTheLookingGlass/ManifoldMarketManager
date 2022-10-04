@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from functools import lru_cache
+from functools import _make_key, lru_cache
 from importlib import import_module
 from logging import getLogger, warn
 from math import log10
@@ -9,17 +9,19 @@ from pathlib import Path
 from sys import modules
 from time import monotonic as time_monotonic
 from traceback import print_exc
-from typing import TYPE_CHECKING, Any, Mapping
+from typing import TYPE_CHECKING
 
 from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Callable, Collection, Iterable, MutableSequence, TypeVar
+    from typing import Any, Callable, Collection, Hashable, Iterable, Mapping, MutableSequence, TypeVar
 
     from . import Market, Rule
 
     T = TypeVar("T")
+
+time_cache_state: dict[tuple[int, Hashable], tuple[Any, float]] = {}
 
 ENVIRONMENT_VARIABLES = [
     "ManifoldAPIKey",     # REQUIRED. Allows trades, market creation, market resolution
@@ -148,19 +150,20 @@ def round_sig_figs_f(num: float, sig_figs: int = 4) -> float:
 
 
 def time_cache(seconds: float = 30) -> Callable[[Callable[..., T]], Callable[..., T]]:
-    """Cache the return value of a function for some number of seconds."""
+    """Cache the return value of a method for some number of seconds."""
     def bar(func: Callable[..., T]) -> Callable[..., T]:
-        cached_time: float = 0
-        cached_value: T = None  # type: ignore[assignment]
-
-        def foo(*args: Any, **kwargs: Any) -> T:
-            nonlocal cached_value, cached_time
+        def foo(self=None, *args: Any, **kwargs: Any) -> T:
+            key = (id(self or func), _make_key(args, kwargs, False))
+            cached_value: T
+            cached_time: float
+            cached_value, cached_time = time_cache_state.get(key, (None, 0))  # type: ignore[assignment]
             t = time_monotonic()
             if cached_time + seconds < t:
+                args = (self, ) * bool(self is not None) + args
                 cached_value = func(*args, **kwargs)
                 cached_time = t
+                time_cache_state[key] = cached_value, cached_time
             return cached_value
-
         return foo
     return bar
 

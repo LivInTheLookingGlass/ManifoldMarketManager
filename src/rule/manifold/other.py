@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from time import time
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 from attrs import define
 
@@ -19,8 +19,12 @@ if TYPE_CHECKING:  # pragma: no cover
     from ...market import Market
 
 
-@define
+@define(slots=False)
 class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
+    def __attrs_post_init__(self) -> None:
+        DoResolveRule.__attrs_post_init__(self)
+        ManifoldMarketMixin.__attrs_post_init__(self)
+
     @time_cache()
     def _value(self, market: Market) -> bool:
         return bool(self.api_market().closeTime < time() * 1000)
@@ -29,8 +33,12 @@ class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
         return f"{'  ' * indent}- If `{self.id_}` closes ({self.api_market().question}).\n"
 
 
-@define
+@define(slots=False)
 class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
+    def __attrs_post_init__(self) -> None:
+        DoResolveRule.__attrs_post_init__(self)
+        ManifoldMarketMixin.__attrs_post_init__(self)
+
     @time_cache()
     def _value(self, market: Market) -> bool:
         return bool(self.api_market().isResolved)
@@ -39,8 +47,12 @@ class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
         return f"{'  ' * indent}- If `{self.id_}` is resolved ({self.api_market().question}).\n"
 
 
-@define
+@define(slots=False)
 class OtherMarketValue(ManifoldMarketMixin, ResolutionValueRule):
+    def __attrs_post_init__(self) -> None:
+        ResolutionValueRule.__attrs_post_init__(self)
+        ManifoldMarketMixin.__attrs_post_init__(self)
+
     @time_cache()
     def _value(self, market: Market) -> BinaryResolution:
         mkt = self.api_market()
@@ -84,7 +96,7 @@ class OtherMarketValue(ManifoldMarketMixin, ResolutionValueRule):
         return ret + ")\n"
 
 
-@define
+@define(slots=False)
 class AmplifiedOddsRule(OtherMarketValue, ResolveRandomSeed):
     """Immitate the amplified odds scheme deployed by @Tetraspace.
 
@@ -115,17 +127,6 @@ class AmplifiedOddsRule(OtherMarketValue, ResolveRandomSeed):
     """
 
     a: int = 1
-
-    # def __init__(
-    #     self,
-    #     seed: int | float | str | bytes | bytearray = urandom(16),
-    #     rounds: int = 1,
-    #     id_: Optional[str] = None,
-    #     slug: Optional[str] = None,
-    #     url: Optional[str] = None
-    # ) -> None:
-    #     ResolveRandomSeed.__init__(self, seed=seed, rounds=rounds)
-    #     OtherMarketValue.__init__(self, id_=id_, slug=slug, url=url)
 
     @time_cache()
     def _value(self, market: Market) -> BinaryResolution:
@@ -161,7 +162,7 @@ class AmplifiedOddsRule(OtherMarketValue, ResolveRandomSeed):
             ret += f"{round_sig_figs(val, 4)}%)\n"
         indent += 1
         ret += f"{'  ' * indent}- If the referenced market resolves True, resolve True\n"
-        ret += OtherMarketValue._explain_specific(cast(OtherMarketValue, super()), market, indent + 1, sig_figs)
+        ret += OtherMarketValue._explain_specific(self, market, indent + 1, sig_figs)
         ret += f"{'  ' * indent}- If it resolved NO, generate a random number using a predetermined seed\n"
         indent += 1
         a_recip = round_sig_figs(1 / self.a, sig_figs)

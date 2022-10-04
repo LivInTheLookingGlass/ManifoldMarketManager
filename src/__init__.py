@@ -39,11 +39,11 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import Any
 
 
-@define  # type: ignore
+@define(slots=False)  # type: ignore
 class Rule(ABC, Generic[T], DictDeserializable):
     """The basic unit of market automation, rules defmine how a market should react to given events."""
 
-    logger: Logger = field(init=False)
+    logger: Logger = field(init=False, repr=False, hash=False)
 
     def __attrs_post_init__(self) -> None:
         self.logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
@@ -55,7 +55,7 @@ class Rule(ABC, Generic[T], DictDeserializable):
     ) -> T:  # pragma: no cover
         ...
 
-    @time_cache(seconds=30)
+    @time_cache()
     def value(
         self,
         market: Market,
@@ -147,7 +147,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.37"
+VERSION = "0.6.0.38"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "AnyResolution", "BinaryResolution", "DoResolveRule", "FreeResponseResolution",

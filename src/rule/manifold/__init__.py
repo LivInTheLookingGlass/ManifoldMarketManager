@@ -22,7 +22,7 @@ class ManifoldMarketMixin:
     url: Optional[str] = None
 
     def __attrs_post_init__(self) -> None:
-        if self.id_:
+        if self.id_ is not None:
             return
         elif self.slug:
             slug = self.slug

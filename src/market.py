@@ -32,12 +32,21 @@ class MarketStatus(Enum):
 class Market:
     """Represent a market and its corresponding rules."""
 
-    market: APIMarket
-    client: ManifoldClient = field(default_factory=get_client)
+    market: APIMarket = field(repr=False, compare=False)
+    client: ManifoldClient = field(default_factory=get_client, repr=False, compare=False)
     notes: str = field(default='')
     do_resolve_rules: list[Rule[Optional[bool]]] = field(default_factory=list)
     resolve_to_rules: list[Rule[AnyResolution]] = field(default_factory=list)
-    logger: Logger = field(init=False, default=None, repr=False)  # type: ignore[assignment]
+    logger: Logger = field(init=False, default=None, hash=False, repr=False)  # type: ignore[assignment]
+
+    def __hash__(self) -> int:
+        return id(self)
+
+    def __repr__(self) -> str:
+        do_resolve_rules = self.do_resolve_rules
+        resolve_to_rules = self.resolve_to_rules
+        notes = self.notes
+        return f"Market.from_id({self.market.id!r}, {do_resolve_rules = !r}, {resolve_to_rules = !r}, {notes = !r})"
 
     def __post_init__(self) -> None:
         """Initialize state that doesn't make sense to exist in the init."""
@@ -124,7 +133,7 @@ class Market:
         val = self.resolve_to()
         if val == "CANCEL":
             ret = "CANCEL"
-        elif self.market.outcomeType == "BINARY":
+        elif isinstance(val, bool) or self.market.outcomeType == "BINARY":
             defaults: dict[AnyResolution, str] = {
                 True: "YES", 100: "YES", 100.0: "YES",
                 False: "NO"

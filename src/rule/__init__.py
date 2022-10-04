@@ -20,12 +20,12 @@ def get_rule(type_: str) -> Type[Rule[Any]]:
     raise NameError()
 
 
-@define  # type: ignore
+@define(slots=False)  # type: ignore
 class DoResolveRule(Rule[bool]):
     """The subtype of rule which determines if a market should resolve, returning a bool."""
 
 
-@define  # type: ignore
+@define(slots=False)  # type: ignore
 class ResolutionValueRule(Rule[AnyResolution]):
     """The subtype of rule which determines what a market should resolve to."""
 

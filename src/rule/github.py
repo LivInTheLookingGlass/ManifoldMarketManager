@@ -29,7 +29,7 @@ def login() -> GitHub:
     return gh_login(username=getenv('GithubUsername'), token=getenv('GithubAccessToken'))
 
 
-@define
+@define(slots=False)
 class ResolveWithPR(DoResolveRule):
     """Return True if the specified PR was merged in the past."""
 
@@ -58,7 +58,7 @@ class ResolveWithPR(DoResolveRule):
         return ret
 
 
-@define
+@define(slots=False)
 class ResolveToPR(ResolutionValueRule):
     """Resolve to True if the PR is merged, otherwise False."""
 
@@ -90,7 +90,7 @@ class ResolveToPR(ResolutionValueRule):
                 f"{merge_time is not None})\n")
 
 
-@define
+@define(slots=False)
 class ResolveToPRDelta(ResolutionValueRule):
     """Resolve to the fractional number of days between start and merged date or, if not merged, MAX."""
 

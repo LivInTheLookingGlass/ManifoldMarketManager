@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, cast
 from attrs import define
 from pymanifold.lib import ManifoldClient
 
-from ...util import time_cache
 from .. import ResolutionValueRule
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -14,14 +13,13 @@ if TYPE_CHECKING:  # pragma: no cover
     from ...market import Market
 
 
-@define
+@define(slots=False)
 class ResolveToUserProfit(ResolutionValueRule):
     """Resolve to the currently reported profit of a user."""
 
     user: str
     field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
 
-    @time_cache()
     def _value(self, market: Market) -> float:
         user = ManifoldClient()._get_user_raw(self.user)
         return cast(float, user['profitCached'][self.field])
@@ -30,14 +28,13 @@ class ResolveToUserProfit(ResolutionValueRule):
         return f"{'  ' * indent}- Resolves to the current reported {self.field} profit of user {self.user}.\n"
 
 
-@define
+@define(slots=False)
 class ResolveToUserCreatedVolume(ResolutionValueRule):
     """Resolve to the currently reported created market volume of a user."""
 
     user: str
     field: Literal["allTime", "daily", "weekly", "monthly"] = "allTime"
 
-    @time_cache()
     def _value(self, market: Market) -> float:
         user = ManifoldClient()._get_user_raw(self.user)
         return cast(float, user['creatorVolumeCached'][self.field])

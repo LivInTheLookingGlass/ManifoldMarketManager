@@ -15,7 +15,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from ..market import Market
 
 
-@define  # type: ignore
+@define(slots=False)  # type: ignore
 class UnaryRule(Rule[T]):
     """Perform a unary operation on another DoResolveRule."""
 
@@ -30,7 +30,7 @@ class UnaryRule(Rule[T]):
         return cast(UnaryRule[T], super().from_dict(env_copy))
 
 
-@define  # type: ignore
+@define(slots=False)  # type: ignore
 class BinaryRule(Rule[T]):
     """Perform a binary operation on two Rules."""
 
@@ -47,7 +47,7 @@ class BinaryRule(Rule[T]):
         return cast(BinaryRule[T], super().from_dict(env_copy))
 
 
-@define  # type: ignore
+@define(slots=False)  # type: ignore
 class VariadicRule(Rule[T]):
     """Perform a variadic operation on many Rules."""
 
@@ -63,7 +63,7 @@ class VariadicRule(Rule[T]):
         return cast(VariadicRule[T], super().from_dict(env_copy))
 
 
-@define  # type: ignore
+@define(slots=False)  # type: ignore
 class ResolveRandomSeed(ResolutionValueRule):
     """Abstract class that handles the nitty-gritty of the Random object."""
 

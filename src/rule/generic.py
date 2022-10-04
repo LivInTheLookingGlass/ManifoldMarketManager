@@ -18,7 +18,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from ..market import Market
 
 
-@define
+@define(slots=False)
 class NegateRule(UnaryRule[BinaryResolution]):
     """Negate another DoResolveRule."""
 
@@ -34,7 +34,7 @@ class NegateRule(UnaryRule[BinaryResolution]):
                 f"{self.value(market, format='NONE')})\n") + self.child.explain_specific(market, indent + 1, sig_figs)
 
 
-@define
+@define(slots=False)
 class EitherRule(BinaryRule[BinaryResolution]):
     """Return the OR of two other DoResolveRules."""
 
@@ -55,7 +55,7 @@ class EitherRule(BinaryRule[BinaryResolution]):
         return ret
 
 
-@define
+@define(slots=False)
 class BothRule(BinaryRule[BinaryResolution]):
     """Return the AND of two other DoResolveRules."""
 
@@ -76,7 +76,7 @@ class BothRule(BinaryRule[BinaryResolution]):
         return ret
 
 
-@define
+@define(slots=False)
 class NANDRule(BinaryRule[BinaryResolution]):
     """Return the NAND of two other DoResolveRules."""
 
@@ -97,7 +97,7 @@ class NANDRule(BinaryRule[BinaryResolution]):
         return ret
 
 
-@define
+@define(slots=False)
 class NeitherRule(BinaryRule[BinaryResolution]):
     """Return the NOR of two other DoResolveRules."""
 
@@ -118,7 +118,7 @@ class NeitherRule(BinaryRule[BinaryResolution]):
         return ret
 
 
-@define
+@define(slots=False)
 class XORRule(BinaryRule[BinaryResolution]):
     """Return the XOR of two other DoResolveRules."""
 
@@ -139,7 +139,7 @@ class XORRule(BinaryRule[BinaryResolution]):
         return ret
 
 
-@define
+@define(slots=False)
 class XNORRule(BinaryRule[BinaryResolution]):
     """Return the XNOR of two other DoResolveRules."""
 
@@ -160,7 +160,7 @@ class XNORRule(BinaryRule[BinaryResolution]):
         return ret
 
 
-@define
+@define(slots=False)
 class ImpliesRule(BinaryRule[BinaryResolution]):
     """Return the implication of two other DoResolveRules."""
 
@@ -181,7 +181,7 @@ class ImpliesRule(BinaryRule[BinaryResolution]):
         return ret
 
 
-@define
+@define(slots=False)
 class ResolveAtTime(DoResolveRule):
     """Return True if the specified time is in the past."""
 
@@ -198,7 +198,7 @@ class ResolveAtTime(DoResolveRule):
         return f"{'  ' * indent}- Resolve True if the current time is past {self.resolve_at}, otherwise resolve False\n"
 
 
-@define
+@define(slots=False)
 class ResolveToValue(ResolutionValueRule):
     """Resolve to a pre-specified value."""
 
@@ -211,7 +211,7 @@ class ResolveToValue(ResolutionValueRule):
         return f"{'  ' * indent}- Resolves to the specific value {self.resolve_value}\n"
 
 
-@define
+@define(slots=False)
 class ModulusRule(BinaryRule[PseudoNumericResolution]):
     """Return the modulus of two other DoResolveRules."""
 
@@ -237,7 +237,7 @@ class ModulusRule(BinaryRule[PseudoNumericResolution]):
         return ret
 
 
-@define
+@define(slots=False)
 class AdditiveRule(VariadicRule[PseudoNumericResolution]):
     """Return the sum of many other Rules."""
 
@@ -268,7 +268,7 @@ class AdditiveRule(VariadicRule[PseudoNumericResolution]):
         return ret
 
 
-@define
+@define(slots=False)
 class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
     """Return the product of many other Rules."""
 
@@ -299,7 +299,7 @@ class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
         return ret
 
 
-@define
+@define(slots=False)
 class ResolveRandomIndex(ResolveRandomSeed):
     """Resolve to a random index in a market."""
 
@@ -340,7 +340,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
         return ret
 
 
-@define
+@define(slots=False)
 class ResolveMultipleValues(ResolutionValueRule):
     """Resolve to multiple values with different shares."""
 

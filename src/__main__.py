@@ -10,7 +10,7 @@ from .application import main, register_db
 from .market import Market
 from .rule.generic import ResolveAtTime, ResolveRandomIndex
 from .rule.github import ResolveToPR, ResolveToPRDelta, ResolveWithPR
-from .rule.manifold.this import CurrentValueRule, RoundValueRule
+from .rule.manifold.this import CurrentValueRule, RoundValueRule, ThisMarketClosed
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Optional
@@ -111,8 +111,9 @@ if any((args.slug, args.id_, args.url)):
 
     if not mkt.do_resolve_rules:
         if not date:
-            raise ValueError("No resolve date provided")
-        mkt.do_resolve_rules.append(ResolveAtTime(datetime(*date)))
+            mkt.do_resolve_rules.append(ThisMarketClosed())
+        else:
+            mkt.do_resolve_rules.append(ResolveAtTime(datetime(*date)))
 
     conn = register_db()
 

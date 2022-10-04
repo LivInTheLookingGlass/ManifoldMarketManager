@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, cast
 
 from attrs import Factory, define
 
-from ...util import fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1, time_cache
+from ...util import fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1
 from .. import DoResolveRule, ResolutionValueRule
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -15,9 +15,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from ...market import Market
 
 
-@define
+@define(slots=False)
 class ThisMarketClosed(DoResolveRule):
-    @time_cache()
     def _value(self, market: Market) -> bool:
         return bool(market.market.closeTime < time() * 1000)
 
@@ -25,11 +24,10 @@ class ThisMarketClosed(DoResolveRule):
         return f"{'  ' * indent}- If this market reaches its close date\n"
 
 
-@define
+@define(slots=False)
 class CurrentValueRule(ResolutionValueRule):
     """Resolve to the current market-consensus value."""
 
-    @time_cache()
     def _value(self, market: Market) -> float | dict[Any, float]:
         if market.market.outcomeType == "BINARY":
             return cast(float, market.market.probability * 100)
@@ -48,14 +46,13 @@ class CurrentValueRule(ResolutionValueRule):
         return f"{'  ' * indent}- Resolves to the current market value.\n"
 
 
-@define
+@define(slots=False)
 class FibonacciValueRule(ResolutionValueRule):
     """Resolve each value with a fibonacci weight, ranked by probability."""
 
     exclude: set[int] = Factory(set)
     min_rewarded: float = 0.0001
 
-    @time_cache()
     def _value(self, market: Market) -> float | dict[Any, float]:
         items = market_to_answer_map(market, self.exclude, (lambda id_, probability: probability < self.min_rewarded))
         rank = sorted(items, key=items.__getitem__)
@@ -71,11 +68,10 @@ class FibonacciValueRule(ResolutionValueRule):
         return ret
 
 
-@define
+@define(slots=False)
 class RoundValueRule(CurrentValueRule):
     """Resolve to the current market-consensus value, but rounded."""
 
-    @time_cache()
     def _value(self, market: Market) -> float:
         if market.market.outcomeType in ("MULTIPLE_CHOICE", "FREE_RESPONSE"):
             raise RuntimeError()
@@ -87,13 +83,12 @@ class RoundValueRule(CurrentValueRule):
         return f"{'  ' * indent}- Resolves to round(MKT).\n"
 
 
-@define
+@define(slots=False)
 class PopularValueRule(ResolutionValueRule):
     """Resolve to the n most likely market-consensus values, weighted by their probability."""
 
     size: int = 1
 
-    @time_cache()
     def _value(self, market: Market) -> FreeResponseResolution | MultipleChoiceResolution:
         answers = market_to_answer_map(market)
         final_answers: dict[int, float] = {}
