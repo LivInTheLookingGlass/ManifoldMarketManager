@@ -39,7 +39,7 @@ class Market:
     resolve_to_rules: list[Rule[AnyResolution]] = field(default_factory=list)
     logger: Logger = field(init=False, default=None, repr=False)  # type: ignore[assignment]
 
-    def __postinit__(self) -> None:
+    def __post_init__(self) -> None:
         """Initialize state that doesn't make sense to exist in the init."""
         self.logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
 
@@ -56,7 +56,7 @@ class Market:
         self.__dict__.update(state)
         self.client = get_client()
         self.market = self.client.get_market_by_id(self.market.id)
-        self.__postinit__()
+        self.__post_init__()
 
     @property
     def id(self) -> str:
