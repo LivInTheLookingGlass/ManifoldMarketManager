@@ -1,4 +1,5 @@
 from __future__ import annotations
+from copy import deepcopy
 
 from dataclasses import dataclass, field
 from datetime import date, datetime
@@ -82,7 +83,7 @@ class ManifoldRequest(DictDeserializable):
         if self.outcomeType == "BINARY":
             self._validate_binary()
         elif self.outcomeType == "PSEUDO_NUMERIC":
-            self.validate_pseudo_numeric()
+            self._validate_pseudo_numeric()
         elif self.outcomeType == "MULTIPLE_CHOICE":
             self._validate_multiple_choice()
 
@@ -99,8 +100,10 @@ class ManifoldRequest(DictDeserializable):
             raise ValueError("Invalid answers list")
 
     def to_dict(self) -> dict[str, Any]:
+        state = deepcopy(self.__dict__)
+        state['description'].pop('processed', None)
         return {
-            k: v for k, v in self.__dict__.items()
+            k: v for k, v in state.items()
             if k in signature(type(self)).parameters and v is not None and k != "outcomeType"
         }
 
