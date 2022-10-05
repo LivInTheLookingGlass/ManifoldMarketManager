@@ -10,9 +10,11 @@ from .. import Rule, T
 from . import ResolutionValueRule, get_rule
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Mapping, Sequence
+    from typing import Any, ClassVar, Mapping, Sequence
 
     from ..market import Market
+
+SENTINEL_STUB = "A programatic explanation was not provided"
 
 
 @define(slots=False)  # type: ignore
@@ -20,6 +22,20 @@ class UnaryRule(Rule[T]):
     """Perform a unary operation on another DoResolveRule."""
 
     child: Rule[T]
+    _explainer_stub: ClassVar[str] = SENTINEL_STUB
+
+    def __init_subclass__(cls) -> None:
+        if cls._explainer_stub is SENTINEL_STUB:
+            raise ValueError("You need to override _explainer_stub to subclass this")
+        return super().__init_subclass__()
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        return f"{'  ' * indent}- {self._explainer_stub}\n" +\
+               self.child.explain_abstract(indent + 1, **kwargs)
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        return (f"{'  ' * indent}- {self._explainer_stub} (-> "
+                f"{self.value(market, format='NONE')})\n") + self.child.explain_specific(market, indent + 1, sig_figs)
 
     @classmethod
     def from_dict(cls, env: Mapping[str, Any]) -> 'UnaryRule[T]':
@@ -36,6 +52,12 @@ class BinaryRule(Rule[T]):
 
     rule1: Rule[T]
     rule2: Rule[T]
+    _explainer_stub: ClassVar[str] = SENTINEL_STUB
+
+    def __init_subclass__(cls) -> None:
+        if cls._explainer_stub is SENTINEL_STUB:
+            raise ValueError("You need to override _explainer_stub to subclass this")
+        return super().__init_subclass__()
 
     @classmethod
     def from_dict(cls, env: Mapping[str, Any]) -> 'BinaryRule[T]':
@@ -46,12 +68,30 @@ class BinaryRule(Rule[T]):
             env_copy[name] = get_rule(type_).from_dict(kwargs)
         return super().from_dict(env_copy)
 
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        ret = f"{'  ' * indent}- {self._explainer_stub}\n"
+        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
+        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
+        return ret
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        ret = (f"{'  ' * indent}- {self._explainer_stub} (-> {self.value(market, format='NONE')})\n")
+        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
+        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
+        return ret
+
 
 @define(slots=False)  # type: ignore
 class VariadicRule(Rule[T]):
     """Perform a variadic operation on many Rules."""
 
     rules: list[Rule[T]] = Factory(list)
+    _explainer_stub: ClassVar[str] = SENTINEL_STUB
+
+    def __init_subclass__(cls) -> None:
+        if cls._explainer_stub is SENTINEL_STUB:
+            raise ValueError("You need to override _explainer_stub to subclass this")
+        return super().__init_subclass__()
 
     @classmethod
     def from_dict(cls, env: Mapping[str, Any]) -> 'VariadicRule[T]':

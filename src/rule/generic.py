@@ -7,12 +7,12 @@ from typing import TYPE_CHECKING, Dict, Generic, Mapping, Optional, Tuple, Union
 from attrs import Factory, define
 
 from .. import BinaryResolution, PseudoNumericResolution, Rule, T
-from ..util import normalize_mapping, round_sig_figs
+from ..util import normalize_mapping
 from . import DoResolveRule, ResolutionValueRule, get_rule
 from .abstract import BinaryRule, ResolveRandomSeed, UnaryRule, VariadicRule
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, DefaultDict, Literal, MutableSequence
+    from typing import Any, ClassVar, DefaultDict, Literal, MutableSequence
 
     from .. import FreeResponseResolution, MultipleChoiceResolution
     from ..market import Market
@@ -22,163 +22,82 @@ if TYPE_CHECKING:  # pragma: no cover
 class NegateRule(UnaryRule[Optional[BinaryResolution]]):
     """Negate another DoResolveRule."""
 
+    _explainer_stub: ClassVar[str] = "Resolve False if the below is True, and vice versa"
+
     def _value(self, market: Market) -> bool:
         return not self.child._value(market)
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- Resolve False if the below is True, and vice versa\n" +\
-               self.child.explain_abstract(indent + 1, **kwargs)
-
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        return (f"{'  ' * indent}- Resolve True if the below resolves False, otherwise resolve True (-> "
-                f"{self.value(market, format='NONE')})\n") + self.child.explain_specific(market, indent + 1, sig_figs)
 
 
 @define(slots=False)
 class EitherRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the OR of two other DoResolveRules."""
 
+    _explainer_stub: ClassVar[str] = "Resolve True if either of the below resolves True, otherwise resolve False"
+
     def _value(self, market: Market) -> bool:
         return bool(self.rule1._value(market)) or bool(self.rule2._value(market))
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- \n"
-        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
-        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
-        return ret
-
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = (f"{'  ' * indent}- Resolve True if either of the below resolves True, otherwise resolve False (-> "
-               f"{self.value(market, format='NONE')})\n")
-        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
-        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
-        return ret
 
 
 @define(slots=False)
 class BothRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the AND of two other DoResolveRules."""
 
+    _explainer_stub: ClassVar[str] = "Resolve True if both of the below resolve to True, otherwise resolve False"
+
     def _value(self, market: Market) -> bool:
         return bool(self.rule1._value(market)) and bool(self.rule2._value(market))
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- \n"
-        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
-        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
-        return ret
-
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = (f"{'  ' * indent}- Resolve True if both of the below resolve to True, otherwise resolve False (-> "
-               f"{self.value(market)})\n")
-        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
-        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
-        return ret
 
 
 @define(slots=False)
 class NANDRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the NAND of two other DoResolveRules."""
 
+    _explainer_stub: ClassVar[str] = "Resolve True if one or more of the below resolves False, otherwise resolve False"
+
     def _value(self, market: Market) -> bool:
         return not (self.rule1._value(market) and self.rule2._value(market))
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- \n"
-        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
-        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
-        return ret
-
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = (f"{'  ' * indent}- Resolve True if one or more of the below resolves False, otherwise resolve False "
-               f"(-> {self.value(market)})\n")
-        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
-        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
-        return ret
 
 
 @define(slots=False)
 class NeitherRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the NOR of two other DoResolveRules."""
 
+    _explainer_stub: ClassVar[str] = "Resolve False if either of the below resolve to True, otherwise resolve True"
+
     def _value(self, market: Market) -> bool:
         return not (self.rule1._value(market) or self.rule2._value(market))
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- Resolve False if either of the below resolve to True, otherwise resolve True\n"
-        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
-        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
-        return ret
-
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = (f"{'  ' * indent}- Resolve False if either of the below resolve to True, otherwise resolve True (-> "
-               f"{self.value(market)})\n")
-        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
-        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
-        return ret
 
 
 @define(slots=False)
 class XORRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the XOR of two other DoResolveRules."""
 
+    _explainer_stub: ClassVar[str] = "Resolve False if the below resolve to the same value, otherwise resolve True"
+
     def _value(self, market: Market) -> bool:
         return bool(bool(self.rule1._value(market)) ^ bool(self.rule2._value(market)))
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- Resolve False if the below resolve to the same value, otherwise resolve True\n"
-        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
-        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
-        return ret
-
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = (f"{'  ' * indent}- Resolve False if the below resolve to the same value, otherwise resolve True (-> "
-               f"{self.value(market)})\n")
-        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
-        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
-        return ret
 
 
 @define(slots=False)
 class XNORRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the XNOR of two other DoResolveRules."""
 
+    _explainer_stub: ClassVar[str] = "Resolve True if the below resolve to the same value, otherwise resolve False"
+
     def _value(self, market: Market) -> bool:
         return bool(self.rule1._value(market)) == bool(self.rule2._value(market))
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- Resolve True if the below resolve to the same value, otherwise resolve False\n"
-        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
-        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
-        return ret
-
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = (f"{'  ' * indent}- Resolve True if the below resolve to the same value, otherwise resolve False (-> "
-               f"{self.value(market)})\n")
-        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
-        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
-        return ret
 
 
 @define(slots=False)
 class ImpliesRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the implication of two other DoResolveRules."""
 
+    _explainer_stub: ClassVar[str] = (
+        "Resolve True if the next line resolves False, otherwise resolves to the value of the item after"
+    )
+
     def _value(self, market: Market) -> bool:
         return not self.rule1._value(market) or bool(self.rule2._value(market))
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- \n"
-        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
-        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
-        return ret
-
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = (f"{'  ' * indent}- Resolve True if the next line resolves False, otherwise resolves to the value of "
-               f"the item after (-> {self.value(market)})\n")
-        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
-        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
-        return ret
 
 
 @define(slots=False)
@@ -215,31 +134,20 @@ class ResolveToValue(Generic[T], Rule[T]):
 class ModulusRule(BinaryRule[PseudoNumericResolution]):
     """Return the modulus of two other DoResolveRules."""
 
+    _explainer_stub: ClassVar[str] = "A mod B, where A is the next line and B the line after"
+
     def _value(self, market: Market) -> Literal["CANCEL"] | float:
         val1, val2 = self.rule1._value(market), self.rule2._value(market)
         if val1 == "CANCEL" or val2 == "CANCEL":
             return "CANCEL"
         return val1 % val2
 
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- A mod B, where A is the next line and B the line after\n"
-        ret += self.rule1.explain_abstract(indent + 1, **kwargs)
-        ret += self.rule2.explain_abstract(indent + 1, **kwargs)
-        return ret
-
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        val: str | float = self._value(market)
-        if val != "CANCEL":
-            val = round_sig_figs(cast(float, val), sig_figs)
-        ret = f"{'  ' * indent}- A mod B, where A is the next line and B the line after (-> {val})\n"
-        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
-        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
-        return ret
-
 
 @define(slots=False)
 class AdditiveRule(VariadicRule[PseudoNumericResolution]):
     """Return the sum of many other Rules."""
+
+    _explainer_stub: ClassVar[str] = "The sum of the below"
 
     def _value(self, market: Market) -> Literal["CANCEL"] | float:
         """Return the sum of the underlying rules."""
@@ -254,23 +162,12 @@ class AdditiveRule(VariadicRule[PseudoNumericResolution]):
             ret += val
         return ret
 
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- The sum of the below\n"
-        for rule in self.rules:
-            ret += rule.explain_abstract(indent + 1, **kwargs)
-        return ret
-
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        val = round_sig_figs(cast(float, self._value(market)), sig_figs)
-        ret = f"{'  ' * indent}- The sum of the below (-> {val})\n"
-        for rule in self.rules:
-            ret += rule.explain_specific(market, indent + 1, sig_figs)
-        return ret
-
 
 @define(slots=False)
 class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
     """Return the product of many other Rules."""
+
+    _explainer_stub: ClassVar[str] = "The product of the below"
 
     def _value(self, market: Market) -> Literal["CANCEL"] | float:
         """Return the product of the underlying rules."""
@@ -283,19 +180,6 @@ class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
             if val == "CANCEL":
                 return "CANCEL"
             ret *= val
-        return ret
-
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- The product of the below\n"
-        for rule in self.rules:
-            ret += rule.explain_abstract(indent + 1, **kwargs)
-        return ret
-
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        val = round_sig_figs(cast(float, self._value(market)), sig_figs)
-        ret = f"{'  ' * indent}- The product of the below (-> {val})\n"
-        for rule in self.rules:
-            ret += rule.explain_specific(market, indent + 1, sig_figs)
         return ret
 
 
