@@ -36,7 +36,7 @@ jobs:
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
-          command: make test upload_coverage
+          command: mkdir -p logs && touch env_personal.sh && make test upload_coverage
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
