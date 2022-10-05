@@ -1,0 +1,17 @@
+matrix:
+  include:
+    - language: python
+      python: 3.8
+    - language: python
+      python: 3.9
+    - language: python
+      python: 3.10
+    - language: python
+      python: 3.11
+    - language: python
+      python: pypy3
+  allow_failures:
+    - python: pypy3
+
+script:
+  - make build test
