@@ -70,7 +70,7 @@ class Market:
     @property
     def id(self) -> str:
         """Return the ID of a market as reported by Manifold."""
-        return cast(str, self.market.id)
+        return self.market.id
 
     @property
     def status(self) -> MarketStatus:
@@ -114,6 +114,7 @@ class Market:
     def explain_specific(self, sig_figs: int = 4) -> str:
         """Explain why the market is resolving the way that it is."""
         shim = ""
+        rule_: Rule[Any]
         for rule_ in self.do_resolve_rules:
             shim += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
         if self.should_resolve() is not True:
@@ -184,15 +185,18 @@ class Market:
         """Return the current top (single) answer."""
         # TODO: move these behaviors to a rule class
         if self.market.outcomeType == "BINARY":
+            assert isinstance(self.market.probability, float)
             return f"{100 * self.market.probability}%"
         elif self.market.outcomeType == "PSEUDO_NUMERIC":
+            assert not isinstance(self.market.pool, float)
+            assert isinstance(self.market.p, float)
             return pool_to_number_cpmm1(
                 self.market.pool['YES'],
                 self.market.pool['NO'],
                 self.market.p,
                 float(self.market.min or 0),
                 float(self.market.max or 0),
-                self.market.isLogScale
+                bool(self.market.isLogScale)
             )
         elif self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
             market_to_answer_map(self.market)
@@ -238,15 +242,7 @@ class Market:
     def __format_request_resolve_mapping(self, _override: AnyResolution | tuple[float, float]) -> dict[int, float]:
         if not isinstance(_override, Mapping):
             raise TypeError()
-        if self.market.outcomeType == "MULTIPLE_CHOICE":
-            new_override = {}
-            for idx, weight in _override.items():
-                new_override[self.market.answers[idx]['id']] = weight
-            _override = new_override
-        new_override = {}
-        for idx, weight in _override.items():
-            new_override[int(idx)] = weight
-        return new_override
+        return {int(id_): weight for id_, weight in _override.items()}
 
     @require_env("ManifoldAPIKey")
     def cancel(self) -> Response:

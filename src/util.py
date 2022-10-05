@@ -75,13 +75,15 @@ def market_to_answer_map(
         If a non-supported market is fed
     """
     mkt: APIMarket = market  # type: ignore[assignment]
-    if hasattr(market, 'market'):
+    if not isinstance(market, APIMarket):
         mkt = market.market
     if mkt.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
-        initial = {
-            int(answer['id']): float(answer['probability'])
-            for answer in mkt.answers
-        }
+        assert mkt.answers
+        initial: dict[int, float] = {}
+        answer: dict[str, str | float]
+        for answer in mkt.answers:
+            key = int(answer['id'])
+            initial[key] = float(answer['probability'])
     # elif mkt.outcomeType == "MULTIPLE_CHOICE":
     #     # TODO: reimplement dpm-2 math so this is actually by probability
     #     pool = cast(Mapping[Any, float], mkt.pool)
@@ -152,7 +154,7 @@ def round_sig_figs_f(num: float, sig_figs: int = 4) -> float:
 def time_cache(seconds: float = 30) -> Callable[[Callable[..., T]], Callable[..., T]]:
     """Cache the return value of a method for some number of seconds."""
     def bar(func: Callable[..., T]) -> Callable[..., T]:
-        def foo(self=None, *args: Any, **kwargs: Any) -> T:
+        def foo(self: Any = None, *args: Any, **kwargs: Any) -> T:
             key = (id(self or func), _make_key(args, kwargs, False))
             cached_value: T
             cached_time: float

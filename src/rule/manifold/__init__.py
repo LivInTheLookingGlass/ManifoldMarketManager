@@ -17,12 +17,14 @@ __all__ = ('this', 'other', 'user', 'ManifoldMarketMixin')
 
 @define(slots=False)
 class ManifoldMarketMixin:
-    id_: Optional[str] = None
+    id_: str = ''
     slug: Optional[str] = None
     url: Optional[str] = None
 
     def __attrs_post_init__(self) -> None:
-        if self.id_ is not None:
+        if hasattr(super(), '__attrs_post_init__'):
+            super().__attrs_post_init__()  # type: ignore
+        if self.id_:
             return
         elif self.slug:
             slug = self.slug

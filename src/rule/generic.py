@@ -2,24 +2,24 @@ from __future__ import annotations
 
 from collections import defaultdict
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Dict, Union, cast
+from typing import TYPE_CHECKING, Dict, Generic, Mapping, Optional, Tuple, Union, cast
 
 from attrs import Factory, define
 
-from .. import BinaryResolution, PseudoNumericResolution
+from .. import BinaryResolution, PseudoNumericResolution, Rule, T
 from ..util import normalize_mapping, round_sig_figs
 from . import DoResolveRule, ResolutionValueRule, get_rule
 from .abstract import BinaryRule, ResolveRandomSeed, UnaryRule, VariadicRule
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, DefaultDict, Literal, Mapping, MutableSequence, Optional
+    from typing import Any, DefaultDict, Literal, MutableSequence
 
-    from .. import AnyResolution, FreeResponseResolution, MultipleChoiceResolution
+    from .. import FreeResponseResolution, MultipleChoiceResolution
     from ..market import Market
 
 
 @define(slots=False)
-class NegateRule(UnaryRule[BinaryResolution]):
+class NegateRule(UnaryRule[None | BinaryResolution]):
     """Negate another DoResolveRule."""
 
     def _value(self, market: Market) -> bool:
@@ -35,7 +35,7 @@ class NegateRule(UnaryRule[BinaryResolution]):
 
 
 @define(slots=False)
-class EitherRule(BinaryRule[BinaryResolution]):
+class EitherRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the OR of two other DoResolveRules."""
 
     def _value(self, market: Market) -> bool:
@@ -56,7 +56,7 @@ class EitherRule(BinaryRule[BinaryResolution]):
 
 
 @define(slots=False)
-class BothRule(BinaryRule[BinaryResolution]):
+class BothRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the AND of two other DoResolveRules."""
 
     def _value(self, market: Market) -> bool:
@@ -77,7 +77,7 @@ class BothRule(BinaryRule[BinaryResolution]):
 
 
 @define(slots=False)
-class NANDRule(BinaryRule[BinaryResolution]):
+class NANDRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the NAND of two other DoResolveRules."""
 
     def _value(self, market: Market) -> bool:
@@ -98,7 +98,7 @@ class NANDRule(BinaryRule[BinaryResolution]):
 
 
 @define(slots=False)
-class NeitherRule(BinaryRule[BinaryResolution]):
+class NeitherRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the NOR of two other DoResolveRules."""
 
     def _value(self, market: Market) -> bool:
@@ -119,7 +119,7 @@ class NeitherRule(BinaryRule[BinaryResolution]):
 
 
 @define(slots=False)
-class XORRule(BinaryRule[BinaryResolution]):
+class XORRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the XOR of two other DoResolveRules."""
 
     def _value(self, market: Market) -> bool:
@@ -140,7 +140,7 @@ class XORRule(BinaryRule[BinaryResolution]):
 
 
 @define(slots=False)
-class XNORRule(BinaryRule[BinaryResolution]):
+class XNORRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the XNOR of two other DoResolveRules."""
 
     def _value(self, market: Market) -> bool:
@@ -161,7 +161,7 @@ class XNORRule(BinaryRule[BinaryResolution]):
 
 
 @define(slots=False)
-class ImpliesRule(BinaryRule[BinaryResolution]):
+class ImpliesRule(BinaryRule[Optional[BinaryResolution]]):
     """Return the implication of two other DoResolveRules."""
 
     def _value(self, market: Market) -> bool:
@@ -199,12 +199,12 @@ class ResolveAtTime(DoResolveRule):
 
 
 @define(slots=False)
-class ResolveToValue(ResolutionValueRule):
+class ResolveToValue(Generic[T], Rule[T]):
     """Resolve to a pre-specified value."""
 
-    resolve_value: AnyResolution
+    resolve_value: T
 
-    def _value(self, market: Market) -> AnyResolution:
+    def _value(self, market: Market) -> T:
         return self.resolve_value
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -326,6 +326,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
         if self.method == 'randrange':
             self.args = (self.start, self.size)
         else:
+            assert isinstance(market.market.pool, Mapping)
             items = [(int(idx), float(obj)) for idx, obj in market.market.pool.items() if int(idx) >= self.start]
             self.args = (range(self.start, self.start + len(items)), )
             self.kwargs["weights"] = [prob for _, prob in items]
@@ -366,14 +367,14 @@ class ResolveMultipleValues(ResolutionValueRule):
     def from_dict(cls, env: Mapping[str, Any]) -> 'ResolveMultipleValues':
         """Take a dictionary and return an instance of the associated class."""
         env_copy: dict[str, Any] = dict(env)
-        shares: MutableSequence[tuple[ResolutionValueRule, float]] = env['shares']
+        shares: MutableSequence[tuple[ResolutionValueRule | tuple[str, dict[str, Any]], float]] = env['shares']
         new_shares = []
         for rule, weight in shares:
             try:
-                type_, kwargs = rule
+                type_, kwargs = cast(Tuple[str, Dict[str, Any]], rule)
                 new_rule = get_rule(type_).from_dict(kwargs)
                 new_shares.append((new_rule, weight))
             except Exception:
                 pass
         env_copy['shares'] = new_shares
-        return cast(ResolveMultipleValues, super().from_dict(env_copy))
+        return super().from_dict(env_copy)

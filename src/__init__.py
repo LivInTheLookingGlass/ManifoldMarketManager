@@ -16,7 +16,7 @@ from pathlib import Path
 from pickle import dumps, loads
 from sqlite3 import register_adapter, register_converter
 from sys import path as _sys_path
-from typing import TYPE_CHECKING, Generic, Iterable, Literal, Mapping, Optional, Sequence, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Generic, Iterable, Literal, Mapping, Sequence, TypeVar, Union, cast
 from warnings import warn
 
 from attrs import define, field
@@ -32,7 +32,7 @@ PseudoNumericResolution = Union[Literal["CANCEL"], float]
 FreeResponseResolution = Union[Literal["CANCEL"], Mapping[str, float], Mapping[int, float], Mapping[float, float]]
 MultipleChoiceResolution = FreeResponseResolution
 AnyResolution = Union[BinaryResolution, PseudoNumericResolution, FreeResponseResolution, MultipleChoiceResolution]
-T = TypeVar("T", bound=Optional[AnyResolution])
+T = TypeVar("T", bound=Union[None, AnyResolution])
 
 if TYPE_CHECKING:  # pragma: no cover
     from logging import Logger
@@ -46,6 +46,8 @@ class Rule(ABC, Generic[T], DictDeserializable):
     logger: Logger = field(init=False, repr=False, hash=False)
 
     def __attrs_post_init__(self) -> None:
+        if hasattr(super(), '__attrs_post_init__'):
+            super().__attrs_post_init__()  # type: ignore
         self.logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
 
     @abstractmethod
@@ -147,7 +149,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.38"
+VERSION = "0.6.0.39"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "AnyResolution", "BinaryResolution", "DoResolveRule", "FreeResponseResolution",

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from time import time
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Mapping, cast
 
 from attrs import Factory, define
 
@@ -18,6 +18,7 @@ if TYPE_CHECKING:  # pragma: no cover
 @define(slots=False)
 class ThisMarketClosed(DoResolveRule):
     def _value(self, market: Market) -> bool:
+        assert market.market.closeTime is not None
         return bool(market.market.closeTime < time() * 1000)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -30,15 +31,18 @@ class CurrentValueRule(ResolutionValueRule):
 
     def _value(self, market: Market) -> float | dict[Any, float]:
         if market.market.outcomeType == "BINARY":
-            return cast(float, market.market.probability * 100)
+            assert market.market.probability is not None
+            return market.market.probability * 100
         elif market.market.outcomeType == "PSEUDO_NUMERIC":
+            assert isinstance(market.market.pool, Mapping)
+            assert market.market.p
             return pool_to_number_cpmm1(
                 market.market.pool['YES'],
                 market.market.pool['NO'],
                 market.market.p,
                 float(market.market.min or 0),
                 float(market.market.max or 0),
-                market.market.isLogScale
+                bool(market.market.isLogScale)
             )
         return market_to_answer_map(market)
 
@@ -76,6 +80,7 @@ class RoundValueRule(CurrentValueRule):
         if market.market.outcomeType in ("MULTIPLE_CHOICE", "FREE_RESPONSE"):
             raise RuntimeError()
         elif market.market.outcomeType == "BINARY":
+            assert market.market.probability
             return bool(round(market.market.probability))
         return round(cast(float, super()._value(market)))
 

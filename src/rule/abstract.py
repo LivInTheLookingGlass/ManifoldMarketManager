@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from os import urandom
 from random import Random
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 from attrs import Factory, define
 
@@ -27,7 +27,7 @@ class UnaryRule(Rule[T]):
         env_copy = dict(env)
         type_, kwargs = env["child"]
         env_copy["child"] = get_rule(type_).from_dict(kwargs)
-        return cast(UnaryRule[T], super().from_dict(env_copy))
+        return super().from_dict(env_copy)
 
 
 @define(slots=False)  # type: ignore
@@ -44,7 +44,7 @@ class BinaryRule(Rule[T]):
         for name in ('rule1', 'rule2'):
             type_, kwargs = env[name]
             env_copy[name] = get_rule(type_).from_dict(kwargs)
-        return cast(BinaryRule[T], super().from_dict(env_copy))
+        return super().from_dict(env_copy)
 
 
 @define(slots=False)  # type: ignore
@@ -60,7 +60,7 @@ class VariadicRule(Rule[T]):
         arr = env["rules"]
         for idx, (type_, kwargs) in enumerate(arr):
             env_copy["rules"][idx] = get_rule(type_).from_dict(kwargs)
-        return cast(VariadicRule[T], super().from_dict(env_copy))
+        return super().from_dict(env_copy)
 
 
 @define(slots=False)  # type: ignore

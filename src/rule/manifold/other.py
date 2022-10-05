@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from time import time
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from attrs import define
 
@@ -21,13 +21,11 @@ if TYPE_CHECKING:  # pragma: no cover
 
 @define(slots=False)
 class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
-    def __attrs_post_init__(self) -> None:
-        DoResolveRule.__attrs_post_init__(self)
-        ManifoldMarketMixin.__attrs_post_init__(self)
-
     @time_cache()
     def _value(self, market: Market) -> bool:
-        return bool(self.api_market().closeTime < time() * 1000)
+        close_time = self.api_market().closeTime
+        assert close_time is not None
+        return bool(close_time < time() * 1000)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- If `{self.id_}` closes ({self.api_market().question}).\n"
@@ -35,10 +33,6 @@ class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
 
 @define(slots=False)
 class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
-    def __attrs_post_init__(self) -> None:
-        DoResolveRule.__attrs_post_init__(self)
-        ManifoldMarketMixin.__attrs_post_init__(self)
-
     @time_cache()
     def _value(self, market: Market) -> bool:
         return bool(self.api_market().isResolved)
@@ -49,10 +43,6 @@ class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
 
 @define(slots=False)
 class OtherMarketValue(ManifoldMarketMixin, ResolutionValueRule):
-    def __attrs_post_init__(self) -> None:
-        ResolutionValueRule.__attrs_post_init__(self)
-        ManifoldMarketMixin.__attrs_post_init__(self)
-
     @time_cache()
     def _value(self, market: Market) -> BinaryResolution:
         mkt = self.api_market()
@@ -65,7 +55,7 @@ class OtherMarketValue(ManifoldMarketMixin, ResolutionValueRule):
                 self._binary_value(market, mkt),
                 float(mkt.min or 0),
                 float(mkt.max or 0),
-                mkt.isLogScale
+                bool(mkt.isLogScale)
             )
         raise NotImplementedError("Doesn't seem to be reported in the API")
 
@@ -75,8 +65,8 @@ class OtherMarketValue(ManifoldMarketMixin, ResolutionValueRule):
                 return True
             elif mkt.resolution == "NO":
                 return False
-            return float(mkt.resolutionProbability)
-        return float(mkt.probability)
+            return cast(float, mkt.resolutionProbability)
+        return cast(float, mkt.probability)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return (f"{'  ' * indent}- Resolved (or current, if not resolved) value of `{self.id_}` "
