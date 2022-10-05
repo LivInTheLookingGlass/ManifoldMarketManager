@@ -19,7 +19,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 @define(slots=False)
-class NegateRule(UnaryRule[None | BinaryResolution]):
+class NegateRule(UnaryRule[Optional[BinaryResolution]]):
     """Negate another DoResolveRule."""
 
     def _value(self, market: Market) -> bool:
