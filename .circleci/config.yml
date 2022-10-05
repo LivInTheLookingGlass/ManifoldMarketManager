@@ -36,7 +36,7 @@ jobs:
       - run:
           name: Initialize submodules
           command: |-
-              git submodule init
+              git submodule init --update
               mkdir -p logs
               touch env_personal.sh
       - run:
