@@ -1,35 +1,12 @@
 from __future__ import annotations
 
-from os import putenv
 from pickle import dumps, loads
-from typing import TYPE_CHECKING
 from urllib.parse import quote
 
-from pytest import fixture
-
 from ..market import Market
-from . import manifold_vcr
+from . import manifold_vcr, mkt
 
-if TYPE_CHECKING:  # pragma: no cover
-    from . import PytestRequest
-
-putenv('ManifoldAPIKey', 'fake_api_key')
-
-
-def fetch_slug(slug: str) -> Market:
-    """Fetch a market by slug, but cached."""
-    with manifold_vcr.use_cassette(f'test_market/fetch_slug/{quote(slug)}.yaml'):
-        return Market.from_slug(slug)
-
-
-@fixture(params=(
-    "what-are-the-next-5-badges-well-add",
-    "will-the-european-union-have-an-off",
-    "my-partner-and-i-are-considering-mo"
-))
-def mkt(request: PytestRequest[str]) -> Market:
-    """Generate markets via a fixture."""
-    return fetch_slug(request.param)
+assert mkt  # just need to access it so mypy doesn't complain
 
 
 def assert_equality(mkt1: Market, mkt2: Market) -> None:

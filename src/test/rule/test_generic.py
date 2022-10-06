@@ -29,7 +29,7 @@ validators: dict[str, Validator] = {
 }
 
 
-@fixture(params=tuple(validators))
+@fixture(params=tuple(validators))  # type: ignore
 def binary_rule(request: PytestRequest[str]) -> str:
     return request.param
 

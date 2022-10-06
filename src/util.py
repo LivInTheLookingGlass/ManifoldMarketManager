@@ -77,23 +77,14 @@ def market_to_answer_map(
     mkt: APIMarket = market  # type: ignore[assignment]
     if not isinstance(market, APIMarket):
         mkt = market.market
-    if mkt.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
-        assert mkt.answers
-        initial: dict[int, float] = {}
-        answer: dict[str, str | float]
-        for answer in mkt.answers:
-            key = int(answer['id'])
-            initial[key] = float(answer['probability'])
-    # elif mkt.outcomeType == "MULTIPLE_CHOICE":
-    #     # TODO: reimplement dpm-2 math so this is actually by probability
-    #     pool = cast(Mapping[Any, float], mkt.pool)
-    #     total = sum(answer**2 for answer in pool.values()) + 100**2
-    #     initial = {
-    #         int(answer): weight**2 / total
-    #         for answer, weight in pool.items()
-    #     }
-    else:
+    if mkt.outcomeType not in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
         raise RuntimeError("Cannot extract a mapping from binary markets")
+    assert mkt.answers
+    initial: dict[int, float] = {}
+    answer: dict[str, str | float]
+    for answer in mkt.answers:
+        key = int(answer['id'])
+        initial[key] = float(answer['probability'])
     return {
         key: value for key, value in initial.items()
         if key not in exclude and not any(f(key, value) for f in filters)

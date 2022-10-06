@@ -41,7 +41,7 @@ if TYPE_CHECKING:  # pragma: no cover
     "manifold.other.OtherMarketValue",
     "manifold.user.ResolveToUserProfit",
     "manifold.user.ResolveToUserCreatedVolume",
-))
+))  # type: ignore
 def rule_name(request: PytestRequest[str]) -> str:
     """Return the name of an existing rule."""
     return request.param
