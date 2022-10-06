@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from os import urandom
 from random import Random
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from attrs import Factory, define
 
 from .. import Rule, T
+from ..util import round_sig_figs
 from . import ResolutionValueRule, get_rule
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -25,6 +26,7 @@ class UnaryRule(Rule[T]):
     _explainer_stub: ClassVar[str] = SENTINEL_STUB
 
     def __init_subclass__(cls) -> None:
+        """Enforce that subclasses provide an explanatory stub."""
         if cls._explainer_stub is SENTINEL_STUB:
             raise ValueError("You need to override _explainer_stub to subclass this")
         return super().__init_subclass__()
@@ -55,6 +57,7 @@ class BinaryRule(Rule[T]):
     _explainer_stub: ClassVar[str] = SENTINEL_STUB
 
     def __init_subclass__(cls) -> None:
+        """Enforce that subclasses provide an explanatory stub."""
         if cls._explainer_stub is SENTINEL_STUB:
             raise ValueError("You need to override _explainer_stub to subclass this")
         return super().__init_subclass__()
@@ -89,6 +92,7 @@ class VariadicRule(Rule[T]):
     _explainer_stub: ClassVar[str] = SENTINEL_STUB
 
     def __init_subclass__(cls) -> None:
+        """Enforce that subclasses provide an explanatory stub."""
         if cls._explainer_stub is SENTINEL_STUB:
             raise ValueError("You need to override _explainer_stub to subclass this")
         return super().__init_subclass__()
@@ -101,6 +105,19 @@ class VariadicRule(Rule[T]):
         for idx, (type_, kwargs) in enumerate(arr):
             env_copy["rules"][idx] = get_rule(type_).from_dict(kwargs)
         return super().from_dict(env_copy)
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        ret = f"{'  ' * indent}- {self._explainer_stub}\n"
+        for rule in self.rules:
+            ret += rule.explain_abstract(indent + 1, **kwargs)
+        return ret
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        val = round_sig_figs(cast(float, self._value(market)), sig_figs)
+        ret = f"{'  ' * indent}- {self._explainer_stub} (-> {val})\n"
+        for rule in self.rules:
+            ret += rule.explain_specific(market, indent + 1, sig_figs)
+        return ret
 
 
 @define(slots=False)  # type: ignore
