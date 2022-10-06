@@ -44,11 +44,11 @@ class UnaryRule(AbstractRule[T]):
     child: Rule[T]
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- {self._explainer_stub}\n" + self.child.explain_abstract(indent + 1, **kwargs)
+        return super()._explain_abstract(indent, **kwargs) + self.child.explain_abstract(indent + 1, **kwargs)
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        return (f"{'  ' * indent}- {self._explainer_stub} (-> "
-                f"{self.value(market, format='NONE')})\n") + self.child.explain_specific(market, indent + 1, sig_figs)
+        return super()._explain_specific(market, indent, sig_figs) +\
+            self.child.explain_specific(market, indent + 1, sig_figs)
 
     @classmethod
     def from_dict(cls, env: Mapping[str, Any]) -> 'UnaryRule[T]':
@@ -76,13 +76,13 @@ class BinaryRule(AbstractRule[T]):
         return super().from_dict(env_copy)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- {self._explainer_stub}\n"
+        ret = super()._explain_abstract(indent, **kwargs)
         ret += self.rule1.explain_abstract(indent + 1, **kwargs)
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = (f"{'  ' * indent}- {self._explainer_stub} (-> {self.value(market, format='NONE')})\n")
+        ret = super()._explain_specific(market, indent, sig_figs)
         ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
         ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
         return ret
@@ -104,7 +104,7 @@ class VariadicRule(AbstractRule[T]):
         return super().from_dict(env_copy)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        ret = f"{'  ' * indent}- {self._explainer_stub}\n"
+        ret = super()._explain_abstract(indent, **kwargs)
         for rule in self.rules:
             ret += rule.explain_abstract(indent + 1, **kwargs)
         return ret
