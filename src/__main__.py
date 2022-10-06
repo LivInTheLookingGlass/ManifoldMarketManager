@@ -121,7 +121,8 @@ if any((args.slug, args.id_, args.url)):
     conn.execute("INSERT INTO markets values (?, ?, ?, ?);", (idx, mkt, 1, None))
     conn.commit()
 
-    print(msg := f"Successfully added as ID {idx}!")
+    msg = f"Successfully added as ID {idx}!"
+    print(msg)
     logger.info(msg)
     conn.close()
 

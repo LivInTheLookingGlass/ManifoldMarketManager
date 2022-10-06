@@ -182,22 +182,26 @@ def main(refresh: bool = False, console_only: bool = False) -> None:
     conn = register_db()
     mkt: market.Market
     for id_, mkt, check_rate, last_checked in conn.execute("SELECT * FROM markets"):
-        print(msg := f"Currently checking ID {id_}: {mkt.market.question}")
+        msg = f"Currently checking ID {id_}: {mkt.market.question}"
+        print(msg)
         logger.info(msg)
         print(mkt.explain_abstract())
         print("\n\n" + mkt.explain_specific() + "\n\n")
         check = (refresh or not last_checked or (datetime.now() > last_checked + timedelta(hours=check_rate)))
-        print(msg := f'  - [{"x" if check else " "}] Should I check?')
+        msg = f'  - [{"x" if check else " "}] Should I check?'
+        print(msg)
         logger.info(msg)
         if check:
             check = mkt.should_resolve()
-            print(msg := f'  - [{"x" if check else " "}] Is elligible to resolve (to {mkt.resolve_to()})?')
+            msg = f'  - [{"x" if check else " "}] Is elligible to resolve (to {mkt.resolve_to()})?'
+            print(msg)
             logger.info(msg)
             if check:
                 watch_reply(conn, id_, mkt, console_only)
 
             if mkt.market.isResolved:
-                print(msg := "  - [x] Market resolved, removing from db")
+                msg = "  - [x] Market resolved, removing from db"
+                print(msg)
                 logger.info(msg)
                 conn.execute(
                     "DELETE FROM markets WHERE id = ?;",

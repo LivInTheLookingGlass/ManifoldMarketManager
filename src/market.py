@@ -174,7 +174,8 @@ class Market:
         """
         chosen = None
         for rule in (self.resolve_to_rules or ()):
-            if (chosen := rule.value(self, format=self.market.outcomeType)) is not None:
+            chosen = rule.value(self, format=self.market.outcomeType)
+            if chosen is not None:
                 break
         if chosen is None:
             raise RuntimeError()
