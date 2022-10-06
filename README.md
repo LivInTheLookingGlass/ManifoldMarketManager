@@ -122,42 +122,6 @@ The goal of this project is to make a Manifold agent that can manage various for
 
 ![A graph of my application's dependencies](./src.png)
 
-## Recent Coverage Report
-
-```
----------- coverage: platform linux, python 3.10.7-final-0 -----------
-Name                                          Stmts   Miss Branch BrPart  Cover
--------------------------------------------------------------------------------
-src/PyManifold/pymanifold/__init__.py             4      0      0      0   100%
-src/PyManifold/pymanifold/lib.py                167     95     68      6    37%
-src/PyManifold/pymanifold/types.py               95      2     24      0    95%
-src/PyManifold/pymanifold/utils/__init__.py       2      0      0      0   100%
-src/PyManifold/pymanifold/utils/kelly.py         40     37     10      0     6%
-src/PyManifold/tests/__init__.py                  0      0      0      0   100%
-src/PyManifold/tests/test_pymanifold.py          79      0      6      0   100%
-src/__init__.py                                 104     55     48      1    36%
-src/__main__.py                                  84     84     34      0     0%
-src/application.py                              133    133     40      0     0%
-src/market.py                                   151     88     64      2    33%
-src/rule/__init__.py                             18      1      6      1    92%
-src/rule/abstract.py                             50     19     14      0    61%
-src/rule/generic.py                             249    153     68      0    40%
-src/rule/github.py                               89     47     14      0    47%
-src/rule/manifold/__init__.py                    23      9      8      0    52%
-src/rule/manifold/other.py                       97     65     32      0    31%
-src/rule/manifold/this.py                        66     32     24      0    49%
-src/rule/manifold/user.py                        26      6      4      0    80%
-src/test/__init__.py                              7      0      2      0   100%
-src/test/rule/__init__.py                         0      0      0      0   100%
-src/test/rule/test_generic.py                    37      0      8      0   100%
-src/test/test_market.py                          40      0     10      0   100%
-src/test/test_rule.py                            14      0      4      0   100%
-src/test/test_util.py                            41      2     16      2    93%
-src/util.py                                     101     41     35      0    52%
--------------------------------------------------------------------------------
-TOTAL                                          1717    869    539     12    45%
-```
-
 ## JSON Examples
 
 ### 50/50 Lottery
