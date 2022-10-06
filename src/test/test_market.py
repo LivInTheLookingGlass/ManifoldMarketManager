@@ -1,21 +1,25 @@
 from __future__ import annotations
 
-from functools import lru_cache
+from os import putenv
 from pickle import dumps, loads
 from typing import TYPE_CHECKING
+from urllib.parse import quote
 
-from pytest import fixture, mark
+from pytest import fixture
 
 from ..market import Market
+from . import manifold_vcr
 
 if TYPE_CHECKING:  # pragma: no cover
     from . import PytestRequest
 
+putenv('ManifoldAPIKey', 'fake_api_key')
 
-@lru_cache(maxsize=None)
+
 def fetch_slug(slug: str) -> Market:
     """Fetch a market by slug, but cached."""
-    return Market.from_slug(slug)
+    with manifold_vcr.use_cassette(f'test_market/fetch_slug/{quote(slug)}.yaml'):
+        return Market.from_slug(slug)
 
 
 @fixture(params=(
@@ -43,8 +47,6 @@ def assert_equality(mkt1: Market, mkt2: Market) -> None:
             assert mkt1.market.id == mkt2.market.id
 
 
-@mark.network
-@mark.slow
 def test_get_state(mkt: Market) -> None:
     """Make sure that we are not divulging secrets."""
     state = mkt.__getstate__()
@@ -52,17 +54,15 @@ def test_get_state(mkt: Market) -> None:
     assert 'logger' not in state
 
 
-@mark.network
-@mark.slow
 def test_pickling(mkt: Market) -> None:
     """Make sure Markets can be dumped to disk and reloaded."""
-    new_mkt: Market = loads(dumps(mkt))
+    with manifold_vcr.use_cassette(f'test_market/pickle_load/{quote(mkt.id)}.yaml'):
+        new_mkt: Market = loads(dumps(mkt))
     assert_equality(mkt, new_mkt)
 
 
-@mark.network
-@mark.slow
 def test_from_id(mkt: Market) -> None:
     """Make sure Markets can be grabbed by ID."""
-    mkt2 = Market.from_id(mkt.id)
+    with manifold_vcr.use_cassette(f'test_market/fetch_by_id/{quote(mkt.id)}.yaml'):
+        mkt2 = Market.from_id(mkt.id)
     assert_equality(mkt, mkt2)
