@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from os import urandom
 from random import Random
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Generic, cast
 
 from attrs import Factory, define
 
@@ -19,21 +19,32 @@ SENTINEL_STUB = "A programatic explanation was not provided"
 
 
 @define(slots=False)  # type: ignore
-class UnaryRule(Rule[T]):
-    """Perform a unary operation on another DoResolveRule."""
+class AbstractRule(Generic[T], Rule[T]):
+    """Provide a rule where the explanations are pre-generated."""
 
-    child: Rule[T]
     _explainer_stub: ClassVar[str] = SENTINEL_STUB
 
     def __init_subclass__(cls) -> None:
         """Enforce that subclasses provide an explanatory stub."""
-        if cls._explainer_stub is SENTINEL_STUB:
+        if cls._explainer_stub is SENTINEL_STUB and cls._value != AbstractRule._value:
             raise ValueError("You need to override _explainer_stub to subclass this")
         return super().__init_subclass__()
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- {self._explainer_stub}\n" +\
-               self.child.explain_abstract(indent + 1, **kwargs)
+        return f"{'  ' * indent}- {self._explainer_stub}\n"
+
+    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        return f"{'  ' * indent}- {self._explainer_stub} (-> {self.value(market, format='NONE')})\n"
+
+
+@define(slots=False)  # type: ignore
+class UnaryRule(AbstractRule[T]):
+    """Perform a unary operation on another DoResolveRule."""
+
+    child: Rule[T]
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        return f"{'  ' * indent}- {self._explainer_stub}\n" + self.child.explain_abstract(indent + 1, **kwargs)
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
         return (f"{'  ' * indent}- {self._explainer_stub} (-> "
@@ -49,18 +60,11 @@ class UnaryRule(Rule[T]):
 
 
 @define(slots=False)  # type: ignore
-class BinaryRule(Rule[T]):
+class BinaryRule(AbstractRule[T]):
     """Perform a binary operation on two Rules."""
 
     rule1: Rule[T]
     rule2: Rule[T]
-    _explainer_stub: ClassVar[str] = SENTINEL_STUB
-
-    def __init_subclass__(cls) -> None:
-        """Enforce that subclasses provide an explanatory stub."""
-        if cls._explainer_stub is SENTINEL_STUB:
-            raise ValueError("You need to override _explainer_stub to subclass this")
-        return super().__init_subclass__()
 
     @classmethod
     def from_dict(cls, env: Mapping[str, Any]) -> 'BinaryRule[T]':
@@ -85,17 +89,10 @@ class BinaryRule(Rule[T]):
 
 
 @define(slots=False)  # type: ignore
-class VariadicRule(Rule[T]):
+class VariadicRule(AbstractRule[T]):
     """Perform a variadic operation on many Rules."""
 
     rules: list[Rule[T]] = Factory(list)
-    _explainer_stub: ClassVar[str] = SENTINEL_STUB
-
-    def __init_subclass__(cls) -> None:
-        """Enforce that subclasses provide an explanatory stub."""
-        if cls._explainer_stub is SENTINEL_STUB:
-            raise ValueError("You need to override _explainer_stub to subclass this")
-        return super().__init_subclass__()
 
     @classmethod
     def from_dict(cls, env: Mapping[str, Any]) -> 'VariadicRule[T]':

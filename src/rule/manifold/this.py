@@ -1,33 +1,36 @@
 from __future__ import annotations
 
 from time import time
-from typing import TYPE_CHECKING, Mapping, cast
+from typing import TYPE_CHECKING, Mapping, Union, cast
 
 from attrs import Factory, define
 
+from ... import (AnyResolution, BinaryResolution, FreeResponseResolution, MultipleChoiceResolution,
+                 PseudoNumericResolution, Rule)
 from ...util import fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1
-from .. import DoResolveRule, ResolutionValueRule
+from ..abstract import AbstractRule
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any
+    from typing import Any, ClassVar
 
-    from ... import FreeResponseResolution, MultipleChoiceResolution
     from ...market import Market
 
 
 @define(slots=False)
-class ThisMarketClosed(DoResolveRule):
+class ThisMarketClosed(AbstractRule[bool]):
+
+    _explainer_stub: ClassVar[str] = "If this market reaches its close date"
+
     def _value(self, market: Market) -> bool:
         assert market.market.closeTime is not None
         return bool(market.market.closeTime < time() * 1000)
 
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- If this market reaches its close date\n"
-
 
 @define(slots=False)
-class CurrentValueRule(ResolutionValueRule):
+class CurrentValueRule(AbstractRule[AnyResolution]):
     """Resolve to the current market-consensus value."""
+
+    _explainer_stub: ClassVar[str] = "Resolves to the current market value"
 
     def _value(self, market: Market) -> float | dict[Any, float]:
         if market.market.outcomeType == "BINARY":
@@ -46,18 +49,15 @@ class CurrentValueRule(ResolutionValueRule):
             )
         return market_to_answer_map(market)
 
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- Resolves to the current market value.\n"
-
 
 @define(slots=False)
-class FibonacciValueRule(ResolutionValueRule):
+class FibonacciValueRule(Rule[Union[float, Mapping[int, float]]]):
     """Resolve each value with a fibonacci weight, ranked by probability."""
 
     exclude: set[int] = Factory(set)
     min_rewarded: float = 0.0001
 
-    def _value(self, market: Market) -> float | dict[Any, float]:
+    def _value(self, market: Market) -> float | dict[int, float]:
         items = market_to_answer_map(market, self.exclude, (lambda id_, probability: probability < self.min_rewarded))
         rank = sorted(items, key=items.__getitem__)
         ret = {item: fib for item, fib in zip(rank, fibonacci())}
@@ -73,8 +73,10 @@ class FibonacciValueRule(ResolutionValueRule):
 
 
 @define(slots=False)
-class RoundValueRule(CurrentValueRule):
+class RoundValueRule(AbstractRule[Union[BinaryResolution, PseudoNumericResolution]]):
     """Resolve to the current market-consensus value, but rounded."""
+
+    _explainer_stub: ClassVar[str] = "Resolves to round(MKT)"
 
     def _value(self, market: Market) -> float:
         if market.market.outcomeType in ("MULTIPLE_CHOICE", "FREE_RESPONSE"):
@@ -84,12 +86,9 @@ class RoundValueRule(CurrentValueRule):
             return bool(round(market.market.probability))
         return round(cast(float, super()._value(market)))
 
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
-        return f"{'  ' * indent}- Resolves to round(MKT).\n"
-
 
 @define(slots=False)
-class PopularValueRule(ResolutionValueRule):
+class PopularValueRule(Rule[Union[MultipleChoiceResolution, FreeResponseResolution]]):
     """Resolve to the n most likely market-consensus values, weighted by their probability."""
 
     size: int = 1
