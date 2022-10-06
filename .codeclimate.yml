@@ -35,18 +35,10 @@ plugins:
     enabled: true
     config:
       languages:
-      - python:
+        python:
+          python_version: 3
   fixme:
     enabled: true
-  pep8:
-    enabled: true
-    config:
-      max-line-length: 120
-  sonar-python:
-    enabled: true
-    config:
-      tests_patterns:
-        - src/test/**
   git-legal:
     enabled: true
   shellcheck:
