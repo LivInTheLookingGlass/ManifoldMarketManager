@@ -47,6 +47,11 @@ def assert_equality(mkt1: Market, mkt2: Market) -> None:
             assert mkt1.market.id == mkt2.market.id
 
 
+def test_repr(mkt: Market) -> None:
+    """Make sure that repr does not error on common cases."""
+    assert repr(mkt)
+
+
 def test_get_state(mkt: Market) -> None:
     """Make sure that we are not divulging secrets."""
     state = mkt.__getstate__()

@@ -10,7 +10,19 @@ from typing import Any, List, cast
 from pytest import raises
 
 from .. import Rule
-from ..util import explain_abstract, require_env
+from ..util import explain_abstract, fibonacci, require_env
+
+
+def test_fib(limit: int = 100) -> None:
+    """Ensure the fib generator works, out to some number of terms."""
+    penultimate = prev = 0
+    for idx, x in enumerate(fibonacci(start=randrange(0, 20))):
+        if idx >= 2:
+            assert x - prev == penultimate
+        penultimate = prev
+        prev = x
+        if idx >= limit:
+            break
 
 
 def test_require_env() -> None:
