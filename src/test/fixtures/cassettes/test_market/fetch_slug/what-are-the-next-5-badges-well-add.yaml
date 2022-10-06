@@ -5,7 +5,7 @@ interactions:
       Accept:
       - '*/*'
       Accept-Encoding:
-      - gzip, deflate, br
+      - gzip, deflate
       Connection:
       - keep-alive
       User-Agent:
@@ -14,282 +14,285 @@ interactions:
     uri: https://manifold.markets/api/v0/slug/what-are-the-next-5-badges-well-add
   response:
     body:
-      string: !!binary |
-        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
+      string: "{\"id\":\"GdIMBXtOnA1wj3KJAYvj\",\"creatorId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"creatorUsername\":\"ian\",\"creatorName\":\"Ian
+        Philips\",\"createdTime\":1663366879764,\"creatorAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"closeTime\":1667282340000,\"question\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"tags\":[],\"url\":\"https://manifold.markets/ian/what-are-the-next-5-badges-well-add\",\"pool\":{\"0\":100,\"1\":5,\"2\":5,\"3\":5,\"4\":10,\"5\":30,\"6\":25,\"7\":5,\"8\":13,\"9\":9,\"10\":20,\"11\":5,\"12\":1,\"13\":2,\"14\":1,\"15\":0,\"16\":10,\"17\":1,\"18\":1,\"19\":10,\"20\":21,\"21\":4,\"22\":10,\"23\":1,\"24\":1,\"25\":1,\"26\":1},\"outcomeType\":\"FREE_RESPONSE\",\"mechanism\":\"dpm-2\",\"volume\":199,\"volume7Days\":14,\"volume24Hours\":1,\"isResolved\":false,\"lastUpdatedTime\":1664933881767,\"answers\":[{\"username\":\"ian\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"text\":\"Tipped
+        comments (in place of proven correct)\",\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"name\":\"Ian
+        Philips\",\"number\":1,\"id\":\"1\",\"createdTime\":1663369771773,\"probability\":0.011620129465247311},{\"text\":\"Number
+        of predictions\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FNathanYounga244%2FNathan%20square.jpg?alt=media&token=6de519e4-402b-4ff2-b6b3-70181e9d9dc2\",\"number\":2,\"id\":\"2\",\"createdTime\":1663375142593,\"name\":\"N.C.
+        Young\",\"userId\":\"fSrex43BDjeneNZ4ZLfxllSb8b42\",\"username\":\"NcyRocks\",\"probability\":0.01218696504891791},{\"createdTime\":1663375224256,\"id\":\"3\",\"username\":\"NcyRocks\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FNathanYounga244%2FNathan%20square.jpg?alt=media&token=6de519e4-402b-4ff2-b6b3-70181e9d9dc2\",\"text\":\"Number
+        of markets bet on\",\"number\":3,\"userId\":\"fSrex43BDjeneNZ4ZLfxllSb8b42\",\"name\":\"N.C.
+        Young\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"probability\":0.012753800632588509},{\"id\":\"4\",\"number\":4,\"name\":\"Olivia\",\"createdTime\":1663383733801,\"username\":\"LivInTheLookingGlass\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"text\":\"Groups
+        Created\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"probability\":0.03503043907084311},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"number\":5,\"id\":\"5\",\"createdTime\":1663383830807,\"username\":\"LivInTheLookingGlass\",\"text\":\"A
+        badge for highest leaderboard position\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"name\":\"Olivia\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"probability\":0.10169030371050575},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"name\":\"Robin
+        Foster\",\"username\":\"RobinFoster\",\"userId\":\"QtBvbpuAP0cXKh8qUgCsSpGW0nh2\",\"text\":\"Top
+        Tipper\",\"id\":\"6\",\"createdTime\":1663416008850,\"number\":6,\"avatarUrl\":\"https://lh3.googleusercontent.com/a/AATXAJzxP5vDmtsmb1gnc6d5kJGNemnV0TXwJ0tDQX32=s96-c\",\"probability\":0.09063700982892904},{\"text\":\"Bug
+        report\",\"id\":\"7\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"name\":\"Duncan\",\"number\":7,\"username\":\"Duncan\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"createdTime\":1663423595847,\"probability\":0.018988992052965115},{\"number\":8,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"name\":\"Duncan\",\"createdTime\":1663423738479,\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"id\":\"8\",\"text\":\"Referrals.
+        \",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"username\":\"Duncan\",\"probability\":0.05807797390288972},{\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"text\":\"Tournament
+        participation \",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"createdTime\":1663423832534,\"username\":\"Duncan\",\"number\":9,\"name\":\"Duncan\",\"id\":\"9\",\"probability\":0.03832942216780601},{\"text\":\"$M
+        to Charity. \",\"id\":\"10\",\"username\":\"Duncan\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"number\":10,\"createdTime\":1663423901615,\"name\":\"Duncan\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"probability\":0.09205409878810553},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"username\":\"Duncan\",\"name\":\"Duncan\",\"number\":11,\"text\":\"Challenges\",\"id\":\"11\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"createdTime\":1663512260147,\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"probability\":0.02545091770680996},{\"text\":\"Competed
+        tutorial \",\"number\":12,\"name\":\"Martin Randall\",\"createdTime\":1663622348235,\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"username\":\"MartinRandall\",\"id\":\"12\",\"probability\":0.005271570928136584},{\"number\":13,\"username\":\"MartinRandall\",\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"name\":\"Martin
+        Randall\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"13\",\"createdTime\":1663622819980,\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"text\":\"Paid
+        account\",\"probability\":0.011132650863290594},{\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"id\":\"14\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"createdTime\":1663623112006,\"username\":\"MartinRandall\",\"text\":\"Ante
+        up / Subsidy\",\"number\":14,\"name\":\"Martin Randall\",\"probability\":0.005316917774830232},{\"name\":\"Martin
+        Randall\",\"text\":\"Proven correct\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"number\":15,\"username\":\"MartinRandall\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"createdTime\":1663623587224,\"id\":\"15\",\"probability\":0},{\"id\":\"16\",\"username\":\"Yev\",\"number\":16,\"userId\":\"Y8xXwCCYe3cBCW5XeU8MxykuPAY2\",\"createdTime\":1663623907854,\"text\":\"A
+        badge indicating that the user is a bot\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"name\":\"Yev\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FYev%2Fpfp.svg?alt=media&token=1d1e1ec2-e870-4890-8dd0-60bbd312ab71\",\"probability\":0.05441621603237766},{\"id\":\"17\",\"text\":\"Verified\",\"createdTime\":1663624132200,\"username\":\"MartinRandall\",\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"name\":\"Martin
+        Randall\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"number\":17,\"probability\":0.005566325431645297},{\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"createdTime\":1663625232496,\"username\":\"MartinRandall\",\"name\":\"Martin
+        Randall\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"id\":\"18\",\"number\":18,\"text\":\"Long
+        shot\",\"probability\":0.005588998854992122},{\"id\":\"19\",\"number\":19,\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FYev%2Fpfp.svg?alt=media&token=1d1e1ec2-e870-4890-8dd0-60bbd312ab71\",\"userId\":\"Y8xXwCCYe3cBCW5XeU8MxykuPAY2\",\"createdTime\":1663625861895,\"text\":\"Twitch/Discord
+        user\",\"username\":\"Yev\",\"name\":\"Yev\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"probability\":0.05713702683399654},{\"text\":\"Whale\",\"name\":\"Martin
+        Randall\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"id\":\"20\",\"username\":\"MartinRandall\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"createdTime\":1663641550212,\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"number\":20,\"probability\":0.1278440975410672},{\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"name\":\"Martin
+        Randall\",\"number\":21,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"createdTime\":1664246455093,\"username\":\"MartinRandall\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"id\":\"21\",\"text\":\"Beat
+        the founder\",\"probability\":0.025484927841830193},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"name\":\"Ian
+        Philips\",\"id\":\"22\",\"createdTime\":1664579205144,\"username\":\"ian\",\"text\":\"Popular
+        market creator\",\"number\":22,\"probability\":0.06529945923885318},{\"username\":\"MartinRandall\",\"number\":23,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"text\":\"Minority
+        Report\",\"id\":\"23\",\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"name\":\"Martin
+        Randall\",\"createdTime\":1664580888625,\"probability\":0.00665464975229285},{\"name\":\"Martin
+        Randall\",\"createdTime\":1664580976827,\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"id\":\"24\",\"number\":24,\"username\":\"MartinRandall\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"text\":\"Precog\",\"probability\":0.006677323175639674},{\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"name\":\"Martin
+        Randall\",\"text\":\"Quality adjusted dating years\",\"createdTime\":1664581434659,\"id\":\"25\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"username\":\"MartinRandall\",\"number\":25,\"probability\":0.006699996598986498},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"26\",\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"name\":\"Martin
+        Randall\",\"username\":\"MartinRandall\",\"number\":26,\"text\":\"Spindle\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"createdTime\":1664933844819,\"probability\":0.006722670022333324}],\"comments\":[{\"answerOutcome\":\"26\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"content\":{\"content\":[{\"content\":[{\"text\":\"Awarded
+        for getting a negative mana balance.\",\"type\":\"text\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"id\":\"dXMYQUkbSwjrfC6tjvIt\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"commenterPositionOutcome\":\"12\",\"commentType\":\"contract\",\"betOutcome\":\"26\",\"userName\":\"Martin
+        Randall\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"betAmount\":1,\"createdTime\":1664933880357,\"betId\":\"KpbQ3gAV1dYk1VjJvEAE\",\"commenterPositionShares\":1,\"userUsername\":\"MartinRandall\"},{\"userUsername\":\"MartinRandall\",\"id\":\"DW3273yZkzOViglgQjBU\",\"commentType\":\"contract\",\"createdTime\":1664630766988,\"commenterPositionShares\":1,\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"answerOutcome\":\"24\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"attrs\":{\"id\":\"QClKksEIMokqiWwOi5YU\",\"label\":\"Yev\"},\"type\":\"mention\"},{\"text\":\"
+        It wont be \",\"type\":\"text\"},{\"type\":\"text\",\"marks\":[{\"type\":\"italic\"}],\"text\":\"awarded\"},{\"type\":\"text\",\"text\":\"
+        until then. But I think it can be added now, aspirationally.\"}]}]},\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"commenterPositionOutcome\":\"12\",\"userName\":\"Martin
+        Randall\"},{\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FYev%2Fpfp.svg?alt=media&token=1d1e1ec2-e870-4890-8dd0-60bbd312ab71\",\"userName\":\"Yev\",\"answerOutcome\":\"25\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"commenterPositionShares\":20,\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"createdTime\":1664596118574,\"id\":\"AZyxC5mD6irWR9praSiz\",\"userUsername\":\"Yev\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"mention\",\"attrs\":{\"label\":\"MartinRandall\",\"id\":\"flAeCjVuAUNCztkKBBEt\"}},{\"text\":\"
+        I think the person who caused the market to resolve positively should also
+        get it (or in the case of numeric markets, anyone who contributed to the resolution)\",\"type\":\"text\"}]}]},\"commenterPositionOutcome\":\"20\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userId\":\"Y8xXwCCYe3cBCW5XeU8MxykuPAY2\",\"commentType\":\"contract\"},{\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"5qImyoEb1Zs7GRtkvYwV\",\"label\":\"MartinRandall\"}},{\"type\":\"text\",\"text\":\"
+        This obviously won't be added until Manifold is Y years old\"}],\"type\":\"paragraph\"}]},\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FYev%2Fpfp.svg?alt=media&token=1d1e1ec2-e870-4890-8dd0-60bbd312ab71\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"commenterPositionOutcome\":\"20\",\"answerOutcome\":\"24\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"userUsername\":\"Yev\",\"userName\":\"Yev\",\"createdTime\":1664595645122,\"commentType\":\"contract\",\"commenterPositionShares\":20,\"id\":\"QClKksEIMokqiWwOi5YU\",\"userId\":\"Y8xXwCCYe3cBCW5XeU8MxykuPAY2\"},{\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"commenterPositionShares\":1,\"commenterPositionOutcome\":\"12\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Resolving
+        a date me market with a date me doc positively.\"}]}]},\"betOutcome\":\"25\",\"userName\":\"Martin
+        Randall\",\"commentType\":\"contract\",\"createdTime\":1664583421941,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"betAmount\":1,\"userUsername\":\"MartinRandall\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"id\":\"flAeCjVuAUNCztkKBBEt\",\"betId\":\"Oqs3Lz0bwSD3mlhuGh3l\",\"answerOutcome\":\"25\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\"},{\"userName\":\"Martin
+        Randall\",\"userUsername\":\"MartinRandall\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"5qImyoEb1Zs7GRtkvYwV\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"commentType\":\"contract\",\"createdTime\":1664581375262,\"answerOutcome\":\"24\",\"commenterPositionShares\":1,\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionOutcome\":\"12\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"content\":{\"content\":[{\"content\":[{\"text\":\"Future
+        Perfect\",\"type\":\"text\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"}},{\"answerOutcome\":\"24\",\"createdTime\":1664581169973,\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Or
+        maybe Farseer\"}]}],\"type\":\"doc\"},\"commenterPositionShares\":1,\"userName\":\"Martin
+        Randall\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commentType\":\"contract\",\"commenterPositionOutcome\":\"12\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"id\":\"6ctOZFsMcjXOXqIyaU03\",\"userUsername\":\"MartinRandall\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\"},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"betId\":\"0TjNOU9VFcl0TJlxmfGl\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"id\":\"9wfqJTXrOmKSiJ2GmQrX\",\"commenterPositionOutcome\":\"12\",\"userUsername\":\"MartinRandall\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"betAmount\":1,\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"For
+        making X mana from a bet made Y years before the market resolved.\"}]}]},\"answerOutcome\":\"24\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"userName\":\"Martin
+        Randall\",\"betOutcome\":\"24\",\"contractQuestion\":\"What are the next 5
+        badges we'll add by the end of October?\",\"commentType\":\"contract\",\"createdTime\":1664581145472,\"commenterPositionShares\":1},{\"betOutcome\":\"23\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"For
+        being the only bettor to make money on a market that you didn't create where
+        X bettors lost money.\"}]}]},\"commenterPositionShares\":1,\"commenterPositionOutcome\":\"12\",\"betAmount\":1,\"id\":\"vdnDgHEIVNKdVcmZv63v\",\"answerOutcome\":\"23\",\"userName\":\"Martin
+        Randall\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"betId\":\"CL0K7HHjLy1QvXhjuoSn\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"commentType\":\"contract\",\"createdTime\":1664580930405,\"userUsername\":\"MartinRandall\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\"},{\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"answerOutcome\":\"22\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"id\":\"caMpI79A0AcCsJxF8PjF\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"betId\":\"4BMjEyLghHg9kCNQ58H9\",\"createdTime\":1664579281503,\"userName\":\"Ian
+        Philips\",\"commentType\":\"contract\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"betOutcome\":\"22\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"userUsername\":\"ian\",\"betAmount\":10,\"commenterPositionShares\":10,\"commenterPositionOutcome\":\"22\",\"content\":{\"content\":[{\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"22\",\"label\":\"ian\"}},{\"type\":\"text\",\"text\":\"
+        Market created with >5,50,200 unique traders\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"}},{\"betId\":\"Q2EIDALWwG1XNBdYubFZ\",\"createdTime\":1664246528567,\"id\":\"tLulYDPzo7UeAbErQ7PG\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"commenterPositionShares\":1,\"betOutcome\":\"21\",\"betAmount\":1,\"commentType\":\"contract\",\"commenterPositionOutcome\":\"12\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"content\":{\"content\":[{\"content\":[{\"text\":\"Make
+        at least X mana betting in a market where one of Manifold's founders lost
+        at least Y mana.\",\"type\":\"text\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"answerOutcome\":\"21\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userUsername\":\"MartinRandall\",\"userName\":\"Martin
+        Randall\"},{\"commenterPositionShares\":1,\"userUsername\":\"MartinRandall\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"createdTime\":1663641850427,\"id\":\"LXDT6YVaRLGu2xRdV2S3\",\"userName\":\"Martin
+        Randall\",\"commentType\":\"contract\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionOutcome\":\"12\",\"answerOutcome\":\"20\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"attrs\":{\"label\":\"MartinRandall\",\"id\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\"},\"type\":\"mention\"},{\"type\":\"text\",\"text\":\"
+        Probably restricted to markets created by someone else. Still vulnerable to
+        gaming.\"}]}]},\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\"},{\"commentType\":\"contract\",\"answerOutcome\":\"20\",\"commenterPositionOutcome\":\"12\",\"userUsername\":\"MartinRandall\",\"betId\":\"lO93gkpyl5RoaNEtfYlA\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"createdTime\":1663641793948,\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionShares\":1,\"content\":{\"content\":[{\"content\":[{\"text\":\"Bronze:
+        Dolphin: make a single bet of at least m100.\",\"type\":\"text\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\",\"content\":[{\"text\":\"Silver:
+        Whale: make a single bet of at least m1,000.\",\"type\":\"text\"}]},{\"content\":[{\"text\":\"Gold:
+        Megalodon: make a single bet of at least m10,000.\",\"type\":\"text\"}],\"type\":\"paragraph\"},{\"content\":[{\"type\":\"text\",\"text\":\"Platinum:
+        Kraken: make a single bet of at least m100,000.\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"id\":\"lO93gkpyl5RoaNEtfYlA\",\"userName\":\"Martin
+        Randall\",\"contractQuestion\":\"What are the next 5 badges we'll add by the
+        end of October?\"},{\"answerOutcome\":\"18\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"mention\",\"attrs\":{\"label\":\"MartinRandall\",\"id\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\"}},{\"type\":\"text\",\"text\":\"
+        love this idea btw, too\"}]}]},\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commentType\":\"contract\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"commenterPositionOutcome\":\"1\",\"userName\":\"Ian
+        Philips\",\"commenterPositionShares\":5,\"contractQuestion\":\"What are the
+        next 5 badges we'll add by the end of October?\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"userUsername\":\"ian\",\"createdTime\":1663641322770,\"id\":\"jJn34Ldcitv9DRPJ3prT\"},{\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"label\":\"MartinRandall\"}},{\"text\":\"
+        yes I've recently been thinking these badges should only be awarded for markets
+        with at least 5 other unique bettors\",\"type\":\"text\"}]}]},\"userName\":\"Ian
+        Philips\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"commentType\":\"contract\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"answerOutcome\":\"18\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userUsername\":\"ian\",\"createdTime\":1663641310529,\"commenterPositionOutcome\":\"1\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionShares\":5,\"id\":\"yo8zxfvXopD6SFrlrOFW\"},{\"createdTime\":1663625926405,\"userUsername\":\"Yev\",\"id\":\"gDrSgFwd3Om38qQXPXQv\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userName\":\"Yev\",\"answerOutcome\":\"19\",\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"text\":\"For
+        linking the twitch bot or the discord bot to your MM account\",\"type\":\"text\"}],\"type\":\"paragraph\"}]},\"commentType\":\"contract\",\"commenterPositionOutcome\":\"16\",\"betId\":\"gDrSgFwd3Om38qQXPXQv\",\"userId\":\"Y8xXwCCYe3cBCW5XeU8MxykuPAY2\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FYev%2Fpfp.svg?alt=media&token=1d1e1ec2-e870-4890-8dd0-60bbd312ab71\",\"commenterPositionShares\":10,\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\"},{\"userUsername\":\"LivInTheLookingGlass\",\"commenterPositionShares\":10,\"userName\":\"Olivia\",\"createdTime\":1663625630773,\"commentType\":\"contract\",\"content\":{\"content\":[{\"content\":[{\"text\":\"Fair
+        enough. That kind of thing would be really useful, but it wouldn't capture
+        all of the problems, either\",\"type\":\"text\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"answerOutcome\":\"4\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"commenterPositionOutcome\":\"5\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"id\":\"r6zp2KDZEXBQ8Mqdgjt5\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\"},{\"commenterPositionOutcome\":\"12\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"text\":\"Making
+        a 100x return on a market (eg by betting on a 1% option). Needs some care
+        to exclude market making of various kinds.\",\"type\":\"text\"}]}]},\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"answerOutcome\":\"18\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"betId\":\"d1wKKdX3PSZzVtPFymrf\",\"commenterPositionShares\":1,\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"id\":\"d1wKKdX3PSZzVtPFymrf\",\"userName\":\"Martin
+        Randall\",\"userUsername\":\"MartinRandall\",\"commentType\":\"contract\",\"createdTime\":1663625482611},{\"userId\":\"Y8xXwCCYe3cBCW5XeU8MxykuPAY2\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FYev%2Fpfp.svg?alt=media&token=1d1e1ec2-e870-4890-8dd0-60bbd312ab71\",\"commentType\":\"contract\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"commenterPositionShares\":10,\"answerOutcome\":\"2\",\"userUsername\":\"Yev\",\"content\":{\"content\":[{\"content\":[{\"type\":\"mention\",\"attrs\":{\"label\":\"NcyRocks\",\"id\":\"fSrex43BDjeneNZ4ZLfxllSb8b42\"}},{\"text\":\"
+        It would reward people who spam the quick bet arrows :(\",\"type\":\"text\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionOutcome\":\"16\",\"id\":\"Yhy0oCLCmOT5S83IiNMj\",\"createdTime\":1663624840541,\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"userName\":\"Yev\"},{\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"label\":\"LivInTheLookingGlass\"}},{\"text\":\"
+        It's already annoying to tag every Russia/Ukraine market with \\\"Global Macro,
+        Russia, Ukraine, World, Wars\\\". I don't want people to create even more
+        similar groups until we have can mark groups as subsets of each other (so
+        adding a market to a subgroup automatically adds it to the supergroup).\",\"type\":\"text\"}]}],\"type\":\"doc\"},\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"userName\":\"Yev\",\"createdTime\":1663624524656,\"userId\":\"Y8xXwCCYe3cBCW5XeU8MxykuPAY2\",\"commenterPositionOutcome\":\"16\",\"userUsername\":\"Yev\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FYev%2Fpfp.svg?alt=media&token=1d1e1ec2-e870-4890-8dd0-60bbd312ab71\",\"commentType\":\"contract\",\"answerOutcome\":\"4\",\"id\":\"pHRyCaeNc4g7FBEqNBcg\",\"commenterPositionShares\":10,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\"},{\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"createdTime\":1663624155099,\"commenterPositionOutcome\":\"12\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionShares\":1,\"answerOutcome\":\"17\",\"userName\":\"Martin
+        Randall\",\"commentType\":\"contract\",\"betId\":\"LBHTvTbk9P3UQIZTEDAh\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"label\":\"MartinRandall\"}},{\"text\":\"
+        @realdonaldtrump\",\"type\":\"text\"}]}]},\"id\":\"LBHTvTbk9P3UQIZTEDAh\",\"userUsername\":\"MartinRandall\"},{\"userName\":\"Martin
+        Randall\",\"userUsername\":\"MartinRandall\",\"commentType\":\"contract\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"createdTime\":1663623478718,\"commenterPositionShares\":1,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"content\":{\"content\":[{\"content\":[{\"text\":\"Awarded
+        for losing some amount of mana on a single market, via subsidy or betting
+        on a losing answer.\",\"type\":\"text\"}],\"type\":\"paragraph\"},{\"content\":[{\"type\":\"text\",\"text\":\"(This
+        could be just a badge for AMM liquidity, but I think a loss of mana is often
+        a subsidy to those who make mana from the market)\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"answerOutcome\":\"14\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"id\":\"9ox8RqXsbylLacHA2FRF\",\"betId\":\"9ox8RqXsbylLacHA2FRF\",\"commenterPositionOutcome\":\"12\"},{\"userName\":\"Martin
+        Randall\",\"createdTime\":1663622873313,\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"OtV9kbvffU0rJ2qB6puV\",\"answerOutcome\":\"13\",\"commenterPositionOutcome\":\"12\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"betId\":\"OtV9kbvffU0rJ2qB6puV\",\"userUsername\":\"MartinRandall\",\"commentType\":\"contract\",\"commenterPositionShares\":1,\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Awarded
+        for buying mana.\"}]}]},\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\"},{\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"content\":{\"content\":[{\"content\":[{\"attrs\":{\"id\":\"jO7sUhIDTQbAJ3w86akzncTlpRG2\",\"label\":\"MichaelWheatley\"},\"type\":\"mention\"},{\"type\":\"text\",\"text\":\"
+        Curious if you think this idea would replace them.\"}],\"type\":\"paragraph\"},{\"type\":\"iframe\",\"attrs\":{\"allowfullscreen\":true,\"src\":\"https://manifold.markets/embed/MartinRandall/will-manifold-provide-referrer-cont\",\"frameborder\":0,\"height\":0}}],\"type\":\"doc\"},\"createdTime\":1663622716540,\"userUsername\":\"MartinRandall\",\"userName\":\"Martin
+        Randall\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"commenterPositionOutcome\":\"12\",\"answerOutcome\":\"11\",\"id\":\"FOyZMhFZgUbIWGTFBnOS\",\"commentType\":\"contract\",\"commenterPositionShares\":1},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"1b1OobcPD2pfeY8lzn9y\",\"createdTime\":1663622495321,\"betId\":\"1b1OobcPD2pfeY8lzn9y\",\"userName\":\"Martin
+        Randall\",\"commenterPositionShares\":1,\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commentType\":\"contract\",\"userUsername\":\"MartinRandall\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"commenterPositionOutcome\":\"12\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"The
+        tutorial guides users through making bets and markets and gives a bronze badge
+        to those who compete it.\"}]}],\"type\":\"doc\"},\"answerOutcome\":\"12\"},{\"userName\":\"Michael
+        Wheatley\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"answerOutcome\":\"11\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FMichaelWheatley%2FUntitled-1.png?alt=media&token=c762196e-85d0-4f0c-961a-e3a80d736c9b\",\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"label\":\"ian\"}},{\"type\":\"text\",\"text\":\"
+        I think the challenges are a great feature... but apparently no-one uses them
+        (and admittedly, I haven't sent any). I'm hoping if there's some impetus to
+        overcome the inertia, people will warm up to them. Or at the very least, there's
+        some data as to why they don't work as well as they do in my head.\"}],\"type\":\"paragraph\"}]},\"createdTime\":1663522507644,\"userUsername\":\"MichaelWheatley\",\"commentType\":\"contract\",\"id\":\"5Ovum3eIPMoskMBiZZgs\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"userId\":\"jO7sUhIDTQbAJ3w86akzncTlpRG2\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\"},{\"commentType\":\"contract\",\"createdTime\":1663512692694,\"id\":\"mnWru7RcwLOaq3Bp0JYo\",\"userUsername\":\"ian\",\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"label\":\"ian\"}},{\"type\":\"text\",\"text\":\"
+        I do loke the sound of a \u2018challenger\u2019 badge\"}],\"type\":\"paragraph\"}]},\"commenterPositionShares\":5,\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"commenterPositionOutcome\":\"1\",\"answerOutcome\":\"11\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"userName\":\"Ian
+        Philips\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\"},{\"commenterPositionOutcome\":\"1\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"userName\":\"Ian
+        Philips\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"jO7sUhIDTQbAJ3w86akzncTlpRG2\",\"label\":\"MichaelWheatley\"}},{\"text\":\"
+        Lol! Hmmm I\u2019d love to know why you want to incentivize this so much!
+        \",\"type\":\"text\"}]}]},\"commenterPositionShares\":5,\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"commentType\":\"contract\",\"createdTime\":1663512661863,\"userUsername\":\"ian\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"JJ508gRFCpziLgWKjARI\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"answerOutcome\":\"11\"},{\"createdTime\":1663512411726,\"userUsername\":\"MichaelWheatley\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"attrs\":{\"label\":\"ian\",\"id\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\"},\"type\":\"mention\"},{\"type\":\"text\",\"text\":\"
+        How much mana do I have to pump into this to ensure you do it?\"}],\"type\":\"paragraph\"}]},\"answerOutcome\":\"11\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FMichaelWheatley%2FUntitled-1.png?alt=media&token=c762196e-85d0-4f0c-961a-e3a80d736c9b\",\"id\":\"FKGga2y1GvWnAykosNli\",\"commentType\":\"contract\",\"userId\":\"jO7sUhIDTQbAJ3w86akzncTlpRG2\",\"userName\":\"Michael
+        Wheatley\",\"contractQuestion\":\"What are the next 5 badges we'll add by
+        the end of October?\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\"},{\"userUsername\":\"Duncan\",\"betId\":\"HVXVrKOf4pCJHpXuxW7D\",\"answerOutcome\":\"11\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"userName\":\"Duncan\",\"id\":\"HVXVrKOf4pCJHpXuxW7D\",\"commenterPositionShares\":15,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"commenterPositionOutcome\":\"10\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"mention\",\"attrs\":{\"label\":\"Duncan\",\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\"}},{\"text\":\"
+        Perhaps just \\\"extended a challenge\\\", \\\"accepted a challenge\\\", and
+        \\\"won a challenge\\\" badges. \",\"type\":\"text\"}]}]},\"commentType\":\"contract\",\"createdTime\":1663512301808,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\"},{\"commenterPositionShares\":5,\"commentType\":\"contract\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"6dxmxa1mZv3CyXHo7VLn\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"attrs\":{\"label\":\"Duncan\",\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\"},\"type\":\"mention\"},{\"type\":\"text\",\"text\":\"
+        Yes I gyess i mean sufficiently incentivized, some of these are insufficiently
+        incentivized imo\"}]}],\"type\":\"doc\"},\"contractQuestion\":\"What are the
+        next 5 badges we'll add by the end of October?\",\"createdTime\":1663512115428,\"userName\":\"Ian
+        Philips\",\"commenterPositionOutcome\":\"1\",\"userUsername\":\"ian\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"answerOutcome\":\"9\"},{\"commentType\":\"contract\",\"commenterPositionOutcome\":\"10\",\"createdTime\":1663512031232,\"userName\":\"Duncan\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"answerOutcome\":\"9\",\"userUsername\":\"Duncan\",\"id\":\"ABHrl5MMafbmTlwF3RcV\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"commenterPositionShares\":10,\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"attrs\":{\"label\":\"ian\",\"id\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\"},\"type\":\"mention\"},{\"type\":\"text\",\"text\":\"
+        Isn't that true of all of these? \"}]}]}},{\"contractQuestion\":\"What are
+        the next 5 badges we'll add by the end of October?\",\"userName\":\"Michael
+        Wheatley\",\"createdTime\":1663511992542,\"answerOutcome\":\"7\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FMichaelWheatley%2FUntitled-1.png?alt=media&token=c762196e-85d0-4f0c-961a-e3a80d736c9b\",\"id\":\"djdxmjju1b68eSbkJUWk\",\"commentType\":\"contract\",\"userUsername\":\"MichaelWheatley\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"mention\",\"attrs\":{\"label\":\"Duncan\",\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\"}},{\"type\":\"text\",\"text\":\"
+        You could even set up a discord bot that automatically logs everyone who submits
+        a bug on the bugs channel... Which would sum up to even \"},{\"type\":\"text\",\"marks\":[{\"type\":\"italic\"}],\"text\":\"more\"},{\"type\":\"text\",\"text\":\"
+        work, mind you...\"}]}],\"type\":\"doc\"},\"userId\":\"jO7sUhIDTQbAJ3w86akzncTlpRG2\"},{\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"userUsername\":\"ian\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"answerOutcome\":\"7\",\"commenterPositionShares\":5,\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commentType\":\"contract\",\"commenterPositionOutcome\":\"1\",\"userName\":\"Ian
+        Philips\",\"createdTime\":1663511974170,\"contractQuestion\":\"What are the
+        next 5 badges we'll add by the end of October?\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"jO7sUhIDTQbAJ3w86akzncTlpRG2\",\"label\":\"MichaelWheatley\"}},{\"type\":\"text\",\"text\":\"
+        Yup just compared to the automated ones\"}]}]},\"id\":\"p0EkNF9NnQ4JnSeEfBXB\"},{\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"userUsername\":\"ian\",\"id\":\"ljxPMfQ91FCgwLIPmmwk\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"createdTime\":1663511884689,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userName\":\"Ian
+        Philips\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"commenterPositionShares\":5,\"answerOutcome\":\"5\",\"commentType\":\"contract\",\"content\":{\"content\":[{\"content\":[{\"type\":\"mention\",\"attrs\":{\"label\":\"LivInTheLookingGlass\",\"id\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\"}},{\"type\":\"text\",\"text\":\"
+        Makes sense! \"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"commenterPositionOutcome\":\"1\"},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"createdTime\":1663511883237,\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionShares\":10,\"id\":\"iNKeJHL5r38aA2JsshKi\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"It
+        seems like it would be easy enough to set up a page where you awarded a badge
+        just by typing a name (e.g., @ian), but that would be an extra step. \"}]}]},\"commentType\":\"contract\",\"commenterPositionOutcome\":\"10\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"userUsername\":\"Duncan\",\"answerOutcome\":\"7\",\"userName\":\"Duncan\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\"},{\"userUsername\":\"ian\",\"commenterPositionOutcome\":\"1\",\"answerOutcome\":\"6\",\"id\":\"j2eBJPJQzwpEtsMARnjx\",\"commenterPositionShares\":5,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"createdTime\":1663511849392,\"userName\":\"Ian
+        Philips\",\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"QtBvbpuAP0cXKh8qUgCsSpGW0nh2\",\"label\":\"RobinFoster\"}},{\"type\":\"text\",\"text\":\"
+        Definitely!\"}],\"type\":\"paragraph\"}]},\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"commentType\":\"contract\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\"},{\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"id\":\"QldXqOnJncr7wpW3OX3o\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"commenterPositionShares\":5,\"createdTime\":1663511840548,\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"commenterPositionOutcome\":\"1\",\"commentType\":\"contract\",\"userName\":\"Ian
+        Philips\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"content\":{\"content\":[{\"content\":[{\"type\":\"mention\",\"attrs\":{\"label\":\"Duncan\",\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\"}},{\"text\":\"
+        This is great! \",\"type\":\"text\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"userUsername\":\"ian\",\"answerOutcome\":\"10\"},{\"userName\":\"Ian
+        Philips\",\"answerOutcome\":\"9\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"attrs\":{\"label\":\"Duncan\",\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\"},\"type\":\"mention\"},{\"text\":\"
+        Yup this seems obviously fun but I wonder if tournaments already have their
+        own incentives for winning such that we can punt on making badges for them\",\"type\":\"text\"}]}]},\"commenterPositionOutcome\":\"1\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"userUsername\":\"ian\",\"id\":\"MSuz20lw7maLdnwM998u\",\"commentType\":\"contract\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"createdTime\":1663511755938,\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"commenterPositionShares\":5,\"contractSlug\":\"what-are-the-next-5-badges-well-add\"},{\"userName\":\"Michael
+        Wheatley\",\"id\":\"GDSoR22HyocrxP9Eee07\",\"answerOutcome\":\"10\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"content\":{\"content\":[{\"content\":[{\"attrs\":{\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"label\":\"Duncan\"},\"type\":\"mention\"},{\"text\":\"
+        FWIW, this would be the push that actually gets me to donate some mana instead
+        of \\\"reinvesting\\\" it so I can \\\"donate more later\\\"\",\"type\":\"text\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FMichaelWheatley%2FUntitled-1.png?alt=media&token=c762196e-85d0-4f0c-961a-e3a80d736c9b\",\"createdTime\":1663511734380,\"userUsername\":\"MichaelWheatley\",\"commentType\":\"contract\",\"userId\":\"jO7sUhIDTQbAJ3w86akzncTlpRG2\"},{\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionOutcome\":\"1\",\"id\":\"rND6PT6rRLDZtZW01QnR\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"commenterPositionShares\":5,\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"createdTime\":1663511701726,\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"label\":\"LivInTheLookingGlass\"}},{\"type\":\"text\",\"text\":\"
+        I think we might be wanting to cool the group creation engine for a little
+        bit until the groups we have get more self sustaining activity so that people
+        can join the platform specifically for a group and feel that it\u2019s lively
+        and interesting\"}],\"type\":\"paragraph\"}]},\"answerOutcome\":\"4\",\"commentType\":\"contract\",\"userUsername\":\"ian\",\"userName\":\"Ian
+        Philips\"},{\"userUsername\":\"MichaelWheatley\",\"commentType\":\"contract\",\"userName\":\"Michael
+        Wheatley\",\"createdTime\":1663511659529,\"content\":{\"content\":[{\"content\":[{\"attrs\":{\"id\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"label\":\"ian\"},\"type\":\"mention\"},{\"type\":\"text\",\"text\":\"
+        It doesn't seem like that much work, but I suppose you're comparing it to
+        the others that can be done totally automatically? \"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"id\":\"xb4MsQleQvd95Syb9u0e\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FMichaelWheatley%2FUntitled-1.png?alt=media&token=c762196e-85d0-4f0c-961a-e3a80d736c9b\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"answerOutcome\":\"7\",\"userId\":\"jO7sUhIDTQbAJ3w86akzncTlpRG2\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\"},{\"createdTime\":1663511564972,\"answerOutcome\":\"3\",\"commentType\":\"contract\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"userName\":\"Ian
+        Philips\",\"commenterPositionOutcome\":\"1\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"attrs\":{\"label\":\"Duncan\",\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\"},\"type\":\"mention\"},{\"text\":\"
+        Nice! Yeah I like the framing that youre still invested in them so you can\u2019t
+        just buy and sell 1k markets for the badge\",\"type\":\"text\"}]}],\"type\":\"doc\"},\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"id\":\"eoPfkK7m77j38p2jbH1m\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"commenterPositionShares\":5,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userUsername\":\"ian\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\"},{\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"userName\":\"Ian
+        Philips\",\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"attrs\":{\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"label\":\"Duncan\"},\"type\":\"mention\"},{\"text\":\"
+        I like this a lot but we have too many bugs and too little time to dole out
+        badges for reports! If there was a really easy way to award them then I would
+        bid this higher but that would take extra work. \",\"type\":\"text\"}],\"type\":\"paragraph\"}]},\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commentType\":\"contract\",\"userUsername\":\"ian\",\"commenterPositionOutcome\":\"1\",\"createdTime\":1663511507926,\"commenterPositionShares\":5,\"answerOutcome\":\"7\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"id\":\"LY2YCKYHP96TPMiJc7VZ\"},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"commentType\":\"contract\",\"userUsername\":\"MichaelWheatley\",\"userName\":\"Michael
+        Wheatley\",\"contractQuestion\":\"What are the next 5 badges we'll add by
+        the end of October?\",\"answerOutcome\":\"5\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"attrs\":{\"id\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"label\":\"LivInTheLookingGlass\"},\"type\":\"mention\"},{\"type\":\"text\",\"text\":\"
+        This would be particularly good for the daily leaderboards, because they're
+        very attainable, and a lasting badge would make the accomplishment more meaningful\"}]}],\"type\":\"doc\"},\"id\":\"ZSsydZoupgCQoEQMKQRG\",\"userId\":\"jO7sUhIDTQbAJ3w86akzncTlpRG2\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FMichaelWheatley%2FUntitled-1.png?alt=media&token=c762196e-85d0-4f0c-961a-e3a80d736c9b\",\"createdTime\":1663447302905,\"contractSlug\":\"what-are-the-next-5-badges-well-add\"},{\"commenterPositionShares\":5,\"userName\":\"Ian
+        Philips\",\"contractQuestion\":\"What are the next 5 badges we'll add by the
+        end of October?\",\"commenterPositionOutcome\":\"1\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"XT52Ka6eBS2rQVSPE0YI\",\"userUsername\":\"ian\",\"replyToCommentId\":\"GT9FJeLOrLETxHmZkiBl\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"attrs\":{\"label\":\"Duncan\",\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\"},\"type\":\"mention\"},{\"text\":\"
+        Def will be implemented! Na resolution is fine if not but the whole team is
+        on board with the idea. \",\"type\":\"text\"}]}]},\"commentType\":\"contract\",\"createdTime\":1663424973966,\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\"},{\"answerOutcome\":\"10\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"createdTime\":1663423956449,\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"commenterPositionOutcome\":\"10\",\"commenterPositionShares\":10,\"id\":\"rmi7G8FQOKiOR5F1GgZ4\",\"userUsername\":\"Duncan\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commentType\":\"contract\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userName\":\"Duncan\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"betId\":\"rmi7G8FQOKiOR5F1GgZ4\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"label\":\"Duncan\"}},{\"text\":\"
+        Maybe just a badge to show you participated, but a b/s/g tier level would
+        be easy to work out. \",\"type\":\"text\"}]}],\"type\":\"doc\"}},{\"commentType\":\"contract\",\"userUsername\":\"Duncan\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"createdTime\":1663423868246,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"answerOutcome\":\"9\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"mention\",\"attrs\":{\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"label\":\"Duncan\"}},{\"type\":\"text\",\"text\":\"
+        Probably something like bronze for participation, silver for top 5, gold for
+        win? \"}]}],\"type\":\"doc\"},\"id\":\"GpOgbzAyRWNo0Yv5VTd5\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionOutcome\":\"5\",\"userName\":\"Duncan\",\"commenterPositionShares\":5,\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"betId\":\"GpOgbzAyRWNo0Yv5VTd5\"},{\"answerOutcome\":\"8\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"id\":\"mjI4kNnqHT944Y0BA4Vc\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"userName\":\"Duncan\",\"commenterPositionOutcome\":\"5\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"userUsername\":\"Duncan\",\"createdTime\":1663423806664,\"commenterPositionShares\":5,\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"attrs\":{\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"label\":\"Duncan\"},\"type\":\"mention\"},{\"type\":\"text\",\"text\":\"
+        perhaps 1 ref = bronze, 5 = silver, 10 = gold, 15 = platinum... \"}]},{\"type\":\"paragraph\"}],\"type\":\"doc\"},\"betId\":\"mjI4kNnqHT944Y0BA4Vc\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"commentType\":\"contract\"},{\"createdTime\":1663423664252,\"userName\":\"Duncan\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"userUsername\":\"Duncan\",\"commenterPositionOutcome\":\"5\",\"id\":\"2bRBNMViLt5SlLQNzKFT\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"commenterPositionShares\":5,\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"answerOutcome\":\"3\",\"commentType\":\"contract\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"attrs\":{\"label\":\"NcyRocks\",\"id\":\"fSrex43BDjeneNZ4ZLfxllSb8b42\"},\"type\":\"mention\"},{\"type\":\"text\",\"text\":\"
+        \\\"Number of markets invested in\\\"\"}]}],\"type\":\"doc\"},\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\"},{\"id\":\"sbjxQJ2OhhEj0lN019Ff\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"commenterPositionShares\":5,\"commenterPositionOutcome\":\"5\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"userUsername\":\"Duncan\",\"userName\":\"Duncan\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"content\":{\"content\":[{\"content\":[{\"attrs\":{\"label\":\"Duncan\",\"id\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\"},\"type\":\"mention\"},{\"text\":\"
+        Given for having brought a bug to the devs' attention. \",\"type\":\"text\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"commentType\":\"contract\",\"betId\":\"sbjxQJ2OhhEj0lN019Ff\",\"createdTime\":1663423641039,\"answerOutcome\":\"7\"},{\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"commentType\":\"contract\",\"userUsername\":\"RobinFoster\",\"userId\":\"QtBvbpuAP0cXKh8qUgCsSpGW0nh2\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Based
+        on amount given by user in tips. Maybe levels something like:\"}]},{\"content\":[{\"type\":\"text\",\"text\":\"\U0001F949M$5\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"\U0001F948M$50\"}]},{\"type\":\"paragraph\",\"content\":[{\"text\":\"\U0001F947M$500\",\"type\":\"text\"}]}],\"type\":\"doc\"},\"id\":\"6yhvI5hAF8KhcXPlVCd8\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"commenterPositionOutcome\":\"6\",\"commenterPositionShares\":5,\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"createdTime\":1663416192692,\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a/AATXAJzxP5vDmtsmb1gnc6d5kJGNemnV0TXwJ0tDQX32=s96-c\",\"userName\":\"Robin
+        Foster\",\"betId\":\"6yhvI5hAF8KhcXPlVCd8\",\"answerOutcome\":\"6\"},{\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"text\":\"Is
+        this going to be something that will definitely be implemented? If badges
+        are not implemented, does this resolve N/A?\",\"type\":\"text\"}]}],\"type\":\"doc\"},\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"userUsername\":\"Duncan\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"userName\":\"Duncan\",\"commentType\":\"contract\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"id\":\"GT9FJeLOrLETxHmZkiBl\",\"createdTime\":1663414511001},{\"userName\":\"Olivia\",\"createdTime\":1663383909962,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"userUsername\":\"LivInTheLookingGlass\",\"betId\":\"i25QAdWWNOftsgk79h8B\",\"id\":\"i25QAdWWNOftsgk79h8B\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"answerOutcome\":\"5\",\"content\":{\"content\":[{\"content\":[{\"type\":\"text\",\"text\":\"If
+        you end up on any leaderboard, you should get a badge that says \\\"Top N
+        <period> <board>\\\". For example, I would have a badge saying \\\"Top 10
+        weekly market creator\\\". This badge gets replaced if you would ever have
+        a lower Top N badge of the same type\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"commentType\":\"contract\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionShares\":10,\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"commenterPositionOutcome\":\"5\"},{\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"More
+        groups means more categories. Tagging markets takes effort. It makes sense
+        to reward people who make useful tags.\"}]},{\"type\":\"paragraph\"},{\"content\":[{\"text\":\"Perhaps
+        as a limiting mechanism, make it only appear when the group has some non-negligible
+        number of markets\",\"type\":\"text\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionOutcome\":\"4\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"createdTime\":1663383791503,\"userName\":\"Olivia\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"commentType\":\"contract\",\"id\":\"V45SudJbIlM5kOnsyXCl\",\"betId\":\"V45SudJbIlM5kOnsyXCl\",\"answerOutcome\":\"4\",\"commenterPositionShares\":5,\"userUsername\":\"LivInTheLookingGlass\"},{\"commentType\":\"contract\",\"createdTime\":1663376292042,\"userUsername\":\"NcyRocks\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionOutcome\":\"2\",\"userName\":\"N.C.
+        Young\",\"id\":\"ZLCJRpTyphz2mv94jwdx\",\"commenterPositionShares\":5,\"answerOutcome\":\"3\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Maybe
+        10/100/1000 markets for bronze/silver/gold?\"}]}],\"type\":\"doc\"},\"userId\":\"fSrex43BDjeneNZ4ZLfxllSb8b42\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FNathanYounga244%2FNathan%20square.jpg?alt=media&token=6de519e4-402b-4ff2-b6b3-70181e9d9dc2\"},{\"id\":\"hauDU4ecuOdWXo6WrE4q\",\"content\":{\"content\":[{\"content\":[{\"text\":\"Possible
+        to game by placing a series of M$1 bets instead of larger bets, or placing
+        bets then immediately selling\",\"type\":\"text\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\",\"commenterPositionOutcome\":\"2\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FNathanYounga244%2FNathan%20square.jpg?alt=media&token=6de519e4-402b-4ff2-b6b3-70181e9d9dc2\",\"commenterPositionShares\":5,\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"userName\":\"N.C.
+        Young\",\"userId\":\"fSrex43BDjeneNZ4ZLfxllSb8b42\",\"answerOutcome\":\"2\",\"commentType\":\"contract\",\"createdTime\":1663375294767,\"userUsername\":\"NcyRocks\"},{\"contractQuestion\":\"What
+        are the next 5 badges we'll add by the end of October?\",\"commentType\":\"contract\",\"commenterPositionShares\":5,\"id\":\"e4R951w2E6PkKPe0ODb9\",\"betId\":\"e4R951w2E6PkKPe0ODb9\",\"commenterPositionOutcome\":\"2\",\"userUsername\":\"NcyRocks\",\"answerOutcome\":\"3\",\"userName\":\"N.C.
+        Young\",\"createdTime\":1663375237673,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Couldn't
+        figure out a way to phrase this without using the word 'bet' \U0001F937\u200D\u2642\uFE0F\"}]}],\"type\":\"doc\"},\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FNathanYounga244%2FNathan%20square.jpg?alt=media&token=6de519e4-402b-4ff2-b6b3-70181e9d9dc2\",\"userId\":\"fSrex43BDjeneNZ4ZLfxllSb8b42\",\"contractSlug\":\"what-are-the-next-5-badges-well-add\"}],\"bets\":[{\"amount\":1,\"probBefore\":0,\"shares\":24.351591323771842,\"userName\":\"Martin
+        Randall\",\"userUsername\":\"MartinRandall\",\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"id\":\"KpbQ3gAV1dYk1VjJvEAE\",\"outcome\":\"26\",\"createdTime\":1664933844819,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"probAfter\":0.006722670022333324,\"loanAmount\":0.02,\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\"},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"shares\":24.310491562286437,\"userUsername\":\"MartinRandall\",\"amount\":1,\"id\":\"Oqs3Lz0bwSD3mlhuGh3l\",\"probBefore\":0,\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"probAfter\":0.006745343316289262,\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"createdTime\":1664581434659,\"outcome\":\"25\",\"userName\":\"Martin
+        Randall\",\"loanAmount\":0.0960792032,\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\"},{\"probAfter\":0.006768170066072968,\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"loanAmount\":0.0960792032,\"createdTime\":1664580976827,\"probBefore\":0,\"outcome\":\"24\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"userUsername\":\"MartinRandall\",\"shares\":24.269322199023193,\"userName\":\"Martin
+        Randall\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"amount\":1,\"id\":\"0TjNOU9VFcl0TJlxmfGl\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\"},{\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"loanAmount\":0.0960792032,\"probAfter\":0.006791151834883613,\"outcome\":\"23\",\"amount\":1,\"userUsername\":\"MartinRandall\",\"userName\":\"Martin
+        Randall\",\"shares\":24.228082879171435,\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"id\":\"CL0K7HHjLy1QvXhjuoSn\",\"createdTime\":1664580888625,\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"probBefore\":0,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\"},{\"loanAmount\":0.9607920320000001,\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"id\":\"4BMjEyLghHg9kCNQ58H9\",\"probBefore\":0,\"userUsername\":\"ian\",\"shares\":75.8946638440411,\"createdTime\":1664579205144,\"userName\":\"Ian
+        Philips\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"outcome\":\"22\",\"amount\":10,\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"probAfter\":0.06709454973267015,\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0}},{\"userUsername\":\"Yev\",\"outcome\":\"21\",\"amount\":3,\"probAfter\":0.028068773489492934,\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"shares\":23.76989752944501,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"createdTime\":1664254150770,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FYev%2Fpfp.svg?alt=media&token=1d1e1ec2-e870-4890-8dd0-60bbd312ab71\",\"userId\":\"Y8xXwCCYe3cBCW5XeU8MxykuPAY2\",\"id\":\"iRoNUqVG3Bc8oV7O73JA\",\"loanAmount\":0.4987567136095503,\"probBefore\":0.007130102040816326,\"userName\":\"Yev\"},{\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"probAfter\":0.007130102040816326,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"amount\":1,\"createdTime\":1664246455093,\"shares\":23.643180835073778,\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"loanAmount\":0.16625223786985013,\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"id\":\"Q2EIDALWwG1XNBdYubFZ\",\"userUsername\":\"MartinRandall\",\"outcome\":\"21\",\"userName\":\"Martin
+        Randall\",\"probBefore\":0},{\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FYev%2Fpfp.svg?alt=media&token=1d1e1ec2-e870-4890-8dd0-60bbd312ab71\",\"outcome\":\"20\",\"createdTime\":1663652825938,\"userId\":\"Y8xXwCCYe3cBCW5XeU8MxykuPAY2\",\"probBefore\":0.007707100371193035,\"shares\":83.455586120763,\"userUsername\":\"Yev\",\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"probAfter\":0.14487223956526762,\"userName\":\"Yev\",\"amount\":20,\"id\":\"Wqn64LSlw26ncWZWDtpy\",\"loanAmount\":5.228617947091921},{\"amount\":1,\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0},\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"shares\":22.737634001804146,\"outcome\":\"20\",\"userUsername\":\"MartinRandall\",\"probAfter\":0.007707100371193035,\"userName\":\"Martin
+        Randall\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"createdTime\":1663641550213,\"probBefore\":0,\"loanAmount\":0.2614308973545961,\"id\":\"lO93gkpyl5RoaNEtfYlA\"},{\"createdTime\":1663639764571,\"probBefore\":0.007070508259019818,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"2Jjau3sMT7mjpwBAcfE4\",\"shares\":9.726696447010486,\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"userUsername\":\"Duncan\",\"outcome\":\"13\",\"amount\":1,\"userName\":\"Duncan\",\"loanAmount\":0.2614308973545961,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"probAfter\":0.014752719187548825,\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0}},{\"amount\":10,\"probAfter\":0.07630698420869356,\"shares\":70.9929573971954,\"createdTime\":1663625861895,\"userUsername\":\"Yev\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"loanAmount\":2.6143089735459606,\"userId\":\"Y8xXwCCYe3cBCW5XeU8MxykuPAY2\",\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"probBefore\":0,\"id\":\"gDrSgFwd3Om38qQXPXQv\",\"userName\":\"Yev\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FYev%2Fpfp.svg?alt=media&token=1d1e1ec2-e870-4890-8dd0-60bbd312ab71\",\"outcome\":\"19\"},{\"outcome\":\"18\",\"loanAmount\":0.2614308973545961,\"userUsername\":\"MartinRandall\",\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"amount\":1,\"probAfter\":0.008080774967627729,\"createdTime\":1663625232496,\"shares\":22.20360331117452,\"userName\":\"Martin
+        Randall\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"d1wKKdX3PSZzVtPFymrf\",\"probBefore\":0,\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\"},{\"createdTime\":1663624132200,\"loanAmount\":0.2614308973545961,\"shares\":22.15851980616034,\"id\":\"LBHTvTbk9P3UQIZTEDAh\",\"amount\":1,\"userUsername\":\"MartinRandall\",\"probAfter\":0.00811355674532355,\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"outcome\":\"17\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"probBefore\":0,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userName\":\"Martin
+        Randall\"},{\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"amount\":10,\"outcome\":\"16\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"createdTime\":1663623907854,\"id\":\"C2RKPlbSwA1NqVGywwT1\",\"probBefore\":0,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FYev%2Fpfp.svg?alt=media&token=1d1e1ec2-e870-4890-8dd0-60bbd312ab71\",\"loanAmount\":2.6143089735459606,\"shares\":69.2820323027551,\"userUsername\":\"Yev\",\"userId\":\"Y8xXwCCYe3cBCW5XeU8MxykuPAY2\",\"probAfter\":0.07996668054977095,\"userName\":\"Yev\"},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userName\":\"Martin
+        Randall\",\"outcome\":\"15\",\"id\":\"UbSVkI2l7c0XzZspIrUE\",\"loanAmount\":0,\"probBefore\":0.008456621660442403,\"probAfter\":0,\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"userUsername\":\"MartinRandall\",\"shares\":-21.702534414210707,\"sale\":{\"betId\":\"UbSVkI2l7c0XzZspIrUE\",\"amount\":1},\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"amount\":-1,\"createdTime\":1663623632500},{\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"probAfter\":0.008456621660442403,\"outcome\":\"15\",\"createdTime\":1663623587224,\"shares\":21.702534414210707,\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"UbSVkI2l7c0XzZspIrUE\",\"probBefore\":0,\"amount\":1,\"isSold\":true,\"userName\":\"Martin
+        Randall\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"userUsername\":\"MartinRandall\",\"loanAmount\":0},{\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"shares\":21.656407827707714,\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"createdTime\":1663623112007,\"userUsername\":\"MartinRandall\",\"userName\":\"Martin
+        Randall\",\"probBefore\":0,\"probAfter\":0.008492530556813037,\"amount\":1,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"outcome\":\"14\",\"loanAmount\":0.2614308973545961,\"id\":\"9ox8RqXsbylLacHA2FRF\"},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"probBefore\":0,\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"probAfter\":0.008528745708232888,\"createdTime\":1663622819980,\"shares\":21.61018278497431,\"amount\":1,\"id\":\"OtV9kbvffU0rJ2qB6puV\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"userName\":\"Martin
+        Randall\",\"userUsername\":\"MartinRandall\",\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"loanAmount\":0.2614308973545961,\"outcome\":\"13\"},{\"loanAmount\":0.2614308973545961,\"probAfter\":0.008565271049383852,\"amount\":1,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14Gi4DoekN-bxocogrQc7Q8l6w7dDxSF_A5TEq7A6JQ=s96-c\",\"createdTime\":1663622348236,\"userUsername\":\"MartinRandall\",\"userId\":\"sA7V30Ic73XZtniboy2eKr6ekkn1\",\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"userName\":\"Martin
+        Randall\",\"probBefore\":0,\"id\":\"1b1OobcPD2pfeY8lzn9y\",\"outcome\":\"12\",\"shares\":21.563858652847824},{\"userUsername\":\"RobinFoster\",\"shares\":13.789354996181743,\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"id\":\"qOKjBAW13HSkfpoYwbOt\",\"userName\":\"Robin
+        Foster\",\"outcome\":\"10\",\"createdTime\":1663513820010,\"amount\":5,\"userId\":\"QtBvbpuAP0cXKh8qUgCsSpGW0nh2\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"loanAmount\":1.3810113970375206,\"probBefore\":0.11304314075569095,\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a/AATXAJzxP5vDmtsmb1gnc6d5kJGNemnV0TXwJ0tDQX32=s96-c\",\"probAfter\":0.15086206896551724},{\"id\":\"HVXVrKOf4pCJHpXuxW7D\",\"probBefore\":0,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"shares\":47.38143096192854,\"userUsername\":\"Duncan\",\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0},\"amount\":5,\"createdTime\":1663512260149,\"userName\":\"Duncan\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"probAfter\":0.04356769974189292,\"outcome\":\"11\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"loanAmount\":1.3810113970375206},{\"createdTime\":1663512173122,\"outcome\":\"8\",\"loanAmount\":1.3810113970375206,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"probAfter\":0.1039485431377323,\"id\":\"tVByoeCaQZm4XUq7R9OY\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"shares\":17.46413831353484,\"amount\":5,\"probBefore\":0.06218012699356538,\"userName\":\"Duncan\",\"userUsername\":\"Duncan\"},{\"probBefore\":0.08187967248131008,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userUsername\":\"Duncan\",\"loanAmount\":1.3810113970375206,\"probAfter\":0.12370192613986279,\"userName\":\"Duncan\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"id\":\"WP6YxeXEnci3PT0dAv9w\",\"shares\":15.658684059956329,\"amount\":5,\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"outcome\":\"10\",\"createdTime\":1663512166388},{\"probBefore\":0.16044715162547551,\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"userUsername\":\"Duncan\",\"amount\":5,\"shares\":11.794464181527601,\"createdTime\":1663512161767,\"userName\":\"Duncan\",\"loanAmount\":1.3810113970375206,\"probAfter\":0.19958170167319333,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"zCYHQUOFpt7TixTsdxcp\",\"outcome\":\"5\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\"},{\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"userUsername\":\"Duncan\",\"outcome\":\"6\",\"loanAmount\":1.3810113970375206,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"amount\":5,\"probBefore\":0.1458190373492795,\"probAfter\":0.18658545123573483,\"userName\":\"Duncan\",\"createdTime\":1663512155129,\"id\":\"udn3loyT8SjOCmarXLrZ\",\"shares\":12.278520778879695},{\"loanAmount\":0.8720347014580622,\"userName\":\"Olivia\",\"probAfter\":0.07175767081658661,\"userUsername\":\"LivInTheLookingGlass\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"amount\":3,\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"probBefore\":0.04355950607307896,\"id\":\"G0kWlqY2o3kZvNzDMCPJ\",\"createdTime\":1663464242489,\"outcome\":\"8\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"shares\":12.57787771928436,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\"},{\"userName\":\"Robin
+        Foster\",\"loanAmount\":1.4533911690967702,\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a/AATXAJzxP5vDmtsmb1gnc6d5kJGNemnV0TXwJ0tDQX32=s96-c\",\"shares\":20.51659159597297,\"userId\":\"QtBvbpuAP0cXKh8qUgCsSpGW0nh2\",\"id\":\"205CWsftEslUNis8uBZa\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userUsername\":\"RobinFoster\",\"probAfter\":0.08537663190323477,\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"amount\":5,\"probBefore\":0.037623551918376026,\"outcome\":\"9\",\"createdTime\":1663456086021},{\"userId\":\"QtBvbpuAP0cXKh8qUgCsSpGW0nh2\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a/AATXAJzxP5vDmtsmb1gnc6d5kJGNemnV0TXwJ0tDQX32=s96-c\",\"loanAmount\":1.4533911690967702,\"id\":\"lylMPHM2cDP8UZAGG8Mo\",\"outcome\":\"4\",\"userName\":\"Robin
+        Foster\",\"userUsername\":\"RobinFoster\",\"amount\":5,\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"createdTime\":1663455951089,\"probBefore\":0.03289381596259903,\"shares\":21.309495436743966,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"probAfter\":0.08210224253374429},{\"probBefore\":0,\"userUsername\":\"Duncan\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"createdTime\":1663423901615,\"loanAmount\":2.9067823381935405,\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"shares\":60.663003552412405,\"id\":\"rmi7G8FQOKiOR5F1GgZ4\",\"userName\":\"Duncan\",\"amount\":10,\"probAfter\":0.10302063212116122,\"outcome\":\"10\"},{\"userUsername\":\"Duncan\",\"outcome\":\"9\",\"amount\":4,\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"shares\":37.62977544445356,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"GpOgbzAyRWNo0Yv5VTd5\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"loanAmount\":1.1627129352774164,\"userName\":\"Duncan\",\"probAfter\":0.04419337723541712,\"probBefore\":0,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"createdTime\":1663423832535},{\"userUsername\":\"Duncan\",\"amount\":5,\"createdTime\":1663423738479,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"loanAmount\":1.4533911690967702,\"probAfter\":0.05632653061224489,\"userName\":\"Duncan\",\"probBefore\":0,\"shares\":41.53311931459037,\"outcome\":\"8\",\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"mjI4kNnqHT944Y0BA4Vc\"},{\"userUsername\":\"Duncan\",\"userName\":\"Duncan\",\"probAfter\":0.05795847750865051,\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"probBefore\":0,\"shares\":40.92676385936225,\"loanAmount\":1.4533911690967702,\"id\":\"sbjxQJ2OhhEj0lN019Ff\",\"outcome\":\"7\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"createdTime\":1663423595849,\"amount\":5,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\"},{\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"id\":\"3iRSSNqROzM2jwwRntOz\",\"amount\":5,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"probBefore\":0.1689453125,\"loanAmount\":1.4533911690967702,\"probAfter\":0.21854912764003676,\"shares\":11.371510912878037,\"createdTime\":1663423581150,\"userName\":\"Duncan\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"outcome\":\"6\",\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"userUsername\":\"Duncan\"},{\"shares\":10.114520866079815,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"probBefore\":0.22060353798126955,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FDuncan%2Fd23fdd0ee35b58832236cbd532da462a.jpg?alt=media&token=248daf59-7b59-4ecf-b4c9-5fe6ff48656d\",\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0},\"probAfter\":0.26855468750000006,\"createdTime\":1663423576038,\"amount\":5,\"userName\":\"Duncan\",\"id\":\"G3ZpfPt075Whp0uOLfA2\",\"userId\":\"LJ7CB9fuYzZ5j8HieQxubQhRYYu2\",\"loanAmount\":1.4533911690967702,\"outcome\":\"5\",\"userUsername\":\"Duncan\"},{\"probAfter\":0.18002081165452655,\"amount\":10,\"outcome\":\"6\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a/AATXAJzxP5vDmtsmb1gnc6d5kJGNemnV0TXwJ0tDQX32=s96-c\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"createdTime\":1663416236421,\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0},\"loanAmount\":2.9067823381935405,\"probBefore\":0.06302021403091558,\"userName\":\"Robin
+        Foster\",\"userId\":\"QtBvbpuAP0cXKh8qUgCsSpGW0nh2\",\"id\":\"Jj4Q71Qjamd6BEuj6ij2\",\"shares\":29.364182743426937,\"userUsername\":\"RobinFoster\"},{\"userUsername\":\"RobinFoster\",\"probAfter\":0.2520808561236623,\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"id\":\"gFZ4ao5OUeQhgDN3qmAT\",\"createdTime\":1663416216451,\"amount\":10,\"outcome\":\"5\",\"probBefore\":0.13717421124828533,\"shares\":22.801098892805186,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userId\":\"QtBvbpuAP0cXKh8qUgCsSpGW0nh2\",\"userName\":\"Robin
+        Foster\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a/AATXAJzxP5vDmtsmb1gnc6d5kJGNemnV0TXwJ0tDQX32=s96-c\",\"loanAmount\":2.9067823381935405},{\"userUsername\":\"RobinFoster\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a/AATXAJzxP5vDmtsmb1gnc6d5kJGNemnV0TXwJ0tDQX32=s96-c\",\"probBefore\":0,\"userId\":\"QtBvbpuAP0cXKh8qUgCsSpGW0nh2\",\"amount\":5,\"probAfter\":0.07270233196159123,\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"outcome\":\"6\",\"loanAmount\":1.4533911690967702,\"shares\":36.40054944640259,\"createdTime\":1663416008851,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"6yhvI5hAF8KhcXPlVCd8\",\"userName\":\"Robin
+        Foster\"},{\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"amount\":10,\"userName\":\"Olivia\",\"probAfter\":0.14792899408284024,\"createdTime\":1663383830807,\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"shares\":50,\"outcome\":\"5\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"id\":\"i25QAdWWNOftsgk79h8B\",\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"loanAmount\":2.9067823381935405,\"userUsername\":\"LivInTheLookingGlass\",\"probBefore\":0},{\"outcome\":\"4\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"shares\":34.27827300200522,\"userUsername\":\"LivInTheLookingGlass\",\"id\":\"V45SudJbIlM5kOnsyXCl\",\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"userName\":\"Olivia\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"probBefore\":0,\"loanAmount\":1.4533911690967702,\"createdTime\":1663383733801,\"amount\":5,\"probAfter\":0.08159722222222222},{\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FNathanYounga244%2FNathan%20square.jpg?alt=media&token=6de519e4-402b-4ff2-b6b3-70181e9d9dc2\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"shares\":33.54101966249684,\"outcome\":\"3\",\"loanAmount\":1.4533911690967702,\"probAfter\":0.08506616257088845,\"userUsername\":\"NcyRocks\",\"id\":\"e4R951w2E6PkKPe0ODb9\",\"probBefore\":0,\"amount\":5,\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"userName\":\"N.C.
+        Young\",\"createdTime\":1663375224256,\"userId\":\"fSrex43BDjeneNZ4ZLfxllSb8b42\"},{\"userName\":\"N.C.
+        Young\",\"probBefore\":0,\"probAfter\":0.08884297520661157,\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"loanAmount\":1.4533911690967702,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FNathanYounga244%2FNathan%20square.jpg?alt=media&token=6de519e4-402b-4ff2-b6b3-70181e9d9dc2\",\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"6i0JGekTTBeeUVM52BqJ\",\"outcome\":\"2\",\"createdTime\":1663375142594,\"userUsername\":\"NcyRocks\",\"shares\":32.78719262151,\"amount\":5,\"userId\":\"fSrex43BDjeneNZ4ZLfxllSb8b42\"},{\"amount\":5,\"probBefore\":0,\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"userName\":\"Ian
+        Philips\",\"outcome\":\"1\",\"shares\":32.01562118716424,\"probAfter\":0.09297052154195011,\"userUsername\":\"ian\",\"createdTime\":1663369771775,\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"loanAmount\":1.4533911690967702,\"id\":\"2u3lGWXYnJQVGtwTNuMO\"},{\"isAnte\":true,\"userName\":\"Ian
+        Philips\",\"outcome\":\"0\",\"shares\":100,\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"probAfter\":1,\"amount\":100,\"loanAmount\":29.067823381935405,\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"createdTime\":1663366879764,\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"contractId\":\"GdIMBXtOnA1wj3KJAYvj\",\"id\":\"DwlLkUs7NhDS3JtQx5Qj\",\"probBefore\":0,\"userUsername\":\"ian\"}],\"description\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"text\":\"Resolves
+        to the next 5 we add, regardless of if they're suggested here or not. Please
+        comment how they should work and not just a title!\",\"type\":\"text\"}]},{\"content\":[{\"type\":\"text\",\"text\":\"Sep
+        16, 4:21pm: \"},{\"marks\":[{\"type\":\"link\",\"attrs\":{\"href\":\"https://github.com/manifoldmarkets/manifold/pull/891\",\"target\":\"_blank\",\"class\":\"no-underline
+        !text-indigo-700 z-10 break-anywhere hover:underline hover:decoration-indigo-400
+        hover:decoration-2\"}}],\"text\":\"https://github.com/manifoldmarkets/manifold/pull/891\",\"type\":\"text\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\"},{\"type\":\"paragraph\"},{\"type\":\"image\",\"attrs\":{\"title\":null,\"src\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fdefault%2Fn_COrTpAsV.02?alt=media&token=78ae8b48-d2a7-489e-985b-23332a98ab7d\",\"alt\":null}},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Sep
+        16, 4:21pm: Also, the three in the pic don't count!\"}]},{\"content\":[{\"type\":\"text\",\"text\":\"Sep
+        16, 4:30pm: more inspiration: \"},{\"type\":\"text\",\"text\":\"https://www.notion.so/manifoldmarkets/Achievements-ec047a7eca854654b0f517851de87e3d#28ad328572614c259c93fd283a654431\",\"marks\":[{\"attrs\":{\"target\":\"_blank\",\"class\":\"no-underline
+        !text-indigo-700 z-10 break-anywhere hover:underline hover:decoration-indigo-400
+        hover:decoration-2\",\"href\":\"https://www.notion.so/manifoldmarkets/Achievements-ec047a7eca854654b0f517851de87e3d#28ad328572614c259c93fd283a654431\"},\"type\":\"link\"}]}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"textDescription\":\"Resolves
+        to the next 5 we add, regardless of if they're suggested here or not. Please
+        comment how they should work and not just a title!\\n\\nSep 16, 4:21pm: https://github.com/manifoldmarkets/manifold/pull/891\\n\\n[Image]\\n\\nSep
+        16, 4:21pm: Also, the three in the pic don't count!\\n\\nSep 16, 4:30pm: more
+        inspiration: https://www.notion.so/manifoldmarkets/Achievements-ec047a7eca854654b0f517851de87e3d#28ad328572614c259c93fd283a654431\"}"
     headers:
       Access-Control-Allow-Origin:
       - '*'
@@ -299,14 +302,12 @@ interactions:
       - max-age=0
       Connection:
       - keep-alive
-      Content-Encoding:
-      - br
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Thu, 06 Oct 2022 01:13:26 GMT
+      - Thu, 06 Oct 2022 01:35:19 GMT
       Etag:
-      - W/"4259k09dnw1sy1"
+      - W/"tk63jc5coz1sy1"
       Server:
       - Vercel
       Strict-Transport-Security:
@@ -318,7 +319,9 @@ interactions:
       X-Vercel-Cache:
       - MISS
       X-Vercel-Id:
-      - cle1::cle1::m76hn-1665018806218-0166f9a97f64
+      - cle1::cle1::8xn56-1665020119667-8a3149354c3f
+      content-length:
+      - '84193'
     status:
       code: 200
       message: OK

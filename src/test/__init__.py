@@ -15,6 +15,7 @@ manifold_vcr = VCR(
     record_mode="once",
     match_on=["uri", "method"],
     filter_headers=["authorization"],
+    decode_compressed_response=True
 )
 
 

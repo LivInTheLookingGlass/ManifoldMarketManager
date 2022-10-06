@@ -5,7 +5,7 @@ interactions:
       Accept:
       - '*/*'
       Accept-Encoding:
-      - gzip, deflate, br
+      - gzip, deflate
       Connection:
       - keep-alive
       User-Agent:
@@ -14,137 +14,96 @@ interactions:
     uri: https://manifold.markets/api/v0/market/opaEWymtuX61FK2gKwXL
   response:
     body:
-      string: !!binary |
-        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
-        QQc1+fE/6KDufMSdffdW6PVHHXA0Djqoaw0=
+      string: "{\"id\":\"opaEWymtuX61FK2gKwXL\",\"creatorId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"creatorUsername\":\"LivInTheLookingGlass\",\"creatorName\":\"Olivia\",\"createdTime\":1663625336474,\"creatorAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"closeTime\":1664596740000,\"question\":\"My
+        partner and I are considering moving soon.  Where should we consider?\",\"tags\":[],\"url\":\"https://manifold.markets/LivInTheLookingGlass/my-partner-and-i-are-considering-mo\",\"pool\":{\"0\":100,\"1\":25,\"2\":1,\"3\":2,\"4\":6,\"5\":12,\"6\":2,\"7\":1,\"8\":8.028166220647933,\"9\":1,\"10\":1,\"11\":2,\"12\":5,\"13\":5,\"14\":1},\"outcomeType\":\"FREE_RESPONSE\",\"mechanism\":\"dpm-2\",\"volume\":75.97183377935207,\"volume7Days\":10,\"volume24Hours\":0,\"isResolved\":false,\"lastUpdatedTime\":1664555512114,\"answers\":[{\"username\":\"LivInTheLookingGlass\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"text\":\"Greater
+        Chicago\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"id\":\"1\",\"number\":1,\"name\":\"Olivia\",\"createdTime\":1663625351697,\"probability\":0.26100396143128424},{\"name\":\"Olivia\",\"text\":\"Vancouver,
+        Canada\",\"username\":\"LivInTheLookingGlass\",\"number\":2,\"id\":\"2\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"createdTime\":1663625366278,\"probability\":0.006859570407866334},{\"text\":\"Silicon
+        Valley / Sacramento Valley\",\"username\":\"LivInTheLookingGlass\",\"name\":\"Olivia\",\"number\":3,\"createdTime\":1663625391140,\"id\":\"3\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"probability\":0.01669465122085362},{\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"name\":\"Jack\",\"number\":4,\"text\":\"San
+        Francisco\",\"id\":\"4\",\"username\":\"jack\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\",\"createdTime\":1663627088515,\"probability\":0.054204550575922335},{\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"text\":\"New
+        York\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\",\"createdTime\":1663627096642,\"name\":\"Jack\",\"id\":\"5\",\"number\":5,\"username\":\"jack\",\"probability\":0.09407410845073831},{\"username\":\"jack\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\",\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"number\":6,\"text\":\"Seattle\",\"createdTime\":1663627114686,\"name\":\"Jack\",\"id\":\"6\",\"probability\":0.016964979118700572},{\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"number\":7,\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\",\"name\":\"Jack\",\"text\":\"Portland\",\"createdTime\":1663627398811,\"username\":\"jack\",\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"id\":\"7\",\"probability\":0.007332644229098495},{\"number\":8,\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\",\"createdTime\":1663627560984,\"id\":\"8\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"name\":\"Jack\",\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"text\":\"Boston\",\"username\":\"jack\",\"probability\":0.07603923891347701},{\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"text\":\"Washington
+        DC\",\"createdTime\":1663627571742,\"id\":\"9\",\"number\":9,\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"username\":\"jack\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\",\"name\":\"Jack\",\"probability\":0.0074678081780219716},{\"number\":10,\"id\":\"10\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userId\":\"5LZ4LgYuySdL1huCWe7bti02ghx2\",\"username\":\"JamesGrugett\",\"text\":\"Austin,
+        TX\",\"avatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GjC83uMe-fEfzd6QvxiK6ZqZdlMytuHxevgMYIkpAI=s96-c\",\"createdTime\":1663636654475,\"name\":\"James\",\"probability\":0.007535390152483708},{\"text\":\"Bellingham,
+        WA\",\"id\":\"11\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FFutureOwl%2FXYCT2NQkYd.44?alt=media&token=d1f2390e-ef8d-4731-be88-187a42fd5af2\",\"number\":11,\"name\":\"Future
+        Telling Owl\",\"createdTime\":1663656230115,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userId\":\"1peFzLQ2AUXC5NzE9xWsRByeMSF3\",\"username\":\"FutureOwl\",\"probability\":0.01723530701654752},{\"userId\":\"U0HGS0lz7CTVT7UWDBE5T3VSl7u1\",\"text\":\"Philadelphia\",\"id\":\"12\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fathenaciara%2FlgPaUse14O.png?alt=media&token=78689b3d-1522-4ab6-949f-466ec11b061c\",\"createdTime\":1663656744195,\"username\":\"athenaciara\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"name\":\"Athena
+        C.\",\"number\":12,\"probability\":0.04240768897474015},{\"userId\":\"U0HGS0lz7CTVT7UWDBE5T3VSl7u1\",\"id\":\"13\",\"number\":13,\"name\":\"Athena
+        C.\",\"text\":\"Denver\",\"username\":\"athenaciara\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fathenaciara%2FlgPaUse14O.png?alt=media&token=78689b3d-1522-4ab6-949f-466ec11b061c\",\"createdTime\":1663656776397,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"probability\":0.044097238336283574},{\"createdTime\":1663708071667,\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"text\":\"Minneapolis\u2013Saint
+        Paul\",\"name\":\"Forrest\",\"id\":\"14\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"number\":14,\"username\":\"Forrest\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"probability\":0.010172990685295974}],\"comments\":[{\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GhGa0Vhb3LTBXbd2fGfekbG5clPQSVe59Xh35CrKw=s96-c\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"attrs\":{\"id\":\"U0HGS0lz7CTVT7UWDBE5T3VSl7u1\",\"label\":\"athenaciara\"},\"type\":\"mention\"},{\"type\":\"text\",\"text\":\"
+        Incentive: mountains, trees\"}]}],\"type\":\"doc\"},\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userId\":\"AJwLWoo3xue32XIiAVrL5SyR1WB2\",\"createdTime\":1663721786395,\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"id\":\"rycbdYvw4w9VkCqUwisT\",\"userUsername\":\"ian\",\"userName\":\"Ian
+        Philips\",\"answerOutcome\":\"13\",\"commentType\":\"contract\",\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\"},{\"id\":\"v9d6GcZKZBAkdjtpu1K8\",\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"type\":\"text\",\"text\":\"Incentive:
+        transit system\"}],\"type\":\"paragraph\"}]},\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"commenterPositionOutcome\":\"1\",\"commenterPositionShares\":6,\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\",\"answerOutcome\":\"4\",\"createdTime\":1663709675216,\"userUsername\":\"LivInTheLookingGlass\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"commentType\":\"contract\",\"userName\":\"Olivia\"},{\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"userName\":\"Olivia\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"type\":\"text\",\"text\":\"Incentive:
+        transit system\"}],\"type\":\"paragraph\"}]},\"answerOutcome\":\"1\",\"id\":\"tqMll6YUsOA3ZpWucFff\",\"createdTime\":1663709666798,\"commenterPositionShares\":6,\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userUsername\":\"LivInTheLookingGlass\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"commenterPositionOutcome\":\"1\",\"commentType\":\"contract\"},{\"commenterPositionShares\":6,\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"createdTime\":1663709627467,\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\",\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"userUsername\":\"LivInTheLookingGlass\",\"commenterPositionOutcome\":\"1\",\"id\":\"Ei3O82tXB09CEIM2AvWL\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"answerOutcome\":\"7\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"text\":\"Incentive:
+        water, mountains, trees\",\"type\":\"text\"}]}],\"type\":\"doc\"},\"userName\":\"Olivia\",\"commentType\":\"contract\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\"},{\"commenterPositionShares\":6,\"userUsername\":\"LivInTheLookingGlass\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"createdTime\":1663709603618,\"commenterPositionOutcome\":\"1\",\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"answerOutcome\":\"14\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"commentType\":\"contract\",\"content\":{\"content\":[{\"content\":[{\"text\":\"Incentive:
+        (my) family nearby\",\"type\":\"text\"}],\"type\":\"paragraph\"},{\"content\":[{\"type\":\"text\",\"text\":\"Disincentive:
+        winter\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\",\"id\":\"vxT1xx72ts3rxKJBOUBS\",\"userName\":\"Olivia\"},{\"createdTime\":1663709567943,\"userName\":\"Olivia\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\",\"commenterPositionShares\":6,\"answerOutcome\":\"3\",\"commentType\":\"contract\",\"userUsername\":\"LivInTheLookingGlass\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"commenterPositionOutcome\":\"1\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Incentive:
+        weather, (my) family nearby, mountains, water\"}]}]},\"id\":\"rmTL1uhu9bfDF9aF88ml\"},{\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Incentive:
+        water, mountains\"}]}]},\"id\":\"qmJmRTASHewR72b3t8oM\",\"userUsername\":\"LivInTheLookingGlass\",\"commentType\":\"contract\",\"answerOutcome\":\"6\",\"userName\":\"Olivia\",\"commenterPositionShares\":6,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"createdTime\":1663709543701,\"commenterPositionOutcome\":\"1\",\"contractId\":\"opaEWymtuX61FK2gKwXL\"},{\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"userUsername\":\"LivInTheLookingGlass\",\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"text\":\"Incentive:
+        (my) family nearby, mountains, water\",\"type\":\"text\"}],\"type\":\"paragraph\"}]},\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"commenterPositionOutcome\":\"1\",\"createdTime\":1663709530078,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"commenterPositionShares\":6,\"userName\":\"Olivia\",\"commentType\":\"contract\",\"answerOutcome\":\"4\",\"id\":\"qeGeI4Cw6sJzjhMw2S9z\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\"},{\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"createdTime\":1663709509222,\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\",\"userUsername\":\"LivInTheLookingGlass\",\"answerOutcome\":\"1\",\"commenterPositionOutcome\":\"1\",\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"id\":\"e58vTIxKjE0pIiYypDgi\",\"userName\":\"Olivia\",\"commentType\":\"contract\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Incentive:
+        family both there and nearby\"}]}]},\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"commenterPositionShares\":6},{\"userName\":\"Olivia\",\"betId\":\"qvqyk7Jsp4r7TXOmnq7v\",\"userUsername\":\"LivInTheLookingGlass\",\"answerOutcome\":\"8\",\"commentType\":\"contract\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"createdTime\":1663658822154,\"commenterPositionShares\":6,\"id\":\"qvqyk7Jsp4r7TXOmnq7v\",\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"text\":\"I
+        don't know that we'd go there, but it has always had a spot in my heart from
+        visiting as a kid\",\"type\":\"text\"}]}],\"type\":\"doc\"},\"commenterPositionOutcome\":\"1\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\"},{\"userUsername\":\"athenaciara\",\"userName\":\"Athena
+        C.\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"commenterPositionShares\":10,\"userId\":\"U0HGS0lz7CTVT7UWDBE5T3VSl7u1\",\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\",\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"commentType\":\"contract\",\"commenterPositionOutcome\":\"5\",\"id\":\"41WML2EA5U5H4CCmRwxu\",\"createdTime\":1663656719502,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fathenaciara%2FlgPaUse14O.png?alt=media&token=78689b3d-1522-4ab6-949f-466ec11b061c\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"text\":\"The
+        Municipal Equality Index is a database of U.S. cities scored on the strength
+        of their LGBTQ+ rights protections. To my surprise, lots of cities get perfect
+        scores:\",\"type\":\"text\"}]},{\"type\":\"paragraph\",\"content\":[{\"marks\":[{\"type\":\"link\",\"attrs\":{\"href\":\"https://www.hrc.org/resources/municipalities\",\"target\":\"_blank\",\"class\":\"no-underline
+        !text-indigo-700 z-10 break-anywhere hover:underline hover:decoration-indigo-400
+        hover:decoration-2\"}}],\"type\":\"text\",\"text\":\"https://www.hrc.org/resources/municipalities\"}]}],\"type\":\"doc\"}},{\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"Btw
+        generally I meant the metropolitan areas, not just the specific cities.\"}]}],\"type\":\"doc\"},\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\",\"createdTime\":1663627598810,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\",\"replyToCommentId\":\"1VHzd7rwG74vgNvtn2tL\",\"commenterPositionShares\":2,\"commentType\":\"contract\",\"userName\":\"Jack\",\"id\":\"U210WVkp8GQv9m7cF0cG\",\"userUsername\":\"jack\",\"commenterPositionOutcome\":\"4\",\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\"},{\"userUsername\":\"jack\",\"commenterPositionOutcome\":\"4\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\",\"contractQuestion\":\"My
+        partner and I are considering moving soon.  Where should we consider?\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"createdTime\":1663627506076,\"commenterPositionShares\":2,\"commentType\":\"contract\",\"userName\":\"Jack\",\"content\":{\"content\":[{\"content\":[{\"text\":\"Just
+        adding some cities/areas that seem to broadly fit your criteria and which
+        I have a positive impression of.\",\"type\":\"text\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"contractSlug\":\"my-partner-and-i-are-considering-mo\",\"id\":\"1VHzd7rwG74vgNvtn2tL\"}],\"bets\":[{\"amount\":10,\"userUsername\":\"JohnRoxton\",\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"outcome\":\"1\",\"probAfter\":0.26100396143128424,\"id\":\"BAnKIVRNE21UN4m41php\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"shares\":21.67863185051081,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJohnRoxton%2FP1%20-%20Copy%20(2).jpg?alt=media&token=fb83f18b-ca71-49db-8b32-7b23aa4cf70a\",\"userName\":\"John
+        Roxton\",\"loanAmount\":0.9607920320000001,\"userId\":\"jU6q1ZdnPgWlZTa1E1W2CQFPdME3\",\"probBefore\":0.16697085458077052,\"createdTime\":1664555510979},{\"userName\":\"Adele
+        Lopez\",\"probAfter\":0.16697085458077052,\"loanAmount\":1.7245064096756866,\"shares\":19.68803401818785,\"userUsername\":\"adele\",\"amount\":7,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userId\":\"8ClHap6pPnTL6uOupDT94R6cxgv2\",\"id\":\"NqdxpDvfHo4JB5C1mNKq\",\"probBefore\":0.09004480186064578,\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"outcome\":\"1\",\"createdTime\":1663777058997,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fadele%2F279279883_488642422947721_1881180699517898772_n.jpg?alt=media&token=3fcf76a0-c696-4941-9004-d13e976cd5ea\"},{\"createdTime\":1663711554737,\"userUsername\":\"Forrest\",\"probAfter\":0.06674421781055552,\"userName\":\"Forrest\",\"id\":\"ZBj77srHyMJjjzJEmGjy\",\"probBefore\":0.042190453789816174,\"outcome\":\"4\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"loanAmount\":0.5228617947091923,\"amount\":2,\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0},\"shares\":8.61890802723742},{\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"loanAmount\":0.5228617947091923,\"probAfter\":0.09241386172437745,\"id\":\"CVRWknPRuXXvHjyyW0l8\",\"userUsername\":\"Forrest\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"createdTime\":1663711551469,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"probBefore\":0.06821716929470115,\"shares\":7.073858496467693,\"userName\":\"Forrest\",\"amount\":2,\"outcome\":\"1\"},{\"outcome\":\"14\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"userUsername\":\"Forrest\",\"id\":\"4zEPlr8RjpnxNuVB41pf\",\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userName\":\"Forrest\",\"amount\":1,\"shares\":17.35097497091434,\"loanAmount\":0.2614308973545961,\"createdTime\":1663708071668,\"probAfter\":0.013198721592152768,\"probBefore\":0,\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\"},{\"probBefore\":0.03684656363948797,\"userUsername\":\"juan\",\"id\":\"v0U3qNahII7p4Nlt5aMM\",\"amount\":5,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"loanAmount\":1.3071544867729803,\"createdTime\":1663701030792,\"probAfter\":0.09997496923466304,\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0},\"outcome\":\"8\",\"userName\":\"Juan
+        Gil\",\"shares\":19.59831197580899,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fjuan%2F9y5r9a.jpg?alt=media&token=90e74344-4983-43bf-a26c-a52078afc366\",\"userId\":\"sIOL0UIyQ4X4LnHUY8LyjfOHhUW2\"},{\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"shares\":7.9095569296695505,\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"loanAmount\":0.2614308973545961,\"userUsername\":\"Forrest\",\"probAfter\":0.023489391090051916,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"probBefore\":0.009882321953786993,\"outcome\":\"3\",\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"userName\":\"Forrest\",\"id\":\"EtIdyrJN44RXkKGq3o3i\",\"createdTime\":1663682557501,\"amount\":1},{\"probAfter\":0.024202352761572673,\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"shares\":7.743735288477712,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userUsername\":\"Forrest\",\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"probBefore\":0.010509820988225359,\"amount\":1,\"createdTime\":1663682554053,\"outcome\":\"6\",\"id\":\"DBKJS5gYf2pze2UCgHbx\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"loanAmount\":0.2614308973545961,\"userName\":\"Forrest\"},{\"probBefore\":0.011154074955383701,\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"amount\":1,\"outcome\":\"11\",\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"id\":\"0xO21HuESlJY82DhmtQI\",\"shares\":7.584426768047397,\"userUsername\":\"Forrest\",\"probAfter\":0.024933026734273403,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"userName\":\"Forrest\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"createdTime\":1663682549654,\"loanAmount\":0.2614308973545961},{\"userName\":\"Forrest\",\"amount\":-1.9718337793520675,\"probBefore\":0.06457368827160494,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"id\":\"Gxo4To71RkG593AKCG9x\",\"shares\":-8.753527112913865,\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"outcome\":\"8\",\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"sale\":{\"betId\":\"Gxo4To71RkG593AKCG9x\",\"amount\":1.9718337793520675},\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"createdTime\":1663682523718,\"userUsername\":\"Forrest\",\"loanAmount\":0,\"probAfter\":0.038419591512988294},{\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"createdTime\":1663682498145,\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"probBefore\":0.020630827216822058,\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"shares\":11.036389236632285,\"amount\":2,\"userName\":\"Forrest\",\"userUsername\":\"Forrest\",\"loanAmount\":0.5228617947091923,\"id\":\"3oJ2s8vsQltXycmiGj7b\",\"probAfter\":0.04764660493827161,\"outcome\":\"4\"},{\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"shares\":8.753527112913865,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"createdTime\":1663682495323,\"outcome\":\"8\",\"probAfter\":0.066405475104146,\"loanAmount\":0,\"userName\":\"Forrest\",\"probBefore\":0.03954081632653061,\"userUsername\":\"Forrest\",\"isSold\":true,\"id\":\"Gxo4To71RkG593AKCG9x\",\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"amount\":2,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\"},{\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"createdTime\":1663658763210,\"amount\":2,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"outcome\":\"8\",\"userName\":\"Olivia\",\"loanAmount\":0.5228617947091923,\"shares\":13.040173227201366,\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"userUsername\":\"LivInTheLookingGlass\",\"probAfter\":0.03954081632653061,\"id\":\"qvqyk7Jsp4r7TXOmnq7v\",\"probBefore\":0.011499684940138626,\"contractId\":\"opaEWymtuX61FK2gKwXL\"},{\"userName\":\"Olivia\",\"probBefore\":0.01136299395104302,\"outcome\":\"1\",\"amount\":5,\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"shares\":25.268718967874214,\"loanAmount\":1.3071544867729803,\"probAfter\":0.08170552404956943,\"createdTime\":1663658746208,\"userUsername\":\"LivInTheLookingGlass\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"id\":\"ljuBTuYDAGlKlNABpGFM\",\"contractId\":\"opaEWymtuX61FK2gKwXL\"},{\"probBefore\":0,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fathenaciara%2FlgPaUse14O.png?alt=media&token=78689b3d-1522-4ab6-949f-466ec11b061c\",\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"outcome\":\"13\",\"userUsername\":\"athenaciara\",\"loanAmount\":1.3071544867729803,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"probAfter\":0.07377466221945841,\"shares\":36.124783736376884,\"userId\":\"U0HGS0lz7CTVT7UWDBE5T3VSl7u1\",\"createdTime\":1663656776398,\"userName\":\"Athena
+        C.\",\"id\":\"7V13cFmZSfr78BeKoDhl\",\"amount\":5},{\"userName\":\"Athena
+        C.\",\"createdTime\":1663656744195,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userUsername\":\"athenaciara\",\"id\":\"nezZCGP48RvkOYg9Mlfp\",\"shares\":35.4259791678367,\"probBefore\":0,\"outcome\":\"12\",\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0},\"probAfter\":0.07659912109375,\"amount\":5,\"loanAmount\":1.3071544867729803,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fathenaciara%2FlgPaUse14O.png?alt=media&token=78689b3d-1522-4ab6-949f-466ec11b061c\",\"userId\":\"U0HGS0lz7CTVT7UWDBE5T3VSl7u1\"},{\"createdTime\":1663656496546,\"id\":\"KNOXaqOHtNrek1fKV7GK\",\"userUsername\":\"athenaciara\",\"loanAmount\":2.6143089735459606,\"outcome\":\"5\",\"userId\":\"U0HGS0lz7CTVT7UWDBE5T3VSl7u1\",\"userName\":\"Athena
+        C.\",\"shares\":32.17236355111768,\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"probBefore\":0.03320541937504895,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fathenaciara%2FlgPaUse14O.png?alt=media&token=78689b3d-1522-4ab6-949f-466ec11b061c\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"amount\":10,\"probAfter\":0.18401744993059688},{\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userUsername\":\"FutureOwl\",\"userName\":\"Future
+        Telling Owl\",\"amount\":1,\"loanAmount\":0.2614308973545961,\"outcome\":\"11\",\"createdTime\":1663656230116,\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0},\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FFutureOwl%2FXYCT2NQkYd.44?alt=media&token=d1f2390e-ef8d-4731-be88-187a42fd5af2\",\"userId\":\"1peFzLQ2AUXC5NzE9xWsRByeMSF3\",\"probAfter\":0.01762080037591041,\"id\":\"UCUGhVd7o8ipqOVrxWML\",\"probBefore\":0,\"shares\":15},{\"id\":\"MfouFTKwzYvQ85Acya48\",\"probAfter\":0.017777423469387755,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0},\"amount\":1,\"userUsername\":\"JamesGrugett\",\"userId\":\"5LZ4LgYuySdL1huCWe7bti02ghx2\",\"outcome\":\"10\",\"loanAmount\":0.2614308973545961,\"createdTime\":1663636654475,\"userName\":\"James\",\"userAvatarUrl\":\"https://lh3.googleusercontent.com/a-/AOh14GjC83uMe-fEfzd6QvxiK6ZqZdlMytuHxevgMYIkpAI=s96-c\",\"probBefore\":0,\"shares\":14.933184523068078},{\"id\":\"z67gsBX3OXYLhRJDoDIG\",\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"shares\":14.866068747318506,\"createdTime\":1663627571743,\"outcome\":\"9\",\"probAfter\":0.017936855774693616,\"amount\":1,\"probBefore\":0,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userUsername\":\"jack\",\"userName\":\"Jack\",\"loanAmount\":0.2614308973545961,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\"},{\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\",\"userName\":\"Jack\",\"createdTime\":1663627560985,\"shares\":14.798648586948742,\"outcome\":\"8\",\"loanAmount\":0.2614308973545961,\"amount\":1,\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"userUsername\":\"jack\",\"probBefore\":0,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"id\":\"u8Q20w3Z400bsrAOfkY6\",\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"probAfter\":0.018099173553719008},{\"shares\":14.730919862656235,\"amount\":1,\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"userUsername\":\"jack\",\"createdTime\":1663627398811,\"loanAmount\":0.2614308973545961,\"id\":\"4qC4znQgPXha3N13c8Vn\",\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"userName\":\"Jack\",\"probBefore\":0,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\",\"probAfter\":0.01826445585388435,\"outcome\":\"7\",\"contractId\":\"opaEWymtuX61FK2gKwXL\"},{\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"probAfter\":0.018432784636488342,\"shares\":14.66287829861518,\"createdTime\":1663627114686,\"amount\":1,\"outcome\":\"6\",\"probBefore\":0,\"id\":\"6uMxI1lP9084WAFNajY0\",\"loanAmount\":0.2614308973545961,\"userName\":\"Jack\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"userUsername\":\"jack\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\"},{\"userName\":\"Jack\",\"id\":\"U7GaJJT6aZwuMohafzCv\",\"userUsername\":\"jack\",\"shares\":20.591260281974,\"loanAmount\":0.5228617947091923,\"probAfter\":0.03703380207878418,\"amount\":2,\"createdTime\":1663627096642,\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\",\"outcome\":\"5\",\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"probBefore\":0},{\"userId\":\"YGZdZUSFQyM8j2YzPaBqki8NBz23\",\"createdTime\":1663627088515,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"userName\":\"Jack\",\"outcome\":\"4\",\"id\":\"6Xl6xXDvmcPxuWHYm2ng\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FJackC%2Fmetal-jacks-thumbnail.jpg?alt=media&token=89d230f3-05a9-4ad4-9606-5fc6e2c6b096\",\"probAfter\":0.03773242630385487,\"probBefore\":0,\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"userUsername\":\"jack\",\"amount\":2,\"loanAmount\":0.5228617947091923,\"shares\":20.396078054371138},{\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"createdTime\":1663625391140,\"outcome\":\"3\",\"userUsername\":\"LivInTheLookingGlass\",\"id\":\"JUV6LgiU1OQynvvJYjps\",\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"probAfter\":0.019323216137241965,\"amount\":1,\"userName\":\"Olivia\",\"loanAmount\":0.2614308973545961,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"probBefore\":0,\"shares\":14.317821063276353,\"contractId\":\"opaEWymtuX61FK2gKwXL\"},{\"outcome\":\"2\",\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"shares\":14.247806848775006,\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"loanAmount\":0.2614308973545961,\"probBefore\":0,\"amount\":1,\"userUsername\":\"LivInTheLookingGlass\",\"probAfter\":0.019511726259131102,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"id\":\"uVhonaYfUzdHsXttBAbU\",\"userName\":\"Olivia\",\"createdTime\":1663625366278},{\"amount\":1,\"probAfter\":0.01970395059307911,\"outcome\":\"1\",\"userName\":\"Olivia\",\"userUsername\":\"LivInTheLookingGlass\",\"shares\":14.177446878757825,\"loanAmount\":0.2614308973545961,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"probBefore\":0,\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"id\":\"DO9gbxOQYu5jSweHESAd\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"createdTime\":1663625351697},{\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"createdTime\":1663625336474,\"shares\":100,\"amount\":100,\"contractId\":\"opaEWymtuX61FK2gKwXL\",\"outcome\":\"0\",\"isAnte\":true,\"probAfter\":1,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"userName\":\"Olivia\",\"id\":\"y7fauj5h2Db80NARnX4m\",\"userUsername\":\"LivInTheLookingGlass\",\"loanAmount\":26.143089735459608,\"probBefore\":0,\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0}}],\"description\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"I
+        will resolve based on what the two of us think of each option\"}]},{\"type\":\"paragraph\"},{\"content\":[{\"text\":\"I
+        am a computer science major who by this point will have a Master's Degree.
+        I'm going to be looking for remote work, so location doesn't matter as much
+        to me in particular.\",\"type\":\"text\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\"},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"My
+        partner is a Baking & Pastry Arts student who will be graduating just before
+        we move. So far their favorite is yeast doughs and  the like\"}]},{\"type\":\"paragraph\"},{\"content\":[{\"type\":\"text\",\"text\":\"We
+        live in the United States and both have passports. We are willing (but unlikely)
+        to leave the country. We are queer, and therefore large parts of the country/world
+        are essentially off limits for living. Locations in the former Confederacy
+        or in a country where English is not spoken will not be selected unless there
+        is a \"},{\"text\":\"very\",\"type\":\"text\",\"marks\":[{\"type\":\"italic\"}]},{\"text\":\"
+        good counterbalancing reason.\",\"type\":\"text\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\"},{\"content\":[{\"text\":\"In
+        general, regions are preferred to specific locations. For instance, \\\"Greater
+        Chicago\\\" is more useful than \\\"Boystown\\\"\",\"type\":\"text\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\"},{\"type\":\"paragraph\",\"content\":[{\"text\":\"The
+        only ask we have that I think is difficult is for a decent public transit
+        system. Otherwise, we would also like to be within a few hours of a body of
+        water and of a mountain. I realize some of our wants are mutually exclusive,
+        but that's how things are sometimes\",\"type\":\"text\"}]}]},\"textDescription\":\"I
+        will resolve based on what the two of us think of each option\\n\\nI am a
+        computer science major who by this point will have a Master's Degree. I'm
+        going to be looking for remote work, so location doesn't matter as much to
+        me in particular.\\n\\nMy partner is a Baking & Pastry Arts student who will
+        be graduating just before we move. So far their favorite is yeast doughs and
+        \ the like\\n\\nWe live in the United States and both have passports. We are
+        willing (but unlikely) to leave the country. We are queer, and therefore large
+        parts of the country/world are essentially off limits for living. Locations
+        in the former Confederacy or in a country where English is not spoken will
+        not be selected unless there is a very good counterbalancing reason.\\n\\nIn
+        general, regions are preferred to specific locations. For instance, \\\"Greater
+        Chicago\\\" is more useful than \\\"Boystown\\\"\\n\\nThe only ask we have
+        that I think is difficult is for a decent public transit system. Otherwise,
+        we would also like to be within a few hours of a body of water and of a mountain.
+        I realize some of our wants are mutually exclusive, but that's how things
+        are sometimes\"}"
     headers:
       Access-Control-Allow-Origin:
       - '*'
@@ -154,14 +113,12 @@ interactions:
       - public, max-age=0, must-revalidate
       Connection:
       - keep-alive
-      Content-Encoding:
-      - br
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Thu, 06 Oct 2022 01:13:30 GMT
+      - Thu, 06 Oct 2022 01:35:23 GMT
       Etag:
-      - W/"172srhe9iwcs49"
+      - W/"ycuthx6ik4s49"
       Server:
       - Vercel
       Strict-Transport-Security:
@@ -173,7 +130,9 @@ interactions:
       X-Vercel-Cache:
       - HIT
       X-Vercel-Id:
-      - cle1::cle1::6b2n7-1665018812010-a43b1f2dff68
+      - cle1::cle1::92whw-1665020125148-8cd3cbf5fe3f
+      content-length:
+      - '36443'
     status:
       code: 200
       message: OK

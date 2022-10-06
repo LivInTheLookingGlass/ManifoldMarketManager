@@ -7,7 +7,7 @@ from random import randrange
 from secrets import token_hex
 from typing import Any, List, cast
 
-from pytest import mark, raises
+from pytest import raises
 
 from .. import Rule
 from ..util import explain_abstract, require_env
@@ -37,7 +37,6 @@ def test_require_env() -> None:
                 environ[key] = orig
 
 
-@mark.network
 def test_explain_abstract() -> None:
     """Make sure that explain_abstract() calls to each of its fed Rules."""
     @dataclass
