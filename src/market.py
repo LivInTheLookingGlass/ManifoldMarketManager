@@ -6,8 +6,7 @@ from logging import getLogger
 from time import time
 from typing import TYPE_CHECKING, cast
 
-from .util import (explain_abstract, get_client, market_to_answer_map, number_to_prob_cpmm1, pool_to_number_cpmm1,
-                   require_env, round_sig_figs)
+from .util import explain_abstract, get_client, number_to_prob_cpmm1, require_env, round_sig_figs
 
 if TYPE_CHECKING:  # pragma: no cover
     from logging import Logger
@@ -181,26 +180,10 @@ class Market:
             raise RuntimeError()
         return chosen
 
-    def current_answer(self) -> str | AnyResolution:
-        """Return the current top (single) answer."""
-        # TODO: move these behaviors to a rule class
-        if self.market.outcomeType == "BINARY":
-            assert isinstance(self.market.probability, float)
-            return f"{100 * self.market.probability}%"
-        elif self.market.outcomeType == "PSEUDO_NUMERIC":
-            assert not isinstance(self.market.pool, float)
-            assert isinstance(self.market.p, float)
-            return pool_to_number_cpmm1(
-                self.market.pool['YES'],
-                self.market.pool['NO'],
-                self.market.p,
-                float(self.market.min or 0),
-                float(self.market.max or 0),
-                bool(self.market.isLogScale)
-            )
-        elif self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
-            market_to_answer_map(self.market)
-        raise NotImplementedError(self.market.outcomeType)
+    def current_answer(self) -> AnyResolution:
+        """Return the current market consensus."""
+        from .rule.manifold.this import CurrentValueRule
+        return CurrentValueRule().value(self, format=self.market.outcomeType)
 
     @require_env("ManifoldAPIKey")
     def resolve(self, override: Optional[AnyResolution] = None) -> Response:
