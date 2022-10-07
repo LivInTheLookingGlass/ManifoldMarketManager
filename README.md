@@ -1,9 +1,9 @@
 # Market Manager for Manifold
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/c02f68d7edee3420903f/maintainability)](https://codeclimate.com/github/gappleto97/ManifoldMarketManager/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/c02f68d7edee3420903f/test_coverage)](https://codeclimate.com/github/gappleto97/ManifoldMarketManager/test_coverage) [![CircleCI](https://dl.circleci.com/status-badge/img/gh/gappleto97/ManifoldMarketManager/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/gappleto97/ManifoldMarketManager/tree/master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/70890c1f8770fd3b684d/maintainability)](https://codeclimate.com/github/LivInTheLookingGlass/ManifoldMarketManager/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/70890c1f8770fd3b684d/test_coverage)](https://codeclimate.com/github/LivInTheLookingGlass/ManifoldMarketManager/test_coverage) [![CircleCI](https://dl.circleci.com/status-badge/img/gh/LivInTheLookingGlass/ManifoldMarketManager/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/LivInTheLookingGlass/ManifoldMarketManager/tree/master)
 
 What you're reading is only one of many places I host this code at. They are:
-- [GitHub](https://github.com/gappleto97/ManifoldMarketManager)
+- [GitHub](https://github.com/LivInTheLookingGlass/ManifoldMarketManager)
 - [GitLab](https://gitlab.com/gappleto97/ManifoldMarketManager)
 - [TildeGit](https://tildegit.org/LivInTheLookingGlass/ManifoldMarketManager)
 

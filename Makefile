@@ -143,7 +143,7 @@ upload_coverage: .coverage
 	@coverage xml
 	@python -m coverage xml
 	@if [ ! -f ./test-reporter-latest-linux-amd64 ]; then wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64; chmod +x ./test-reporter-latest-linux-amd64; fi
-	@./test-reporter-latest-linux-amd64 after-build -t coverage.py -r edb8346708ccd2734dd8ba11e7e9775ae67f4fb61cef327679d7b6e3c2123945
+	@./test-reporter-latest-linux-amd64 after-build -t coverage.py -r eb0fb76d1b07b8f58d16c2ccd2ef6f9d2483faa25650522e6313f6564a6d0351
 
 .PHONY: help
 # Show this help.
