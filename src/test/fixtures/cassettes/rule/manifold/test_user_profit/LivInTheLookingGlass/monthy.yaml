@@ -1,0 +1,51 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://manifold.markets/api/v0/user/LivInTheLookingGlass
+  response:
+    body:
+      string: '{"id":"k13AzY3mu8XTju3xRZV3P8qBjEC2","createdTime":1648011015371,"name":"Olivia","username":"LivInTheLookingGlass","url":"https://manifold.markets/LivInTheLookingGlass","avatarUrl":"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97","bio":"Computer
+        Science & Engineering PhD student who likes testing her predictive skill.
+        I also operate @MarketManagerBot, map on OpenStreetMap, and occasionally post
+        on Mastodon @LivInTheLookingGlass@mastodon.social","website":"https://mastodon.social/@LivInTheLookingGlass","twitterHandle":"","balance":24.328893216088005,"totalDeposits":8355.897013412578,"profitCached":{"monthly":2374.385642135074,"daily":177.9272442400179,"allTime":6131.776489376594,"weekly":496.933697342356},"creatorVolumeCached":{"daily":790.9647473532227,"monthly":12540.906372343215,"weekly":4484.343023585168,"allTime":62890.969107217374}}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '978'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 08 Oct 2022 23:49:46 GMT
+      Etag:
+      - '"e0vk9n4fktr6"'
+      Server:
+      - Vercel
+      Strict-Transport-Security:
+      - max-age=63072000
+      X-Matched-Path:
+      - /api/v0/user/[username]
+      X-Vercel-Cache:
+      - MISS
+      X-Vercel-Id:
+      - cle1::cle1::bhlm5-1665272986721-c93a8b14d7ca
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -1,0 +1,96 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://manifold.markets/api/v0/user/v
+  response:
+    body:
+      string: '{"id":"w1knZ6yBvEhRThYPEYTwlmGv7N33","createdTime":1655431081524,"name":"Velocity","username":"v","url":"https://manifold.markets/v","avatarUrl":"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fv%2FjrWCCgX7WR.jpg?alt=media&token=8061788f-a243-421e-9e09-cf7e2747c9c1","bio":"If
+        you prick us, do we not bleed? If you tickle us, do we not laugh? ...","website":"","twitterHandle":"","balance":13079.51754944143,"totalDeposits":2115,"profitCached":{"daily":4619.0476158665515,"weekly":8063.125743897224,"allTime":23412.99914548799,"monthly":22929.84736746954},"creatorVolumeCached":{"daily":0,"allTime":0,"monthly":0,"weekly":0}}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '664'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 08 Oct 2022 23:49:51 GMT
+      Etag:
+      - '"fqzrwros7iig"'
+      Server:
+      - Vercel
+      Strict-Transport-Security:
+      - max-age=63072000
+      X-Matched-Path:
+      - /api/v0/user/[username]
+      X-Vercel-Cache:
+      - MISS
+      X-Vercel-Id:
+      - cle1::cle1::pqw72-1665272991415-8d605276a74e
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://manifold.markets/api/v0/user/v
+  response:
+    body:
+      string: '{"id":"w1knZ6yBvEhRThYPEYTwlmGv7N33","createdTime":1655431081524,"name":"Velocity","username":"v","url":"https://manifold.markets/v","avatarUrl":"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fv%2FjrWCCgX7WR.jpg?alt=media&token=8061788f-a243-421e-9e09-cf7e2747c9c1","bio":"If
+        you prick us, do we not bleed? If you tickle us, do we not laugh? ...","website":"","twitterHandle":"","balance":13079.51754944143,"totalDeposits":2115,"profitCached":{"weekly":8063.125743897224,"monthly":22929.84736746954,"daily":4619.0476158665515,"allTime":23412.99914548799},"creatorVolumeCached":{"weekly":0,"daily":0,"monthly":0,"allTime":0}}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '664'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 08 Oct 2022 23:49:51 GMT
+      Etag:
+      - '"67i1aw07pxig"'
+      Server:
+      - Vercel
+      Strict-Transport-Security:
+      - max-age=63072000
+      X-Matched-Path:
+      - /api/v0/user/[username]
+      X-Vercel-Cache:
+      - MISS
+      X-Vercel-Id:
+      - cle1::cle1::562bh-1665272991617-3f4aa7a8ecfa
+    status:
+      code: 200
+      message: OK
+version: 1

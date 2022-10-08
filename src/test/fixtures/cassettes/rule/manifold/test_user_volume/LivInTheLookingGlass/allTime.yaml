@@ -1,0 +1,100 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://manifold.markets/api/v0/user/LivInTheLookingGlass
+  response:
+    body:
+      string: '{"id":"k13AzY3mu8XTju3xRZV3P8qBjEC2","createdTime":1648011015371,"name":"Olivia","username":"LivInTheLookingGlass","url":"https://manifold.markets/LivInTheLookingGlass","avatarUrl":"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97","bio":"Computer
+        Science & Engineering PhD student who likes testing her predictive skill.
+        I also operate @MarketManagerBot, map on OpenStreetMap, and occasionally post
+        on Mastodon @LivInTheLookingGlass@mastodon.social","website":"https://mastodon.social/@LivInTheLookingGlass","twitterHandle":"","balance":24.328893216088005,"totalDeposits":8355.897013412578,"profitCached":{"daily":177.9272442400179,"weekly":496.933697342356,"allTime":6131.776489376594,"monthly":2374.385642135074},"creatorVolumeCached":{"daily":790.9647473532227,"allTime":62890.969107217374,"weekly":4484.343023585168,"monthly":12540.906372343215}}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '978'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 08 Oct 2022 23:49:48 GMT
+      Etag:
+      - '"132hv3xvqu4r6"'
+      Server:
+      - Vercel
+      Strict-Transport-Security:
+      - max-age=63072000
+      X-Matched-Path:
+      - /api/v0/user/[username]
+      X-Vercel-Cache:
+      - MISS
+      X-Vercel-Id:
+      - cle1::cle1::lm6cv-1665272988592-48dda4d86c43
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://manifold.markets/api/v0/user/LivInTheLookingGlass
+  response:
+    body:
+      string: '{"id":"k13AzY3mu8XTju3xRZV3P8qBjEC2","createdTime":1648011015371,"name":"Olivia","username":"LivInTheLookingGlass","url":"https://manifold.markets/LivInTheLookingGlass","avatarUrl":"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97","bio":"Computer
+        Science & Engineering PhD student who likes testing her predictive skill.
+        I also operate @MarketManagerBot, map on OpenStreetMap, and occasionally post
+        on Mastodon @LivInTheLookingGlass@mastodon.social","website":"https://mastodon.social/@LivInTheLookingGlass","twitterHandle":"","balance":24.328893216088005,"totalDeposits":8355.897013412578,"profitCached":{"allTime":6131.776489376594,"monthly":2374.385642135074,"weekly":496.933697342356,"daily":177.9272442400179},"creatorVolumeCached":{"allTime":62890.969107217374,"monthly":12540.906372343215,"daily":790.9647473532227,"weekly":4484.343023585168}}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '978'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 08 Oct 2022 23:49:48 GMT
+      Etag:
+      - '"5da5i9jegxr6"'
+      Server:
+      - Vercel
+      Strict-Transport-Security:
+      - max-age=63072000
+      X-Matched-Path:
+      - /api/v0/user/[username]
+      X-Vercel-Cache:
+      - MISS
+      X-Vercel-Id:
+      - cle1::cle1::q4kfs-1665272988815-a3151f14ff8f
+    status:
+      code: 200
+      message: OK
+version: 1
