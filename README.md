@@ -66,10 +66,73 @@ Every time you run `example.py`, it goes through the following steps:
 
 ## Immediate Goals
 
-- [ ] Testing for the API bindings by spinning up a dev node of Manifold
-- [ ] Resolve based on passage of a US law
-- [ ] Automatic creation of a market when a Pull Request is made
-- [ ] A way to queue creation of markets for when account has enough mana
+- [ ] Make test for each untested function in PyManifold (0/15)
+	- [ ] get_markets
+	- [ ] stream_markets
+	- [ ] list_bets
+	- [ ] get_bets
+	- [ ] stream_bets
+	- [ ] get_market_by_url
+	- [ ] get_user
+	- [ ] cancel_market
+	- [ ] create_multiple_choice_market
+	- [ ] _resolve_binary_market
+	- [ ] _resolve_pseudo_numeric_market
+	- [ ] _resolve_free_response_market
+	- [ ] _resolve_multiple_choice_market
+	- [ ] Group
+	- [ ] LiteUser
+- [ ] move `example_json` into main library
+- [ ] write tests for whatever comes of `example_json`
+- [ ] Make an API to import JSON markets without creating one
+- [ ] test `from_dict` of rule, subclasses
+- [ ] test `__main__` by monkeypatching the `main()` function
+- [ ] disable warning about default explain_specific if classvar acknowledges default behavior as intended
+- [ ] Make comparison rules (>, <, etc)
+- [ ] test GitHub rules using real examples
+- [ ] test register_db
+- [ ] test ManifoldMarketMixin
+- [x] test manifold user rules using real examples
+- [ ] test manifold this rules using real examples
+- [ ] test manifold other rules using real examples
+- [ ] test market.py (0/8)
+  - [ ] from_url
+  - [ ] explain_abstract
+  - [ ] explain_specific
+  - [ ] current answer
+  - [ ] should_resolve
+  - [ ] resolve_to
+  - [ ] resolve
+  - [ ] cancel
+- [ ] test abstract.py (0/3)
+  - [ ] abstractrule subclass enforcement
+  - [ ] explain_abstract
+  - [ ] explain_specific
+- [ ] test generic.py (0/5)
+  - [ ] modulus
+  - [ ] sum
+  - [ ] product
+  - [ ] random index
+  - [ ] multiple values
+- [ ] test util.py (0/4)
+  - [ ] math with examples
+  - [ ] normalize mapping
+  - [ ] round_sig_fig
+  - [ ] time_cache
+- [ ] add a Manifold API hook to leave comments
+- [ ] use pyee to enable events on markets
+- [ ] add a submodule for scanners
+- [ ] add a hook to insert preambles in explain_specific()
+- [ ] figure out how to make myself show up on leaderboard even if not placed
+- [ ] Truth table rule
+For N markets, make 2^N choices
+If any component market resolves PROB, treat it as a superposition, so (p|YES, y, z> + [1-p]|NO, y, z>)
+
+    If any component resolves to CANCEL, either cancel the whole market or resolve to it as a 50/50 superposition
+
+    So this is a Rule[MultipleChoiceResolution] whose children are Rule[BinaryResolution] (specifically OtherMarketValue[BinaryResolution])
+- [ ] support multiple accounts by prepending username to table names, or adding username field
+- [ ] move confirmation code to own file, one for console, one for telegram, and an extra (Null) that implements the protocol as an example
 
 ## Future Goals
 

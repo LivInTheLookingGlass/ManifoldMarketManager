@@ -100,7 +100,7 @@ class Rule(ABC, Generic[T], DictDeserializable):
         raise TypeError(ret, format, market)
 
     @abstractmethod
-    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:  # pragma: no cover
         raise NotImplementedError(type(self))
 
     def explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -149,7 +149,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.55"
+VERSION = "0.6.0.56"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "AnyResolution", "BinaryResolution", "DoResolveRule", "FreeResponseResolution",
@@ -157,7 +157,7 @@ __all__ = [
     "require_env", "rule", "util"
 ]
 
-if getenv("DEBUG"):
+if getenv("DEBUG"):  # pragma: no cover
     import sys
 
     def info(type, value, tb):  # type: ignore  # pragma: no cover
