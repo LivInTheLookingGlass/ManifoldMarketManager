@@ -27,7 +27,7 @@ def field(request: PytestRequest[FieldType]) -> FieldType:
 
 
 def test_user_profit(manifold_user: str, field: FieldType) -> None:
-    expected = {
+    expected: dict[str, dict[str, float]] = {
         "LivInTheLookingGlass": {
             "allTime": 6131.776489376594,
             "daily": 177.9272442400179,
@@ -48,7 +48,7 @@ def test_user_profit(manifold_user: str, field: FieldType) -> None:
 
 
 def test_user_market_volume(manifold_user: str, field: FieldType) -> None:
-    expected = {
+    expected: dict[str, dict[str, float]] = {
         "LivInTheLookingGlass": {
             "allTime": 62890.969107217374,
             "daily": 790.9647473532227,
