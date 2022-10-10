@@ -66,22 +66,22 @@ Every time you run `example.py`, it goes through the following steps:
 
 ## Immediate Goals
 
-- [ ] Make test for each untested function in PyManifold (0/15)
-	- [ ] get_markets
-	- [ ] stream_markets
-	- [ ] list_bets
-	- [ ] get_bets
-	- [ ] stream_bets
-	- [ ] get_market_by_url
+- [ ] Make test for each untested function in PyManifold (6 done / 2 removed / 15)
+	- [x] get_markets
+	- [x] stream_markets
+	- [x] list_bets
+	- [x] get_bets
+	- [x] stream_bets
+	- [x] get_market_by_url
 	- [ ] get_user
 	- [ ] cancel_market
-	- [ ] create_multiple_choice_market
+	- [x] create_multiple_choice_market
 	- [ ] _resolve_binary_market
 	- [ ] _resolve_pseudo_numeric_market
 	- [ ] _resolve_free_response_market
 	- [ ] _resolve_multiple_choice_market
 	- [ ] Group
-	- [ ] LiteUser
+	- [x] LiteUser
 - [ ] move `example_json` into main library
 - [ ] write tests for whatever comes of `example_json`
 - [ ] Make an API to import JSON markets without creating one
