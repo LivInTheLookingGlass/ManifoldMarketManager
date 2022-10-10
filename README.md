@@ -72,15 +72,18 @@ Every time you run `example.py`, it goes through the following steps:
 	- [x] list_bets
 	- [x] get_bets
 	- [x] stream_bets
+	- [x] list_groups
+	- [x] get_groups
+    - [x] get_group
 	- [x] get_market_by_url
-	- [ ] get_user
+	- [x] get_user
 	- [ ] cancel_market
 	- [x] create_multiple_choice_market
 	- [ ] _resolve_binary_market
 	- [ ] _resolve_pseudo_numeric_market
 	- [ ] _resolve_free_response_market
 	- [ ] _resolve_multiple_choice_market
-	- [ ] Group
+	- [x] Group
 	- [x] LiteUser
 - [ ] move `example_json` into main library
 - [ ] write tests for whatever comes of `example_json`
