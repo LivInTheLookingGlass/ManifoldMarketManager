@@ -77,9 +77,9 @@ Every time you run `example.py`, it goes through the following steps:
     - [x] get_group
 	- [x] get_market_by_url
 	- [x] get_user
-	- [ ] cancel_market
+	- [x] cancel_market
 	- [x] create_multiple_choice_market
-	- [ ] _resolve_binary_market
+	- [x] _resolve_binary_market
 	- [ ] _resolve_pseudo_numeric_market
 	- [ ] _resolve_free_response_market
 	- [ ] _resolve_multiple_choice_market

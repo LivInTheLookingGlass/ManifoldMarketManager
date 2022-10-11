@@ -10,7 +10,7 @@ USER_FLAG?=--user
 PIP?=$(PY) -m pip
 # Unless specified otherwise, perform code coverage analysis
 COV?=true
-# Unless specified otherwise, run a linter
+# Unless specified otherwise, run a linter. Also accepts only to run only linting and type-checking, disable code coverage
 LINT?=true
 # Unless specified otherwise, perform type-checking
 MYPY?=true
@@ -28,6 +28,11 @@ endif
 
 ifneq ($(LINT),false)
 pytest_args += --flake8 --isort
+endif
+
+ifeq ($(LINT),only)
+pytest_args += --ignore=./src/test --ignore=./src/PyManifold/tests
+COV=false
 endif
 
 ifneq ($(MYPY),false)
