@@ -3,7 +3,6 @@ from __future__ import annotations
 from functools import _make_key, lru_cache
 from importlib import import_module
 from logging import getLogger, warn
-from math import log10
 from os import getenv
 from pathlib import Path
 from sys import modules
@@ -13,6 +12,7 @@ from typing import TYPE_CHECKING
 
 from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
+from pymanifold.utils.math import number_to_prob_cpmm1  # noqa: F401
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any, Callable, Collection, Hashable, Iterable, Mapping, MutableSequence, TypeVar
@@ -121,15 +121,6 @@ def prob_to_number_cpmm1(probability: float, start: float, end: float, isLogScal
         ret = start + (end - start) * probability
     ret = max(start, min(end, ret))
     return ret
-
-
-def number_to_prob_cpmm1(current: float, start: float, end: float, isLogScale: bool = False) -> float:
-    """Go from a numeric answer to a probability."""
-    if not (start <= current <= end):
-        raise ValueError()
-    if isLogScale:
-        return log10(current - start + 1) / log10(end - start + 1)
-    return (current - start) / (end - start)
 
 
 def round_sig_figs(num: float, sig_figs: int = 4) -> str:
