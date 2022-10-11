@@ -1,6 +1,12 @@
 # Market Manager for Manifold
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/70890c1f8770fd3b684d/maintainability)](https://codeclimate.com/github/LivInTheLookingGlass/ManifoldMarketManager/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/70890c1f8770fd3b684d/test_coverage)](https://codeclimate.com/github/LivInTheLookingGlass/ManifoldMarketManager/test_coverage) [![CircleCI](https://dl.circleci.com/status-badge/img/gh/LivInTheLookingGlass/ManifoldMarketManager/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/LivInTheLookingGlass/ManifoldMarketManager/tree/master)
+[![PyPI version](https://badge.fury.io/py/manifoldmarketmanager.svg)](https://badge.fury.io/py/manifoldmarketmanager) ![PyPI - Status](https://img.shields.io/pypi/status/ManifoldMarketManager) ![Supported Python Versions](https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-brightgreen)
+
+[![GitHub license](https://img.shields.io/github/license/LivInTheLookingGlass/ManifoldMarketManager)](https://github.com/LivInTheLookingGlass/ManifoldMarketManager/blob/master/LICENSE) ![GitHub top language](https://img.shields.io/github/languages/top/LivInTheLookingGlass/ManifoldMarketManager)
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/70890c1f8770fd3b684d/maintainability)](https://codeclimate.com/github/LivInTheLookingGlass/ManifoldMarketManager/maintainability) ![Code Climate issues](https://img.shields.io/codeclimate/issues/LivInTheLookingGlass/ManifoldMarketManager) ![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/LivInTheLookingGlass/ManifoldMarketManager)
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/70890c1f8770fd3b684d/test_coverage)](https://codeclimate.com/github/LivInTheLookingGlass/ManifoldMarketManager/test_coverage) [![CircleCI](https://dl.circleci.com/status-badge/img/gh/LivInTheLookingGlass/ManifoldMarketManager/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/LivInTheLookingGlass/ManifoldMarketManager/tree/master)
 
 What you're reading is only one of many places I host this code at. They are:
 - [GitHub](https://github.com/LivInTheLookingGlass/ManifoldMarketManager)
@@ -66,25 +72,22 @@ Every time you run `example.py`, it goes through the following steps:
 
 ## Immediate Goals
 
-- [ ] Make test for each untested function in PyManifold (6 done / 2 removed / 15)
-	- [x] get_markets
-	- [x] stream_markets
-	- [x] list_bets
-	- [x] get_bets
-	- [x] stream_bets
-	- [x] list_groups
-	- [x] get_groups
-    - [x] get_group
-	- [x] get_market_by_url
-	- [x] get_user
-	- [x] cancel_market
-	- [x] create_multiple_choice_market
-	- [x] _resolve_binary_market
+- [ ] Make test for each untested function in PyManifold (0/15)
+	- [ ] get_markets
+	- [ ] stream_markets
+	- [ ] list_bets
+	- [ ] get_bets
+	- [ ] stream_bets
+	- [ ] get_market_by_url
+	- [ ] get_user
+	- [ ] cancel_market
+	- [ ] create_multiple_choice_market
+	- [ ] _resolve_binary_market
 	- [ ] _resolve_pseudo_numeric_market
 	- [ ] _resolve_free_response_market
 	- [ ] _resolve_multiple_choice_market
-	- [x] Group
-	- [x] LiteUser
+	- [ ] Group
+	- [ ] LiteUser
 - [ ] move `example_json` into main library
 - [ ] write tests for whatever comes of `example_json`
 - [ ] Make an API to import JSON markets without creating one
