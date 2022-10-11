@@ -1,12 +1,8 @@
 # Market Manager for Manifold
 
-[![PyPI version](https://badge.fury.io/py/manifoldmarketmanager.svg)](https://badge.fury.io/py/manifoldmarketmanager) ![PyPI - Status](https://img.shields.io/pypi/status/ManifoldMarketManager) ![Supported Python Versions](https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-brightgreen)
+[![PyPI version](https://badge.fury.io/py/manifoldmarketmanager.svg)](https://badge.fury.io/py/manifoldmarketmanager) ![PyPI - Status](https://img.shields.io/pypi/status/ManifoldMarketManager) ![Supported Python Versions](https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-brightgreen) [![GitHub license](https://img.shields.io/github/license/LivInTheLookingGlass/ManifoldMarketManager)](https://github.com/LivInTheLookingGlass/ManifoldMarketManager/blob/master/LICENSE) ![GitHub top language](https://img.shields.io/github/languages/top/LivInTheLookingGlass/ManifoldMarketManager)
 
-[![GitHub license](https://img.shields.io/github/license/LivInTheLookingGlass/ManifoldMarketManager)](https://github.com/LivInTheLookingGlass/ManifoldMarketManager/blob/master/LICENSE) ![GitHub top language](https://img.shields.io/github/languages/top/LivInTheLookingGlass/ManifoldMarketManager)
-
-[![Maintainability](https://api.codeclimate.com/v1/badges/70890c1f8770fd3b684d/maintainability)](https://codeclimate.com/github/LivInTheLookingGlass/ManifoldMarketManager/maintainability) ![Code Climate issues](https://img.shields.io/codeclimate/issues/LivInTheLookingGlass/ManifoldMarketManager) ![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/LivInTheLookingGlass/ManifoldMarketManager)
-
-[![Test Coverage](https://api.codeclimate.com/v1/badges/70890c1f8770fd3b684d/test_coverage)](https://codeclimate.com/github/LivInTheLookingGlass/ManifoldMarketManager/test_coverage) [![CircleCI](https://dl.circleci.com/status-badge/img/gh/LivInTheLookingGlass/ManifoldMarketManager/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/LivInTheLookingGlass/ManifoldMarketManager/tree/master)
+![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/LivInTheLookingGlass/ManifoldMarketManager) ![Code Climate issues](https://img.shields.io/codeclimate/issues/LivInTheLookingGlass/ManifoldMarketManager) ![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/LivInTheLookingGlass/ManifoldMarketManager) ![Code Climate coverage](https://img.shields.io/codeclimate/coverage/LivInTheLookingGlass/ManifoldMarketManager) [![CircleCI](https://dl.circleci.com/status-badge/img/gh/LivInTheLookingGlass/ManifoldMarketManager/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/LivInTheLookingGlass/ManifoldMarketManager/tree/master)
 
 What you're reading is only one of many places I host this code at. They are:
 - [GitHub](https://github.com/LivInTheLookingGlass/ManifoldMarketManager)
