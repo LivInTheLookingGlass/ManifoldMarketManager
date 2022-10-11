@@ -6,7 +6,7 @@ from logging import getLogger
 from time import time
 from typing import TYPE_CHECKING, cast
 
-from .util import explain_abstract, get_client, number_to_prob_cpmm1, require_env, round_sig_figs
+from .util import explain_abstract, get_client, require_env, round_sig_figs
 
 if TYPE_CHECKING:  # pragma: no cover
     from logging import Logger
@@ -203,9 +203,6 @@ class Market:
         if _override == "CANCEL":
             return self.cancel()
 
-        if self.market.outcomeType == "PSEUDO_NUMERIC":
-            _override = self.__format_request_resolve_numeric(_override)
-
         if self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
             _override = self.__format_request_resolve_mapping(_override)
 
@@ -214,14 +211,6 @@ class Market:
         self.logger.info("I was resolved")
         self.market.isResolved = True
         return ret
-
-    def __format_request_resolve_numeric(self, _override: AnyResolution | tuple[float, float]) -> tuple[float, float]:
-        if not isinstance(_override, (int, float)):
-            raise TypeError()
-        return (
-            _override,
-            100 * number_to_prob_cpmm1(_override, self.market.min or 0, self.market.max or 0)
-        )
 
     def __format_request_resolve_mapping(self, _override: AnyResolution | tuple[float, float]) -> dict[int, float]:
         if not isinstance(_override, Mapping):
