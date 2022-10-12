@@ -5,13 +5,14 @@ from itertools import chain
 from os import environ
 from random import randrange
 from secrets import token_hex
-from typing import TYPE_CHECKING, Any, List, cast
+from typing import TYPE_CHECKING, Any, List, Mapping, cast
 
-from pytest import raises
+from pytest import raises, skip
 
 from .. import Rule
 from ..consts import Outcome
-from ..util import explain_abstract, fibonacci, market_to_answer_map, require_env
+from ..util import (explain_abstract, fibonacci, market_to_answer_map, pool_to_number_cpmm1, pool_to_prob_cpmm1,
+                    prob_to_number_cpmm1, require_env)
 from . import mkt
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -27,11 +28,54 @@ def test_market_to_answer_map(mkt: Market, data_regression: DataRegressionFixtur
     """Test the behavior of the market to answer map utility function."""
     if mkt.market.outcomeType in Outcome.MC_LIKE():
         answer = benchmark(market_to_answer_map, mkt)
-        print(mkt.id, answer)
         data_regression.check(answer)
     else:
         with raises(RuntimeError):
             market_to_answer_map(mkt)
+
+
+def test_pool_to_prob_cpmm1(mkt: Market, data_regression: DataRegressionFixture) -> None:
+    """Test the behavior of the market to answer map utility function."""
+    if mkt.market.outcomeType in Outcome.BINARY_LIKE():
+        assert isinstance(mkt.market.pool, Mapping)
+        assert mkt.market.p
+        no = mkt.market.pool['NO']
+        yes = mkt.market.pool['YES']
+        p = mkt.market.p
+        answer = pool_to_prob_cpmm1(yes, no, p)
+        data_regression.check({'answer': answer})
+    else:
+        skip("Function doesn't work with this market type")
+
+
+def test_pool_to_num_cpmm1(mkt: Market, data_regression: DataRegressionFixture) -> None:
+    """Test the behavior of the market to answer map utility function."""
+    if mkt.market.outcomeType in Outcome.PSEUDO_NUMERIC:
+        assert isinstance(mkt.market.pool, Mapping)
+        assert mkt.market.p
+        assert None not in (mkt.market.min, mkt.market.max, mkt.market.isLogScale)
+        no = mkt.market.pool['NO']
+        yes = mkt.market.pool['YES']
+        answer = pool_to_number_cpmm1(yes, no, mkt.market.p, mkt.market.min, mkt.market.max, mkt.market.isLogScale)
+        data_regression.check({'answer': answer})
+    else:
+        skip("Function doesn't work with this market type")
+
+
+def test_prob_to_num_cpmm1(mkt: Market, data_regression: DataRegressionFixture) -> None:
+    """Test the behavior of the market to answer map utility function."""
+    if mkt.market.outcomeType in Outcome.PSEUDO_NUMERIC:
+        assert None not in (mkt.market.min, mkt.market.max, mkt.market.isLogScale)
+        assert (mkt.market.probability or mkt.market.resolutionProbability) is not None
+        answer = prob_to_number_cpmm1(
+            mkt.market.probability or mkt.market.resolutionProbability,
+            mkt.market.min,
+            mkt.market.max,
+            mkt.market.isLogScale
+        )
+        data_regression.check({'answer': answer})
+    else:
+        skip("Function doesn't work with this market type")
 
 
 def test_fib(limit: int = 100) -> None:
