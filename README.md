@@ -80,10 +80,10 @@ Every time you run `example.py`, it goes through the following steps:
 - [ ] test register_db
 - [ ] test ManifoldMarketMixin
 - [x] test manifold user rules using real examples
-- [ ] test manifold this rules using real examples
+- [x] test manifold this rules using real examples
 - [ ] test manifold other rules using real examples
-- [ ] test market.py (0/8)
-  - [ ] from_url
+- [ ] test market.py (1/8)
+  - [x] from_url
   - [ ] explain_abstract
   - [ ] explain_specific
   - [ ] current answer
@@ -101,9 +101,9 @@ Every time you run `example.py`, it goes through the following steps:
   - [ ] product
   - [ ] random index
   - [ ] multiple values
-- [ ] test util.py (0/4)
-  - [ ] math with examples
-  - [ ] normalize mapping
+- [ ] test util.py (2/4)
+  - [x] math with examples
+  - [x] normalize mapping (now covered by testing answer map)
   - [ ] round_sig_fig
   - [ ] time_cache
 - [ ] add a Manifold API hook to leave comments

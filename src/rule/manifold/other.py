@@ -7,8 +7,10 @@ from typing import TYPE_CHECKING, cast
 
 from attrs import define
 
-from ...util import prob_to_number_cpmm1, round_sig_figs, time_cache
-from .. import DoResolveRule, ResolutionValueRule
+from ... import Rule
+from ...consts import BinaryResolution, Outcome, T
+from ...util import market_to_answer_map, prob_to_number_cpmm1, round_sig_figs
+from .. import DoResolveRule
 from ..abstract import ResolveRandomSeed
 from . import ManifoldMarketMixin
 
@@ -17,7 +19,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from pymanifold.types import Market as APIMarket
 
-    from ...consts import BinaryResolution
+    from ...consts import AnyResolution
     from ...market import Market
 
 
@@ -25,7 +27,6 @@ if TYPE_CHECKING:  # pragma: no cover
 class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
     """A rule that checks whether another market is closed."""
 
-    @time_cache()
     def _value(self, market: Market) -> bool:
         close_time = self.api_market().closeTime
         assert close_time is not None
@@ -39,7 +40,6 @@ class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
 class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
     """A rule that checks whether another market is resolved."""
 
-    @time_cache()
     def _value(self, market: Market) -> bool:
         return bool(self.api_market().isResolved)
 
@@ -48,24 +48,25 @@ class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
 
 
 @define(slots=False)
-class OtherMarketValue(ManifoldMarketMixin, ResolutionValueRule):
+class OtherMarketValue(ManifoldMarketMixin, Rule[T]):
     """A rule that resolves to the value of another rule."""
 
-    @time_cache()
-    def _value(self, market: Market) -> BinaryResolution:
+    def _value(self, market: Market) -> T:
         mkt = self.api_market()
         if mkt.resolution == "CANCEL":
-            return "CANCEL"
+            ret: AnyResolution = "CANCEL"
         elif mkt.outcomeType == "BINARY":
-            return self._binary_value(market, mkt) * 100
+            ret = self._binary_value(market, mkt) * 100
         elif mkt.outcomeType == "PSEUDO_NUMERIC":
-            return prob_to_number_cpmm1(
+            ret = prob_to_number_cpmm1(
                 self._binary_value(market, mkt),
                 float(mkt.min or 0),
                 float(mkt.max or 0),
                 bool(mkt.isLogScale)
             )
-        raise NotImplementedError("Doesn't seem to be reported in the API")
+        else:
+            ret = market_to_answer_map(mkt)
+        return cast(T, ret)
 
     def _binary_value(self, market: Market, mkt: APIMarket) -> float:
         if mkt.isResolved:
@@ -87,15 +88,18 @@ class OtherMarketValue(ManifoldMarketMixin, ResolutionValueRule):
         val = self._value(market)
         if val == "CANCEL":
             ret += "CANCEL)\n"
-        else:
+        elif mkt.outcomeType == Outcome.PSEUDO_NUMERIC:
+            assert isinstance(val, float)
             ret += f"{round_sig_figs(val, sig_figs)}"
-        if mkt.outcomeType == "BINARY":
+        elif mkt.outcomeType == Outcome.BINARY:
             ret += "%"
+        elif mkt.outcomeType in Outcome.MC_LIKE():
+            ret += repr(market_to_answer_map(mkt))
         return ret + ")\n"
 
 
 @define(slots=False)
-class AmplifiedOddsRule(OtherMarketValue, ResolveRandomSeed):
+class AmplifiedOddsRule(OtherMarketValue[BinaryResolution], ResolveRandomSeed):
     """Immitate the amplified odds scheme deployed by @Tetraspace.
 
     This rule resolves YES if the referenced market resolves YES.
@@ -126,7 +130,6 @@ class AmplifiedOddsRule(OtherMarketValue, ResolveRandomSeed):
 
     a: int = 1
 
-    @time_cache()
     def _value(self, market: Market) -> BinaryResolution:
         val = OtherMarketValue._binary_value(self, market, self.api_market())
         if val is True:

@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 from functools import _make_key, lru_cache
+from hashlib import blake2b
 from importlib import import_module
+from itertools import count
 from logging import getLogger, warn
+from math import ceil
 from os import getenv
 from pathlib import Path
 from sys import modules
@@ -26,6 +29,22 @@ if TYPE_CHECKING:  # pragma: no cover
     T = TypeVar("T")
 
 time_cache_state: dict[tuple[int, Hashable], tuple[Any, float]] = {}
+
+
+def hash_to_randrange(buff: bytes, *args: int, **kwargs: int) -> int:
+    """Generate a 'random' number by hashing a buffer."""
+    active_range = range(*args, **kwargs)
+    size = len(active_range)
+    mask = 2**size - 1
+    byte_length = ceil((size - 1).bit_length() / 8)
+    ret: int
+    for idx in count():
+        hashobj = blake2b(buff, digest_size=byte_length, salt=str(idx).encode())
+        as_int = int.from_bytes(hashobj.digest(), 'little') & mask
+        if as_int < size:
+            ret = active_range[as_int]
+            break
+    return ret
 
 
 def fibonacci(start: int = 1) -> Iterable[int]:
