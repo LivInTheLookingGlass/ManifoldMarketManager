@@ -1,3 +1,5 @@
+"""Contains utility functions."""
+
 from __future__ import annotations
 
 from functools import _make_key, lru_cache

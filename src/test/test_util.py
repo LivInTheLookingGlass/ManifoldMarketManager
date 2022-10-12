@@ -44,6 +44,7 @@ canonical_market_answers: dict[str, dict[int, float]] = {
 
 
 def test_market_to_answer_map(mkt: Market) -> None:
+    """Test the behavior of the market to answer map utility function."""
     if mkt.market.outcomeType in Outcome.MC_LIKE():
         answer = market_to_answer_map(mkt)
         print(mkt.id, answer)

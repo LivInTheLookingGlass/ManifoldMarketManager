@@ -16,8 +16,6 @@ LINT?=true
 MYPY?=true
 # If specified, perform benchmarking (WARNING: silently disables code coverage)
 BENCHMARK?=false
-# Unless specified otherwise, run tests that are relatively slow
-SLOW?=true
 
 pytest_args?= -vl
 
@@ -27,7 +25,7 @@ COV=false
 endif
 
 ifneq ($(LINT),false)
-pytest_args += --flake8 --isort
+pytest_args += --flake8 --isort --pydocstyle
 endif
 
 ifeq ($(LINT),only)
@@ -41,10 +39,6 @@ endif
 
 ifneq ($(COV),false)
 pytest_args += --cov=src --cov-branch --cov-report=term
-endif
-
-ifneq ($(SLOW),true)
-pytest_args += -m "not slow"
 endif
 
 ifneq ($(https_proxy), )

@@ -1,3 +1,5 @@
+"""Contains abstract subclasses of Rule which allow for forms of pluggable behavior."""
+
 from __future__ import annotations
 
 from os import urandom

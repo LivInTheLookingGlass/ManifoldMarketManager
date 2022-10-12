@@ -1,3 +1,13 @@
+"""Umbrella package for all rules.
+
+Anyone who wants to develop a plugin is welcome to modify the values in this specific namespace. In particular, to add
+a rule with your plugin:
+1) Add your plugin's rules as a submodule of this using
+   `from sys import modules; modules['.'.join((PATH_TO_RULE_MODULE, PATH_TO_YOUR_RULE))] = module[PATH_TO_YOUR_RULE]
+2) Append your plugin's namespace to `rule.__all__`
+3) Append each of your rules' import paths to `consts.AVAILABLE_RULES`
+"""
+
 from __future__ import annotations
 
 from importlib import import_module

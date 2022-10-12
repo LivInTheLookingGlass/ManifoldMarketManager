@@ -1,3 +1,5 @@
+"""Contains functions which are needed to run the runner script, but nowhere else."""
+
 from __future__ import annotations
 
 from asyncio import get_event_loop, new_event_loop, set_event_loop

@@ -1,3 +1,5 @@
+"""Contains the Market class, which associates Rules with a market on Manifold."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -32,9 +34,11 @@ class Market:
     logger: Logger = field(init=False, default=None, hash=False, repr=False)  # type: ignore[assignment]
 
     def __hash__(self) -> int:
-        return id(self)
+        """Hack to allow markets as dict keys."""
+        return hash((Market, id(self)))
 
     def __repr__(self) -> str:
+        """Create a representation of this market using the `Market.from_id()` constructor."""
         do_resolve_rules = self.do_resolve_rules
         resolve_to_rules = self.resolve_to_rules
         notes = self.notes

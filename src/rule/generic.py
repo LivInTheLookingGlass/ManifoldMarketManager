@@ -1,3 +1,5 @@
+"""Contains generic rules, which don't interact markets other than their assigned one, & don't cause any mutations."""
+
 from __future__ import annotations
 
 from collections import defaultdict
@@ -199,6 +201,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
         start: int = 0,
         **kwargs: Any
     ) -> None:
+        """Ensure that we select a different method depending on the type of range that's requested."""
         self.start = start
         self.size = size
         if size is None:

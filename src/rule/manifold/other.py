@@ -1,3 +1,5 @@
+"""Contains rules that reference other Manifold markets."""
+
 from __future__ import annotations
 
 from time import time
@@ -21,6 +23,8 @@ if TYPE_CHECKING:  # pragma: no cover
 
 @define(slots=False)
 class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
+    """A rule that checks whether another market is closed."""
+
     @time_cache()
     def _value(self, market: Market) -> bool:
         close_time = self.api_market().closeTime
@@ -33,6 +37,8 @@ class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
 
 @define(slots=False)
 class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
+    """A rule that checks whether another market is resolved."""
+
     @time_cache()
     def _value(self, market: Market) -> bool:
         return bool(self.api_market().isResolved)
@@ -43,6 +49,8 @@ class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
 
 @define(slots=False)
 class OtherMarketValue(ManifoldMarketMixin, ResolutionValueRule):
+    """A rule that resolves to the value of another rule."""
+
     @time_cache()
     def _value(self, market: Market) -> BinaryResolution:
         mkt = self.api_market()

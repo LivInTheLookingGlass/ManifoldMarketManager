@@ -41,6 +41,7 @@ class Rule(ABC, Generic[T], DictDeserializable):
     logger: Logger = field(init=False, repr=False, hash=False)
 
     def __attrs_post_init__(self) -> None:
+        """Ensure that the logger object is created."""
         if hasattr(super(), '__attrs_post_init__'):
             super().__attrs_post_init__()  # type: ignore
         self.logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
@@ -144,7 +145,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.63"
+VERSION = "0.6.0.64"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "DoResolveRule", "ResolutionValueRule", "Rule", "Market", "get_client", "rule",

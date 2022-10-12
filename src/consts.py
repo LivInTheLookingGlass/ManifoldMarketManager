@@ -1,3 +1,5 @@
+"""Store constants, shared values, and enumerations."""
+
 from __future__ import annotations
 
 from enum import Enum, IntEnum, auto, unique
@@ -50,6 +52,8 @@ AVAILABLE_RULES = [
 
 
 class EnvironmentVariable(str, Enum):
+    """Represents an Environment Variable that is used by this program."""
+
     ManifoldAPIKey = "ManifoldAPIKey"        # REQUIRED. Allows trades, market creation, market resolution
     GithubUsername = "GithubUsername"        # Optional. Allows you have a higher rate limit, make authorized requests
     GithubAccessToken = "GithubAccessToken"  # Optional. See above
@@ -78,10 +82,12 @@ class Outcome(str, Enum):  # officially supported in python3.11+
 
     @staticmethod
     def BINARY_LIKE() -> Sequence[OutcomeType]:
+        """Return the group of markets that resolves using the binary market API."""
         return (Outcome.BINARY, Outcome.PSEUDO_NUMERIC)
 
     @staticmethod
     def MC_LIKE() -> Sequence[OutcomeType]:
+        """Return the group of markets that resolves using the free response market API."""
         return (Outcome.FREE_RESPONSE, Outcome.MULTIPLE_CHOICE)
 
 

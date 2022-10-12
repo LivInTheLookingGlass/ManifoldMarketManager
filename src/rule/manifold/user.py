@@ -1,3 +1,5 @@
+"""Contain rules that are associated with a particular Manifold user."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, cast

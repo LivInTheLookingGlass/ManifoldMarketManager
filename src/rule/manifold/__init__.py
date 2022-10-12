@@ -1,3 +1,5 @@
+"""Contain rules that reference things on Manifold Markets."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, cast
@@ -17,11 +19,14 @@ __all__ = ('this', 'other', 'user', 'ManifoldMarketMixin')
 
 @define(slots=False)
 class ManifoldMarketMixin:
+    """A mixin class that holds the access to a Manifold market."""
+
     id_: str = ''
     slug: Optional[str] = None
     url: Optional[str] = None
 
     def __attrs_post_init__(self) -> None:
+        """Ensure we have at least the id."""
         if hasattr(super(), '__attrs_post_init__'):
             super().__attrs_post_init__()  # type: ignore
         if self.id_:
@@ -34,6 +39,7 @@ class ManifoldMarketMixin:
 
     @time_cache()
     def api_market(self, client: Optional[ManifoldClient] = None) -> APIMarket:
+        """Return an APIMarket object associated with this rule's market."""
         if client is None:
             client = get_client()
         return client.get_market_by_id(self.id_)

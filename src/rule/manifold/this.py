@@ -1,3 +1,5 @@
+"""Contain rules that reference the market that is calling them."""
+
 from __future__ import annotations
 
 from time import time
@@ -19,6 +21,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 @define(slots=False)
 class ThisMarketClosed(AbstractRule[bool]):
+    """A rule that checks whether its associated market is closed."""
 
     _explainer_stub: ClassVar[str] = "If this market reaches its close date"
 
