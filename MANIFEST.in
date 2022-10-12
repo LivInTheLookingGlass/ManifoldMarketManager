@@ -1,0 +1,7 @@
+include Makefile
+graft src
+prune **/.benchmarks
+prune **/.vscode
+prune **/.github
+prune **/.mypy_cache
+global-exclude *.pyc .*

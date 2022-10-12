@@ -77,11 +77,11 @@ Every time you run `example.py`, it goes through the following steps:
 - [ ] disable warning about default explain_specific if classvar acknowledges default behavior as intended
 - [ ] Make comparison rules (>, <, etc)
 - [ ] test GitHub rules using real examples
-- [ ] test register_db
-- [ ] test ManifoldMarketMixin
+- [x] test register_db
+- [x] test ManifoldMarketMixin (done implicitly via the Other rules)
 - [x] test manifold user rules using real examples
 - [x] test manifold this rules using real examples
-- [ ] test manifold other rules using real examples
+- [x] test manifold other rules using real examples
 - [ ] test market.py (1/8)
   - [x] from_url
   - [ ] explain_abstract
