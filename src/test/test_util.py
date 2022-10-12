@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any, List, cast
 from pytest import raises
 
 from .. import Rule
+from ..consts import Outcome
 from ..util import explain_abstract, fibonacci, market_to_answer_map, require_env
 from . import mkt
 
@@ -43,7 +44,7 @@ canonical_market_answers: dict[str, dict[int, float]] = {
 
 
 def test_market_to_answer_map(mkt: Market) -> None:
-    if mkt.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
+    if mkt.market.outcomeType in Outcome.MC_LIKE():
         answer = market_to_answer_map(mkt)
         print(mkt.id, answer)
         assert answer == canonical_market_answers[mkt.id]
