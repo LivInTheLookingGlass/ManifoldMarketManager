@@ -37,22 +37,29 @@ def test_import_rule_failure() -> None:
 def test_rule_formatting() -> None:
     """Make sure that Rule does formatting if requested."""
     market: Market = None  # type: ignore[assignment]
-    for outcome, as_int in [(100, 100), ({3: 1}, 3), ([7], 7)]:
+    for outcome, as_int in [(100, 100), ({3: 1}, 3), ([7], 7), ("25", 25), (None, None)]:
         rule = ResolveToValue(outcome)  # type: ignore
         val: Any = rule.value(market, format=Outcome.BINARY)
-        assert isinstance(val, (int, float))
+        assert isinstance(val, (int, float)) or as_int is None
         assert val == as_int
 
         val = rule.value(market, format=Outcome.PSEUDO_NUMERIC)
-        assert isinstance(val, (int, float))
+        assert isinstance(val, (int, float)) or as_int is None
         assert val == as_int
 
         val = rule.value(market, format=Outcome.FREE_RESPONSE)
-        assert isinstance(val, Mapping)
-        assert as_int in val
-        assert val[as_int] == 1
+        if as_int is not None:
+            assert isinstance(val, Mapping)
+            assert as_int in val
+            assert val[as_int] == 1
 
         val = rule.value(market, format=Outcome.MULTIPLE_CHOICE)
-        assert isinstance(val, Mapping)
-        assert as_int in val
-        assert val[as_int] == 1
+        if as_int is not None:
+            assert isinstance(val, Mapping)
+            assert as_int in val
+            assert val[as_int] == 1
+
+    rule = ResolveToValue(object())  # type: ignore
+    for format in Outcome:
+        with raises(TypeError):
+            val = rule.value(market, format=format)
