@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Mapping, Union, cast
 from attrs import Factory, define
 
 from ... import Rule
-from ...consts import (AnyResolution, BinaryResolution, FreeResponseResolution, MultipleChoiceResolution,
+from ...consts import (AnyResolution, BinaryResolution, FreeResponseResolution, MultipleChoiceResolution, Outcome,
                        PseudoNumericResolution)
 from ...util import fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1
 from ..abstract import AbstractRule
@@ -37,10 +37,10 @@ class CurrentValueRule(AbstractRule[AnyResolution]):
     _explainer_stub: ClassVar[str] = "Resolves to the current market value"
 
     def _value(self, market: Market) -> float | dict[Any, float]:
-        if market.market.outcomeType == "BINARY":
+        if market.market.outcomeType == Outcome.BINARY:
             assert market.market.probability is not None
             return market.market.probability * 100
-        elif market.market.outcomeType == "PSEUDO_NUMERIC":
+        elif market.market.outcomeType == Outcome.PSEUDO_NUMERIC:
             assert isinstance(market.market.pool, Mapping)
             assert market.market.p
             return pool_to_number_cpmm1(
@@ -77,15 +77,15 @@ class FibonacciValueRule(Rule[Union[float, Mapping[int, float]]]):
 
 
 @define(slots=False)
-class RoundValueRule(AbstractRule[Union[BinaryResolution, PseudoNumericResolution]]):
+class RoundValueRule(CurrentValueRule, Rule[Union[BinaryResolution, PseudoNumericResolution]]):
     """Resolve to the current market-consensus value, but rounded."""
 
     _explainer_stub: ClassVar[str] = "Resolves to round(MKT)"
 
     def _value(self, market: Market) -> float:
-        if market.market.outcomeType in ("MULTIPLE_CHOICE", "FREE_RESPONSE"):
+        if market.market.outcomeType in Outcome.MC_LIKE():
             raise RuntimeError()
-        elif market.market.outcomeType == "BINARY":
+        elif market.market.outcomeType == Outcome.BINARY:
             assert market.market.probability
             return bool(round(market.market.probability))
         return round(cast(float, super()._value(market)))
@@ -100,10 +100,14 @@ class PopularValueRule(Rule[Union[MultipleChoiceResolution, FreeResponseResoluti
     def _value(self, market: Market) -> FreeResponseResolution | MultipleChoiceResolution:
         answers = market_to_answer_map(market)
         final_answers: dict[int, float] = {}
-        for _ in range(self.size):
-            next_answer = max(answers, key=answers.__getitem__)
-            final_answers[next_answer] = answers[next_answer]
-            del answers[next_answer]
+        try:
+            for _ in range(self.size):
+                next_answer = max(answers, key=answers.__getitem__)
+                final_answers[next_answer] = answers[next_answer]
+                del answers[next_answer]
+        except ValueError as e:
+            if e.args[0] != "max() arg is an empty sequence":
+                raise
         return normalize_mapping(final_answers)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:

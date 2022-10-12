@@ -43,6 +43,14 @@ def test_pickling(mkt: Market) -> None:
     assert_equality(mkt, new_mkt)
 
 
+def test_from_url(mkt: Market) -> None:
+    """Make sure Markets can be grabbed by URL."""
+    with manifold_vcr.use_cassette(f'test_market/fetch_by_url/{quote(mkt.id)}.yaml'):
+        assert mkt.market.url
+        mkt2 = Market.from_url(mkt.market.url)
+    assert_equality(mkt, mkt2)
+
+
 def test_from_id(mkt: Market) -> None:
     """Make sure Markets can be grabbed by ID."""
     with manifold_vcr.use_cassette(f'test_market/fetch_by_id/{quote(mkt.id)}.yaml'):

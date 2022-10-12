@@ -1,0 +1,77 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://manifold.markets/api/v0/slug/what-will-my-reported-profit-be-on
+  response:
+    body:
+      string: '{"id":"eBuljtDFa2dR7bXSaYyY","creatorId":"k13AzY3mu8XTju3xRZV3P8qBjEC2","creatorUsername":"LivInTheLookingGlass","creatorName":"Olivia","createdTime":1663099416258,"creatorAvatarUrl":"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97","closeTime":1664553599000,"question":"What
+        will my reported profit be on 2022-10-01?","tags":[],"url":"https://manifold.markets/LivInTheLookingGlass/what-will-my-reported-profit-be-on","pool":{"YES":55.288613725107865,"NO":180.86906735841671},"p":0.5000000000000003,"totalLiquidity":100,"outcomeType":"PSEUDO_NUMERIC","mechanism":"cpmm-1","volume":118.73964574180756,"volume7Days":0,"volume24Hours":0,"isResolved":true,"resolution":"MKT","resolutionTime":1664604205925,"resolutionProbability":0.8828819049998092,"lastUpdatedTime":1664552619255,"min":2000,"max":6000,"isLogScale":false,"comments":[],"bets":[{"createdTime":1664552619002,"shares":-2.833942227270846,"isRedemption":true,"probAfter":0.765882636247799,"userUsername":"Dacaveofwonders","userId":"T5IuPIXaMjT5alEDZrSIaNrYcS72","probBefore":0.765882636247799,"userName":"Tiger
+        Lava Lamp","fees":{"liquidityFee":0,"creatorFee":0,"platformFee":0},"contractId":"eBuljtDFa2dR7bXSaYyY","loanAmount":0,"userAvatarUrl":"https://lh3.googleusercontent.com/a/ALm5wu0WQuo75x-R75TTdnukoDCjT8jmSZyGzWlhxN6f=s96-c","amount":-0.6634750832746915,"id":"j8RGCp302R8EeiZNa8qs","outcome":"NO"},{"id":"K139ANATzDLyIsdWclws","probBefore":0.765882636247799,"fees":{"platformFee":0,"creatorFee":0,"liquidityFee":0},"createdTime":1664552619002,"loanAmount":0,"userUsername":"Dacaveofwonders","userAvatarUrl":"https://lh3.googleusercontent.com/a/ALm5wu0WQuo75x-R75TTdnukoDCjT8jmSZyGzWlhxN6f=s96-c","isRedemption":true,"contractId":"eBuljtDFa2dR7bXSaYyY","amount":-2.1704671439961545,"userId":"T5IuPIXaMjT5alEDZrSIaNrYcS72","shares":-2.833942227270846,"outcome":"YES","probAfter":0.765882636247799,"userName":"Tiger
+        Lava Lamp"},{"userName":"phaen","userAvatarUrl":"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fphaen%2F32.png?alt=media&token=0a0a4a63-889a-4705-a9a0-90cebc102691","isFilled":true,"userId":"yAPO0lFCr0VYiIosymUdZgbTxnC2","orderAmount":28,"userUsername":"phaen","loanAmount":0,"outcome":"YES","contractId":"eBuljtDFa2dR7bXSaYyY","isCancelled":false,"probAfter":0.765882636247799,"fees":{"platformFee":0,"liquidityFee":0,"creatorFee":0},"createdTime":1664552618685,"probBefore":0.76,"amount":28,"fills":[{"timestamp":1664552618685,"shares":1.6132785380495207,"matchedBetId":null,"amount":1.2281119105223226},{"amount":25.08223684210526,"timestamp":1664552618685,"matchedBetId":"V8VaSvzjL47F0gaWzN7U","shares":32.89473684210526},{"shares":2.2110195896390508,"timestamp":1664552618685,"amount":1.6896512473724172,"matchedBetId":null}],"shares":36.71903496979383,"id":"aeKAHOgHQLPBiLB4nDE3"},{"orderAmount":24.999999999999996,"probAfter":0.76,"userUsername":"Dacaveofwonders","probBefore":0.7555429263979957,"userId":"T5IuPIXaMjT5alEDZrSIaNrYcS72","contractId":"eBuljtDFa2dR7bXSaYyY","userAvatarUrl":"https://lh3.googleusercontent.com/a/ALm5wu0WQuo75x-R75TTdnukoDCjT8jmSZyGzWlhxN6f=s96-c","isCancelled":false,"loanAmount":0,"id":"P2PIMTivA14vVZTknVM3","amount":2.147500314140016,"fills":[{"timestamp":1664544305945,"matchedBetId":null,"amount":2.147500314140016,"shares":2.833942227270846}],"limitProb":0.76,"createdTime":1664544305946,"shares":2.833942227270846,"isFilled":false,"fees":{"liquidityFee":0,"platformFee":0,"creatorFee":0},"userName":"Tiger
+        Lava Lamp","outcome":"YES"},{"orderAmount":7.812500000000001,"userAvatarUrl":"https://lh3.googleusercontent.com/a/ALm5wu0WQuo75x-R75TTdnukoDCjT8jmSZyGzWlhxN6f=s96-c","amount":7.812500000000001,"fills":[{"shares":32.89473684210526,"matchedBetId":"aeKAHOgHQLPBiLB4nDE3","timestamp":1664552618685,"amount":7.812500000000001}],"isCancelled":false,"limitProb":0.7625,"contractId":"eBuljtDFa2dR7bXSaYyY","userName":"Tiger
+        Lava Lamp","userId":"T5IuPIXaMjT5alEDZrSIaNrYcS72","userUsername":"Dacaveofwonders","id":"V8VaSvzjL47F0gaWzN7U","fees":{"liquidityFee":0,"platformFee":0,"creatorFee":0},"loanAmount":0,"probBefore":0.7555429263979957,"shares":32.89473684210526,"createdTime":1664544303394,"isFilled":true,"outcome":"NO","probAfter":0.7555429263979957},{"isFilled":true,"shares":12.788341541285604,"probBefore":0.7750000000000001,"userId":"7XGrTPYHE2WgHJSne6kxRVseLdo1","contractId":"eBuljtDFa2dR7bXSaYyY","userAvatarUrl":"https://lh3.googleusercontent.com/a-/AOh14GiMOGvT0wihOCke38p23uPRigh10h-RZZBoj5Wkkcs=s96-c","amount":3,"fees":{"liquidityFee":0,"creatorFee":0,"platformFee":0},"isCancelled":false,"userUsername":"Charlie","outcome":"NO","loanAmount":0.11879999999999999,"userName":"Charlie","orderAmount":3,"createdTime":1664393045842,"probAfter":0.7555429263979957,"fills":[{"amount":3,"shares":12.788341541285604,"matchedBetId":null,"timestamp":1664393045842}],"id":"4C7qdmD8tyURGkYRgFqW"},{"amount":5.59214542766755,"outcome":"YES","isFilled":false,"shares":7.266110375190671,"contractId":"eBuljtDFa2dR7bXSaYyY","fills":[{"matchedBetId":null,"shares":7.266110375190671,"timestamp":1664307116569,"amount":5.59214542766755}],"createdTime":1664307116569,"orderAmount":10,"userAvatarUrl":"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97","probBefore":0.7641509433962261,"isCancelled":true,"fees":{"liquidityFee":0,"platformFee":0,"creatorFee":0},"probAfter":0.7750000000000001,"id":"vsFYV2AuYHMPOwpj33z5","userUsername":"LivInTheLookingGlass","userName":"Olivia","loanAmount":0,"limitProb":0.775,"userId":"k13AzY3mu8XTju3xRZV3P8qBjEC2"},{"userName":"RBGreen","id":"EQ2zdfcRmbzkk48nFQ1O","outcome":"YES","probAfter":0.7641509433962261,"fills":[{"matchedBetId":null,"timestamp":1664305659157,"shares":13.26797385620911,"amount":10}],"createdTime":1664305659157,"fees":{"platformFee":0,"liquidityFee":0,"creatorFee":0},"userAvatarUrl":"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fbluewater%2FjnC3Hr5Vqp.jpg?alt=media&token=419b867a-615b-48c1-a6cc-100d2a4e83dd","orderAmount":10,"isCancelled":false,"userId":"Lb4jlfLRtPhJlhJ3gJoxQfa5JBF2","contractId":"eBuljtDFa2dR7bXSaYyY","userUsername":"bluewater","loanAmount":0.58808,"amount":10,"probBefore":0.7429305912596399,"isFilled":true,"shares":13.26797385620911},{"createdTime":1663659658232,"userAvatarUrl":"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97","outcome":"YES","amount":10,"loanAmount":0,"probAfter":0.7429305912596399,"isFilled":true,"userName":"Olivia","fills":[{"shares":13.676470588235247,"matchedBetId":null,"amount":10,"timestamp":1663659658232}],"userId":"k13AzY3mu8XTju3xRZV3P8qBjEC2","probBefore":0.7191011235955056,"shares":13.676470588235247,"userUsername":"LivInTheLookingGlass","isCancelled":false,"contractId":"eBuljtDFa2dR7bXSaYyY","fees":{"liquidityFee":0,"creatorFee":0,"platformFee":0},"id":"zDnfkvD9KMkCAuSe6kUT","orderAmount":10},{"createdTime":1663659652986,"fees":{"platformFee":0,"liquidityFee":0,"creatorFee":0},"amount":10,"userAvatarUrl":"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97","orderAmount":10,"isCancelled":false,"fills":[{"shares":14.166666666666671,"matchedBetId":null,"amount":10,"timestamp":1663659652986}],"id":"y8e9EBD1ZC7siWLfq3vB","userId":"k13AzY3mu8XTju3xRZV3P8qBjEC2","userUsername":"LivInTheLookingGlass","contractId":"eBuljtDFa2dR7bXSaYyY","probBefore":0.6923076923076923,"isFilled":true,"userName":"Olivia","loanAmount":0,"probAfter":0.7191011235955056,"shares":14.166666666666671,"outcome":"YES"},{"fills":[{"shares":83.33333333333333,"matchedBetId":null,"amount":50,"timestamp":1663099485508}],"id":"cX0n9gA3iufJxptVdVgx","shares":83.33333333333333,"orderAmount":50,"amount":50,"isFilled":true,"probBefore":0.5,"userId":"k13AzY3mu8XTju3xRZV3P8qBjEC2","probAfter":0.6923076923076923,"contractId":"eBuljtDFa2dR7bXSaYyY","fees":{"platformFee":0,"creatorFee":0,"liquidityFee":0},"createdTime":1663099485508,"isCancelled":false,"outcome":"YES","loanAmount":16.305309676814236,"userUsername":"LivInTheLookingGlass","userAvatarUrl":"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97","userName":"Olivia"}],"description":{"content":[{"type":"paragraph"},{"type":"paragraph","content":[{"text":"This
+        market will resolve if any of the following are true:","type":"text"}]},{"content":[{"text":"-
+        If the current time is past 2022-09-30 11:59:59","type":"text"}],"type":"paragraph"},{"type":"paragraph"},{"type":"paragraph","content":[{"type":"text","text":"It
+        will resolve based on the following decision tree:"}]},{"type":"paragraph","content":[{"text":"-
+        If the human operator agrees:","type":"text"}]},{"type":"paragraph","content":[{"text":"---
+        Resolves to the current reported allTime profit of user LivInTheLookingGlass.","type":"text"}]},{"type":"paragraph","content":[{"text":"-
+        Otherwise, a manually provided value","type":"text"}]},{"type":"paragraph"},{"type":"paragraph","content":[{"text":"Note
+        that the bot operator reserves the right to resolve contrary to the purely
+        automated rules to preserve the spirit of the market. All resolutions are
+        first verified by the human operator.","type":"text"}]},{"type":"paragraph"},{"content":[{"text":"The
+        operator also reserves the right to trade on this market unless otherwise
+        specified. Even if otherwise specified, the operator reserves the right to
+        buy shares for subsidy or to trade for the purposes of cashing out liquidity.","type":"text"}],"type":"paragraph"}],"type":"doc","processed":true},"textDescription":"This
+        market will resolve if any of the following are true:\n\n- If the current
+        time is past 2022-09-30 11:59:59\n\nIt will resolve based on the following
+        decision tree:\n\n- If the human operator agrees:\n\n--- Resolves to the current
+        reported allTime profit of user LivInTheLookingGlass.\n\n- Otherwise, a manually
+        provided value\n\nNote that the bot operator reserves the right to resolve
+        contrary to the purely automated rules to preserve the spirit of the market.
+        All resolutions are first verified by the human operator.\n\nThe operator
+        also reserves the right to trade on this market unless otherwise specified.
+        Even if otherwise specified, the operator reserves the right to buy shares
+        for subsidy or to trade for the purposes of cashing out liquidity."}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=0
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Wed, 12 Oct 2022 06:44:30 GMT
+      Etag:
+      - W/"3p8qzpvigc8bp"
+      Server:
+      - Vercel
+      Strict-Transport-Security:
+      - max-age=63072000
+      Transfer-Encoding:
+      - chunked
+      X-Matched-Path:
+      - /api/v0/slug/[slug]
+      X-Vercel-Cache:
+      - MISS
+      X-Vercel-Id:
+      - cle1::cle1::cvtpr-1665557070721-ea966f0d9f40
+      content-length:
+      - '10789'
+    status:
+      code: 200
+      message: OK
+version: 1
