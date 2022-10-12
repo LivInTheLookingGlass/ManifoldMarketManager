@@ -5,8 +5,9 @@ from typing import TYPE_CHECKING, Mapping, Union, cast
 
 from attrs import Factory, define
 
-from ... import (AnyResolution, BinaryResolution, FreeResponseResolution, MultipleChoiceResolution,
-                 PseudoNumericResolution, Rule)
+from ... import Rule
+from ...consts import (AnyResolution, BinaryResolution, FreeResponseResolution, MultipleChoiceResolution,
+                       PseudoNumericResolution)
 from ...util import fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1
 from ..abstract import AbstractRule
 

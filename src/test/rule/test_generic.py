@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING, Callable, List, Type, cast
 
 from pytest import fixture
 
-from ... import BinaryResolution, Rule
+from ... import Rule
+from ...consts import BinaryResolution
 from ...market import Market
 from ...rule import get_rule
 from ...rule.abstract import BinaryRule

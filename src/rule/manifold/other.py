@@ -15,7 +15,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from pymanifold.types import Market as APIMarket
 
-    from ... import BinaryResolution
+    from ...consts import BinaryResolution
     from ...market import Market
 
 

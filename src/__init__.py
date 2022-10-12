@@ -16,7 +16,7 @@ from pathlib import Path
 from pickle import dumps, loads
 from sqlite3 import register_adapter, register_converter
 from sys import path as _sys_path
-from typing import TYPE_CHECKING, Generic, Iterable, Literal, Mapping, Sequence, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Generic, Iterable, Literal, Mapping, Sequence, Union, cast
 from warnings import warn
 
 from attrs import define, field
@@ -25,18 +25,13 @@ _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
 
 from pymanifold.types import DictDeserializable  # noqa: E402
 
-from .util import time_cache  # noqa: E402
-
-BinaryResolution = Union[Literal["CANCEL"], bool, float]
-PseudoNumericResolution = Union[Literal["CANCEL"], float]
-FreeResponseResolution = Union[Literal["CANCEL"], Mapping[str, float], Mapping[int, float], Mapping[float, float]]
-MultipleChoiceResolution = FreeResponseResolution
-AnyResolution = Union[BinaryResolution, PseudoNumericResolution, FreeResponseResolution, MultipleChoiceResolution]
-T = TypeVar("T", bound=Union[None, AnyResolution])
+from .consts import AnyResolution, Outcome, T  # noqa: E402
 
 if TYPE_CHECKING:  # pragma: no cover
     from logging import Logger
     from typing import Any
+
+    from .consts import OutcomeType
 
 
 @define(slots=False)  # type: ignore
@@ -57,20 +52,19 @@ class Rule(ABC, Generic[T], DictDeserializable):
     ) -> T:  # pragma: no cover
         ...
 
-    @time_cache()
     def value(
         self,
         market: Market,
-        format: Literal['NONE', 'BINARY', 'PSEUDO_NUMERIC', 'FREE_RESPONSE', 'MULTIPLE_CHOICE'] = 'NONE',
+        format: Literal['NONE'] | OutcomeType = 'NONE',
         refresh: bool = False
     ) -> AnyResolution:
         """Return the resolution value of a market, appropriately formatted for its market type."""
         ret = self._value(market)
         if (ret is None) or (ret == "CANCEL") or (format == 'NONE'):
             return cast(AnyResolution, ret)
-        elif format in ('BINARY', 'PSEUDO_NUMERIC'):
+        elif format in Outcome.BINARY_LIKE():
             return self.__binary_value(market, ret)
-        elif format in ('FREE_RESPONSE', 'MULTIPLE_CHOICE'):
+        elif format in Outcome.MC_LIKE():
             return self.__multiple_choice_value(market, ret)
         raise ValueError()
 
@@ -89,15 +83,16 @@ class Rule(ABC, Generic[T], DictDeserializable):
 
     def __multiple_choice_value(self, market: Market, ret: Any) -> Mapping[int, float]:
         if isinstance(ret, Mapping):
-            return {int(val): share for val, share in ret.items()}
+            ret = {int(val): share for val, share in ret.items()}
         elif isinstance(ret, (int, str)):
-            return {int(ret): 1}
+            ret = {int(ret): 1}
         elif isinstance(ret, float) and ret.is_integer():
-            return {int(ret): 1}
+            ret = {int(ret): 1}
         elif isinstance(ret, Iterable):
-            return normalize_mapping({int(val): 1 for val in ret})
-
-        raise TypeError(ret, format, market)
+            ret = {int(val): 1 for val in ret}
+        else:
+            raise TypeError(ret, format, market)
+        return normalize_mapping(ret)
 
     @abstractmethod
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:  # pragma: no cover
@@ -119,16 +114,16 @@ class Rule(ABC, Generic[T], DictDeserializable):
         if val == "CANCEL":
             ret += "CANCEL)\n"
             return ret
-        if isinstance(self, rule.DoResolveRule) or market.market.outcomeType == "BINARY":
+        if isinstance(self, rule.DoResolveRule) or market.market.outcomeType == Outcome.BINARY:
             if val is True or val == 100:
                 ret += "YES)\n"
             elif not val:
                 ret += "NO)\n"
             else:
                 ret += f"{round_sig_figs(cast(float, val))}%)\n"
-        elif market.market.outcomeType == "PSEUDO_NUMERIC":
+        elif market.market.outcomeType == Outcome.PSEUDO_NUMERIC:
             ret += round_sig_figs(cast(float, val))
-        elif market.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
+        elif market.market.outcomeType in Outcome.MC_LIKE():
             val_ = cast(Mapping[int, float], val)
             ret += "{"
             for idx, (key, weight) in enumerate(val_.items()):
@@ -149,12 +144,11 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.60"
+VERSION = "0.6.0.61"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
-    "__version_info__", "VERSION", "AnyResolution", "BinaryResolution", "DoResolveRule", "FreeResponseResolution",
-    "MultipleChoiceResolution", "PseudoNumericResolution", "ResolutionValueRule", "Rule", "Market", "get_client",
-    "require_env", "rule", "util"
+    "__version_info__", "VERSION", "DoResolveRule", "ResolutionValueRule", "Rule", "Market", "get_client", "rule",
+    "util", "require_env"
 ]
 
 if getenv("DEBUG"):  # pragma: no cover

@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING, Generic, cast
 
 from attrs import Factory, define
 
-from .. import Rule, T
+from .. import Rule
+from ..consts import T
 from ..util import round_sig_figs
 from . import ResolutionValueRule, get_rule
 

@@ -5,7 +5,8 @@ from typing import Any, Type, cast
 
 from attrs import define
 
-from .. import AnyResolution, Rule
+from .. import Rule
+from ..consts import AnyResolution
 from ..util import dynamic_import
 
 

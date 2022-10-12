@@ -8,6 +8,7 @@ from attrs import define
 from github3 import GitHub
 from github3 import login as gh_login
 
+from ..consts import EnvironmentVariable
 from ..util import require_env, time_cache
 from . import DoResolveRule, ResolutionValueRule
 
@@ -23,7 +24,7 @@ def unauth_login() -> GitHub:
 
 
 @time_cache()
-@require_env('GithubAccessToken', 'GithubUsername')
+@require_env(EnvironmentVariable.GithubAccessToken, EnvironmentVariable.GithubUsername)
 def login() -> GitHub:
     """Return an authorized login to GitHub."""
     return gh_login(username=getenv('GithubUsername'), token=getenv('GithubAccessToken'))
@@ -38,7 +39,7 @@ class ResolveWithPR(DoResolveRule):
     number: int
 
     @time_cache()
-    @require_env("GithubAccessToken", "GithubUsername")
+    @require_env(EnvironmentVariable.GithubAccessToken, EnvironmentVariable.GithubUsername)
     def _value(self, market: Market) -> bool:
         """Return True if the issue is closed or the PR is merged, otherwise False."""
         issue = login().issue(self.owner, self.repo, self.number)

@@ -1,47 +1,22 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Mapping
 
 from pytest import fixture, raises
 
 from .. import Rule
+from ..consts import AVAILABLE_RULES, Outcome
 from ..rule import get_rule
+from ..rule.generic import ResolveToValue
 
 if TYPE_CHECKING:  # pragma: no cover
+    from typing import Any
+
+    from ..market import Market
     from . import PytestRequest
 
 
-@fixture(params=(
-    "generic.NegateRule",
-    "generic.EitherRule",
-    "generic.BothRule",
-    "generic.NANDRule",
-    "generic.NeitherRule",
-    "generic.XORRule",
-    "generic.XNORRule",
-    "generic.ImpliesRule",
-    "generic.ResolveAtTime",
-    "generic.ResolveToValue",
-    "generic.AdditiveRule",
-    "generic.MultiplicitiveRule",
-    "generic.ModulusRule",
-    "generic.ResolveRandomSeed",
-    "generic.ResolveRandomIndex",
-    "generic.ResolveMultipleValues",
-    "github.ResolveWithPR",
-    "github.ResolveToPR",
-    "github.ResolveToPRDelta",
-    "manifold.this.CurrentValueRule",
-    "manifold.this.FibonacciValueRule",
-    "manifold.this.PopularValueRule",
-    "manifold.this.ThisMarketClosed",
-    "manifold.other.AmplifiedOddsRule",
-    "manifold.other.OtherMarketClosed",
-    "manifold.other.OtherMarketResolved",
-    "manifold.other.OtherMarketValue",
-    "manifold.user.ResolveToUserProfit",
-    "manifold.user.ResolveToUserCreatedVolume",
-))  # type: ignore
+@fixture(params=AVAILABLE_RULES)  # type: ignore
 def rule_name(request: PytestRequest[str]) -> str:
     """Return the name of an existing rule."""
     return request.param
@@ -57,3 +32,27 @@ def test_import_rule_failure() -> None:
     for rule_name in ["time.sleep", "random.Random"]:
         with raises(Exception):
             get_rule(rule_name)
+
+
+def test_rule_formatting() -> None:
+    """Make sure that Rule does formatting if requested."""
+    market: Market = None  # type: ignore[assignment]
+    for outcome, as_int in [(100, 100), ({3: 1}, 3), ([7], 7)]:
+        rule = ResolveToValue(outcome)  # type: ignore
+        val: Any = rule.value(market, format=Outcome.BINARY)
+        assert isinstance(val, (int, float))
+        assert val == as_int
+
+        val = rule.value(market, format=Outcome.PSEUDO_NUMERIC)
+        assert isinstance(val, (int, float))
+        assert val == as_int
+
+        val = rule.value(market, format=Outcome.FREE_RESPONSE)
+        assert isinstance(val, Mapping)
+        assert as_int in val
+        assert val[as_int] == 1
+
+        val = rule.value(market, format=Outcome.MULTIPLE_CHOICE)
+        assert isinstance(val, Mapping)
+        assert as_int in val
+        assert val[as_int] == 1

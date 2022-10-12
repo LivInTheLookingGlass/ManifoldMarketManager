@@ -3,7 +3,6 @@ from __future__ import annotations
 from asyncio import get_event_loop, new_event_loop, set_event_loop
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from enum import IntEnum
 from logging import getLogger
 from os import getenv
 from pathlib import Path
@@ -29,6 +28,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CallbackQueryHandler
 
 from src import market, require_env
+from src.consts import EnvironmentVariable, MarketStatus, Response
 
 if TYPE_CHECKING:  # pragma: no cover
     from sqlite3 import Connection
@@ -39,14 +39,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from src import Market
 
 logger = getLogger(__name__)
-
-
-class Response(IntEnum):
-    """Possible responses from the Telegram Bot, other than YES or NO."""
-
-    NO_ACTION = 1
-    USE_DEFAULT = 2
-    CANCEL = 3
 
 
 @dataclass
@@ -74,7 +66,7 @@ keyboard2 = [
 ]
 
 
-@require_env("DBName")
+@require_env(EnvironmentVariable.DBName)
 def register_db() -> Connection:
     """Get a connection to the appropriate database for this bot."""
     name = getenv("DBName")
@@ -120,7 +112,7 @@ async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await query.edit_message_reply_markup(reply_markup=reply_markup)
 
 
-@require_env("TelegramAPIKey", "TelegramChatID")
+@require_env(EnvironmentVariable.TelegramAPIKey, EnvironmentVariable.TelegramChatID)
 def tg_main(text: str) -> Response:
     """Run the bot."""
     async def post_init(self):  # type: ignore
@@ -167,7 +159,7 @@ def watch_reply(conn: Connection, id_: int, mkt: Market, console_only: bool = Fa
         resp = mkt.resolve()
     elif response == Response.CANCEL:
         resp = mkt.cancel()
-    if mkt.status != market.MarketStatus.RESOLVED:
+    if mkt.status != MarketStatus.RESOLVED:
         raise RuntimeError(resp)
     conn.execute(
         "DELETE FROM markets WHERE id = ?;",
@@ -176,7 +168,7 @@ def watch_reply(conn: Connection, id_: int, mkt: Market, console_only: bool = Fa
     conn.commit()
 
 
-@require_env("ManifoldAPIKey", "DBName")
+@require_env(EnvironmentVariable.ManifoldAPIKey, EnvironmentVariable.DBName)
 def main(refresh: bool = False, console_only: bool = False) -> None:
     """Go through watched markets and act on rules (resolve, trade, etc)."""
     conn = register_db()

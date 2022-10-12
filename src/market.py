@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum, auto
 from logging import getLogger
 from time import time
 from typing import TYPE_CHECKING, cast
 
+from .consts import EnvironmentVariable, MarketStatus, Outcome
 from .util import explain_abstract, get_client, require_env, round_sig_figs
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -16,15 +16,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from pymanifold.types import Market as APIMarket
     from requests import Response
 
-    from . import AnyResolution, Rule
-
-
-class MarketStatus(Enum):
-    """Represent the status of a market at a high level."""
-
-    OPEN = auto()
-    CLOSED = auto()
-    RESOLVED = auto()
+    from . import Rule
+    from .consts import AnyResolution
 
 
 @dataclass
@@ -133,7 +126,7 @@ class Market:
         val = self.resolve_to()
         if val == "CANCEL":
             ret = "CANCEL"
-        elif isinstance(val, bool) or self.market.outcomeType == "BINARY":
+        elif isinstance(val, bool) or self.market.outcomeType == Outcome.BINARY:
             defaults: dict[AnyResolution, str] = {
                 True: "YES", 100: "YES", 100.0: "YES",
                 False: "NO"
@@ -142,7 +135,7 @@ class Market:
                 ret = defaults[val]
             else:
                 ret = round_sig_figs(cast(float, val), sig_figs) + "%"
-        elif self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
+        elif self.market.outcomeType in Outcome.MC_LIKE():
             assert not isinstance(val, (float, str))
             ret = "{"
             total = sum(val.values())
@@ -174,6 +167,7 @@ class Market:
         """
         chosen = None
         for rule in (self.resolve_to_rules or ()):
+            assert self.market.outcomeType != "NUMERIC"
             chosen = rule.value(self, format=self.market.outcomeType)
             if chosen is not None:
                 break
@@ -184,9 +178,10 @@ class Market:
     def current_answer(self) -> AnyResolution:
         """Return the current market consensus."""
         from .rule.manifold.this import CurrentValueRule
+        assert self.market.outcomeType != "NUMERIC"
         return CurrentValueRule().value(self, format=self.market.outcomeType)
 
-    @require_env("ManifoldAPIKey")
+    @require_env(EnvironmentVariable.ManifoldAPIKey)
     def resolve(self, override: Optional[AnyResolution] = None) -> Response:
         """Resolve this market according to our resolution rules.
 
@@ -203,7 +198,7 @@ class Market:
         if _override == "CANCEL":
             return self.cancel()
 
-        if self.market.outcomeType in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
+        if self.market.outcomeType in Outcome.MC_LIKE():
             _override = self.__format_request_resolve_mapping(_override)
 
         ret: Response = self.client.resolve_market(self.market, _override)
@@ -217,7 +212,7 @@ class Market:
             raise TypeError()
         return {int(id_): weight for id_, weight in _override.items()}
 
-    @require_env("ManifoldAPIKey")
+    @require_env(EnvironmentVariable.ManifoldAPIKey)
     def cancel(self) -> Response:
         """Cancel this market.
 

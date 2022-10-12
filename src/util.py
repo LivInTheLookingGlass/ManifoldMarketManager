@@ -14,6 +14,8 @@ from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
 from pymanifold.utils.math import number_to_prob_cpmm1  # noqa: F401
 
+from .consts import EnvironmentVariable, Outcome
+
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any, Callable, Collection, Hashable, Iterable, Mapping, MutableSequence, TypeVar
 
@@ -22,19 +24,6 @@ if TYPE_CHECKING:  # pragma: no cover
     T = TypeVar("T")
 
 time_cache_state: dict[tuple[int, Hashable], tuple[Any, float]] = {}
-
-ENVIRONMENT_VARIABLES = [
-    "ManifoldAPIKey",     # REQUIRED. Allows trades, market creation, market resolution
-    "GithubUsername",     # Optional. Allows you have a higher rate limit, make authorized requests
-    "GithubAccessToken",  # Optional. See above
-    "DBName",             # REQUIRED. The name of the database you wish to use
-    "TelegramAPIKey",     # Optional. If you don't have a Telegram channel you wish to use, delete this line
-                          # and run --console-only
-    "TelegramChatID",     # Optional. See above
-    "LogFile",            # REQUIRED. What file to put the log in
-]
-# If you don't need a specific environment variable, delete the line in this list
-# That said, if you use a rule that requires some API and have no key for it, it will fail
 
 
 def fibonacci(start: int = 1) -> Iterable[int]:
@@ -77,7 +66,7 @@ def market_to_answer_map(
     mkt: APIMarket = market  # type: ignore[assignment]
     if not isinstance(market, APIMarket):
         mkt = market.market
-    if mkt.outcomeType not in ("FREE_RESPONSE", "MULTIPLE_CHOICE"):
+    if mkt.outcomeType not in Outcome.MC_LIKE():
         raise RuntimeError("Cannot extract a mapping from binary markets")
     assert mkt.answers
     initial: dict[int, float] = {}
@@ -166,7 +155,7 @@ def require_env(*env: str) -> Callable[[Callable[..., T]], Callable[..., T]]:
 
 
 @lru_cache(maxsize=None)
-@require_env("ManifoldAPIKey")
+@require_env(EnvironmentVariable.ManifoldAPIKey)
 def get_client() -> ManifoldClient:
     """Return a (possibly non-unique) Manifold client."""
     return ManifoldClient(getenv("ManifoldAPIKey"))

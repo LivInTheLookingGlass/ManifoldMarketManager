@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING, Dict, Generic, Mapping, Optional, Tuple, Union
 
 from attrs import Factory, define
 
-from .. import BinaryResolution, PseudoNumericResolution, Rule, T
+from .. import Rule
+from ..consts import BinaryResolution, PseudoNumericResolution, T
 from ..util import normalize_mapping
 from . import DoResolveRule, ResolutionValueRule, get_rule
 from .abstract import BinaryRule, ResolveRandomSeed, UnaryRule, VariadicRule
@@ -14,7 +15,7 @@ from .abstract import BinaryRule, ResolveRandomSeed, UnaryRule, VariadicRule
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any, ClassVar, DefaultDict, Literal, MutableSequence
 
-    from .. import FreeResponseResolution, MultipleChoiceResolution
+    from ..consts import FreeResponseResolution, MultipleChoiceResolution
     from ..market import Market
 
 

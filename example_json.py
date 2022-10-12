@@ -16,9 +16,10 @@ from src.util import explain_abstract, get_client
 from pymanifold.types import DictDeserializable
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Literal, Mapping, Optional
+    from typing import Any, Mapping, Optional
 
     from src import Rule
+    from src.consts import OutcomeType
     from src.rule import ResolutionValueRule
 
 
@@ -62,7 +63,7 @@ def date_deserialization_hook(json_dict):
 
 @dataclass
 class ManifoldRequest(DictDeserializable):
-    outcomeType: Literal["BINARY", "PSEUDO_NUMERIC", "FREE_RESPONSE", "MULTIPLE_CHOICE"]
+    outcomeType: OutcomeType
     question: str
     description: str | Any
     closeTime: int

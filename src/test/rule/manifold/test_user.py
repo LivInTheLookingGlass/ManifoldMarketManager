@@ -4,16 +4,14 @@ from typing import TYPE_CHECKING, cast
 
 from pytest import fixture
 
+from ....consts import FIELDS
 from ....market import Market
 from ....rule.manifold.user import ResolveToUserCreatedVolume, ResolveToUserProfit
 from ... import manifold_vcr
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Literal
-
+    from ....consts import FieldType
     from ... import PytestRequest
-
-    FieldType = Literal["allTime", "daily", "weekly", "monthly"]
 
 
 @fixture(params=["LivInTheLookingGlass", "v"])
@@ -21,7 +19,7 @@ def manifold_user(request: PytestRequest[str]) -> str:
     return request.param
 
 
-@fixture(params=["allTime", "daily", "weekly", "monthly"])
+@fixture(params=FIELDS)
 def field(request: PytestRequest[FieldType]) -> FieldType:
     return request.param
 
