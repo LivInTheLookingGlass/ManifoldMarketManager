@@ -5,7 +5,7 @@ interactions:
       Accept:
       - '*/*'
       Accept-Encoding:
-      - gzip, deflate, br
+      - gzip, deflate
       Connection:
       - keep-alive
       User-Agent:
@@ -14,132 +14,115 @@ interactions:
     uri: https://manifold.markets/api/v0/market/Dx7vPilTr1rgQQVETM2Z
   response:
     body:
-      string: !!binary |
-        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
-        UdXC8jd/rV4rzzc4LD4OfP40
+      string: "{\"id\":\"Dx7vPilTr1rgQQVETM2Z\",\"creatorId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"creatorUsername\":\"LivInTheLookingGlass\",\"creatorName\":\"Olivia\",\"createdTime\":1663180458290,\"creatorAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"closeTime\":1663516799000,\"question\":\"Which
+        feature of my market manager should I prioritize?\",\"tags\":[],\"url\":\"https://manifold.markets/LivInTheLookingGlass/which-feature-of-my-market-manager\",\"pool\":{\"0\":14.5,\"1\":19.5,\"2\":16.5,\"3\":12.5,\"4\":20.5,\"5\":14.5,\"6\":23.5,\"7\":12.5},\"outcomeType\":\"MULTIPLE_CHOICE\",\"mechanism\":\"dpm-2\",\"volume\":34,\"volume7Days\":0,\"volume24Hours\":0,\"isResolved\":true,\"resolution\":\"MKT\",\"resolutionTime\":1663556015520,\"lastUpdatedTime\":1663712102890,\"answers\":[{\"username\":\"LivInTheLookingGlass\",\"number\":0,\"id\":\"0\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"text\":\"Packaging
+        it for use by others\",\"name\":\"Olivia\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"createdTime\":1663180458290,\"probability\":0.09812875918912897},{\"number\":1,\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"username\":\"LivInTheLookingGlass\",\"createdTime\":1663180458290,\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"name\":\"Olivia\",\"id\":\"1\",\"text\":\"Unit
+        tests where easy\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"probability\":0.15666072621964802},{\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"text\":\"Hooks
+        to perform actions on resolution\",\"name\":\"Olivia\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"id\":\"2\",\"username\":\"LivInTheLookingGlass\",\"createdTime\":1663180458290,\"number\":2,\"probability\":0.11795500111383382},{\"username\":\"LivInTheLookingGlass\",\"text\":\"Issue
+        tracking on places other than GitHub\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"id\":\"3\",\"createdTime\":1663180458290,\"name\":\"Olivia\",\"number\":3,\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"probability\":0.06961461349966586},{\"username\":\"LivInTheLookingGlass\",\"id\":\"4\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"name\":\"Olivia\",\"text\":\"Mirroring
+        other market sites\",\"createdTime\":1663180458290,\"number\":4,\"probability\":0.18021831142793496},{\"id\":\"5\",\"text\":\"Scheduling
+        market creation ahead of time\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"createdTime\":1663180458290,\"name\":\"Olivia\",\"number\":5,\"username\":\"LivInTheLookingGlass\",\"probability\":0.09300512363555358},{\"createdTime\":1663180458290,\"username\":\"LivInTheLookingGlass\",\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"text\":\"Derivative
+        markets of Manifold markets\",\"id\":\"6\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"number\":6,\"name\":\"Olivia\",\"probability\":0.2148028514145689},{\"avatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"createdTime\":1663180458290,\"username\":\"LivInTheLookingGlass\",\"number\":7,\"name\":\"Olivia\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"text\":\"Support
+        for multiple accounts in the same database\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"id\":\"7\",\"probability\":0.06961461349966586}],\"comments\":[{\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"id\":\"qwWIe8D7lPlGbA9JGe9y\",\"userName\":\"Olivia\",\"replyToCommentId\":\"6UPILlRwqS8gWr8sGwwg\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"text\":\"This
+        ended up not taking much effort, so I was able to do it when making tests\",\"type\":\"text\"}]}]},\"commentType\":\"contract\",\"commenterPositionShares\":18,\"userUsername\":\"LivInTheLookingGlass\",\"createdTime\":1663712100842,\"commenterPositionOutcome\":\"NO\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"contractSlug\":\"which-feature-of-my-market-manager\",\"contractQuestion\":\"Which
+        feature of my market manager should I prioritize?\"},{\"content\":{\"content\":[{\"content\":[{\"type\":\"text\",\"text\":\"Formatting
+        done\"}],\"type\":\"paragraph\"}],\"type\":\"doc\"},\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"id\":\"SDhKRmBEKjNqR07ZWDs6\",\"userName\":\"Olivia\",\"userUsername\":\"LivInTheLookingGlass\",\"commenterPositionShares\":18,\"commenterPositionOutcome\":\"NO\",\"contractSlug\":\"which-feature-of-my-market-manager\",\"contractQuestion\":\"Which
+        feature of my market manager should I prioritize?\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"replyToCommentId\":\"XspW8hazMVcSBWsZTxPQ\",\"commentType\":\"contract\",\"createdTime\":1663712080520},{\"userName\":\"Olivia\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"attrs\":{\"label\":\"Forrest\",\"id\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\"},\"type\":\"mention\"},{\"type\":\"text\",\"text\":\"
+        Gah, good catch on the typo\"}]},{\"type\":\"paragraph\"},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"I'm
+        worrying about formatting a little later, as not all of my market types can
+        \ even support this yet. Once I have it working everywhere, and I have a good
+        idea on how to tag rules as supporting only specific market types, then I
+        will work on that\"}]}]},\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"contractSlug\":\"which-feature-of-my-market-manager\",\"commentType\":\"contract\",\"commenterPositionOutcome\":\"NO\",\"userUsername\":\"LivInTheLookingGlass\",\"commenterPositionShares\":18,\"createdTime\":1663625807846,\"contractQuestion\":\"Which
+        feature of my market manager should I prioritize?\",\"id\":\"lZEctZUPtpJNf13nQ7rB\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"replyToCommentId\":\"XspW8hazMVcSBWsZTxPQ\"},{\"userUsername\":\"Forrest\",\"commenterPositionShares\":19,\"commentType\":\"contract\",\"contractSlug\":\"which-feature-of-my-market-manager\",\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"createdTime\":1663605614532,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"replyToCommentId\":\"XspW8hazMVcSBWsZTxPQ\",\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"type\":\"text\",\"text\":\"Suggestions:\"},{\"type\":\"hardBreak\"},{\"marks\":[{\"type\":\"code\"}],\"text\":\"This
+        market will is resolving\",\"type\":\"text\"},{\"type\":\"text\",\"text\":\"
+        should probably be \"},{\"text\":\"This market is resolving\",\"type\":\"text\",\"marks\":[{\"type\":\"code\"}]},{\"type\":\"text\",\"text\":\"
+        \"},{\"type\":\"hardBreak\"},{\"type\":\"text\",\"text\":\"Truncating the
+        probabilities to, say, four decimal places would be good for readability in
+        my option. (A case could be made for % formatting them to match what Manifold
+        does in the UI, but I don't think that matters as much.)\"}],\"type\":\"paragraph\"}]},\"commenterPositionOutcome\":\"NO\",\"contractQuestion\":\"Which
+        feature of my market manager should I prioritize?\",\"id\":\"EBIma0oZQsWNUt7NrIrn\",\"userName\":\"Forrest\"},{\"contractSlug\":\"which-feature-of-my-market-manager\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"commenterPositionShares\":18,\"createdTime\":1663556184749,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"commenterPositionOutcome\":\"NO\",\"content\":{\"content\":[{\"content\":[{\"text\":\"I
+        am currently testing resolution explanations. Note that for this market in
+        particular there is a known bug, in that I cannot get probability from the
+        API and despite my best efforts cannot calculate implied probability in the
+        same way as the site just yet.\",\"type\":\"text\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\"},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"With
+        that aside, how does the following read?\"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"
+        \"}]},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"This
+        market will is resolving because of the following trigger(s):\"},{\"type\":\"hardBreak\"},{\"type\":\"text\",\"text\":\"\_
+        - If the current time is past 2022-09-18 11:59:59 (-> True)\"},{\"type\":\"hardBreak\"},{\"type\":\"hardBreak\"},{\"text\":\"It
+        will follow the decision tree below:\",\"type\":\"text\"},{\"type\":\"hardBreak\"},{\"text\":\"-
+        If the human operator agrees:\",\"type\":\"text\"},{\"type\":\"hardBreak\"},{\"type\":\"text\",\"text\":\"\_
+        - Resolves to the 3 most probable answers, weighted by their probability.
+        (-> {6: 0.3700787401574803, 4: 0.3228346456692913, 1: 0.30708661417322836})\"},{\"type\":\"hardBreak\"},{\"type\":\"hardBreak\"},{\"text\":\"Final
+        Value: {6: 0.3700787401574803, 4: 0.3228346456692913, 1: 0.30708661417322836}\",\"type\":\"text\"}]}],\"type\":\"doc\"},\"userName\":\"Olivia\",\"userUsername\":\"LivInTheLookingGlass\",\"id\":\"XspW8hazMVcSBWsZTxPQ\",\"contractQuestion\":\"Which
+        feature of my market manager should I prioritize?\",\"commentType\":\"contract\"},{\"contractQuestion\":\"Which
+        feature of my market manager should I prioritize?\",\"commenterPositionOutcome\":\"NO\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"text\":\"#
+        Derivative markets of Manifold markets\",\"type\":\"text\"}]},{\"type\":\"paragraph\"},{\"content\":[{\"type\":\"text\",\"text\":\"Would
+        include\"}],\"type\":\"paragraph\"},{\"type\":\"bulletList\",\"content\":[{\"content\":[{\"content\":[{\"text\":\"Conditional
+        markets\",\"type\":\"text\"}],\"type\":\"paragraph\"}],\"type\":\"listItem\"},{\"content\":[{\"content\":[{\"type\":\"text\",\"text\":\"Markets
+        about time-to-close\"}],\"type\":\"paragraph\"}],\"type\":\"listItem\"},{\"type\":\"listItem\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"text\":\"etc\",\"type\":\"text\"}]}]}]},{\"type\":\"paragraph\"},{\"attrs\":{\"src\":\"https://manifold.markets/embed/LivInTheLookingGlass/what-sorts-of-derivative-markets-wo\",\"allowfullscreen\":true,\"height\":0,\"frameborder\":0},\"type\":\"iframe\"}]},\"commenterPositionShares\":16,\"createdTime\":1663181095917,\"userName\":\"Olivia\",\"userUsername\":\"LivInTheLookingGlass\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"id\":\"kaV0CiyTrOX8msZIpw3c\",\"contractSlug\":\"which-feature-of-my-market-manager\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"commentType\":\"contract\"},{\"userUsername\":\"LivInTheLookingGlass\",\"userName\":\"Olivia\",\"commenterPositionOutcome\":\"NO\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"createdTime\":1663181033414,\"id\":\"6UPILlRwqS8gWr8sGwwg\",\"contractSlug\":\"which-feature-of-my-market-manager\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"commenterPositionShares\":16,\"commentType\":\"contract\",\"content\":{\"content\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"#
+        Packaging it for use by others\"}]},{\"type\":\"paragraph\"},{\"content\":[{\"text\":\"There
+        are two parts to this. First, I want to make a setup  file such that dependencies
+        are only grabbed when you need the relevant pluggable behavior. This means
+        if you don't need GitHub, don't download the dependencies\",\"type\":\"text\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\"},{\"type\":\"paragraph\",\"content\":[{\"text\":\"Second,
+        I'd like to use py2exe to make a binary for distribution to different machines.
+        This should eliminate a large number of packaging or portability concerns\",\"type\":\"text\"}]}],\"type\":\"doc\"},\"contractQuestion\":\"Which
+        feature of my market manager should I prioritize?\"},{\"createdTime\":1663180935609,\"userUsername\":\"LivInTheLookingGlass\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"contractSlug\":\"which-feature-of-my-market-manager\",\"commentType\":\"contract\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"id\":\"XIkew0QVl3T1vMrCkqTK\",\"commenterPositionShares\":16,\"userName\":\"Olivia\",\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"type\":\"text\",\"text\":\"#
+        Hooks to perform actions on resolution\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\"},{\"content\":[{\"text\":\"The
+        easiest example here would be submitting a GitHub comment to the relevant
+        PR. I would also like to retroactively expand the scope of this to include
+        on market creation, as this would allow tracked PRs to have a link automatically
+        submitted to the relevant market\",\"type\":\"text\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\"},{\"type\":\"paragraph\",\"content\":[{\"text\":\"This
+        would also allow for things like the creation of sequel markets in a recurring
+        series\",\"type\":\"text\"}]}]},\"contractQuestion\":\"Which feature of my
+        market manager should I prioritize?\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"commenterPositionOutcome\":\"NO\"},{\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"content\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"content\":[{\"text\":\"#
+        Mirroring other market sites\",\"type\":\"text\"}]},{\"type\":\"paragraph\"},{\"type\":\"iframe\",\"attrs\":{\"allowfullscreen\":true,\"height\":0,\"src\":\"https://manifold.markets/embed/LivInTheLookingGlass/which-prediction-market-site-should\",\"frameborder\":0}}]},\"contractSlug\":\"which-feature-of-my-market-manager\",\"userUsername\":\"LivInTheLookingGlass\",\"commenterPositionShares\":16,\"userName\":\"Olivia\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"createdTime\":1663180837882,\"commentType\":\"contract\",\"contractQuestion\":\"Which
+        feature of my market manager should I prioritize?\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"commenterPositionOutcome\":\"NO\",\"id\":\"OBTSSsW2Fiq2wEaL5Vvl\"},{\"commenterPositionShares\":16,\"userName\":\"Olivia\",\"betId\":\"BACn5yBpZ7l4qEU6FsyM\",\"id\":\"BACn5yBpZ7l4qEU6FsyM\",\"userUsername\":\"LivInTheLookingGlass\",\"content\":{\"type\":\"doc\",\"content\":[{\"content\":[{\"text\":\"Unfortunately
+        I did not realize you can't comment on multiple choice answers. I'm going
+        to create a thread for each of the ones I thing need explanation\",\"type\":\"text\"}],\"type\":\"paragraph\"}]},\"commentType\":\"contract\",\"contractSlug\":\"which-feature-of-my-market-manager\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"createdTime\":1663180728286,\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"betOutcome\":\"2\",\"contractQuestion\":\"Which
+        feature of my market manager should I prioritize?\",\"commenterPositionOutcome\":\"NO\",\"betAmount\":3,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\"}],\"bets\":[{\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"id\":\"fE5uQvapbmDtQ8S0WQJA\",\"loanAmount\":0.02,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"userUsername\":\"Forrest\",\"amount\":1,\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"userName\":\"Forrest\",\"createdTime\":1663341313112,\"outcome\":\"6\",\"probAfter\":0.2148028514145689,\"probBefore\":0.20295098648877832,\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"shares\":2.188141505115979},{\"shares\":4.847403288280816,\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"amount\":2,\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"id\":\"fV1ahYUWFFBAMPwKXAj7\",\"probAfter\":0.18293854938097123,\"loanAmount\":0.04,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"outcome\":\"4\",\"userUsername\":\"Forrest\",\"createdTime\":1663341309149,\"userName\":\"Forrest\",\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"probBefore\":0.15779966202435758},{\"id\":\"RzYJzikK0G83g7FKhfeW\",\"probAfter\":0.1639181865858633,\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"amount\":1,\"loanAmount\":0.02,\"probBefore\":0.15100591715976333,\"shares\":2.5203986634441193,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"createdTime\":1663341306260,\"userUsername\":\"Forrest\",\"outcome\":\"1\",\"userName\":\"Forrest\"},{\"loanAmount\":0.02,\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"id\":\"yJPXcZZ6ipoV9pPcegiH\",\"userName\":\"Forrest\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"outcome\":\"2\",\"userUsername\":\"Forrest\",\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"shares\":2.9056117213952106,\"amount\":1,\"createdTime\":1663341303396,\"probAfter\":0.12532544378698224,\"probBefore\":0.11171203653626584},{\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"amount\":2,\"loanAmount\":0.04,\"userId\":\"2ekxJD8MeMfp96gghpjy3PRxjtW2\",\"shares\":6.620844664303334,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FForrest%2Fwolf.png?alt=media&token=f91d3241-6b49-4f47-adba-d226fde95f2e\",\"outcome\":\"0\",\"userUsername\":\"Forrest\",\"probAfter\":0.10588305991226488,\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"probBefore\":0.07750015500031,\"id\":\"sfqWVRLVM1gjyf7PlPdJ\",\"createdTime\":1663341299215,\"userName\":\"Forrest\"},{\"probBefore\":0.09829346949744694,\"userUsername\":\"FutureOwl\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FFutureOwl%2FXYCT2NQkYd.44?alt=media&token=d1f2390e-ef8d-4731-be88-187a42fd5af2\",\"shares\":13.789264327220195,\"userName\":\"Future
+        Telling Owl\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"userId\":\"1peFzLQ2AUXC5NzE9xWsRByeMSF3\",\"outcome\":\"4\",\"loanAmount\":0.198,\"fees\":{\"liquidityFee\":0,\"creatorFee\":0,\"platformFee\":0},\"amount\":5,\"createdTime\":1663188086449,\"probAfter\":0.1678963357926716,\"id\":\"CBgnOwGy8FosDXC2Um62\"},{\"probBefore\":0.17495799547081597,\"loanAmount\":0.198,\"userName\":\"Future
+        Telling Owl\",\"amount\":5,\"outcome\":\"6\",\"userUsername\":\"FutureOwl\",\"probAfter\":0.2411986025262026,\"userId\":\"1peFzLQ2AUXC5NzE9xWsRByeMSF3\",\"shares\":10.977871502812341,\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"createdTime\":1663188081677,\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"id\":\"hw9xmqD9Wi26QjzKBYht\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FFutureOwl%2FXYCT2NQkYd.44?alt=media&token=d1f2390e-ef8d-4731-be88-187a42fd5af2\"},{\"loanAmount\":0.198,\"userId\":\"HT8eUoGkBufqbNB7RayTEOV94VB2\",\"amount\":5,\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"userName\":\"wasabipesto\",\"id\":\"TRBFWqmmrvkh96w9fGRi\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fwasabipesto%2Fcrow.jpg?alt=media&token=c7c168ba-0009-4e67-bc09-105e8c2cac4c\",\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0},\"probBefore\":0.09964923469387756,\"createdTime\":1663184474527,\"outcome\":\"6\",\"userUsername\":\"wasabipesto\",\"shares\":13.583398153641248,\"probAfter\":0.17495799547081597},{\"loanAmount\":0.198,\"createdTime\":1663184469472,\"userName\":\"wasabipesto\",\"id\":\"3ex1MFChN2Ce1ETpITBb\",\"userUsername\":\"wasabipesto\",\"outcome\":\"1\",\"amount\":5,\"probBefore\":0.12726002270940695,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2Fwasabipesto%2Fcrow.jpg?alt=media&token=c7c168ba-0009-4e67-bc09-105e8c2cac4c\",\"probAfter\":0.20344387755102045,\"userId\":\"HT8eUoGkBufqbNB7RayTEOV94VB2\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0},\"shares\":12.346654393275728},{\"outcome\":\"4\",\"id\":\"c20iUFEA1R3jkd7fgdsZ\",\"probBefore\":0.11124955500177999,\"createdTime\":1663181126363,\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"probAfter\":0.1277840859463709,\"shares\":2.8938439384831796,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"userUsername\":\"LivInTheLookingGlass\",\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"loanAmount\":0.039599999999999996,\"userName\":\"Olivia\",\"amount\":1},{\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"amount\":2,\"probAfter\":0.14862940548237807,\"probBefore\":0.11556952662721894,\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"createdTime\":1663180573467,\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"userUsername\":\"LivInTheLookingGlass\",\"userName\":\"Olivia\",\"id\":\"rPqLBsyChuzMbEY2dp0n\",\"shares\":5.5102944240777205,\"loanAmount\":0.07919999999999999,\"outcome\":\"5\"},{\"id\":\"b0ECZHsm4IIdSZg6hB53\",\"probAfter\":0.13470784023668642,\"probBefore\":0.1178244886417193,\"userUsername\":\"LivInTheLookingGlass\",\"createdTime\":1663180566036,\"loanAmount\":0.039599999999999996,\"amount\":1,\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"userName\":\"Olivia\",\"shares\":2.815330308657252,\"outcome\":\"1\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0}},{\"probBefore\":0.125,\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"userUsername\":\"LivInTheLookingGlass\",\"probAfter\":0.17522857950796492,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"amount\":3,\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"id\":\"BACn5yBpZ7l4qEU6FsyM\",\"loanAmount\":0.11879999999999999,\"shares\":7.760783215292818,\"userName\":\"Olivia\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"outcome\":\"2\",\"createdTime\":1663180550667},{\"probBefore\":0.125,\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"probAfter\":0.125,\"isAnte\":true,\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"amount\":12.5,\"id\":\"uJnq4wHna07yjXi7L5Ek\",\"userUsername\":\"LivInTheLookingGlass\",\"loanAmount\":0.495,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"outcome\":\"1\",\"userName\":\"Olivia\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"shares\":35.35533905932738,\"createdTime\":1663180458290},{\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"isAnte\":true,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"userUsername\":\"LivInTheLookingGlass\",\"userName\":\"Olivia\",\"loanAmount\":0.495,\"createdTime\":1663180458290,\"amount\":12.5,\"outcome\":\"4\",\"shares\":35.35533905932738,\"probAfter\":0.125,\"id\":\"u66zy6fvPQ9zQExvGJtH\",\"probBefore\":0.125,\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\"},{\"probAfter\":0.125,\"fees\":{\"creatorFee\":0,\"platformFee\":0,\"liquidityFee\":0},\"loanAmount\":0.495,\"isAnte\":true,\"probBefore\":0.125,\"amount\":12.5,\"userUsername\":\"LivInTheLookingGlass\",\"outcome\":\"0\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"id\":\"nLxQmZFs53zcbamxcYbR\",\"createdTime\":1663180458290,\"userName\":\"Olivia\",\"shares\":35.35533905932738},{\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"amount\":12.5,\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"outcome\":\"2\",\"probAfter\":0.125,\"userName\":\"Olivia\",\"id\":\"XWtlAsTnCAR5e5CxkydC\",\"loanAmount\":0.495,\"isAnte\":true,\"createdTime\":1663180458290,\"shares\":35.35533905932738,\"probBefore\":0.125,\"userUsername\":\"LivInTheLookingGlass\"},{\"probBefore\":0.125,\"userUsername\":\"LivInTheLookingGlass\",\"shares\":35.35533905932738,\"amount\":12.5,\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"fees\":{\"platformFee\":0,\"liquidityFee\":0,\"creatorFee\":0},\"outcome\":\"5\",\"id\":\"Qw5Mvo0Sd58cM7OXk74C\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"userName\":\"Olivia\",\"createdTime\":1663180458290,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"probAfter\":0.125,\"loanAmount\":0.495,\"isAnte\":true},{\"userName\":\"Olivia\",\"createdTime\":1663180458290,\"probBefore\":0.125,\"id\":\"Pa160Try33cLTlMIGIKx\",\"probAfter\":0.125,\"amount\":12.5,\"loanAmount\":0.495,\"fees\":{\"creatorFee\":0,\"liquidityFee\":0,\"platformFee\":0},\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"shares\":35.35533905932738,\"isAnte\":true,\"outcome\":\"7\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"userUsername\":\"LivInTheLookingGlass\"},{\"shares\":35.35533905932738,\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"id\":\"D635JOoF8dDohXyUf6Lp\",\"isAnte\":true,\"loanAmount\":0.495,\"fees\":{\"platformFee\":0,\"creatorFee\":0,\"liquidityFee\":0},\"outcome\":\"6\",\"userName\":\"Olivia\",\"amount\":12.5,\"probAfter\":0.125,\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"userUsername\":\"LivInTheLookingGlass\",\"createdTime\":1663180458290,\"probBefore\":0.125,\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\"},{\"isAnte\":true,\"userName\":\"Olivia\",\"probBefore\":0.125,\"userId\":\"k13AzY3mu8XTju3xRZV3P8qBjEC2\",\"amount\":12.5,\"userUsername\":\"LivInTheLookingGlass\",\"createdTime\":1663180458290,\"id\":\"6F0aFx0KvfME2HqCXCeW\",\"contractId\":\"Dx7vPilTr1rgQQVETM2Z\",\"userAvatarUrl\":\"https://firebasestorage.googleapis.com/v0/b/mantic-markets.appspot.com/o/user-images%2FLivInTheLookingGlass%2FP1120243.jpg?alt=media&token=7bb458ea-8b98-433b-974e-4407497b9d97\",\"probAfter\":0.125,\"outcome\":\"3\",\"loanAmount\":0.495,\"fees\":{\"liquidityFee\":0,\"platformFee\":0,\"creatorFee\":0},\"shares\":35.35533905932738}],\"description\":{\"content\":[{\"content\":[{\"type\":\"text\",\"text\":\"Bet
+        on which you would prefer to see first. I will resolve to the 3 most popular
+        answers weighted by pool size.\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\"},{\"content\":[{\"type\":\"text\",\"text\":\"This
+        market will resolve if any of the following are true:\"}],\"type\":\"paragraph\"},{\"content\":[{\"text\":\"-
+        If the current time is past 2022-09-18 11:59:59\",\"type\":\"text\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\"},{\"content\":[{\"type\":\"text\",\"text\":\"It
+        will resolve based on the following decision tree:\"}],\"type\":\"paragraph\"},{\"content\":[{\"type\":\"text\",\"text\":\"-
+        If the human operator agrees:\"}],\"type\":\"paragraph\"},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"---
+        Resolves to the 3 most probable answers, weighted by their probability.\"}]},{\"type\":\"paragraph\",\"content\":[{\"text\":\"-
+        Otherwise, a manually provided value\",\"type\":\"text\"}]},{\"type\":\"paragraph\"},{\"type\":\"paragraph\",\"content\":[{\"text\":\"Note
+        that the bot operator reserves the right to resolve contrary to the purely
+        automated rules to preserve the spirit of the market. All resolutions are
+        first verified by the human operator.\",\"type\":\"text\"}]},{\"type\":\"paragraph\"},{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"The
+        operator also reserves the right to trade on this market unless otherwise
+        specified. Even if otherwise specified, the operator reserves the right to
+        buy shares for subsidy or to trade for the purposes of cashing out liquidity.\"}]}],\"processed\":true,\"type\":\"doc\"},\"textDescription\":\"Bet
+        on which you would prefer to see first. I will resolve to the 3 most popular
+        answers weighted by pool size.\\n\\nThis market will resolve if any of the
+        following are true:\\n\\n- If the current time is past 2022-09-18 11:59:59\\n\\nIt
+        will resolve based on the following decision tree:\\n\\n- If the human operator
+        agrees:\\n\\n--- Resolves to the 3 most probable answers, weighted by their
+        probability.\\n\\n- Otherwise, a manually provided value\\n\\nNote that the
+        bot operator reserves the right to resolve contrary to the purely automated
+        rules to preserve the spirit of the market. All resolutions are first verified
+        by the human operator.\\n\\nThe operator also reserves the right to trade
+        on this market unless otherwise specified. Even if otherwise specified, the
+        operator reserves the right to buy shares for subsidy or to trade for the
+        purposes of cashing out liquidity.\"}"
     headers:
       Access-Control-Allow-Origin:
       - '*'
       Age:
-      - '6'
+      - '8'
       Cache-Control:
       - public, max-age=0, must-revalidate
       Connection:
       - keep-alive
-      Content-Encoding:
-      - br
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Wed, 12 Oct 2022 20:08:08 GMT
+      - Wed, 12 Oct 2022 21:31:22 GMT
       Etag:
-      - W/"122byf0zj5enfy"
+      - W/"a9x3tprevlnfy"
       Server:
       - Vercel
       Strict-Transport-Security:
@@ -151,7 +134,9 @@ interactions:
       X-Vercel-Cache:
       - HIT
       X-Vercel-Id:
-      - cle1::cle1::whm8q-1665605294739-b23ec1ce1d0f
+      - cle1::cle1::hf58w-1665610291196-048b8371231f
+      content-length:
+      - '30384'
     status:
       code: 200
       message: OK
