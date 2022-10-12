@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, cast
 
 from attrs import define
 
-from ...util import get_client, time_cache
+from ...util import get_client
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Optional
@@ -37,7 +37,6 @@ class ManifoldMarketMixin:
             slug = self.slug = cast(str, self.url).split("/")[-1]
         self.id_ = get_client().get_market_by_slug(slug).id
 
-    @time_cache()
     def api_market(self, client: Optional[ManifoldClient] = None) -> APIMarket:
         """Return an APIMarket object associated with this rule's market."""
         if client is None:

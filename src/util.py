@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from functools import _make_key, lru_cache
+from functools import lru_cache
 from hashlib import blake2b
 from importlib import import_module
 from itertools import count
@@ -11,7 +11,6 @@ from math import ceil
 from os import getenv
 from pathlib import Path
 from sys import modules
-from time import monotonic as time_monotonic
 from traceback import print_exc
 from typing import TYPE_CHECKING
 
@@ -22,13 +21,11 @@ from pymanifold.utils.math import number_to_prob_cpmm1  # noqa: F401
 from .consts import EnvironmentVariable, Outcome
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Callable, Collection, Hashable, Iterable, Mapping, MutableSequence, TypeVar
+    from typing import Any, Callable, Collection, Iterable, Mapping, MutableSequence, TypeVar
 
     from . import Market, Rule
 
     T = TypeVar("T")
-
-time_cache_state: dict[tuple[int, Hashable], tuple[Any, float]] = {}
 
 
 def hash_to_randrange(buff: bytes, *args: int, **kwargs: int) -> int:
@@ -141,25 +138,6 @@ def round_sig_figs(num: float, sig_figs: int = 4) -> str:
 def round_sig_figs_f(num: float, sig_figs: int = 4) -> float:
     """Round a number to the specified number of significant figures, then return it as a float."""
     return float(round_sig_figs(num, sig_figs))
-
-
-def time_cache(seconds: float = 30) -> Callable[[Callable[..., T]], Callable[..., T]]:
-    """Cache the return value of a method for some number of seconds."""
-    def bar(func: Callable[..., T]) -> Callable[..., T]:
-        def foo(self: Any = None, *args: Any, **kwargs: Any) -> T:
-            key = (id(self or func), _make_key(args, kwargs, False))
-            cached_value: T
-            cached_time: float
-            cached_value, cached_time = time_cache_state.get(key, (None, 0))  # type: ignore[assignment]
-            t = time_monotonic()
-            if cached_time + seconds < t:
-                args = (self, ) * bool(self is not None) + args
-                cached_value = func(*args, **kwargs)
-                cached_time = t
-                time_cache_state[key] = cached_value, cached_time
-            return cached_value
-        return foo
-    return bar
 
 
 def require_env(*env: str) -> Callable[[Callable[..., T]], Callable[..., T]]:

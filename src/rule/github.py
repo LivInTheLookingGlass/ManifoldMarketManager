@@ -11,7 +11,7 @@ from github3 import GitHub
 from github3 import login as gh_login
 
 from ..consts import EnvironmentVariable
-from ..util import require_env, time_cache
+from ..util import require_env
 from . import DoResolveRule, ResolutionValueRule
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -25,7 +25,6 @@ def unauth_login() -> GitHub:
     return GitHub()
 
 
-@time_cache()
 @require_env(EnvironmentVariable.GithubAccessToken, EnvironmentVariable.GithubUsername)
 def login() -> GitHub:
     """Return an authorized login to GitHub."""
@@ -40,7 +39,6 @@ class ResolveWithPR(DoResolveRule):
     repo: str
     number: int
 
-    @time_cache()
     @require_env(EnvironmentVariable.GithubAccessToken, EnvironmentVariable.GithubUsername)
     def _value(self, market: Market) -> bool:
         """Return True if the issue is closed or the PR is merged, otherwise False."""
@@ -69,7 +67,6 @@ class ResolveToPR(ResolutionValueRule):
     repo: str
     number: int
 
-    @time_cache()
     def _value(self, market: Market) -> bool:
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
@@ -102,7 +99,6 @@ class ResolveToPRDelta(ResolutionValueRule):
     number: int
     start: datetime
 
-    @time_cache()
     def _value(self, market: Market) -> float:
         issue = login().issue(self.owner, self.repo, self.number)
         pr = issue.pull_request()
