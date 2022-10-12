@@ -28,9 +28,9 @@ class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
     """A rule that checks whether another market is closed."""
 
     def _value(self, market: Market) -> bool:
-        close_time = self.api_market().closeTime
-        assert close_time is not None
-        return bool(close_time < time() * 1000)
+        mkt = self.api_market()
+        assert mkt.closeTime is not None
+        return bool(mkt.isResolved or (mkt.closeTime < time() * 1000))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- If `{self.id_}` closes ({self.api_market().question}).\n"
