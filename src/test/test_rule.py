@@ -62,4 +62,4 @@ def test_rule_formatting() -> None:
     rule = ResolveToValue(object())  # type: ignore
     for format in Outcome:
         with raises(TypeError):
-            val = rule.value(market, format=format)
+            val = rule.value(market, format=format, refresh=True)
