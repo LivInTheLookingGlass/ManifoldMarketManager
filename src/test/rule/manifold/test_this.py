@@ -22,7 +22,7 @@ if TYPE_CHECKING:  # pragma: no cover
 def test_CurentValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
     with manifold_vcr.use_cassette(f'rule/manifold/this/test_CurrentValueRule/{quote(mkt.id)}.yaml'):
         obj = CurrentValueRule()
-        val = obj._value(mkt)
+        val = obj.value(mkt)
         data_regression.check({'answer': val})
 
 
@@ -30,7 +30,7 @@ def test_FibonacciValueRule(mkt: Market, data_regression: DataRegressionFixture)
     if mkt.market.outcomeType in Outcome.MC_LIKE():
         with manifold_vcr.use_cassette(f'rule/manifold/this/test_CurrentValueRule/{quote(mkt.id)}.yaml'):
             obj = FibonacciValueRule()
-            val = obj._value(mkt)
+            val = obj.value(mkt)
             data_regression.check({'answer': val})
     else:
         skip("Rule does not support this market type")
@@ -50,14 +50,14 @@ def test_PopularValueRule(mkt: Market, data_regression: DataRegressionFixture) -
             data_regression.check({'answers': answer_to_check})
         else:
             with raises(RuntimeError):
-                PopularValueRule(size=1)._value(mkt)
+                PopularValueRule(size=1).value(mkt)
 
 
 def test_RoundValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
     if mkt.market.outcomeType in Outcome.BINARY_LIKE():
         with manifold_vcr.use_cassette(f'rule/manifold/this/test_CurrentValueRule/{quote(mkt.id)}.yaml'):
             obj = RoundValueRule()
-            val = obj._value(mkt)
+            val = obj.value(mkt)
             data_regression.check({'answer': val})
     else:
         skip("Rule does not support this market type")
@@ -66,5 +66,5 @@ def test_RoundValueRule(mkt: Market, data_regression: DataRegressionFixture) -> 
 def test_ThisMarketClosed(mkt: Market, data_regression: DataRegressionFixture) -> None:
     with manifold_vcr.use_cassette(f'rule/manifold/this/test_CurrentValueRule/{quote(mkt.id)}.yaml'):
         obj = ThisMarketClosed()
-        val = obj._value(mkt)
+        val = obj.value(mkt)
         data_regression.check({'answer': val})

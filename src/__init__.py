@@ -10,6 +10,7 @@ more information on this.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from itertools import chain
 from logging import getLogger
 from os import getenv
 from pathlib import Path
@@ -20,6 +21,7 @@ from typing import TYPE_CHECKING, Generic, Iterable, Literal, Mapping, Sequence,
 from warnings import warn
 
 from attrs import define, field
+from cache3 import SafeCache
 
 _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
 
@@ -32,6 +34,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import Any
 
     from .consts import OutcomeType
+
+rule_value_cache = SafeCache(timeout=30)
 
 
 @define(slots=False)  # type: ignore
@@ -53,6 +57,13 @@ class Rule(ABC, Generic[T], DictDeserializable):
     ) -> T:  # pragma: no cover
         ...
 
+    def _gen_tag(self, market: Market) -> list[int]:
+        id_list = [id(self), id(market)]
+        if market is not None:
+            for r in chain(market.do_resolve_rules, market.resolve_to_rules):
+                id_list.append(id(r))
+        return id_list
+
     def value(
         self,
         market: Market,
@@ -60,7 +71,10 @@ class Rule(ABC, Generic[T], DictDeserializable):
         refresh: bool = False
     ) -> AnyResolution:
         """Return the resolution value of a market, appropriately formatted for its market type."""
-        ret = self._value(market)
+        tag = str(self._gen_tag(market))
+        if refresh or not rule_value_cache.has_key('value', tag=tag):  # noqa: W601
+            rule_value_cache.set('value', self._value(market), tag=tag)
+        ret = rule_value_cache.get('value', tag=tag)
         if (ret is None) or (ret == "CANCEL") or (format == 'NONE'):
             return cast(AnyResolution, ret)
         elif format in Outcome.BINARY_LIKE():
@@ -145,7 +159,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.76"
+VERSION = "0.6.0.77"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "DoResolveRule", "ResolutionValueRule", "Rule", "Market", "get_client", "rule",

@@ -45,7 +45,7 @@ def test_binary_rule(binary_rule: str) -> None:
     for val1, val2 in list(product(cast(List[bool], [True, False, None]), repeat=2)):
         mock_obj1.resolve_value = val1
         mock_obj2.resolve_value = val2
-        assert bool(obj._value(cast(Market, None))) is bool(validator(val1, val2))
+        assert bool(obj.value(cast(Market, None), refresh=True)) is bool(validator(val1, val2))
 
 
 def test_negate_rule_value() -> None:
@@ -53,10 +53,10 @@ def test_negate_rule_value() -> None:
     obj = NegateRule(cast(Rule[BinaryResolution], mock_obj))
 
     mkt = cast(Market, None)
-    assert bool(obj._value(mkt)) is True
+    assert bool(obj.value(mkt, refresh=True)) is True
 
     mock_obj.resolve_value = True
-    assert bool(obj._value(mkt)) is False
+    assert bool(obj.value(mkt, refresh=True)) is False
 
 
 def test_at_time_rule_value() -> None:
@@ -71,4 +71,4 @@ def test_at_time_rule_value() -> None:
     )
     for idx, val in enumerate(values):
         obj = ResolveAtTime(val)
-        assert bool(obj._value(cast(Market, None))) is bool(idx % 2)
+        assert bool(obj.value(cast(Market, None))) is bool(idx % 2)

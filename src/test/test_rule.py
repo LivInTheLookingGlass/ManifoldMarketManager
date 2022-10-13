@@ -39,7 +39,7 @@ def test_rule_formatting() -> None:
     market: Market = None  # type: ignore[assignment]
     for outcome, as_int in [(100, 100), ({3: 1}, 3), ([7], 7), ("25", 25), (None, None)]:
         rule = ResolveToValue(outcome)  # type: ignore
-        val: Any = rule.value(market, format=Outcome.BINARY)
+        val: Any = rule.value(market, format=Outcome.BINARY, refresh=True)
         assert isinstance(val, (int, float)) or as_int is None
         assert val == as_int
 
