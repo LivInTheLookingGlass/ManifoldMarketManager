@@ -1,0 +1,206 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/vnd.github.v3.full+json
+      Accept-Charset:
+      - utf-8
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - github3.py/3.2.0
+    method: GET
+    uri: https://api.github.com/repos/bcongdon/PyManifold/issues/3
+  response:
+    body:
+      string: '{"url":"https://api.github.com/repos/bcongdon/PyManifold/issues/3","repository_url":"https://api.github.com/repos/bcongdon/PyManifold","labels_url":"https://api.github.com/repos/bcongdon/PyManifold/issues/3/labels{/name}","comments_url":"https://api.github.com/repos/bcongdon/PyManifold/issues/3/comments","events_url":"https://api.github.com/repos/bcongdon/PyManifold/issues/3/events","html_url":"https://github.com/bcongdon/PyManifold/pull/3","id":1309696254,"node_id":"PR_kwDOHgeQxs47qQdS","number":3,"title":"Adds
+        a method that returns the Kelly bet for a market","user":{"login":"JonathanNankivell","id":77177602,"node_id":"MDQ6VXNlcjc3MTc3NjAy","avatar_url":"https://avatars.githubusercontent.com/u/77177602?v=4","gravatar_id":"","url":"https://api.github.com/users/JonathanNankivell","html_url":"https://github.com/JonathanNankivell","followers_url":"https://api.github.com/users/JonathanNankivell/followers","following_url":"https://api.github.com/users/JonathanNankivell/following{/other_user}","gists_url":"https://api.github.com/users/JonathanNankivell/gists{/gist_id}","starred_url":"https://api.github.com/users/JonathanNankivell/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/JonathanNankivell/subscriptions","organizations_url":"https://api.github.com/users/JonathanNankivell/orgs","repos_url":"https://api.github.com/users/JonathanNankivell/repos","events_url":"https://api.github.com/users/JonathanNankivell/events{/privacy}","received_events_url":"https://api.github.com/users/JonathanNankivell/received_events","type":"User","site_admin":false},"labels":[],"state":"closed","locked":false,"assignee":null,"assignees":[],"milestone":null,"comments":0,"created_at":"2022-07-19T15:30:23Z","updated_at":"2022-07-23T23:10:25Z","closed_at":"2022-07-23T23:10:25Z","author_association":"CONTRIBUTOR","active_lock_reason":null,"draft":false,"pull_request":{"url":"https://api.github.com/repos/bcongdon/PyManifold/pulls/3","html_url":"https://github.com/bcongdon/PyManifold/pull/3","diff_url":"https://github.com/bcongdon/PyManifold/pull/3.diff","patch_url":"https://github.com/bcongdon/PyManifold/pull/3.patch","merged_at":"2022-07-23T23:10:25Z"},"body_html":"<p
+        dir=\"auto\">The standard formula for the Kelly bet assumes that the odds
+        are fixed. This is equivalent to assuming infinite liquidity - hardly reasonable
+        when it comes to Manifold Markets.</p>\n<p dir=\"auto\">Naively using the
+        standard Kelly formula may lead to ruin and despair as it overestimates the
+        number of shares a bet will buy.</p>\n<p dir=\"auto\">It''s not hard, however,
+        to calculate the number of shares we will actually buy. It is then easy to
+        find the true Kelly bet.</p>","body_text":"The standard formula for the Kelly
+        bet assumes that the odds are fixed. This is equivalent to assuming infinite
+        liquidity - hardly reasonable when it comes to Manifold Markets.\nNaively
+        using the standard Kelly formula may lead to ruin and despair as it overestimates
+        the number of shares a bet will buy.\nIt''s not hard, however, to calculate
+        the number of shares we will actually buy. It is then easy to find the true
+        Kelly bet.","body":"The standard formula for the Kelly bet assumes that the
+        odds are fixed. This is equivalent to assuming infinite liquidity - hardly
+        reasonable when it comes to Manifold Markets.\r\n\r\nNaively using the standard
+        Kelly formula may lead to ruin and despair as it overestimates the number
+        of shares a bet will buy. \r\n\r\nIt''s not hard, however, to calculate the
+        number of shares we will actually buy. It is then easy to find the true Kelly
+        bet.","closed_by":{"login":"bcongdon","id":706257,"node_id":"MDQ6VXNlcjcwNjI1Nw==","avatar_url":"https://avatars.githubusercontent.com/u/706257?v=4","gravatar_id":"","url":"https://api.github.com/users/bcongdon","html_url":"https://github.com/bcongdon","followers_url":"https://api.github.com/users/bcongdon/followers","following_url":"https://api.github.com/users/bcongdon/following{/other_user}","gists_url":"https://api.github.com/users/bcongdon/gists{/gist_id}","starred_url":"https://api.github.com/users/bcongdon/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/bcongdon/subscriptions","organizations_url":"https://api.github.com/users/bcongdon/orgs","repos_url":"https://api.github.com/users/bcongdon/repos","events_url":"https://api.github.com/users/bcongdon/events{/privacy}","received_events_url":"https://api.github.com/users/bcongdon/received_events","type":"User","site_admin":false},"reactions":{"url":"https://api.github.com/repos/bcongdon/PyManifold/issues/3/reactions","total_count":0,"+1":0,"-1":0,"laugh":0,"hooray":0,"confused":0,"heart":0,"rocket":0,"eyes":0},"timeline_url":"https://api.github.com/repos/bcongdon/PyManifold/issues/3/timeline","performed_via_github_app":null,"state_reason":null}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Fri, 14 Oct 2022 19:45:10 GMT
+      ETag:
+      - W/"f25602ad361f5271b83ecb80d421ea612dec2ded08929abd642461bbc1b9c2bb"
+      Last-Modified:
+      - Sat, 01 Oct 2022 17:15:36 GMT
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding, Accept, X-Requested-With
+      X-Accepted-OAuth-Scopes:
+      - repo
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-GitHub-Media-Type:
+      - github.v3; param=full; format=json
+      X-GitHub-Request-Id:
+      - 9676:737F:4108431:84AB540:6349BC46
+      X-OAuth-Scopes:
+      - ''
+      X-RateLimit-Limit:
+      - '5000'
+      X-RateLimit-Remaining:
+      - '4893'
+      X-RateLimit-Reset:
+      - '1665777044'
+      X-RateLimit-Resource:
+      - core
+      X-RateLimit-Used:
+      - '107'
+      X-XSS-Protection:
+      - '0'
+      content-length:
+      - '4820'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/vnd.github.v3.full+json
+      Accept-Charset:
+      - utf-8
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - github3.py/3.2.0
+    method: GET
+    uri: https://api.github.com/repos/bcongdon/PyManifold/pulls/3
+  response:
+    body:
+      string: '{"url":"https://api.github.com/repos/bcongdon/PyManifold/pulls/3","id":1000933202,"node_id":"PR_kwDOHgeQxs47qQdS","html_url":"https://github.com/bcongdon/PyManifold/pull/3","diff_url":"https://github.com/bcongdon/PyManifold/pull/3.diff","patch_url":"https://github.com/bcongdon/PyManifold/pull/3.patch","issue_url":"https://api.github.com/repos/bcongdon/PyManifold/issues/3","number":3,"state":"closed","locked":false,"title":"Adds
+        a method that returns the Kelly bet for a market","user":{"login":"JonathanNankivell","id":77177602,"node_id":"MDQ6VXNlcjc3MTc3NjAy","avatar_url":"https://avatars.githubusercontent.com/u/77177602?v=4","gravatar_id":"","url":"https://api.github.com/users/JonathanNankivell","html_url":"https://github.com/JonathanNankivell","followers_url":"https://api.github.com/users/JonathanNankivell/followers","following_url":"https://api.github.com/users/JonathanNankivell/following{/other_user}","gists_url":"https://api.github.com/users/JonathanNankivell/gists{/gist_id}","starred_url":"https://api.github.com/users/JonathanNankivell/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/JonathanNankivell/subscriptions","organizations_url":"https://api.github.com/users/JonathanNankivell/orgs","repos_url":"https://api.github.com/users/JonathanNankivell/repos","events_url":"https://api.github.com/users/JonathanNankivell/events{/privacy}","received_events_url":"https://api.github.com/users/JonathanNankivell/received_events","type":"User","site_admin":false},"body":"The
+        standard formula for the Kelly bet assumes that the odds are fixed. This is
+        equivalent to assuming infinite liquidity - hardly reasonable when it comes
+        to Manifold Markets.\r\n\r\nNaively using the standard Kelly formula may lead
+        to ruin and despair as it overestimates the number of shares a bet will buy.
+        \r\n\r\nIt''s not hard, however, to calculate the number of shares we will
+        actually buy. It is then easy to find the true Kelly bet.","created_at":"2022-07-19T15:30:23Z","updated_at":"2022-07-23T23:10:25Z","closed_at":"2022-07-23T23:10:25Z","merged_at":"2022-07-23T23:10:25Z","merge_commit_sha":"04ace34052a3e7b34c290e20b0e8a8540851920c","assignee":null,"assignees":[],"requested_reviewers":[],"requested_teams":[],"labels":[],"milestone":null,"draft":false,"commits_url":"https://api.github.com/repos/bcongdon/PyManifold/pulls/3/commits","review_comments_url":"https://api.github.com/repos/bcongdon/PyManifold/pulls/3/comments","review_comment_url":"https://api.github.com/repos/bcongdon/PyManifold/pulls/comments{/number}","comments_url":"https://api.github.com/repos/bcongdon/PyManifold/issues/3/comments","statuses_url":"https://api.github.com/repos/bcongdon/PyManifold/statuses/6835a0ff52dd24832b03d097362388b039f262b2","head":{"label":"JonathanNankivell:main","ref":"main","sha":"6835a0ff52dd24832b03d097362388b039f262b2","user":{"login":"JonathanNankivell","id":77177602,"node_id":"MDQ6VXNlcjc3MTc3NjAy","avatar_url":"https://avatars.githubusercontent.com/u/77177602?v=4","gravatar_id":"","url":"https://api.github.com/users/JonathanNankivell","html_url":"https://github.com/JonathanNankivell","followers_url":"https://api.github.com/users/JonathanNankivell/followers","following_url":"https://api.github.com/users/JonathanNankivell/following{/other_user}","gists_url":"https://api.github.com/users/JonathanNankivell/gists{/gist_id}","starred_url":"https://api.github.com/users/JonathanNankivell/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/JonathanNankivell/subscriptions","organizations_url":"https://api.github.com/users/JonathanNankivell/orgs","repos_url":"https://api.github.com/users/JonathanNankivell/repos","events_url":"https://api.github.com/users/JonathanNankivell/events{/privacy}","received_events_url":"https://api.github.com/users/JonathanNankivell/received_events","type":"User","site_admin":false},"repo":{"id":515596886,"node_id":"R_kgDOHrtiVg","name":"PyManifold","full_name":"JonathanNankivell/PyManifold","private":false,"owner":{"login":"JonathanNankivell","id":77177602,"node_id":"MDQ6VXNlcjc3MTc3NjAy","avatar_url":"https://avatars.githubusercontent.com/u/77177602?v=4","gravatar_id":"","url":"https://api.github.com/users/JonathanNankivell","html_url":"https://github.com/JonathanNankivell","followers_url":"https://api.github.com/users/JonathanNankivell/followers","following_url":"https://api.github.com/users/JonathanNankivell/following{/other_user}","gists_url":"https://api.github.com/users/JonathanNankivell/gists{/gist_id}","starred_url":"https://api.github.com/users/JonathanNankivell/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/JonathanNankivell/subscriptions","organizations_url":"https://api.github.com/users/JonathanNankivell/orgs","repos_url":"https://api.github.com/users/JonathanNankivell/repos","events_url":"https://api.github.com/users/JonathanNankivell/events{/privacy}","received_events_url":"https://api.github.com/users/JonathanNankivell/received_events","type":"User","site_admin":false},"html_url":"https://github.com/JonathanNankivell/PyManifold","description":"Python
+        API client for Manifold Markets (With Kelly Calculator!!)","fork":true,"url":"https://api.github.com/repos/JonathanNankivell/PyManifold","forks_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/forks","keys_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/keys{/key_id}","collaborators_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/teams","hooks_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/hooks","issue_events_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/issues/events{/number}","events_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/events","assignees_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/assignees{/user}","branches_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/branches{/branch}","tags_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/tags","blobs_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/git/refs{/sha}","trees_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/git/trees{/sha}","statuses_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/statuses/{sha}","languages_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/languages","stargazers_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/stargazers","contributors_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/contributors","subscribers_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/subscribers","subscription_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/subscription","commits_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/commits{/sha}","git_commits_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/git/commits{/sha}","comments_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/comments{/number}","issue_comment_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/issues/comments{/number}","contents_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/contents/{+path}","compare_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/compare/{base}...{head}","merges_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/merges","archive_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/downloads","issues_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/issues{/number}","pulls_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/pulls{/number}","milestones_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/milestones{/number}","notifications_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/labels{/name}","releases_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/releases{/id}","deployments_url":"https://api.github.com/repos/JonathanNankivell/PyManifold/deployments","created_at":"2022-07-19T13:28:44Z","updated_at":"2022-07-19T13:59:39Z","pushed_at":"2022-10-12T06:08:06Z","git_url":"git://github.com/JonathanNankivell/PyManifold.git","ssh_url":"git@github.com:JonathanNankivell/PyManifold.git","clone_url":"https://github.com/JonathanNankivell/PyManifold.git","svn_url":"https://github.com/JonathanNankivell/PyManifold","homepage":null,"size":407,"stargazers_count":0,"watchers_count":0,"language":"Python","has_issues":false,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":0,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":1,"license":{"key":"mit","name":"MIT
+        License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":[],"visibility":"public","forks":0,"open_issues":1,"watchers":0,"default_branch":"main"}},"base":{"label":"bcongdon:main","ref":"main","sha":"8c4fa4750905bbe2142989c298f19955ee2817e1","user":{"login":"bcongdon","id":706257,"node_id":"MDQ6VXNlcjcwNjI1Nw==","avatar_url":"https://avatars.githubusercontent.com/u/706257?v=4","gravatar_id":"","url":"https://api.github.com/users/bcongdon","html_url":"https://github.com/bcongdon","followers_url":"https://api.github.com/users/bcongdon/followers","following_url":"https://api.github.com/users/bcongdon/following{/other_user}","gists_url":"https://api.github.com/users/bcongdon/gists{/gist_id}","starred_url":"https://api.github.com/users/bcongdon/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/bcongdon/subscriptions","organizations_url":"https://api.github.com/users/bcongdon/orgs","repos_url":"https://api.github.com/users/bcongdon/repos","events_url":"https://api.github.com/users/bcongdon/events{/privacy}","received_events_url":"https://api.github.com/users/bcongdon/received_events","type":"User","site_admin":false},"repo":{"id":503812294,"node_id":"R_kgDOHgeQxg","name":"PyManifold","full_name":"bcongdon/PyManifold","private":false,"owner":{"login":"bcongdon","id":706257,"node_id":"MDQ6VXNlcjcwNjI1Nw==","avatar_url":"https://avatars.githubusercontent.com/u/706257?v=4","gravatar_id":"","url":"https://api.github.com/users/bcongdon","html_url":"https://github.com/bcongdon","followers_url":"https://api.github.com/users/bcongdon/followers","following_url":"https://api.github.com/users/bcongdon/following{/other_user}","gists_url":"https://api.github.com/users/bcongdon/gists{/gist_id}","starred_url":"https://api.github.com/users/bcongdon/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/bcongdon/subscriptions","organizations_url":"https://api.github.com/users/bcongdon/orgs","repos_url":"https://api.github.com/users/bcongdon/repos","events_url":"https://api.github.com/users/bcongdon/events{/privacy}","received_events_url":"https://api.github.com/users/bcongdon/received_events","type":"User","site_admin":false},"html_url":"https://github.com/bcongdon/PyManifold","description":"Python
+        API client for Manifold Markets","fork":false,"url":"https://api.github.com/repos/bcongdon/PyManifold","forks_url":"https://api.github.com/repos/bcongdon/PyManifold/forks","keys_url":"https://api.github.com/repos/bcongdon/PyManifold/keys{/key_id}","collaborators_url":"https://api.github.com/repos/bcongdon/PyManifold/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/bcongdon/PyManifold/teams","hooks_url":"https://api.github.com/repos/bcongdon/PyManifold/hooks","issue_events_url":"https://api.github.com/repos/bcongdon/PyManifold/issues/events{/number}","events_url":"https://api.github.com/repos/bcongdon/PyManifold/events","assignees_url":"https://api.github.com/repos/bcongdon/PyManifold/assignees{/user}","branches_url":"https://api.github.com/repos/bcongdon/PyManifold/branches{/branch}","tags_url":"https://api.github.com/repos/bcongdon/PyManifold/tags","blobs_url":"https://api.github.com/repos/bcongdon/PyManifold/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/bcongdon/PyManifold/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/bcongdon/PyManifold/git/refs{/sha}","trees_url":"https://api.github.com/repos/bcongdon/PyManifold/git/trees{/sha}","statuses_url":"https://api.github.com/repos/bcongdon/PyManifold/statuses/{sha}","languages_url":"https://api.github.com/repos/bcongdon/PyManifold/languages","stargazers_url":"https://api.github.com/repos/bcongdon/PyManifold/stargazers","contributors_url":"https://api.github.com/repos/bcongdon/PyManifold/contributors","subscribers_url":"https://api.github.com/repos/bcongdon/PyManifold/subscribers","subscription_url":"https://api.github.com/repos/bcongdon/PyManifold/subscription","commits_url":"https://api.github.com/repos/bcongdon/PyManifold/commits{/sha}","git_commits_url":"https://api.github.com/repos/bcongdon/PyManifold/git/commits{/sha}","comments_url":"https://api.github.com/repos/bcongdon/PyManifold/comments{/number}","issue_comment_url":"https://api.github.com/repos/bcongdon/PyManifold/issues/comments{/number}","contents_url":"https://api.github.com/repos/bcongdon/PyManifold/contents/{+path}","compare_url":"https://api.github.com/repos/bcongdon/PyManifold/compare/{base}...{head}","merges_url":"https://api.github.com/repos/bcongdon/PyManifold/merges","archive_url":"https://api.github.com/repos/bcongdon/PyManifold/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/bcongdon/PyManifold/downloads","issues_url":"https://api.github.com/repos/bcongdon/PyManifold/issues{/number}","pulls_url":"https://api.github.com/repos/bcongdon/PyManifold/pulls{/number}","milestones_url":"https://api.github.com/repos/bcongdon/PyManifold/milestones{/number}","notifications_url":"https://api.github.com/repos/bcongdon/PyManifold/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/bcongdon/PyManifold/labels{/name}","releases_url":"https://api.github.com/repos/bcongdon/PyManifold/releases{/id}","deployments_url":"https://api.github.com/repos/bcongdon/PyManifold/deployments","created_at":"2022-06-15T14:59:23Z","updated_at":"2022-10-12T03:48:03Z","pushed_at":"2022-10-12T06:08:06Z","git_url":"git://github.com/bcongdon/PyManifold.git","ssh_url":"git@github.com:bcongdon/PyManifold.git","clone_url":"https://github.com/bcongdon/PyManifold.git","svn_url":"https://github.com/bcongdon/PyManifold","homepage":null,"size":389,"stargazers_count":5,"watchers_count":5,"language":"Python","has_issues":true,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":2,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":1,"license":{"key":"mit","name":"MIT
+        License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":[],"visibility":"public","forks":2,"open_issues":1,"watchers":5,"default_branch":"main"}},"_links":{"self":{"href":"https://api.github.com/repos/bcongdon/PyManifold/pulls/3"},"html":{"href":"https://github.com/bcongdon/PyManifold/pull/3"},"issue":{"href":"https://api.github.com/repos/bcongdon/PyManifold/issues/3"},"comments":{"href":"https://api.github.com/repos/bcongdon/PyManifold/issues/3/comments"},"review_comments":{"href":"https://api.github.com/repos/bcongdon/PyManifold/pulls/3/comments"},"review_comment":{"href":"https://api.github.com/repos/bcongdon/PyManifold/pulls/comments{/number}"},"commits":{"href":"https://api.github.com/repos/bcongdon/PyManifold/pulls/3/commits"},"statuses":{"href":"https://api.github.com/repos/bcongdon/PyManifold/statuses/6835a0ff52dd24832b03d097362388b039f262b2"}},"author_association":"CONTRIBUTOR","auto_merge":null,"body_html":"<p
+        dir=\"auto\">The standard formula for the Kelly bet assumes that the odds
+        are fixed. This is equivalent to assuming infinite liquidity - hardly reasonable
+        when it comes to Manifold Markets.</p>\n<p dir=\"auto\">Naively using the
+        standard Kelly formula may lead to ruin and despair as it overestimates the
+        number of shares a bet will buy.</p>\n<p dir=\"auto\">It''s not hard, however,
+        to calculate the number of shares we will actually buy. It is then easy to
+        find the true Kelly bet.</p>","body_text":"The standard formula for the Kelly
+        bet assumes that the odds are fixed. This is equivalent to assuming infinite
+        liquidity - hardly reasonable when it comes to Manifold Markets.\nNaively
+        using the standard Kelly formula may lead to ruin and despair as it overestimates
+        the number of shares a bet will buy.\nIt''s not hard, however, to calculate
+        the number of shares we will actually buy. It is then easy to find the true
+        Kelly bet.","active_lock_reason":null,"merged":true,"mergeable":null,"rebaseable":null,"mergeable_state":"unknown","merged_by":{"login":"bcongdon","id":706257,"node_id":"MDQ6VXNlcjcwNjI1Nw==","avatar_url":"https://avatars.githubusercontent.com/u/706257?v=4","gravatar_id":"","url":"https://api.github.com/users/bcongdon","html_url":"https://github.com/bcongdon","followers_url":"https://api.github.com/users/bcongdon/followers","following_url":"https://api.github.com/users/bcongdon/following{/other_user}","gists_url":"https://api.github.com/users/bcongdon/gists{/gist_id}","starred_url":"https://api.github.com/users/bcongdon/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/bcongdon/subscriptions","organizations_url":"https://api.github.com/users/bcongdon/orgs","repos_url":"https://api.github.com/users/bcongdon/repos","events_url":"https://api.github.com/users/bcongdon/events{/privacy}","received_events_url":"https://api.github.com/users/bcongdon/received_events","type":"User","site_admin":false},"comments":0,"review_comments":6,"maintainer_can_modify":false,"commits":10,"additions":96,"deletions":0,"changed_files":3}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Fri, 14 Oct 2022 19:45:11 GMT
+      ETag:
+      - W/"0dc06ce6b45ebc9a3a4bee19d2cc0bb21533cf55d1476d5545fbd8e482b4cf3a"
+      Last-Modified:
+      - Sat, 01 Oct 2022 17:15:36 GMT
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding, Accept, X-Requested-With
+      X-Accepted-OAuth-Scopes:
+      - ''
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-GitHub-Media-Type:
+      - github.v3; param=full; format=json
+      X-GitHub-Request-Id:
+      - 9676:737F:4108474:84AB5DD:6349BC46
+      X-OAuth-Scopes:
+      - ''
+      X-RateLimit-Limit:
+      - '5000'
+      X-RateLimit-Remaining:
+      - '4892'
+      X-RateLimit-Reset:
+      - '1665777044'
+      X-RateLimit-Resource:
+      - core
+      X-RateLimit-Used:
+      - '108'
+      X-XSS-Protection:
+      - '0'
+      content-length:
+      - '18350'
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -1,0 +1,247 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/vnd.github.v3.full+json
+      Accept-Charset:
+      - utf-8
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - github3.py/3.2.0
+    method: GET
+    uri: https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15
+  response:
+    body:
+      string: '{"url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15","repository_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager","labels_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15/labels{/name}","comments_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15/comments","events_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15/events","html_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager/pull/15","id":1398611750,"node_id":"PR_kwDOHp6g7M5AQfGa","number":15,"title":"Update
+        this working branch","user":{"login":"LivInTheLookingGlass","id":1554778,"node_id":"MDQ6VXNlcjE1NTQ3Nzg=","avatar_url":"https://avatars.githubusercontent.com/u/1554778?v=4","gravatar_id":"","url":"https://api.github.com/users/LivInTheLookingGlass","html_url":"https://github.com/LivInTheLookingGlass","followers_url":"https://api.github.com/users/LivInTheLookingGlass/followers","following_url":"https://api.github.com/users/LivInTheLookingGlass/following{/other_user}","gists_url":"https://api.github.com/users/LivInTheLookingGlass/gists{/gist_id}","starred_url":"https://api.github.com/users/LivInTheLookingGlass/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/LivInTheLookingGlass/subscriptions","organizations_url":"https://api.github.com/users/LivInTheLookingGlass/orgs","repos_url":"https://api.github.com/users/LivInTheLookingGlass/repos","events_url":"https://api.github.com/users/LivInTheLookingGlass/events{/privacy}","received_events_url":"https://api.github.com/users/LivInTheLookingGlass/received_events","type":"User","site_admin":false},"labels":[],"state":"open","locked":false,"assignee":null,"assignees":[],"milestone":null,"comments":0,"created_at":"2022-10-06T01:41:40Z","updated_at":"2022-10-14T19:08:34Z","closed_at":null,"author_association":"OWNER","active_lock_reason":null,"draft":false,"pull_request":{"url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls/15","html_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager/pull/15","diff_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager/pull/15.diff","patch_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager/pull/15.patch","merged_at":null},"body_html":null,"body_text":null,"body":null,"closed_by":null,"reactions":{"url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15/reactions","total_count":0,"+1":0,"-1":0,"laugh":0,"hooray":0,"confused":0,"heart":0,"rocket":0,"eyes":0},"timeline_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15/timeline","performed_via_github_app":null,"state_reason":null}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Fri, 14 Oct 2022 20:12:38 GMT
+      ETag:
+      - W/"b2132790cad1e5a51e4f20219bf81602c3a3085fff58aba7cae95ffcc308b369"
+      Last-Modified:
+      - Fri, 14 Oct 2022 19:08:34 GMT
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding, Accept, X-Requested-With
+      X-Accepted-OAuth-Scopes:
+      - repo
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-GitHub-Media-Type:
+      - github.v3; param=full; format=json
+      X-GitHub-Request-Id:
+      - B09E:528F:3F2F1B0:80FC9C7:6349C2B6
+      X-OAuth-Scopes:
+      - ''
+      X-RateLimit-Limit:
+      - '5000'
+      X-RateLimit-Remaining:
+      - '4986'
+      X-RateLimit-Reset:
+      - '1665780865'
+      X-RateLimit-Resource:
+      - core
+      X-RateLimit-Used:
+      - '14'
+      X-XSS-Protection:
+      - '0'
+      content-length:
+      - '2818'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/vnd.github.v3.full+json
+      Accept-Charset:
+      - utf-8
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - github3.py/3.2.0
+    method: GET
+    uri: https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15
+  response:
+    body:
+      string: '{"url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15","repository_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager","labels_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15/labels{/name}","comments_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15/comments","events_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15/events","html_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager/pull/15","id":1398611750,"node_id":"PR_kwDOHp6g7M5AQfGa","number":15,"title":"Update
+        this working branch","user":{"login":"LivInTheLookingGlass","id":1554778,"node_id":"MDQ6VXNlcjE1NTQ3Nzg=","avatar_url":"https://avatars.githubusercontent.com/u/1554778?v=4","gravatar_id":"","url":"https://api.github.com/users/LivInTheLookingGlass","html_url":"https://github.com/LivInTheLookingGlass","followers_url":"https://api.github.com/users/LivInTheLookingGlass/followers","following_url":"https://api.github.com/users/LivInTheLookingGlass/following{/other_user}","gists_url":"https://api.github.com/users/LivInTheLookingGlass/gists{/gist_id}","starred_url":"https://api.github.com/users/LivInTheLookingGlass/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/LivInTheLookingGlass/subscriptions","organizations_url":"https://api.github.com/users/LivInTheLookingGlass/orgs","repos_url":"https://api.github.com/users/LivInTheLookingGlass/repos","events_url":"https://api.github.com/users/LivInTheLookingGlass/events{/privacy}","received_events_url":"https://api.github.com/users/LivInTheLookingGlass/received_events","type":"User","site_admin":false},"labels":[],"state":"open","locked":false,"assignee":null,"assignees":[],"milestone":null,"comments":0,"created_at":"2022-10-06T01:41:40Z","updated_at":"2022-10-14T19:08:34Z","closed_at":null,"author_association":"OWNER","active_lock_reason":null,"draft":false,"pull_request":{"url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls/15","html_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager/pull/15","diff_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager/pull/15.diff","patch_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager/pull/15.patch","merged_at":null},"body_html":null,"body_text":null,"body":null,"closed_by":null,"reactions":{"url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15/reactions","total_count":0,"+1":0,"-1":0,"laugh":0,"hooray":0,"confused":0,"heart":0,"rocket":0,"eyes":0},"timeline_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15/timeline","performed_via_github_app":null,"state_reason":null}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Fri, 14 Oct 2022 20:12:38 GMT
+      ETag:
+      - W/"b2132790cad1e5a51e4f20219bf81602c3a3085fff58aba7cae95ffcc308b369"
+      Last-Modified:
+      - Fri, 14 Oct 2022 19:08:34 GMT
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding, Accept, X-Requested-With
+      X-Accepted-OAuth-Scopes:
+      - repo
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-GitHub-Media-Type:
+      - github.v3; param=full; format=json
+      X-GitHub-Request-Id:
+      - B0A4:4E8A:3B77374:79A3C62:6349C2B6
+      X-OAuth-Scopes:
+      - ''
+      X-RateLimit-Limit:
+      - '5000'
+      X-RateLimit-Remaining:
+      - '4985'
+      X-RateLimit-Reset:
+      - '1665780865'
+      X-RateLimit-Resource:
+      - core
+      X-RateLimit-Used:
+      - '15'
+      X-XSS-Protection:
+      - '0'
+      content-length:
+      - '2818'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/vnd.github.v3.full+json
+      Accept-Charset:
+      - utf-8
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      User-Agent:
+      - github3.py/3.2.0
+    method: GET
+    uri: https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls/15
+  response:
+    body:
+      string: '{"url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls/15","id":1078063514,"node_id":"PR_kwDOHp6g7M5AQfGa","html_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager/pull/15","diff_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager/pull/15.diff","patch_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager/pull/15.patch","issue_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15","number":15,"state":"open","locked":false,"title":"Update
+        this working branch","user":{"login":"LivInTheLookingGlass","id":1554778,"node_id":"MDQ6VXNlcjE1NTQ3Nzg=","avatar_url":"https://avatars.githubusercontent.com/u/1554778?v=4","gravatar_id":"","url":"https://api.github.com/users/LivInTheLookingGlass","html_url":"https://github.com/LivInTheLookingGlass","followers_url":"https://api.github.com/users/LivInTheLookingGlass/followers","following_url":"https://api.github.com/users/LivInTheLookingGlass/following{/other_user}","gists_url":"https://api.github.com/users/LivInTheLookingGlass/gists{/gist_id}","starred_url":"https://api.github.com/users/LivInTheLookingGlass/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/LivInTheLookingGlass/subscriptions","organizations_url":"https://api.github.com/users/LivInTheLookingGlass/orgs","repos_url":"https://api.github.com/users/LivInTheLookingGlass/repos","events_url":"https://api.github.com/users/LivInTheLookingGlass/events{/privacy}","received_events_url":"https://api.github.com/users/LivInTheLookingGlass/received_events","type":"User","site_admin":false},"body":null,"created_at":"2022-10-06T01:41:40Z","updated_at":"2022-10-14T19:08:34Z","closed_at":null,"merged_at":null,"merge_commit_sha":null,"assignee":null,"assignees":[],"requested_reviewers":[],"requested_teams":[],"labels":[],"milestone":null,"draft":false,"commits_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls/15/commits","review_comments_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls/15/comments","review_comment_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls/comments{/number}","comments_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15/comments","statuses_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/statuses/a209a3aa053e75feee73375817b87ec577e8d315","head":{"label":"LivInTheLookingGlass:master","ref":"master","sha":"a209a3aa053e75feee73375817b87ec577e8d315","user":{"login":"LivInTheLookingGlass","id":1554778,"node_id":"MDQ6VXNlcjE1NTQ3Nzg=","avatar_url":"https://avatars.githubusercontent.com/u/1554778?v=4","gravatar_id":"","url":"https://api.github.com/users/LivInTheLookingGlass","html_url":"https://github.com/LivInTheLookingGlass","followers_url":"https://api.github.com/users/LivInTheLookingGlass/followers","following_url":"https://api.github.com/users/LivInTheLookingGlass/following{/other_user}","gists_url":"https://api.github.com/users/LivInTheLookingGlass/gists{/gist_id}","starred_url":"https://api.github.com/users/LivInTheLookingGlass/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/LivInTheLookingGlass/subscriptions","organizations_url":"https://api.github.com/users/LivInTheLookingGlass/orgs","repos_url":"https://api.github.com/users/LivInTheLookingGlass/repos","events_url":"https://api.github.com/users/LivInTheLookingGlass/events{/privacy}","received_events_url":"https://api.github.com/users/LivInTheLookingGlass/received_events","type":"User","site_admin":false},"repo":{"id":513712364,"node_id":"R_kgDOHp6g7A","name":"ManifoldMarketManager","full_name":"LivInTheLookingGlass/ManifoldMarketManager","private":false,"owner":{"login":"LivInTheLookingGlass","id":1554778,"node_id":"MDQ6VXNlcjE1NTQ3Nzg=","avatar_url":"https://avatars.githubusercontent.com/u/1554778?v=4","gravatar_id":"","url":"https://api.github.com/users/LivInTheLookingGlass","html_url":"https://github.com/LivInTheLookingGlass","followers_url":"https://api.github.com/users/LivInTheLookingGlass/followers","following_url":"https://api.github.com/users/LivInTheLookingGlass/following{/other_user}","gists_url":"https://api.github.com/users/LivInTheLookingGlass/gists{/gist_id}","starred_url":"https://api.github.com/users/LivInTheLookingGlass/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/LivInTheLookingGlass/subscriptions","organizations_url":"https://api.github.com/users/LivInTheLookingGlass/orgs","repos_url":"https://api.github.com/users/LivInTheLookingGlass/repos","events_url":"https://api.github.com/users/LivInTheLookingGlass/events{/privacy}","received_events_url":"https://api.github.com/users/LivInTheLookingGlass/received_events","type":"User","site_admin":false},"html_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager","description":null,"fork":false,"url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager","forks_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/forks","keys_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/keys{/key_id}","collaborators_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/teams","hooks_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/hooks","issue_events_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/events{/number}","events_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/events","assignees_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/assignees{/user}","branches_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/branches{/branch}","tags_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/tags","blobs_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/git/refs{/sha}","trees_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/git/trees{/sha}","statuses_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/statuses/{sha}","languages_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/languages","stargazers_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/stargazers","contributors_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/contributors","subscribers_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/subscribers","subscription_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/subscription","commits_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/commits{/sha}","git_commits_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/git/commits{/sha}","comments_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/comments{/number}","issue_comment_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/comments{/number}","contents_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/contents/{+path}","compare_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/compare/{base}...{head}","merges_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/merges","archive_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/downloads","issues_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues{/number}","pulls_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls{/number}","milestones_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/milestones{/number}","notifications_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/labels{/name}","releases_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/releases{/id}","deployments_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/deployments","created_at":"2022-07-14T00:43:41Z","updated_at":"2022-10-14T19:05:40Z","pushed_at":"2022-10-14T19:08:34Z","git_url":"git://github.com/LivInTheLookingGlass/ManifoldMarketManager.git","ssh_url":"git@github.com:LivInTheLookingGlass/ManifoldMarketManager.git","clone_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager.git","svn_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager","homepage":null,"size":15575,"stargazers_count":1,"watchers_count":1,"language":"Python","has_issues":true,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":1,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":6,"license":{"key":"agpl-3.0","name":"GNU
+        Affero General Public License v3.0","spdx_id":"AGPL-3.0","url":"https://api.github.com/licenses/agpl-3.0","node_id":"MDc6TGljZW5zZTE="},"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":[],"visibility":"public","forks":1,"open_issues":6,"watchers":1,"default_branch":"master"}},"base":{"label":"LivInTheLookingGlass:us-congress-bills","ref":"us-congress-bills","sha":"9b20013079e47fa13993500bfeb7fa8644204994","user":{"login":"LivInTheLookingGlass","id":1554778,"node_id":"MDQ6VXNlcjE1NTQ3Nzg=","avatar_url":"https://avatars.githubusercontent.com/u/1554778?v=4","gravatar_id":"","url":"https://api.github.com/users/LivInTheLookingGlass","html_url":"https://github.com/LivInTheLookingGlass","followers_url":"https://api.github.com/users/LivInTheLookingGlass/followers","following_url":"https://api.github.com/users/LivInTheLookingGlass/following{/other_user}","gists_url":"https://api.github.com/users/LivInTheLookingGlass/gists{/gist_id}","starred_url":"https://api.github.com/users/LivInTheLookingGlass/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/LivInTheLookingGlass/subscriptions","organizations_url":"https://api.github.com/users/LivInTheLookingGlass/orgs","repos_url":"https://api.github.com/users/LivInTheLookingGlass/repos","events_url":"https://api.github.com/users/LivInTheLookingGlass/events{/privacy}","received_events_url":"https://api.github.com/users/LivInTheLookingGlass/received_events","type":"User","site_admin":false},"repo":{"id":513712364,"node_id":"R_kgDOHp6g7A","name":"ManifoldMarketManager","full_name":"LivInTheLookingGlass/ManifoldMarketManager","private":false,"owner":{"login":"LivInTheLookingGlass","id":1554778,"node_id":"MDQ6VXNlcjE1NTQ3Nzg=","avatar_url":"https://avatars.githubusercontent.com/u/1554778?v=4","gravatar_id":"","url":"https://api.github.com/users/LivInTheLookingGlass","html_url":"https://github.com/LivInTheLookingGlass","followers_url":"https://api.github.com/users/LivInTheLookingGlass/followers","following_url":"https://api.github.com/users/LivInTheLookingGlass/following{/other_user}","gists_url":"https://api.github.com/users/LivInTheLookingGlass/gists{/gist_id}","starred_url":"https://api.github.com/users/LivInTheLookingGlass/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/LivInTheLookingGlass/subscriptions","organizations_url":"https://api.github.com/users/LivInTheLookingGlass/orgs","repos_url":"https://api.github.com/users/LivInTheLookingGlass/repos","events_url":"https://api.github.com/users/LivInTheLookingGlass/events{/privacy}","received_events_url":"https://api.github.com/users/LivInTheLookingGlass/received_events","type":"User","site_admin":false},"html_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager","description":null,"fork":false,"url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager","forks_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/forks","keys_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/keys{/key_id}","collaborators_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/teams","hooks_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/hooks","issue_events_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/events{/number}","events_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/events","assignees_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/assignees{/user}","branches_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/branches{/branch}","tags_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/tags","blobs_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/git/refs{/sha}","trees_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/git/trees{/sha}","statuses_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/statuses/{sha}","languages_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/languages","stargazers_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/stargazers","contributors_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/contributors","subscribers_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/subscribers","subscription_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/subscription","commits_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/commits{/sha}","git_commits_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/git/commits{/sha}","comments_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/comments{/number}","issue_comment_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/comments{/number}","contents_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/contents/{+path}","compare_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/compare/{base}...{head}","merges_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/merges","archive_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/downloads","issues_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues{/number}","pulls_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls{/number}","milestones_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/milestones{/number}","notifications_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/labels{/name}","releases_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/releases{/id}","deployments_url":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/deployments","created_at":"2022-07-14T00:43:41Z","updated_at":"2022-10-14T19:05:40Z","pushed_at":"2022-10-14T19:08:34Z","git_url":"git://github.com/LivInTheLookingGlass/ManifoldMarketManager.git","ssh_url":"git@github.com:LivInTheLookingGlass/ManifoldMarketManager.git","clone_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager.git","svn_url":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager","homepage":null,"size":15575,"stargazers_count":1,"watchers_count":1,"language":"Python","has_issues":true,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":1,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":6,"license":{"key":"agpl-3.0","name":"GNU
+        Affero General Public License v3.0","spdx_id":"AGPL-3.0","url":"https://api.github.com/licenses/agpl-3.0","node_id":"MDc6TGljZW5zZTE="},"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":[],"visibility":"public","forks":1,"open_issues":6,"watchers":1,"default_branch":"master"}},"_links":{"self":{"href":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls/15"},"html":{"href":"https://github.com/LivInTheLookingGlass/ManifoldMarketManager/pull/15"},"issue":{"href":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15"},"comments":{"href":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/issues/15/comments"},"review_comments":{"href":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls/15/comments"},"review_comment":{"href":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls/comments{/number}"},"commits":{"href":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/pulls/15/commits"},"statuses":{"href":"https://api.github.com/repos/LivInTheLookingGlass/ManifoldMarketManager/statuses/a209a3aa053e75feee73375817b87ec577e8d315"}},"author_association":"OWNER","auto_merge":null,"body_html":null,"body_text":null,"active_lock_reason":null,"merged":false,"mergeable":false,"rebaseable":false,"mergeable_state":"dirty","merged_by":null,"comments":0,"review_comments":0,"maintainer_can_modify":false,"commits":249,"additions":17027,"deletions":289,"changed_files":212}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Fri, 14 Oct 2022 20:12:39 GMT
+      ETag:
+      - W/"1ff3a2e4152f34a1c3219edf157adbd778273cb1a56d0a4972277b25d63c113d"
+      Last-Modified:
+      - Fri, 14 Oct 2022 19:08:34 GMT
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Server:
+      - GitHub.com
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding, Accept, X-Requested-With
+      X-Accepted-OAuth-Scopes:
+      - ''
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-GitHub-Media-Type:
+      - github.v3; param=full; format=json
+      X-GitHub-Request-Id:
+      - B0A4:4E8A:3B773A7:79A3CCE:6349C2B7
+      X-OAuth-Scopes:
+      - ''
+      X-RateLimit-Limit:
+      - '5000'
+      X-RateLimit-Remaining:
+      - '4984'
+      X-RateLimit-Reset:
+      - '1665780865'
+      X-RateLimit-Resource:
+      - core
+      X-RateLimit-Used:
+      - '16'
+      X-XSS-Protection:
+      - '0'
+      content-length:
+      - '18472'
+    status:
+      code: 200
+      message: OK
+version: 1
