@@ -168,11 +168,15 @@ jobs:
       - run:
           name: Run build script
           # This assumes pytest is installed via the install-package step above
-          command: make build PY=./miniconda/bin/pypy
+          command: |-
+              conda activate pypy
+              make build PY=./miniconda/bin/pypy
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
-          command: make test LINT=false MYPY=false PY=./miniconda/bin/pypy
+          command: |-
+              conda activate pypy
+              make test LINT=false MYPY=false
       - run:
           name: Upload coverage report
           # This assumes pytest is installed via the install-package step above
