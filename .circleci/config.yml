@@ -215,5 +215,5 @@ workflows:
       - build-and-test-3-08
       - build-and-test-3-09
       - build-and-test-3-10
-      - build-and-test-pypy
+      - build-and-test-pypy3
       - lint
