@@ -106,7 +106,8 @@ class PopularValueRule(Rule[Union[MultipleChoiceResolution, FreeResponseResoluti
                 final_answers[next_answer] = answers[next_answer]
                 del answers[next_answer]
         except ValueError as e:
-            if e.args[0] != "max() arg is an empty sequence":
+
+            if "arg is an empty sequence" not in e.args[0]:
                 raise
         return normalize_mapping(final_answers)
 
