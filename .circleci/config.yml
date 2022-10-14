@@ -171,8 +171,7 @@ jobs:
           command: |-
               source ./miniconda/bin/activate
               conda activate pypy
-              which python
-              which python3
+              ls ./miniconda/bin
               make build PY=python
       - run:
           name: Run tests
