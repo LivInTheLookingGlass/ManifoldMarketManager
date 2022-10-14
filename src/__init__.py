@@ -25,9 +25,8 @@ from cache3 import SafeCache
 
 _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
 
-from pymanifold.types import DictDeserializable  # noqa: E402
-
 from .consts import AnyResolution, Outcome, T  # noqa: E402
+from .util import DictDeserializable  # noqa: E402
 
 if TYPE_CHECKING:  # pragma: no cover
     from logging import Logger
@@ -42,6 +41,7 @@ rule_value_cache = SafeCache(timeout=30)
 class Rule(ABC, Generic[T], DictDeserializable):
     """The basic unit of market automation, rules defmine how a market should react to given events."""
 
+    tags_used: set[str] = field(factory=set, init=False, repr=False, hash=False)
     logger: Logger = field(init=False, repr=False, hash=False)
 
     def __attrs_post_init__(self) -> None:
@@ -57,12 +57,27 @@ class Rule(ABC, Generic[T], DictDeserializable):
     ) -> T:  # pragma: no cover
         ...
 
-    def _gen_tag(self, market: Market) -> list[int]:
+    def _gen_tag(self, market: Market) -> str:
         id_list = [id(self), id(market)]
         if market is not None:
             for r in chain(market.do_resolve_rules, market.resolve_to_rules):
                 id_list.append(id(r))
-        return id_list
+        tag = str(id_list)
+        self.tags_used.add(tag)
+        return tag
+
+    def __del__(self) -> None:
+        """Ensure that cached values are cleaned up on deletion."""
+        for tag in self.tags_used:
+            rule_value_cache.delete('value', tag=tag)
+
+    def __getstate__(self) -> Mapping[str, Any]:
+        """Remove sensitive/non-serializable state before dumping to database."""
+        state = self.__dict__.copy()
+        del state['tags_used']
+        if 'logger' in state:
+            del state['logger']
+        return state
 
     def value(
         self,
@@ -71,7 +86,7 @@ class Rule(ABC, Generic[T], DictDeserializable):
         refresh: bool = False
     ) -> AnyResolution:
         """Return the resolution value of a market, appropriately formatted for its market type."""
-        tag = str(self._gen_tag(market))
+        tag = self._gen_tag(market)
         if refresh or not rule_value_cache.has_key('value', tag=tag):  # noqa: W601
             rule_value_cache.set('value', self._value(market), tag=tag)
         ret = rule_value_cache.get('value', tag=tag)
@@ -159,7 +174,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.78"
+VERSION = "0.6.0.79"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "DoResolveRule", "ResolutionValueRule", "Rule", "Market", "get_client", "rule",

@@ -21,11 +21,20 @@ from pymanifold.utils.math import number_to_prob_cpmm1  # noqa: F401
 from .consts import EnvironmentVariable, Outcome
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Callable, Collection, Iterable, Mapping, MutableSequence, TypeVar
+    from typing import Any, Callable, Collection, Iterable, Mapping, MutableSequence, Type, TypeVar
 
     from . import Market, Rule
 
     T = TypeVar("T")
+
+
+class DictDeserializable:
+    """A port of PyManifold's DictDeserializable that does not check against the signature."""
+
+    @classmethod
+    def from_dict(cls: Type[T], env: dict[str, Any]) -> T:
+        """Take a dictionary and return an instance of the associated class."""
+        return cls(**env)
 
 
 def hash_to_randrange(buff: bytes, *args: int, **kwargs: int) -> int:

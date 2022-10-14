@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Mapping
 
-from pytest import fixture, raises
+from pytest import fixture, raises, skip
 
 from .. import Rule
 from ..consts import AVAILABLE_RULES, Outcome
@@ -63,3 +63,13 @@ def test_rule_formatting() -> None:
     for format in Outcome:
         with raises(TypeError):
             val = rule.value(market, format=format, refresh=True)
+
+
+def test_rule_from_dict(rule_name: str) -> None:
+    """Make sure that if `__init__` doesn't require arguments, `from_dict()` also does not."""
+    RuleSubclass = get_rule(rule_name)
+    try:
+        RuleSubclass()
+    except Exception:
+        skip("Cannot instantiate with default arguments, may be tested elsewhere")
+    RuleSubclass.from_dict({})

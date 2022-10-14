@@ -101,7 +101,8 @@ class VariadicRule(AbstractRule[T]):
     def from_dict(cls, env: Mapping[str, Any]) -> 'VariadicRule[T]':
         """Take a dictionary and return an instance of the associated class."""
         env_copy = dict(env)
-        arr = env["rules"]
+        arr = env.get("rules", [])
+        env_copy["rules"] = [None] * len(arr)
         for idx, (type_, kwargs) in enumerate(arr):
             env_copy["rules"][idx] = get_rule(type_).from_dict(kwargs)
         return super().from_dict(env_copy)

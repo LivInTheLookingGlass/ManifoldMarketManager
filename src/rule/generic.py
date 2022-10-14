@@ -174,7 +174,7 @@ class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
 
     def _value(self, market: Market) -> Literal["CANCEL"] | float:
         """Return the product of the underlying rules."""
-        ret: float = 0
+        ret: float = 1
         for rule in self.rules:
             val = cast(
                 PseudoNumericResolution,
@@ -255,7 +255,7 @@ class ResolveMultipleValues(ResolutionValueRule):
     def from_dict(cls, env: Mapping[str, Any]) -> 'ResolveMultipleValues':
         """Take a dictionary and return an instance of the associated class."""
         env_copy: dict[str, Any] = dict(env)
-        shares: MutableSequence[tuple[ResolutionValueRule | tuple[str, dict[str, Any]], float]] = env['shares']
+        shares: MutableSequence[tuple[ResolutionValueRule | tuple[str, dict[str, Any]], float]] = env.get('shares', [])
         new_shares = []
         for rule, weight in shares:
             try:

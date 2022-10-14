@@ -11,9 +11,7 @@ from typing import TYPE_CHECKING
 from src.application import register_db
 from src.market import Market
 from src.rule import get_rule
-from src.util import explain_abstract, get_client
-
-from pymanifold.types import DictDeserializable
+from src.util import DictDeserializable, explain_abstract, get_client
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any, Mapping, Optional

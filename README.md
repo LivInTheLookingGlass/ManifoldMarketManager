@@ -73,6 +73,9 @@ Every time you run `example.py`, it goes through the following steps:
 - [ ] write tests for whatever comes of `example_json`
 - [ ] Make an API to import JSON markets without creating one
 - [ ] test `from_dict` of rule, subclasses
+    - [x] test `from_dict` of rule
+    - [x] test `from_dict` of defaultable subclasses
+    - [ ] test `from_dict` of non-defaultable subclasses
 - [ ] test `__main__` by monkeypatching the `main()` function
 - [ ] disable warning about default explain_specific if classvar acknowledges default behavior as intended
 - [ ] Make comparison rules (>, <, etc)
@@ -96,17 +99,12 @@ Every time you run `example.py`, it goes through the following steps:
   - [ ] explain_abstract
   - [ ] explain_specific
 - [ ] test generic.py (0/5)
-  - [ ] modulus
-  - [ ] sum
-  - [ ] product
+  - [x] modulus
+  - [x] sum
+  - [x] product
   - [ ] random index
   - [ ] multiple values
-- [ ] test util.py (2/3)
-  - [x] math with examples
-  - [x] normalize mapping (now covered by testing answer map)
-  - [ ] round_sig_fig
-- [ ] add a Manifold API hook to leave comments
-- [ ] use pyee to enable events on markets
+- [x] test util.py
 - [ ] add a submodule for scanners
 - [ ] add a hook to insert preambles in explain_specific()
 - [ ] figure out how to make myself show up on leaderboard even if not placed
