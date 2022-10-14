@@ -147,14 +147,6 @@ jobs:
     # CircleCI will report the results back to your VCS provider.
     steps:
       - checkout
-      - run:
-          name: Fetch PyPy
-          command: |-
-              wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ./miniconda.sh
-              bash ./miniconda.sh -b -p ./miniconda
-              source ./miniconda/bin/activate
-              conda create -n pypy -c pypy pip wheel
-              conda activate pypy
       - python/install-packages:
           pkg-manager: pip
           # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory.
@@ -169,12 +161,20 @@ jobs:
           name: Run build script
           # This assumes pytest is installed via the install-package step above
           command: |-
+              wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ./miniconda.sh
+              bash ./miniconda.sh -b -p ./miniconda
+              source ./miniconda/bin/activate
+              conda create -n pypy -c pypy pip wheel
               conda activate pypy
-              make build PY=./miniconda/bin/pypy
+              make build
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: |-
+              wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ./miniconda.sh
+              bash ./miniconda.sh -b -p ./miniconda
+              source ./miniconda/bin/activate
+              conda create -n pypy -c pypy pip wheel
               conda activate pypy
               make test LINT=false MYPY=false
       - run:
