@@ -1,6 +1,6 @@
 # Market Manager for Manifold
 
-[![PyPI version](https://badge.fury.io/py/manifoldmarketmanager.svg)](https://badge.fury.io/py/manifoldmarketmanager) ![PyPI - Status](https://img.shields.io/pypi/status/ManifoldMarketManager) ![Supported Python Versions](https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-brightgreen) [![GitHub license](https://img.shields.io/github/license/LivInTheLookingGlass/ManifoldMarketManager)](https://github.com/LivInTheLookingGlass/ManifoldMarketManager/blob/master/LICENSE) ![GitHub top language](https://img.shields.io/github/languages/top/LivInTheLookingGlass/ManifoldMarketManager)
+[![PyPI version](https://badge.fury.io/py/manifoldmarketmanager.svg)](https://badge.fury.io/py/manifoldmarketmanager) ![PyPI - Status](https://img.shields.io/pypi/status/ManifoldMarketManager) ![Supported Python Versions](https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%20pypy3-brightgreen) [![GitHub license](https://img.shields.io/github/license/LivInTheLookingGlass/ManifoldMarketManager)](https://github.com/LivInTheLookingGlass/ManifoldMarketManager/blob/master/LICENSE) ![GitHub top language](https://img.shields.io/github/languages/top/LivInTheLookingGlass/ManifoldMarketManager)
 
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/LivInTheLookingGlass/ManifoldMarketManager) ![Code Climate issues](https://img.shields.io/codeclimate/issues/LivInTheLookingGlass/ManifoldMarketManager) ![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/LivInTheLookingGlass/ManifoldMarketManager) ![Code Climate coverage](https://img.shields.io/codeclimate/coverage/LivInTheLookingGlass/ManifoldMarketManager)](https://codeclimate.com/github/LivInTheLookingGlass/ManifoldMarketManager) [![CircleCI](https://dl.circleci.com/status-badge/img/gh/LivInTheLookingGlass/ManifoldMarketManager/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/LivInTheLookingGlass/ManifoldMarketManager/tree/master)
 
@@ -98,7 +98,7 @@ Every time you run `example.py`, it goes through the following steps:
   - [ ] abstractrule subclass enforcement
   - [ ] explain_abstract
   - [ ] explain_specific
-- [ ] test generic.py (0/5)
+- [ ] test generic.py (3/5)
   - [x] modulus
   - [x] sum
   - [x] product
