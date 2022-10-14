@@ -4,6 +4,7 @@ cache3
 flake8 < 5
 github3.py
 numpy
+pyee
 pytest
 pytest-benchmark
 pytest-cov

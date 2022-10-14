@@ -2,10 +2,15 @@
 
 from __future__ import annotations
 
+from copy import copy
 from dataclasses import dataclass, field
 from logging import getLogger
+from threading import Lock
 from time import time
 from typing import TYPE_CHECKING, cast
+
+from pyee import EventEmitter
+from pyee.cls import evented
 
 from .consts import EnvironmentVariable, MarketStatus, Outcome
 from .util import explain_abstract, get_client, require_env, round_sig_figs
@@ -22,9 +27,29 @@ if TYPE_CHECKING:  # pragma: no cover
     from .consts import AnyResolution
 
 
+@evented
 @dataclass
 class Market:
-    """Represent a market and its corresponding rules."""
+    """Represent a market and its corresponding rules.
+
+    Events
+    ======
+    before_check(market: Market):
+    after_check(market: Market):
+        Called before/after a market is checked. Please don't put anything intensive in here.
+
+    before_create(market: Market):
+    after_create(market: Market):
+        Called before/after a market is created.
+
+    before_resolve(market: Market, outcome: AnyResolution):
+    after_resolve(market: Market, outcome: AnyResolution, response: Response):
+        Called before/after a market is resolved. Please don't put anything intensive in here.
+
+    before_remove(market: Market):
+    after_remove(market: Market):
+        Called before/after a market is removed from the database.
+    """
 
     market: APIMarket = field(repr=False, compare=False)
     client: ManifoldClient = field(default_factory=get_client, repr=False, compare=False)
@@ -32,6 +57,7 @@ class Market:
     do_resolve_rules: list[Rule[Optional[bool]]] = field(default_factory=list)
     resolve_to_rules: list[Rule[AnyResolution]] = field(default_factory=list)
     logger: Logger = field(init=False, default=None, hash=False, repr=False)  # type: ignore[assignment]
+    event_emitter: EventEmitter = field(init=False, default_factory=EventEmitter, hash=False, repr=False)
 
     def __hash__(self) -> int:
         """Hack to allow markets as dict keys."""
@@ -46,6 +72,8 @@ class Market:
 
     def __post_init__(self) -> None:
         """Initialize state that doesn't make sense to exist in the init."""
+        if self._after_resolve not in self.event_emitter.listeners('after_resolve'):
+            self.event_emitter.add_listener('after_resolve', self._after_resolve)
         self.logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
 
     def __getstate__(self) -> Mapping[str, Any]:
@@ -54,6 +82,9 @@ class Market:
         del state['client']
         if 'logger' in state:
             del state['logger']
+        state['event_emitter'] = copy(state['event_emitter'])
+        del state['event_emitter']._lock
+        assert self.event_emitter._lock
         return state
 
     def __setstate__(self, state: Mapping[str, Any]) -> None:
@@ -61,6 +92,7 @@ class Market:
         self.__dict__.update(state)
         self.client = get_client()
         self.market = self.client.get_market_by_id(self.market.id)
+        self.event_emitter._lock = Lock()
         self.__post_init__()
 
     @property
@@ -94,6 +126,9 @@ class Market:
         """Reconstruct a Market object from the market ID and other arguments."""
         api_market = get_client().get_market_by_id(id)
         return cls(api_market, *args, **kwargs)
+
+    def _after_resolve(self, market: Market, outcome: AnyResolution, response: Response) -> None:
+        self.client.create_comment(self.market, self.explain_specific(), mode='markdown')
 
     def explain_abstract(self, **kwargs: Any) -> str:
         """Explain how the market will resolve and decide to resolve."""
@@ -205,10 +240,12 @@ class Market:
         if self.market.outcomeType in Outcome.MC_LIKE():
             _override = self.__format_request_resolve_mapping(_override)
 
+        self.event_emitter.emit('before_resolve', self, _override)
         ret: Response = self.client.resolve_market(self.market, _override)
         ret.raise_for_status()
         self.logger.info("I was resolved")
         self.market.isResolved = True
+        self.event_emitter.emit('after_resolve', self, _override, ret)
         return ret
 
     def __format_request_resolve_mapping(self, _override: AnyResolution | tuple[float, float]) -> dict[int, float]:
@@ -230,3 +267,7 @@ class Market:
         self.logger.info("I was cancelled")
         self.market.isResolved = True
         return ret
+
+    def on(self, *args, **kwargs):  # type: ignore
+        """Register an event with EventEmitter."""
+        return self.event_emitter.on(*args, **kwargs)

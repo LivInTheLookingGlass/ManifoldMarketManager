@@ -18,7 +18,7 @@ def assert_equality(mkt1: Market, mkt2: Market) -> None:
             continue
         elif attr.startswith('__'):
             continue
-        elif attr not in ('client', 'logger', 'market'):
+        elif attr not in ('client', 'logger', 'market', 'event_emitter'):
             assert attr1 == attr2
         elif attr == 'market':
             assert mkt1.market.id == mkt2.market.id

@@ -105,6 +105,7 @@ Every time you run `example.py`, it goes through the following steps:
   - [ ] random index
   - [ ] multiple values
 - [x] test util.py
+- [x] use pyee to enable events on markets
 - [ ] add a submodule for scanners
 - [ ] add a hook to insert preambles in explain_specific()
 - [ ] figure out how to make myself show up on leaderboard even if not placed
