@@ -168,7 +168,10 @@ jobs:
       - run:
           name: Upload coverage report
           # This assumes pytest is installed via the install-package step above
-          command: make upload_coverage
+          command: |-
+              source ./miniconda/bin/activate
+              conda activate pypy
+              make upload_coverage
       - store_artifacts:
           path: ./dist/
   lint: # This is the name of the job, feel free to change it to better match what you're trying to do!
