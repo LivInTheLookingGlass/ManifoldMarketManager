@@ -150,6 +150,9 @@ jobs:
       - run:
           name: Fetch PyPy
           command: |-
+              wget https://repo.anaconda.com/miniconda/Anaconda-latest-Linux-x86_64.sh -O ./anaconda.sh
+              bash ./anaconda.sh -b -p ./anaconda
+              source ./anaconda/bin/activate
               conda create -n pypy -c pypy pip wheel
               conda activate pypy
       - python/install-packages:
