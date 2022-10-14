@@ -171,14 +171,16 @@ jobs:
           command: |-
               source ./miniconda/bin/activate
               conda activate pypy
-              make build
+              which python
+              which python3
+              make build PY=python
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: |-
               source ./miniconda/bin/activate
               conda activate pypy
-              make test LINT=false MYPY=false
+              make test LINT=false MYPY=false PY=python
       - run:
           name: Upload coverage report
           # This assumes pytest is installed via the install-package step above
