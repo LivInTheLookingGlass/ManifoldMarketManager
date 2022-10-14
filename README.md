@@ -79,7 +79,7 @@ Every time you run `example.py`, it goes through the following steps:
 - [ ] test `__main__` by monkeypatching the `main()` function
 - [ ] disable warning about default explain_specific if classvar acknowledges default behavior as intended
 - [ ] Make comparison rules (>, <, etc)
-- [ ] test GitHub rules using real examples
+- [x] test GitHub rules using real examples
 - [x] test register_db
 - [x] test ManifoldMarketMixin (done implicitly via the Other rules)
 - [x] test manifold user rules using real examples

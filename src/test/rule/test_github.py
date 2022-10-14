@@ -50,6 +50,9 @@ def test_ResolveWithPR(
         obj = ResolveWithPR(*pr_tup)
         mkt: Market = None  # type: ignore[assignment]
         data_regression.check({'answer': obj.value(mkt, refresh=True)})
+        desc = obj.explain_abstract()
+        for arg in pr_tup:
+            assert str(arg) in desc
 
 
 def test_ResolveToPR(
@@ -60,6 +63,9 @@ def test_ResolveToPR(
         obj = ResolveToPR(*pr_tup)
         mkt: Market = None  # type: ignore[assignment]
         data_regression.check({'answer': obj.value(mkt, refresh=True)})
+        desc = obj.explain_abstract()
+        for arg in pr_tup:
+            assert str(arg) in desc
 
 
 def test_ResolveToPRDelta(
@@ -75,3 +81,6 @@ def test_ResolveToPRDelta(
         created_at = login().issue(*pr_tup).created_at
         obj = ResolveToPRDelta(*pr_tup, start=created_at)
         data_regression.check({'answer': obj.value(mkt, refresh=True)})
+        desc = obj.explain_abstract(max_=1000)
+        for arg in pr_tup:
+            assert str(arg) in desc
