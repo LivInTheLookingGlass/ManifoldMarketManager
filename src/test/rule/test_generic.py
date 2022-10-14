@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Callable, List, Type, cast
 from pytest import fixture
 
 from ... import Rule
-from ...consts import BinaryResolution, PseudoNumericResolution
+from ...consts import BinaryResolution
 from ...market import Market
 from ...rule import get_rule
 from ...rule.abstract import BinaryRule, VariadicRule
@@ -20,6 +20,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from pytest_regressions.data_regression import DataRegressionFixture
 
+    from ...consts import AnyResolution, PseudoNumericResolution, T
     from .. import PytestRequest
 
 Validator = Callable[[BinaryResolution, BinaryResolution], BinaryResolution]
@@ -40,7 +41,7 @@ def binary_rule(request: PytestRequest[str]) -> str:
 
 
 @fixture(params=(AdditiveRule, MultiplicitiveRule))  # type: ignore
-def VariadicRuleSubclass(request: PytestRequest[Type[VariadicRule]]) -> Type[VariadicRule]:
+def VariadicRuleSubclass(request: PytestRequest[Type[VariadicRule[T]]]) -> Type[VariadicRule[T]]:
     return request.param
 
 
@@ -97,10 +98,10 @@ def test_at_time_rule_value() -> None:
 
 
 def test_modulus_rule(data_regression: DataRegressionFixture, limit: int = 100) -> None:
-    val1 = ResolveToValue(1)
-    val2 = ResolveToValue(1)
+    val1: ResolveToValue[float] = ResolveToValue(1)
+    val2: ResolveToValue[float] = ResolveToValue(1)
     rule = ModulusRule(val1, val2)
-    data: dict[tuple[int, int], int] = {}
+    data: dict[tuple[int, int], AnyResolution] = {}
     mkt: Market = None  # type: ignore[assignment]
     prev = 1
     prev_desc: str = ''
