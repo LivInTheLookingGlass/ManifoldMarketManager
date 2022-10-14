@@ -132,61 +132,6 @@ jobs:
           command: make upload_coverage
       - store_artifacts:
           path: ./dist/
-  build-and-test-3-11: # This is the name of the job, feel free to change it to better match what you're trying to do!
-    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
-    # You can specify an image from Dockerhub or use one of the convenience images from CircleCI's Developer Hub
-    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
-    # The executor is the environment in which the steps below will be executed - below will use a python 3.10.2 container
-    # Change the version below to your required version of python
-    docker:
-      - image: cimg/python:3.10
-    # Checkout the code as the first step. This is a dedicated CircleCI step.
-    # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
-    # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
-    # Then run your tests!
-    # CircleCI will report the results back to your VCS provider.
-    steps:
-      - checkout
-      - run:
-          name: Fetch CPython 3.11
-          command: |-
-              wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ./miniconda.sh
-              bash ./miniconda.sh -b -p ./miniconda
-              source ./miniconda/bin/activate
-              conda config --set channel_priority strict
-              conda create -c conda-forge -n python3.11 python3.11
-              conda activate python3.11
-      - python/install-packages:
-          pkg-manager: pip
-          # app-dir: ~/project/package-directory/  # If you're requirements.txt isn't in the root directory.
-          # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
-      - run:
-          name: Initialize submodules
-          command: |-
-              git submodule update --init
-              mkdir -p logs
-              touch env_personal.sh
-      - run:
-          name: Run build script
-          # This assumes pytest is installed via the install-package step above
-          command: |-
-              source ./miniconda/bin/activate
-              conda activate python3.11
-              ls ./miniconda/bin
-              make build PY=python
-      - run:
-          name: Run tests
-          # This assumes pytest is installed via the install-package step above
-          command: |-
-              source ./miniconda/bin/activate
-              conda activate python3.11
-              make test LINT=false MYPY=false PY=python
-      - run:
-          name: Upload coverage report
-          # This assumes pytest is installed via the install-package step above
-          command: make upload_coverage
-      - store_artifacts:
-          path: ./dist/
   build-and-test-pypy3: # This is the name of the job, feel free to change it to better match what you're trying to do!
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # You can specify an image from Dockerhub or use one of the convenience images from CircleCI's Developer Hub
@@ -281,6 +226,5 @@ workflows:
       - build-and-test-3-08
       - build-and-test-3-09
       - build-and-test-3-10
-      - build-and-test-3-11
       - build-and-test-pypy3
       - lint
