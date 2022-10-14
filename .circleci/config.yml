@@ -168,7 +168,7 @@ jobs:
       - run:
           name: Run build script
           # This assumes pytest is installed via the install-package step above
-          command:
+          command: |-
               source ./miniconda/bin/activate
               conda activate pypy
               make build
