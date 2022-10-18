@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from pickle import dumps, loads
+from pickle import loads, dumps
 from typing import cast
 
 from cryptography.fernet import Fernet
@@ -32,6 +32,7 @@ class Account:
         """Generate encrypted bytes to represent this account."""
         return Fernet(self.key).encrypt(dumps(self))
 
-    def from_bytes(cls, buff: bytes, key: bytes) -> 'Account':
+    @staticmethod
+    def from_bytes(buff: bytes, key: bytes) -> 'Account':
         """Decrypt and deserialize an Account from an encrypted bytestring."""
         return cast(Account, loads(Fernet(key).decrypt(buff)))
