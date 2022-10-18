@@ -55,6 +55,11 @@ endif
 # Run tests sequentially
 test: dependencies _test
 
+.PHONY: test_all_%
+# Run tests in parallel in all supported python versions
+test_all_%:
+	@$(MAKE) test_all pytest_args="$(pytest_args) -n$*" $(MFLAGS)
+
 .PHONY: test_all
 # Run tests sequentially in all supported python versions
 test_all:
