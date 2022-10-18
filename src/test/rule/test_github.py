@@ -32,12 +32,12 @@ def pr_tup(request: PytestRequest[tuple[str, str, int]]) -> tuple[str, str, int]
     return request.param
 
 
-@manifold_vcr.use_cassette()
+@manifold_vcr.use_cassette()  # type: ignore
 def test_auth_login() -> None:
     login()
 
 
-@manifold_vcr.use_cassette()
+@manifold_vcr.use_cassette()  # type: ignore
 def test_unauth_login() -> None:
     unauth_login()
 

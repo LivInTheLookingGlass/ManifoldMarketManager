@@ -16,7 +16,7 @@ from ...rule.generic import AdditiveRule, ModulusRule, MultiplicitiveRule, Negat
 from ...util import fibonacci
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Optional
+    from typing import Literal, Optional
 
     from pytest_regressions.data_regression import DataRegressionFixture
 
@@ -98,10 +98,10 @@ def test_at_time_rule_value() -> None:
 
 
 def test_modulus_rule(data_regression: DataRegressionFixture, limit: int = 100) -> None:
-    val1: ResolveToValue[float] = ResolveToValue(1)
-    val2: ResolveToValue[float] = ResolveToValue(1)
+    val1: ResolveToValue[Literal['CANCEL'] | float] = ResolveToValue(1)
+    val2: ResolveToValue[Literal['CANCEL'] | float] = ResolveToValue(1)
     rule = ModulusRule(val1, val2)
-    data: dict[tuple[int, int], AnyResolution] = {}
+    data: dict[tuple[int, float], AnyResolution] = {}
     mkt: Market = None  # type: ignore[assignment]
     prev = 1
     prev_desc: str = ''
@@ -114,9 +114,10 @@ def test_modulus_rule(data_regression: DataRegressionFixture, limit: int = 100) 
         assert desc != prev_desc
         assert len(desc) >= len(prev_desc)
         prev_desc = desc
-        data[(x, prev)] = rule.value(mkt, refresh=True)
+        val = rule.value(mkt, refresh=True)
+        data[(x, prev)] = val
         prev = x
-    data_regression.check(data)
+    data_regression.check({'answer': data})
 
 
 def test_variadic_rule(
@@ -127,7 +128,7 @@ def test_variadic_rule(
     rule = VariadicRuleSubclass()
     if VariadicRuleSubclass == MultiplicitiveRule:
         limit //= 10
-    data: dict[int, int] = {}
+    data: dict[int, AnyResolution] = {}
     mkt: Market = None  # type: ignore[assignment]
     prev_desc: str = ''
     for idx, x in enumerate(fibonacci(start=2)):
@@ -139,4 +140,4 @@ def test_variadic_rule(
         assert len(desc) >= len(prev_desc)
         prev_desc = desc
         data[x] = rule.value(mkt, refresh=True)
-    data_regression.check(data)
+    data_regression.check({'answer': data})

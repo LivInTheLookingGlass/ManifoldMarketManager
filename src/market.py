@@ -92,6 +92,8 @@ class Market:
         self.__dict__.update(state)
         self.client = get_client()
         self.market = self.client.get_market_by_id(self.market.id)
+        if not hasattr(self, "event_emitter"):
+            self.event_emitter = EventEmitter()
         self.event_emitter._lock = Lock()
         self.__post_init__()
 

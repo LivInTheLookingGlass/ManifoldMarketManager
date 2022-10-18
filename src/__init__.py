@@ -63,18 +63,22 @@ class Rule(ABC, Generic[T], DictDeserializable):
             for r in chain(market.do_resolve_rules, market.resolve_to_rules):
                 id_list.append(id(r))
         tag = str(id_list)
+        if not hasattr(self, 'tags_used'):
+            self.tags_used = set()
         self.tags_used.add(tag)
         return tag
 
     def __del__(self) -> None:
         """Ensure that cached values are cleaned up on deletion."""
-        for tag in self.tags_used:
-            rule_value_cache.delete('value', tag=tag)
+        if hasattr(self, 'tags_used'):
+            for tag in self.tags_used:
+                rule_value_cache.delete('value', tag=tag)
 
     def __getstate__(self) -> Mapping[str, Any]:
         """Remove sensitive/non-serializable state before dumping to database."""
         state = self.__dict__.copy()
-        del state['tags_used']
+        if 'tags_used' in state:
+            del state['tags_used']
         if 'logger' in state:
             del state['logger']
         return state
