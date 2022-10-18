@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from pickle import loads, dumps
+from pickle import dumps, loads
 from typing import cast
 
 from cryptography.fernet import Fernet

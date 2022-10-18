@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, cast
 
 from attrs import define
 from pymanifold.lib import ManifoldClient
+from pymanifold.types import JSONDict
 
 from ... import Rule
 
@@ -31,7 +32,7 @@ class ManifoldUserRule(Rule[float]):
 
     def _value(self, market: Market) -> float:
         user = ManifoldClient()._get_user_raw(self.user)
-        return cast(float, user[self.attr][self.field])
+        return cast(float, cast(JSONDict, user[self.attr])[self.field])
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- Resolves to the current {self.field} {self.attr_desc} user {self.user}.\n"

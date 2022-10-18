@@ -14,9 +14,12 @@ from ..util import round_sig_figs
 from . import ResolutionValueRule, get_rule
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, ClassVar, Mapping, Sequence
+    from typing import Any, ClassVar, Sequence
+
+    from pymanifold.types import JSONDict
 
     from ..market import Market
+    from ..util import ModJSONDict
 
 SENTINEL_STUB = "A programatic explanation was not provided"
 
@@ -54,10 +57,11 @@ class UnaryRule(AbstractRule[T]):
             self.child.explain_specific(market, indent + 1, sig_figs)
 
     @classmethod
-    def from_dict(cls, env: Mapping[str, Any]) -> 'UnaryRule[T]':
+    def from_dict(cls, env: ModJSONDict) -> 'UnaryRule[T]':
         """Take a dictionary and return an instance of the associated class."""
         env_copy = dict(env)
-        type_, kwargs = env["child"]
+        child: tuple[str, ModJSONDict] = env["child"]  # type: ignore[assignment]
+        type_, kwargs = child
         env_copy["child"] = get_rule(type_).from_dict(kwargs)
         return super().from_dict(env_copy)
 
@@ -70,11 +74,12 @@ class BinaryRule(AbstractRule[T]):
     rule2: Rule[T]
 
     @classmethod
-    def from_dict(cls, env: Mapping[str, Any]) -> 'BinaryRule[T]':
+    def from_dict(cls, env: ModJSONDict) -> 'BinaryRule[T]':
         """Take a dictionary and return an instance of the associated class."""
         env_copy = dict(env)
         for name in ('rule1', 'rule2'):
-            type_, kwargs = env[name]
+            child: tuple[str, ModJSONDict] = env[name]  # type: ignore[assignment]
+            type_, kwargs = child
             env_copy[name] = get_rule(type_).from_dict(kwargs)
         return super().from_dict(env_copy)
 
@@ -98,13 +103,14 @@ class VariadicRule(AbstractRule[T]):
     rules: list[Rule[T]] = Factory(list)
 
     @classmethod
-    def from_dict(cls, env: Mapping[str, Any]) -> 'VariadicRule[T]':
+    def from_dict(cls, env: ModJSONDict) -> 'VariadicRule[T]':
         """Take a dictionary and return an instance of the associated class."""
         env_copy = dict(env)
-        arr = env.get("rules", [])
-        env_copy["rules"] = [None] * len(arr)
+        arr: Sequence[tuple[str, ModJSONDict]] = env.get("rules", [])  # type: ignore[assignment]
+        rules: list[None | Rule[Any]] = [None] * len(arr)
         for idx, (type_, kwargs) in enumerate(arr):
-            env_copy["rules"][idx] = get_rule(type_).from_dict(kwargs)
+            rules[idx] = get_rule(type_).from_dict(kwargs)
+        env_copy["rules"] = rules
         return super().from_dict(env_copy)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -129,7 +135,7 @@ class ResolveRandomSeed(ResolutionValueRule):
     method: str = 'random'
     rounds: int = 1
     args: Sequence[Any] = ()
-    kwargs: dict[str, Any] = Factory(dict)
+    kwargs: JSONDict = Factory(dict)
 
     def _value(self, market: Market) -> Any:
         source = Random(self.seed)

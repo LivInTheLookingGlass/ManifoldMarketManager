@@ -17,6 +17,8 @@ from .abstract import BinaryRule, ResolveRandomSeed, UnaryRule, VariadicRule
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any, ClassVar, DefaultDict, Literal, MutableSequence
 
+    from pymanifold.types import JSONDict, JSONType
+
     from ..consts import FreeResponseResolution, MultipleChoiceResolution
     from ..market import Market
 
@@ -252,14 +254,14 @@ class ResolveMultipleValues(ResolutionValueRule):
         return ret
 
     @classmethod
-    def from_dict(cls, env: Mapping[str, Any]) -> 'ResolveMultipleValues':
+    def from_dict(cls, env: dict[str, JSONType | Rule]) -> 'ResolveMultipleValues':
         """Take a dictionary and return an instance of the associated class."""
-        env_copy: dict[str, Any] = dict(env)
-        shares: MutableSequence[tuple[ResolutionValueRule | tuple[str, dict[str, Any]], float]] = env.get('shares', [])
+        env_copy: JSONDict = dict(env)
+        shares: MutableSequence[tuple[ResolutionValueRule | tuple[str, JSONDict], float]] = env.get('shares', [])
         new_shares = []
         for rule, weight in shares:
             try:
-                type_, kwargs = cast(Tuple[str, Dict[str, Any]], rule)
+                type_, kwargs = cast(Tuple[str, JSONDict], rule)
                 new_rule = get_rule(type_).from_dict(kwargs)
                 new_shares.append((new_rule, weight))
             except Exception:

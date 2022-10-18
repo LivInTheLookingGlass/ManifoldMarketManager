@@ -14,7 +14,9 @@ from src.rule import get_rule
 from src.util import DictDeserializable, explain_abstract, get_client
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Mapping, Optional
+    from typing import Any, Optional
+
+    from pymanifold.types import JSONDict
 
     from src import Rule
     from src.consts import OutcomeType
@@ -98,7 +100,7 @@ class ManifoldRequest(DictDeserializable):
         if self.answers is None or len(self.answers) < 2 or any(len(x) < 1 for x in self.answers):
             raise ValueError("Invalid answers list")
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> JSONDict:
         state = deepcopy(self.__dict__)
         state['description'].pop('processed', None)
         return {
@@ -135,7 +137,7 @@ class CreationRequest:
             self.manifold.description["processed"] = True
 
     @classmethod
-    def from_dict(cls, obj: Mapping[str, Any]) -> 'CreationRequest':
+    def from_dict(cls, obj: JSONDict) -> 'CreationRequest':
         """Take a dictionary and return an instance of the associated class."""
         obj = dict(obj)
         manifold = ManifoldRequest.from_dict(obj.pop('manifold'))

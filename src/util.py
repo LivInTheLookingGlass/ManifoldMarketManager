@@ -21,10 +21,12 @@ from pymanifold.utils.math import number_to_prob_cpmm1  # noqa: F401
 from .consts import EnvironmentVariable, Outcome
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Callable, Collection, Iterable, Mapping, MutableSequence, Type, TypeVar
+    from typing import Any, Callable, Collection, Iterable, Mapping, MutableSequence, Sequence, Type, TypeVar, Union
 
     from . import Market, Rule
 
+    ModJSONType = Union[int, float, bool, str, None, Rule[Any], Sequence['ModJSONType'], Mapping[str, 'ModJSONType']]
+    ModJSONDict = Mapping[str, ModJSONType]
     T = TypeVar("T")
 
 
@@ -32,7 +34,7 @@ class DictDeserializable:
     """A port of PyManifold's DictDeserializable that does not check against the signature."""
 
     @classmethod
-    def from_dict(cls: Type[T], env: dict[str, Any]) -> T:
+    def from_dict(cls: Type[T], env: ModJSONDict) -> T:
         """Take a dictionary and return an instance of the associated class."""
         return cls(**env)
 
