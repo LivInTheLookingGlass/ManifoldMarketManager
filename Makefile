@@ -58,7 +58,11 @@ test: dependencies _test
 .PHONY: test_all_%
 # Run tests in parallel in all supported python versions
 test_all_%:
-	@$(MAKE) test_all pytest_args="$(pytest_args) -n$*" $(MFLAGS)
+	@$(MAKE) test LINT=only $(MFLAGS)
+	@if command -v python3.8 &> /dev/null; then $(MAKE) test_$* PY=python3.8 LINT=false MYPY=false $(MFLAGS); else echo "Python 3.8 is not installed - skipping"; fi
+	@if command -v python3.9 &> /dev/null; then $(MAKE) test_$* PY=python3.9 LINT=false MYPY=false $(MFLAGS); else echo "Python 3.9 is not installed - skipping"; fi
+	@if command -v python3.10 &> /dev/null; then $(MAKE) test_$* PY=python3.10 LINT=false MYPY=false $(MFLAGS); else echo "Python 3.10 is not installed - skipping"; fi
+	@if command -v python3.11 &> /dev/null; then $(MAKE) test_$* PY=python3.11 LINT=false MYPY=false $(MFLAGS); else echo "Python 3.11 is not installed - skipping"; fi
 
 .PHONY: test_all
 # Run tests sequentially in all supported python versions
