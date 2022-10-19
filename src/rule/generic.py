@@ -17,10 +17,9 @@ from .abstract import BinaryRule, ResolveRandomSeed, UnaryRule, VariadicRule
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any, ClassVar, DefaultDict, Literal, MutableSequence
 
-    from pymanifold.types import JSONDict, JSONType
-
     from ..consts import FreeResponseResolution, MultipleChoiceResolution
     from ..market import Market
+    from ..util import ModJSONDict
 
 
 @define(slots=False)
@@ -224,7 +223,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- Resolve to a random index, given some original seed. This one operates on a "
-        if self.method == 'randrange':
+        if self.method == 'rand"range':
             ret += f"fixed range of integers in ({self.start} <= x < {self.size}).\n"
         else:
             ret += f"dynamic range based on the current pool and probabilities, but starting at {self.start}.\n"
@@ -254,17 +253,19 @@ class ResolveMultipleValues(ResolutionValueRule):
         return ret
 
     @classmethod
-    def from_dict(cls, env: dict[str, JSONType | Rule]) -> 'ResolveMultipleValues':
+    def from_dict(cls, env: ModJSONDict) -> 'ResolveMultipleValues':
         """Take a dictionary and return an instance of the associated class."""
-        env_copy: JSONDict = dict(env)
-        shares: MutableSequence[tuple[ResolutionValueRule | tuple[str, JSONDict], float]] = env.get('shares', [])
+        env_copy: ModJSONDict = {**env}
+        shares: MutableSequence[tuple[ResolutionValueRule | tuple[str, ModJSONDict], float]] = (
+            env.get('shares', [])  # type: ignore[assignment]
+        )
         new_shares = []
         for rule, weight in shares:
             try:
-                type_, kwargs = cast(Tuple[str, JSONDict], rule)
+                type_, kwargs = cast(Tuple[str, ModJSONDict], rule)
                 new_rule = get_rule(type_).from_dict(kwargs)
                 new_shares.append((new_rule, weight))
             except Exception:
                 pass
-        env_copy['shares'] = new_shares
+        env_copy['shares'] = new_shares  # type: ignore
         return super().from_dict(env_copy)
