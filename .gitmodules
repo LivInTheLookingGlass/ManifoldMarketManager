@@ -1,6 +1,6 @@
 [submodule "PyManifold"]
 	path = src/PyManifold
-	url = https://github.com/gappleto97/PyManifold
+	url = https://github.com/LivInTheLookingGlass/PyManifold
 [submodule "src/test/manifold"]
 	path = src/test/manifold
-	url = https://github.com/gappleto97/manifold/
+	url = https://github.com/LivInTheLookingGlass/manifold/
