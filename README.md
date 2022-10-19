@@ -6,7 +6,7 @@
 
 What you're reading is only one of many places I host this code at. They are:
 - [GitHub](https://github.com/LivInTheLookingGlass/ManifoldMarketManager)
-- [GitLab](https://gitlab.com/gappleto97/ManifoldMarketManager)
+- [GitLab](https://gitlab.com/LivInTheLookingGlass/ManifoldMarketManager)
 - [TildeGit](https://tildegit.org/LivInTheLookingGlass/ManifoldMarketManager)
 
 ## Currently Implemented
