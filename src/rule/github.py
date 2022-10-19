@@ -38,14 +38,18 @@ def login() -> GitHub:
 
 @define(slots=False)
 class GitHubIssueMixin:
+    """Mixin class to represent a GitHub issue."""
+
     owner: str
     repo: str
     number: int
 
     def f_issue(self) -> Future[Issue]:
+        """Return a Future object which resolves to the relevant Issue object."""
         return parallel(login().issue, self.owner, self.repo, self.number)
 
     def f_pr(self) -> Future[PullRequest]:
+        """Return a Future object which resolves to the relevant PullRequest object."""
         return parallel(login().pull_request, self.owner, self.repo, self.number)
 
 

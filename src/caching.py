@@ -1,43 +1,33 @@
+"""Stub module which helps to manage caching and the launch of parallel network requests."""
 from __future__ import annotations
 
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import Future, ThreadPoolExecutor
 from os import getenv
-from pathlib import Path
-from tempfile import TemporaryDirectory
-from time import time
 from typing import TYPE_CHECKING
 
-from vcr import VCR
+import requests_cache
 
 if TYPE_CHECKING:  # pragma: no cover
-    from concurrent.futures import Future
-    from typing import Callable, TypeVar
+    from typing import Any, Callable, TypeVar
 
     T = TypeVar("T")
 
-temp_dir = TemporaryDirectory()
-vcr = VCR(
-    cassette_library_dir=temp_dir.name,
-    record_mode="new_episodes",
-    match_on=["uri", "query", "headers"],
-    filter_headers=["authorization"],
-    decode_compressed_response=True
-)
-executor = ThreadPoolExecutor(thread_name_prefix="ManifoldMarketManagerWorker_")
 CACHE = not getenv("ManifoldMarketManager_NO_CACHE")
+if CACHE:
+    requests_cache.install_cache(expire_after=360, allowable_methods=('GET', ))
+    executor = ThreadPoolExecutor(thread_name_prefix="ManifoldMarketManagerWorker_")
 
 
-def cleanup() -> None:
-    for f in Path(temp_dir.name).iterdir():
-        if f.stat().st_atime + 30 < time():
-            f.unlink()
+def parallel(func: Callable[..., T], *args: Any, **kwargs: Any) -> Future[T]:
+    """Launch a task in parallel UNLESS the ManifoldMarketManager_NO_CACHE environment variable is set.
 
-
-def parallel(func: Callable[..., T], *args, **kwargs) -> Future[T]:
-    def wrapped() -> T:
-        return func(*args, **kwargs)
-
+    I need to be able to disable the cache/parallel launching or VCR doesn't work on testing.
+    """
     if CACHE:
-        wrapped = vcr.use_cassette(wrapped)
-    executor.submit(cleanup)
-    return executor.submit(wrapped)
+        def wrapped() -> T:
+            return func(*args, **kwargs)
+
+        return executor.submit(wrapped)
+    ret: Future[T] = Future()
+    ret.set_result(func(*args, **kwargs))
+    return ret
