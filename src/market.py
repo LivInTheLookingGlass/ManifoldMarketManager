@@ -150,7 +150,7 @@ class Market:
         rule_: Rule[Any]
         for rule_ in self.do_resolve_rules:
             shim += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
-        if self.should_resolve() is not True:
+        if not (self.market.isResolved or self.should_resolve()):
             ret = (f"This market is not resolving, because none of the following are true:\n{shim}\nWere it to "
                    "resolve now, it would follow the decision tree below:\n")
         else:
@@ -240,7 +240,9 @@ class Market:
             return self.cancel()
 
         if self.market.outcomeType in Outcome.MC_LIKE():
-            _override = self.__format_request_resolve_mapping(_override)
+            if not isinstance(_override, Mapping):
+                raise TypeError()
+            _override = {int(id_): weight for id_, weight in _override.items()}
 
         self.event_emitter.emit('before_resolve', self, _override)
         ret: Response = self.client.resolve_market(self.market, _override)
@@ -249,11 +251,6 @@ class Market:
         self.market.isResolved = True
         self.event_emitter.emit('after_resolve', self, _override, ret)
         return ret
-
-    def __format_request_resolve_mapping(self, _override: AnyResolution | tuple[float, float]) -> dict[int, float]:
-        if not isinstance(_override, Mapping):
-            raise TypeError()
-        return {int(id_): weight for id_, weight in _override.items()}
 
     @require_env(EnvironmentVariable.ManifoldAPIKey)
     def cancel(self) -> Response:
