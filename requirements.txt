@@ -1,12 +1,11 @@
 # General
 attrs                       # Better dataclasses, part of python-telegramtbot anyways
 cryptography                # Account storage, part of requests anyways
-cache3                      # General caching
 github3.py                  # To check GitHub issues
 pyee                        # For callbacks on Market
 python-telegram-bot>=20.0a4 # For verification of resolving markets
 requests>=2.28              # General requests, part of PyManifold, github3 anyways
-requests_cache
+requests_cache              # Passively cache network requests
 
 # Dev environment
 bump2version
