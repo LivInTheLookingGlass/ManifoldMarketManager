@@ -10,12 +10,17 @@ from attrs import define
 from github3 import GitHub
 from github3 import login as gh_login
 
+from ..caching import parallel
 from ..consts import EnvironmentVariable
 from ..util import require_env
 from . import DoResolveRule, ResolutionValueRule
 
 if TYPE_CHECKING:  # pragma: no cover
+    from concurrent.futures import Future
     from typing import Any, Optional
+
+    from github3.issues import Issue
+    from github3.pulls import PullRequest
 
     from ..market import Market
 
@@ -32,44 +37,55 @@ def login() -> GitHub:
 
 
 @define(slots=False)
-class ResolveWithPR(DoResolveRule):
-    """Return True if the specified PR was merged in the past."""
-
+class GitHubIssueMixin:
     owner: str
     repo: str
     number: int
 
+    def f_issue(self) -> Future[Issue]:
+        return parallel(login().issue, self.owner, self.repo, self.number)
+
+    def f_pr(self) -> Future[PullRequest]:
+        return parallel(login().pull_request, self.owner, self.repo, self.number)
+
+
+@define(slots=False)
+class ResolveWithPR(DoResolveRule, GitHubIssueMixin):
+    """Return True if the specified PR was merged in the past."""
+
     @require_env(EnvironmentVariable.GithubAccessToken, EnvironmentVariable.GithubUsername)
     def _value(self, market: Market) -> bool:
         """Return True if the issue is closed or the PR is merged, otherwise False."""
-        issue = login().issue(self.owner, self.repo, self.number)
-        pr = issue.pull_request()
-        return issue.state != 'open' or (pr is not None and pr.merged)
+        f_issue = self.f_issue()
+        f_pr = self.f_pr()
+        issue = f_issue.result()
+        if issue.state != 'open':
+            return True
+        pr = f_pr.result()
+        return pr is not None and pr.merged
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- If the GitHub PR {self.owner}/{self.repo}#{self.number} was merged in the past.\n"
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        f_issue = self.f_issue()
+        f_pr = self.f_pr()
+
         ret = f"{'  ' * indent}- If either of the conditions below are True (-> {self.value(market)})\n"
         indent += 1
-        issue = login().issue(self.owner, self.repo, self.number)
+        issue = f_issue.result()
         ret += f"{'  ' * indent}- If the state of the pull request is not open (-> {issue.state})\n"
-        pr = issue.pull_request()
+        pr = f_pr.result()
         ret += f"{'  ' * indent}- If the pull request is merged (-> {pr is not None and pr.merged})\n"
         return ret
 
 
 @define(slots=False)
-class ResolveToPR(ResolutionValueRule):
+class ResolveToPR(ResolutionValueRule, GitHubIssueMixin):
     """Resolve to True if the PR is merged, otherwise False."""
 
-    owner: str
-    repo: str
-    number: int
-
     def _value(self, market: Market) -> bool:
-        issue = login().issue(self.owner, self.repo, self.number)
-        pr = issue.pull_request()
+        pr = self.f_pr().result()
         return pr is not None and pr.merged
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -80,8 +96,7 @@ class ResolveToPR(ResolutionValueRule):
         return ret
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        issue = login().issue(self.owner, self.repo, self.number)
-        pr = issue.pull_request()
+        pr = self.f_pr().result()
         if pr is None:
             merge_time = None
         else:
@@ -91,17 +106,13 @@ class ResolveToPR(ResolutionValueRule):
 
 
 @define(slots=False)
-class ResolveToPRDelta(ResolutionValueRule):
+class ResolveToPRDelta(ResolutionValueRule, GitHubIssueMixin):
     """Resolve to the fractional number of days between start and merged date or, if not merged, MAX."""
 
-    owner: str
-    repo: str
-    number: int
     start: datetime
 
     def _value(self, market: Market) -> float:
-        issue = login().issue(self.owner, self.repo, self.number)
-        pr = issue.pull_request()
+        pr = self.f_pr().result()
         if pr is None or pr.merged_at is None:
             return cast(float, market.market.max)
         delta = cast(datetime, pr.merged_at) - self.start.replace(tzinfo=timezone.utc)
@@ -119,8 +130,7 @@ class ResolveToPRDelta(ResolutionValueRule):
         return ret
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        issue = login().issue(self.owner, self.repo, self.number)
-        pr = issue.pull_request()
+        pr = self.f_pr().result()
         if pr is None:
             merge_time = None
         else:
