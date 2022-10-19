@@ -10,7 +10,6 @@ more information on this.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from itertools import chain
 from logging import getLogger
 from os import getenv
 from pathlib import Path
@@ -21,7 +20,6 @@ from typing import TYPE_CHECKING, Generic, Iterable, Literal, Mapping, Sequence,
 from warnings import warn
 
 from attrs import define, field
-from cache3 import SafeCache
 
 _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
 
@@ -33,8 +31,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from typing import Any
 
     from .consts import OutcomeType
-
-rule_value_cache = SafeCache(timeout=30)
 
 
 @define(slots=False)  # type: ignore
@@ -57,23 +53,6 @@ class Rule(ABC, Generic[T], DictDeserializable):
     ) -> T:  # pragma: no cover
         ...
 
-    def _gen_tag(self, market: Market) -> str:
-        id_list = [id(self), id(market)]
-        if market is not None:
-            for r in chain(market.do_resolve_rules, market.resolve_to_rules):
-                id_list.append(id(r))
-        tag = str(id_list)
-        if not hasattr(self, 'tags_used'):
-            self.tags_used = set()
-        self.tags_used.add(tag)
-        return tag
-
-    def __del__(self) -> None:
-        """Ensure that cached values are cleaned up on deletion."""
-        if hasattr(self, 'tags_used'):
-            for tag in self.tags_used:
-                rule_value_cache.delete('value', tag=tag)
-
     def __getstate__(self) -> Mapping[str, Any]:
         """Remove sensitive/non-serializable state before dumping to database."""
         state = self.__dict__.copy()
@@ -90,10 +69,7 @@ class Rule(ABC, Generic[T], DictDeserializable):
         refresh: bool = False
     ) -> AnyResolution:
         """Return the resolution value of a market, appropriately formatted for its market type."""
-        tag = self._gen_tag(market)
-        if refresh or not rule_value_cache.has_key('value', tag=tag):  # noqa: W601
-            rule_value_cache.set('value', self._value(market), tag=tag)
-        ret = rule_value_cache.get('value', tag=tag)
+        ret = self._value(market)
         if (ret is None) or (ret == "CANCEL") or (format == 'NONE'):
             return cast(AnyResolution, ret)
         elif format in Outcome.BINARY_LIKE():
@@ -178,7 +154,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.6.0.115"
+VERSION = "0.6.0.114"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "DoResolveRule", "ResolutionValueRule", "Rule", "Market", "get_client", "rule",
