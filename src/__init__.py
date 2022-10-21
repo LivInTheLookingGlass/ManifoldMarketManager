@@ -23,6 +23,7 @@ from attrs import define, field
 
 _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
 
+from .caching import parallel  # noqa: E402
 from .consts import AnyResolution, Outcome, T  # noqa: E402
 from .util import DictDeserializable  # noqa: E402
 
@@ -117,10 +118,11 @@ class Rule(ABC, Generic[T], DictDeserializable):
         return self._explain_specific(market, indent, sig_figs)
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        f_val = parallel(self._value, market)
         warn("Using a default specific explanation. This probably isn't what you want!")
         ret = self.explain_abstract(indent=indent).rstrip('\n')
         ret += " (-> "
-        val = self._value(market)
+        val = f_val.result()
         if val == "CANCEL":
             ret += "CANCEL)\n"
             return ret

@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, cast
 from attrs import define
 
 from ... import Rule
+from ...caching import parallel
 from ...consts import BinaryResolution, Outcome, T
 from ...util import market_to_answer_map, prob_to_number_cpmm1, round_sig_figs
 from .. import DoResolveRule
@@ -68,7 +69,9 @@ class OtherMarketValue(ManifoldMarketMixin, Rule[T]):
             ret = market_to_answer_map(mkt)
         return cast(T, ret)
 
-    def _binary_value(self, market: Market, mkt: APIMarket) -> float:
+    def _binary_value(self, market: Market, mkt: APIMarket | None = None) -> float:
+        if mkt is None:
+            mkt = self.api_market()
         if mkt.isResolved:
             if mkt.resolution == "YES":
                 return True
@@ -82,17 +85,20 @@ class OtherMarketValue(ManifoldMarketMixin, Rule[T]):
                 f"({self.api_market().question}).\n")
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+        f_mkt = self.f_api_market()
+        f_val = parallel(self._value, market)
+        mkt = f_mkt.result()
         ret = (f"{'  ' * indent}- Resolved (or current, if not resolved) value of `{self.id_}` "
-               f"({self.api_market().question}) (-> ")
-        mkt = self.api_market()
-        val = self._value(market)
+               f"({mkt.question}) (-> ")
+        val = f_val.result()
         if val == "CANCEL":
-            ret += "CANCEL)\n"
+            ret += "CANCEL"
         elif mkt.outcomeType == Outcome.PSEUDO_NUMERIC:
             assert isinstance(val, float)
             ret += f"{round_sig_figs(val, sig_figs)}"
         elif mkt.outcomeType == Outcome.BINARY:
-            ret += "%"
+            assert isinstance(val, float)
+            ret += f"{round_sig_figs(val, sig_figs)}%"
         elif mkt.outcomeType in Outcome.MC_LIKE():
             ret += repr(market_to_answer_map(mkt))
         return ret + ")\n"
@@ -131,7 +137,7 @@ class AmplifiedOddsRule(OtherMarketValue[BinaryResolution], ResolveRandomSeed):
     a: int = 1
 
     def _value(self, market: Market) -> BinaryResolution:
-        val = OtherMarketValue._binary_value(self, market, self.api_market())
+        val = OtherMarketValue._binary_value(self, market)
         if val is True:
             return True
         if val is False:
@@ -155,15 +161,17 @@ class AmplifiedOddsRule(OtherMarketValue[BinaryResolution], ResolveRandomSeed):
         return ret
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        val = self._value(market)
+        f_val = parallel(self._value, market)
+        other_exp = parallel(OtherMarketValue._explain_specific, self, market, indent + 1, sig_figs)
         ret = f"{'  ' * indent}- Amplified odds: (-> "
+        val = f_val.result()
         if val == "CANCEL":
             ret += "CANCEL)\n"
         else:
             ret += f"{round_sig_figs(val, 4)}%)\n"
         indent += 1
         ret += f"{'  ' * indent}- If the referenced market resolves True, resolve True\n"
-        ret += OtherMarketValue._explain_specific(self, market, indent + 1, sig_figs)
+        ret += other_exp.result()
         ret += f"{'  ' * indent}- If it resolved NO, generate a random number using a predetermined seed\n"
         indent += 1
         a_recip = round_sig_figs(1 / self.a, sig_figs)

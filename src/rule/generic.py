@@ -9,12 +9,14 @@ from typing import TYPE_CHECKING, Dict, Generic, Mapping, Optional, Tuple, Union
 from attrs import Factory, define
 
 from .. import Rule
+from ..caching import parallel
 from ..consts import BinaryResolution, PseudoNumericResolution, T
 from ..util import normalize_mapping
 from . import DoResolveRule, ResolutionValueRule, get_rule
 from .abstract import BinaryRule, ResolveRandomSeed, UnaryRule, VariadicRule
 
 if TYPE_CHECKING:  # pragma: no cover
+    from concurrent.futures import Future
     from typing import Any, ClassVar, DefaultDict, Literal, MutableSequence
 
     from ..consts import FreeResponseResolution, MultipleChoiceResolution
@@ -156,10 +158,11 @@ class AdditiveRule(VariadicRule[PseudoNumericResolution]):
     def _value(self, market: Market) -> Literal["CANCEL"] | float:
         """Return the sum of the underlying rules."""
         ret: float = 0
-        for rule in self.rules:
+        futures = [parallel(rule.value, market, format='PSEUDO_NUMERIC') for rule in self.rules]
+        for f_rule in futures:
             val = cast(
                 PseudoNumericResolution,
-                rule.value(market, format='PSEUDO_NUMERIC')
+                f_rule.result()
             )
             if val == "CANCEL":
                 return "CANCEL"
@@ -176,10 +179,11 @@ class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
     def _value(self, market: Market) -> Literal["CANCEL"] | float:
         """Return the product of the underlying rules."""
         ret: float = 1
-        for rule in self.rules:
+        futures = [parallel(rule.value, market, format='PSEUDO_NUMERIC') for rule in self.rules]
+        for f_rule in futures:
             val = cast(
                 PseudoNumericResolution,
-                rule.value(market, format='PSEUDO_NUMERIC')
+                f_rule.result()
             )
             if val == "CANCEL":
                 return "CANCEL"
@@ -239,9 +243,9 @@ class ResolveMultipleValues(ResolutionValueRule):
     def _value(self, market: Market) -> FreeResponseResolution | MultipleChoiceResolution:
         ret: DefaultDict[int, float] = defaultdict(float)
         for rule, part in self.shares:
-            val = cast(Dict[Union[str, int], float], rule.value(market, format='FREE_RESPONSE'))
+            val = cast(Dict[Union[str, int], Future[float]], parallel(rule.value, market, format='FREE_RESPONSE'))
             for idx, value in val.items():
-                ret[int(idx)] += value * part
+                ret[int(idx)] += value.result() * part
         return normalize_mapping(ret)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:

@@ -6,9 +6,11 @@ from typing import TYPE_CHECKING, cast
 
 from attrs import define
 
+from ...caching import parallel
 from ...util import get_client
 
 if TYPE_CHECKING:  # pragma: no cover
+    from concurrent.futures import Future
     from typing import Optional
 
     from pymanifold.lib import ManifoldClient
@@ -42,6 +44,10 @@ class ManifoldMarketMixin:
         if client is None:
             client = get_client()
         return client.get_market_by_id(self.id_)
+
+    def f_api_market(self, client: Optional[ManifoldClient] = None) -> Future[APIMarket]:
+        """Return a Futures which resolves to the APIMarket object associated with this rule's market."""
+        return parallel(self.api_market, client)
 
 
 from . import other, this, user  # noqa: E402

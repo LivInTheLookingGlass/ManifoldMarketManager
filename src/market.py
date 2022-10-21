@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, cast
 from pyee import EventEmitter
 from pyee.cls import evented
 
+from .caching import parallel
 from .consts import EnvironmentVariable, MarketStatus, Outcome
 from .util import explain_abstract, get_client, require_env, round_sig_figs
 
@@ -206,10 +207,11 @@ class Market:
          a mapping of indices to weights.
         Any rule may return "CANCEL" to instead refund all orders.
         """
+        assert self.market.outcomeType != "NUMERIC"
         chosen = None
-        for rule in (self.resolve_to_rules or ()):
-            assert self.market.outcomeType != "NUMERIC"
-            chosen = rule.value(self, format=self.market.outcomeType)
+        futures = [parallel(rule.value, self, format=self.market.outcomeType) for rule in (self.resolve_to_rules or ())]
+        for f_rule in futures:
+            chosen = f_rule.result()
             if chosen is not None:
                 break
         if chosen is None:
