@@ -18,7 +18,7 @@ client = get_client()
 # slug -> everything else
 examples: dict[str, Any] = {
     'amplified-odds-100x-will-a-nuclear-4acd2868830b': {
-        'market': client.get_market_by_slug('amplified-odds-100x-will-a-nuclear-4acd2868830b'),
+        'market': None,
         'client': client,
         'do_resolve_rules': [[
             'manifold.other.OtherMarketResolved',
@@ -40,6 +40,7 @@ examples: dict[str, Any] = {
 def amplified_example(request: PytestRequest[str]) -> Market:
     with manifold_vcr.use_cassette(f'examples/amplified_odds/fetch/{request.param}.yaml'):
         ret = Market.from_dict(examples[request.param])
+        ret.market = client.get_market_by_slug(request.param)
         ret.market.isResolved = False
         return ret
 
