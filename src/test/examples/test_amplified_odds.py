@@ -39,10 +39,14 @@ examples: dict[str, Any] = {
 @fixture(params=examples)  # type: ignore
 def amplified_example(request: PytestRequest[str]) -> Market:
     with manifold_vcr.use_cassette(f'examples/amplified_odds/fetch/{request.param}.yaml'):
-        return Market.from_dict(examples[request.param])
+        ret = Market.from_dict(examples[request.param])
+        ret.market.isResolved = False
+        return ret
 
 
 def test_AmplifiedOddsMarket(amplified_example: Market) -> None:
     with manifold_vcr.use_cassette(f'examples/amplified_odds/{amplified_example.id}.yaml'):
         if amplified_example.should_resolve():
             amplified_example.resolve()
+        else:  # pragma: no cover
+            raise RuntimeError()
