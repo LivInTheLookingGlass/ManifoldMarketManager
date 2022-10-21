@@ -27,3 +27,4 @@ pytest-xdist
 types-Markdown
 types-requests
 vcrpy>=4.1.1
+brotlipy
