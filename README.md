@@ -365,7 +365,7 @@ The goal of this project is to make a Manifold agent that can manage various for
     "time_rules": [
         [
             "manifold.this.ThisMarketClosed",
-            {"resolve_at": "2025-05-28T11:59:59"}
+            {}
         ],
         [
             "github.ResolveWithPR",

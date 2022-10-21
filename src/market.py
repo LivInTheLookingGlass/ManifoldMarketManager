@@ -14,11 +14,12 @@ from pyee.cls import evented
 
 from .caching import parallel
 from .consts import EnvironmentVariable, MarketStatus, Outcome
-from .util import explain_abstract, get_client, require_env, round_sig_figs
+from .rule import get_rule
+from .util import DictDeserializable, explain_abstract, get_client, require_env, round_sig_figs
 
 if TYPE_CHECKING:  # pragma: no cover
     from logging import Logger
-    from typing import Any, Mapping, Optional
+    from typing import Any, Mapping, Optional, Sequence
 
     from pymanifold.lib import ManifoldClient
     from pymanifold.types import Market as APIMarket
@@ -26,11 +27,12 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from . import Rule
     from .consts import AnyResolution
+    from .util import ModJSONDict
 
 
 @evented
 @dataclass
-class Market:
+class Market(DictDeserializable):
     """Represent a market and its corresponding rules.
 
     Events
@@ -129,6 +131,18 @@ class Market:
         """Reconstruct a Market object from the market ID and other arguments."""
         api_market = get_client().get_market_by_id(id)
         return cls(api_market, *args, **kwargs)
+
+    @classmethod
+    def from_dict(cls, env: ModJSONDict) -> Market:
+        """Take a dictionary and return an instance of the associated class."""
+        env_copy = dict(env)
+        for name in ("do_resolve_rules", "resolve_to_rules"):
+            arr: Sequence[tuple[str, ModJSONDict]] = env.get(name, [])  # type: ignore[assignment]
+            rules: list[None | Rule[Any]] = [None] * len(arr)
+            for idx, (type_, kwargs) in enumerate(arr):
+                rules[idx] = get_rule(type_).from_dict(kwargs)
+            env_copy[name] = rules
+        return super().from_dict(env_copy)
 
     def _after_resolve(self, market: Market, outcome: AnyResolution, response: Response) -> None:
         self.client.create_comment(self.market, self.explain_specific(), mode='markdown')
