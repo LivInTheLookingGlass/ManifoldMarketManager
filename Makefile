@@ -96,7 +96,7 @@ endif
 .PHONY: run_%
 # Run a specific account
 run_%: LICENSE dependencies
-	@source env_$*.sh && $(PY) -m src
+	@source env_$*.sh && $(PY) -O -m src
 
 .PHONY: run
 # Run all known accounts
