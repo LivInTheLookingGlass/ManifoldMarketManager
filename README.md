@@ -408,8 +408,8 @@ The goal of this project is to make a Manifold agent that can manage various for
     "time_rules": [
         ["manifold.this.ThisMarketClosed", {}],
         ["generic.BothRule", {
-            "rule1": ["manifold.other.OtherMarketClosed", {"url": "https://manifold.markets/BoltonBailey/will-abc-news-call-control-of-the-h"}],
-            "rule2": ["manifold.other.OtherMarketClosed", {"url": "https://manifold.markets/BoltonBailey/will-democrats-maintain-control-of"}]
+            "rule1": ["manifold.other.OtherMarketResolved", {"url": "https://manifold.markets/BoltonBailey/will-abc-news-call-control-of-the-h"}],
+            "rule2": ["manifold.other.OtherMarketResolved", {"url": "https://manifold.markets/BoltonBailey/will-democrats-maintain-control-of"}]
         }]
     ],
     "value_rules": [
