@@ -179,8 +179,8 @@ def main(refresh: bool = False, console_only: bool = False) -> None:
         msg = f"Currently checking ID {id_}: {mkt.market.question}"
         print(msg)
         logger.info(msg)
-        print(mkt.explain_abstract())
-        print("\n\n" + mkt.explain_specific() + "\n\n")
+        # print(mkt.explain_abstract())
+        # print("\n\n" + mkt.explain_specific() + "\n\n")
         check = (refresh or not last_checked or (datetime.now() > last_checked + timedelta(hours=check_rate)))
         msg = f'  - [{"x" if check else " "}] Should I check?'
         print(msg)
