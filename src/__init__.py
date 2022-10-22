@@ -156,7 +156,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.7.0.1"
+VERSION = "0.7.0.2"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "DoResolveRule", "ResolutionValueRule", "Rule", "Market", "get_client", "rule",
@@ -185,5 +185,8 @@ if getenv("DEBUG"):  # pragma: no cover
     sys.excepthook = info
 
 # dynamically load optional plugins where able to
-exempt = {'__init__', '__main__', '__pycache__', 'application', 'test', 'PyManifold', 'py.typed', *__all__}
+exempt = {
+    '__init__', '__main__', '__pycache__', 'application', 'test', 'PyManifold', 'py.typed', 'http_cache.sqlite',
+    *__all__
+}
 dynamic_import(__file__, __name__, __all__, exempt)
