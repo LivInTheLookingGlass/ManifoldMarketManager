@@ -32,6 +32,7 @@ validators: dict[str, Validator] = {
     "generic.XORRule": (lambda x, y: bool(x) != bool(y)),
     "generic.XNORRule": (lambda x, y: bool(x) == bool(y)),
     "generic.ImpliesRule": (lambda x, y: bool((not x) or y)),
+    "generic.ConditionalRule": (lambda x, y: "CANCEL" if (not x) else bool(y)),
 }
 
 
@@ -62,7 +63,7 @@ def test_binary_rule(binary_rule: str) -> None:
             "rule1": ["generic.ResolveToValue", {"resolve_value": val1}],
             "rule2": ["generic.ResolveToValue", {"resolve_value": val2}]
         })._value(mkt)
-        assert bool(from_dict_val) is expected
+        assert from_dict_val == "CANCEL" or bool(from_dict_val) is expected
 
 
 def test_negate_rule_value() -> None:

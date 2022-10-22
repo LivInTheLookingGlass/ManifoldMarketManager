@@ -205,9 +205,8 @@ class Market(DictDeserializable):
 
     def should_resolve(self) -> bool:
         """Return whether the market should resolve, according to our rules."""
-        return any(
-            rule.value(self) for rule in (self.do_resolve_rules or ())
-        ) and not self.market.isResolved
+        futures = [parallel(rule.value, self) for rule in (self.do_resolve_rules or ())]
+        return any(future.result() for future in futures) and not self.market.isResolved
 
     def resolve_to(self) -> AnyResolution:
         """Select a value to be resolved to.

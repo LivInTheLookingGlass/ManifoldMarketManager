@@ -27,6 +27,7 @@ AVAILABLE_RULES = [
     "generic.XORRule",
     "generic.XNORRule",
     "generic.ImpliesRule",
+    "generic.ConditionalRule",
     "generic.ResolveAtTime",
     "generic.ResolveToValue",
     "generic.AdditiveRule",

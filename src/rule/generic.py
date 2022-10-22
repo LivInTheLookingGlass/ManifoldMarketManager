@@ -107,6 +107,22 @@ class ImpliesRule(BinaryRule[Optional[BinaryResolution]]):
 
 
 @define(slots=False)
+class ConditionalRule(BinaryRule[BinaryResolution]):
+    """Cancels if the premise is false, and resolve to another value otherwise."""
+
+    _explainer_stub: ClassVar[str] = (
+        "Cancels if the next line resolves False, otherwise resolves to the value of the item after"
+    )
+
+    def _value(self, market: Market) -> BinaryResolution:
+        f_val1 = parallel(self.rule1._value, market)
+        f_val2 = parallel(self.rule2._value, market)
+        if not f_val1.result():
+            return "CANCEL"
+        return f_val2.result()
+
+
+@define(slots=False)
 class ResolveAtTime(DoResolveRule):
     """Return True if the specified time is in the past."""
 
