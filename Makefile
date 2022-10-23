@@ -113,7 +113,7 @@ daemon:
 quiet_daemon:
 	@while [ 1 ]; do\
 		$(MAKE) run $(MFLAGS);\
-		sleep 1800;\
+		sleep 21600;\
 	done;
 
 .PHONY: build

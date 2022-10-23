@@ -26,6 +26,7 @@ class ThisMarketClosed(AbstractRule[bool]):
     _explainer_stub: ClassVar[str] = "If this market reaches its close date"
 
     def _value(self, market: Market) -> bool:
+        market.refresh()
         assert market.market.closeTime is not None
         return bool(market.market.closeTime < time() * 1000)
 
@@ -37,6 +38,7 @@ class CurrentValueRule(AbstractRule[AnyResolution]):
     _explainer_stub: ClassVar[str] = "Resolves to the current market value"
 
     def _value(self, market: Market) -> float | dict[Any, float]:
+        market.refresh()
         if market.market.outcomeType == Outcome.BINARY:
             assert market.market.probability is not None
             return market.market.probability * 100
@@ -62,6 +64,7 @@ class FibonacciValueRule(Rule[Union[float, Mapping[int, float]]]):
     min_rewarded: float = 0.0001
 
     def _value(self, market: Market) -> float | dict[int, float]:
+        market.refresh()
         items = market_to_answer_map(market, self.exclude, (lambda id_, probability: probability < self.min_rewarded))
         rank = sorted(items, key=items.__getitem__)
         ret = {item: fib for item, fib in zip(rank, fibonacci())}
@@ -98,6 +101,7 @@ class PopularValueRule(Rule[Union[MultipleChoiceResolution, FreeResponseResoluti
     size: int = 1
 
     def _value(self, market: Market) -> FreeResponseResolution | MultipleChoiceResolution:
+        market.refresh()
         answers = market_to_answer_map(market)
         final_answers: dict[int, float] = {}
         try:
