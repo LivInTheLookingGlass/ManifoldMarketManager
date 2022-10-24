@@ -21,10 +21,9 @@ if TYPE_CHECKING:  # pragma: no cover
     from logging import Logger
     from typing import Any, Mapping, Optional, Sequence
 
-    from requests import Response
-
     from pymanifold.lib import ManifoldClient
     from pymanifold.types import Market as APIMarket
+    from requests import Response
 
     from . import Rule
     from .consts import AnyResolution
