@@ -49,6 +49,19 @@ class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
 
 
 @define(slots=False)
+class OtherMarketUniqueTraders(ManifoldMarketMixin, Rule[int]):
+    """A rule that checks whether another market is resolved."""
+
+    def _value(self, market: Market) -> int:
+        return len(
+            {bet.userId for bet in self.api_market().bets} - {None}
+        )
+
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        return f"{'  ' * indent}- The number of unique traders on `{self.id_}` ({self.api_market().question}).\n"
+
+
+@define(slots=False)
 class OtherMarketValue(ManifoldMarketMixin, Rule[T]):
     """A rule that resolves to the value of another rule."""
 

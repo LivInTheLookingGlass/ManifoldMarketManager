@@ -57,6 +57,19 @@ class CurrentValueRule(AbstractRule[AnyResolution]):
 
 
 @define(slots=False)
+class UniqueTradersRule(AbstractRule[int]):
+    """Resolve to the current market-consensus value."""
+
+    _explainer_stub: ClassVar[str] = "Resolves to the current number of unique traders"
+
+    def _value(self, market: Market) -> int:
+        market.refresh()
+        return len(
+            {bet.userId for bet in market.market.bets} - {None}
+        )
+
+
+@define(slots=False)
 class FibonacciValueRule(Rule[Union[float, Mapping[int, float]]]):
     """Resolve each value with a fibonacci weight, ranked by probability."""
 
