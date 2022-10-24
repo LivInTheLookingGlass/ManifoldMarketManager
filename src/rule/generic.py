@@ -232,6 +232,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
         super().__init__(seed, method, *args, **kwargs)
 
     def _value(self, market: Market) -> int:
+        market.refresh()
         if self.method == 'randrange':
             self.args = (self.start, self.size)
         else:

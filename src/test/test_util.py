@@ -34,7 +34,7 @@ def test_market_to_answer_map(mkt: Market, data_regression: DataRegressionFixtur
             market_to_answer_map(mkt)
 
 
-def test_pool_to_prob_cpmm1(mkt: Market, data_regression: DataRegressionFixture) -> None:
+def test_pool_to_prob_cpmm1(mkt: Market, data_regression: DataRegressionFixture, benchmark: BenchmarkFixture) -> None:
     """Test the behavior of the market to answer map utility function."""
     if mkt.market.outcomeType in Outcome.BINARY_LIKE():
         assert isinstance(mkt.market.pool, Mapping)
@@ -42,13 +42,13 @@ def test_pool_to_prob_cpmm1(mkt: Market, data_regression: DataRegressionFixture)
         no = mkt.market.pool['NO']
         yes = mkt.market.pool['YES']
         p = mkt.market.p
-        answer = pool_to_prob_cpmm1(yes, no, p)
+        answer = benchmark(pool_to_prob_cpmm1, yes, no, p)
         data_regression.check({'answer': answer})
     else:
         skip("Function doesn't work with this market type")
 
 
-def test_pool_to_num_cpmm1(mkt: Market, data_regression: DataRegressionFixture) -> None:
+def test_pool_to_num_cpmm1(mkt: Market, data_regression: DataRegressionFixture, benchmark: BenchmarkFixture) -> None:
     """Test the behavior of the market to answer map utility function."""
     if mkt.market.outcomeType in Outcome.PSEUDO_NUMERIC:
         assert isinstance(mkt.market.pool, Mapping)
@@ -58,19 +58,20 @@ def test_pool_to_num_cpmm1(mkt: Market, data_regression: DataRegressionFixture) 
         assert mkt.market.isLogScale is not None
         no = mkt.market.pool['NO']
         yes = mkt.market.pool['YES']
-        answer = pool_to_number_cpmm1(yes, no, mkt.market.p, mkt.market.min, mkt.market.max, mkt.market.isLogScale)
+        answer = benchmark(pool_to_number_cpmm1, yes, no, mkt.market.p, mkt.market.min, mkt.market.max, mkt.market.isLogScale)
         data_regression.check({'answer': answer})
     else:
         skip("Function doesn't work with this market type")
 
 
-def test_prob_to_num_cpmm1(mkt: Market, data_regression: DataRegressionFixture) -> None:
+def test_prob_to_num_cpmm1(mkt: Market, data_regression: DataRegressionFixture, benchmark: BenchmarkFixture) -> None:
     """Test the behavior of the market to answer map utility function."""
     if mkt.market.outcomeType in Outcome.PSEUDO_NUMERIC:
         assert mkt.market.min is not None
         assert mkt.market.max is not None
         assert mkt.market.isLogScale is not None
-        answer = prob_to_number_cpmm1(
+        answer = benchmark(
+            prob_to_number_cpmm1,
             cast(float, mkt.market.probability or mkt.market.resolutionProbability),
             mkt.market.min,
             mkt.market.max,

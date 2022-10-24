@@ -28,7 +28,7 @@ def test_CurentValueRule(mkt: Market, data_regression: DataRegressionFixture) ->
 
 def test_FibonacciValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
     if mkt.market.outcomeType in Outcome.MC_LIKE():
-        with manifold_vcr.use_cassette(f'rule/manifold/this/test_CurrentValueRule/{quote(mkt.id)}.yaml'):
+        with manifold_vcr.use_cassette(f'rule/manifold/this/test_FibonacciValueRule/{quote(mkt.id)}.yaml'):
             obj = FibonacciValueRule()
             val = obj.value(mkt)
             data_regression.check({'answer': val})
@@ -37,7 +37,7 @@ def test_FibonacciValueRule(mkt: Market, data_regression: DataRegressionFixture)
 
 
 def test_PopularValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
-    with manifold_vcr.use_cassette(f'rule/manifold/this/test_CurrentValueRule/{quote(mkt.id)}.yaml'):
+    with manifold_vcr.use_cassette(f'rule/manifold/this/test_PopularValueRule/{quote(mkt.id)}.yaml'):
         if mkt.market.outcomeType in Outcome.MC_LIKE():
             answer_to_check: list[FreeResponseResolution] = []
             answer_to_check.append({})  # type: ignore
@@ -55,7 +55,7 @@ def test_PopularValueRule(mkt: Market, data_regression: DataRegressionFixture) -
 
 def test_RoundValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
     if mkt.market.outcomeType in Outcome.BINARY_LIKE():
-        with manifold_vcr.use_cassette(f'rule/manifold/this/test_CurrentValueRule/{quote(mkt.id)}.yaml'):
+        with manifold_vcr.use_cassette(f'rule/manifold/this/test_RoundValueRule/{quote(mkt.id)}.yaml'):
             obj = RoundValueRule()
             val = obj.value(mkt)
             data_regression.check({'answer': val})
@@ -64,7 +64,7 @@ def test_RoundValueRule(mkt: Market, data_regression: DataRegressionFixture) -> 
 
 
 def test_ThisMarketClosed(mkt: Market, data_regression: DataRegressionFixture) -> None:
-    with manifold_vcr.use_cassette(f'rule/manifold/this/test_CurrentValueRule/{quote(mkt.id)}.yaml'):
+    with manifold_vcr.use_cassette(f'rule/manifold/this/test_ThisMarketClosed/{quote(mkt.id)}.yaml'):
         obj = ThisMarketClosed()
         val = obj.value(mkt)
         data_regression.check({'answer': val})

@@ -21,9 +21,10 @@ if TYPE_CHECKING:  # pragma: no cover
     from logging import Logger
     from typing import Any, Mapping, Optional, Sequence
 
+    from requests import Response
+
     from pymanifold.lib import ManifoldClient
     from pymanifold.types import Market as APIMarket
-    from requests import Response
 
     from . import Rule
     from .consts import AnyResolution
@@ -103,7 +104,7 @@ class Market(DictDeserializable):
     def id(self) -> str:
         """Return the ID of a market as reported by Manifold."""
         return self.market.id
-        
+
     def refresh(self) -> None:
         """Ensure market data is recent."""
         self.market = self.client.get_market_by_id(self.market.id)
