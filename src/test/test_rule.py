@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Mapping
 
-from pytest import fixture, raises, skip
+from pytest import fixture, mark, raises, skip
 
 from .. import Rule
 from ..consts import AVAILABLE_RULES, Outcome
@@ -65,6 +65,7 @@ def test_rule_formatting() -> None:
             val = rule.value(market, format=format, refresh=True)
 
 
+@mark.depends(on=('test_import_rule', ))
 def test_rule_from_dict(rule_name: str) -> None:
     """Make sure that if `__init__` doesn't require arguments, `from_dict()` also does not."""
     RuleSubclass = get_rule(rule_name)

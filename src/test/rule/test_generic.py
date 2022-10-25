@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from itertools import chain, product
 from typing import TYPE_CHECKING, Callable, List, Type, cast
 
-from pytest import fixture
+from pytest import fixture, mark
 
 from ... import Rule
 from ...consts import BinaryResolution
@@ -46,6 +46,7 @@ def VariadicRuleSubclass(request: PytestRequest[Type[VariadicRule[T]]]) -> Type[
     return request.param
 
 
+@mark.depends(on=('test_import_rule', ))
 def test_binary_rule(binary_rule: str) -> None:
     RuleSubclass = cast(Type[BinaryRule[BinaryResolution]], get_rule(binary_rule))
     mock_obj1: ResolveToValue[Optional[bool]] = ResolveToValue(None)
@@ -98,6 +99,7 @@ def test_at_time_rule_value() -> None:
         assert bool(obj.value(cast(Market, None))) is bool(idx % 2)
 
 
+@mark.depends(on=('test_fib', ))
 def test_modulus_rule(data_regression: DataRegressionFixture, limit: int = 100) -> None:
     val1: ResolveToValue[Literal['CANCEL'] | float] = ResolveToValue(1)
     val2: ResolveToValue[Literal['CANCEL'] | float] = ResolveToValue(1)

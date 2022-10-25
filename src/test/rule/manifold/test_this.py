@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from urllib.parse import quote
 
-from pytest import raises, skip
+from pytest import mark, raises, skip
 
 from ....consts import Outcome
 from ....market import Market
@@ -26,6 +26,7 @@ def test_CurentValueRule(mkt: Market, data_regression: DataRegressionFixture) ->
         data_regression.check({'answer': val})
 
 
+@mark.depends(on=('test_fib', ))
 def test_FibonacciValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
     if mkt.market.outcomeType in Outcome.MC_LIKE():
         with manifold_vcr.use_cassette(f'rule/manifold/this/test_FibonacciValueRule/{quote(mkt.id)}.yaml'):
@@ -53,6 +54,7 @@ def test_PopularValueRule(mkt: Market, data_regression: DataRegressionFixture) -
                 PopularValueRule(size=1).value(mkt)
 
 
+@mark.depends(on=('test_CurentValueRule', ))
 def test_RoundValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
     if mkt.market.outcomeType in Outcome.BINARY_LIKE():
         with manifold_vcr.use_cassette(f'rule/manifold/this/test_RoundValueRule/{quote(mkt.id)}.yaml'):

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from urllib.parse import quote
 
-from pytest import skip
+from pytest import mark, skip
 
 from ....consts import Outcome
 from ....market import Market
@@ -40,6 +40,7 @@ def test_OtherMarketValue(mkt: Market, data_regression: DataRegressionFixture) -
         data_regression.check({'answer': val})
 
 
+@mark.depends(on=('test_OtherMarketValue', ))
 def test_AmplifiedOddsRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
     if mkt.market.outcomeType == Outcome.BINARY:
         filename = f'rule/manifold/other/test_AmplifiedOddsRule/{quote(mkt.id)}.yaml'
