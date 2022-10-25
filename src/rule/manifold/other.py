@@ -29,7 +29,7 @@ class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
     """A rule that checks whether another market is closed."""
 
     def _value(self, market: Market) -> bool:
-        mkt = self.api_market()
+        mkt = self.api_market(market=market)
         assert mkt.closeTime is not None
         return bool(mkt.isResolved or (mkt.closeTime < time() * 1000))
 
@@ -54,7 +54,7 @@ class OtherMarketUniqueTraders(ManifoldMarketMixin, Rule[int]):
 
     def _value(self, market: Market) -> int:
         return len(
-            {bet.userId for bet in self.api_market().bets} - {None}
+            {bet.userId for bet in self.api_market(market=market).bets} - {None}
         )
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -62,11 +62,11 @@ class OtherMarketUniqueTraders(ManifoldMarketMixin, Rule[int]):
 
 
 @define(slots=False)
-class OtherMarketValue(ManifoldMarketMixin, Rule[T]):
+class OtherMarketValue(Rule[T], ManifoldMarketMixin):
     """A rule that resolves to the value of another rule."""
 
     def _value(self, market: Market) -> T:
-        mkt = self.api_market()
+        mkt = self.api_market(market=market)
         if mkt.resolution == "CANCEL":
             ret: AnyResolution = "CANCEL"
         elif mkt.outcomeType == "BINARY":
@@ -84,7 +84,7 @@ class OtherMarketValue(ManifoldMarketMixin, Rule[T]):
 
     def _binary_value(self, market: Market, mkt: APIMarket | None = None) -> float:
         if mkt is None:
-            mkt = self.api_market()
+            mkt = self.api_market(market=market)
         if mkt.isResolved:
             if mkt.resolution == "YES":
                 return True
@@ -98,7 +98,7 @@ class OtherMarketValue(ManifoldMarketMixin, Rule[T]):
                 f"({self.api_market().question}).\n")
 
     def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        f_mkt = self.f_api_market()
+        f_mkt = self.f_api_market(market=market)
         f_val = parallel(self._value, market)
         mkt = f_mkt.result()
         ret = (f"{'  ' * indent}- Resolved (or current, if not resolved) value of `{self.id_}` "

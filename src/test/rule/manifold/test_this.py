@@ -5,10 +5,10 @@ from urllib.parse import quote
 
 from pytest import mark, raises, skip
 
-from ....consts import Outcome
+from ....consts import AnyResolution, Outcome
 from ....market import Market
 from ....rule.manifold.this import (CurrentValueRule, FibonacciValueRule, PopularValueRule, RoundValueRule,
-                                    ThisMarketClosed)
+                                    ThisMarketClosed, UniqueTradersRule)
 from ... import manifold_vcr, mkt
 
 assert mkt  # just need to access it so mypy doesn't complain
@@ -21,12 +21,19 @@ if TYPE_CHECKING:  # pragma: no cover
 
 def test_CurentValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
     with manifold_vcr.use_cassette(f'rule/manifold/this/test_CurrentValueRule/{quote(mkt.id)}.yaml'):
-        obj = CurrentValueRule()
+        obj: CurrentValueRule[AnyResolution] = CurrentValueRule()
         val = obj.value(mkt)
         data_regression.check({'answer': val})
 
 
-@mark.depends(on=('test_fib', ))
+def test_OtherMarketUniqueTraders(mkt: Market, data_regression: DataRegressionFixture) -> None:
+    with manifold_vcr.use_cassette(f'rule/manifold/this/test_UniqueTradersRule/{quote(mkt.id)}.yaml'):
+        obj = UniqueTradersRule(id_=mkt.id)
+        val = obj._value(mkt)
+        data_regression.check({'answer': val})
+
+
+@mark.depends(on=('src/test/test_util.py::test_fib', 'src/test/test_util.py::test_market_to_answer_map'))
 def test_FibonacciValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
     if mkt.market.outcomeType in Outcome.MC_LIKE():
         with manifold_vcr.use_cassette(f'rule/manifold/this/test_FibonacciValueRule/{quote(mkt.id)}.yaml'):
@@ -34,7 +41,8 @@ def test_FibonacciValueRule(mkt: Market, data_regression: DataRegressionFixture)
             val = obj.value(mkt)
             data_regression.check({'answer': val})
     else:
-        skip("Rule does not support this market type")
+        with raises(RuntimeError):
+            FibonacciValueRule().value(mkt)
 
 
 def test_PopularValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:

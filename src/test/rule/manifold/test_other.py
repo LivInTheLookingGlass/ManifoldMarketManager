@@ -3,15 +3,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from urllib.parse import quote
 
-from pytest import mark, skip
+from pytest import mark
 
 from ....consts import Outcome
 from ....market import Market
-from ....rule.manifold.other import AmplifiedOddsRule, OtherMarketClosed, OtherMarketResolved, OtherMarketValue
+from ....rule.manifold.other import (AmplifiedOddsRule, OtherMarketClosed, OtherMarketResolved,
+                                     OtherMarketUniqueTraders, OtherMarketValue)
 from ....util import hash_to_randrange
-from ... import manifold_vcr, mkt
+from ... import cpmm1_mkt, manifold_vcr, mkt
 
-assert mkt  # just need to access it so mypy doesn't complain
+assert mkt, cpmm1_mkt  # just need to access it so mypy doesn't complain
 
 if TYPE_CHECKING:  # pragma: no cover
     from pytest_regressions.data_regression import DataRegressionFixture
@@ -40,8 +41,16 @@ def test_OtherMarketValue(mkt: Market, data_regression: DataRegressionFixture) -
         data_regression.check({'answer': val})
 
 
+def test_OtherMarketUniqueTraders(mkt: Market, data_regression: DataRegressionFixture) -> None:
+    with manifold_vcr.use_cassette(f'rule/manifold/other/test_OtherMarketUniqueTraders/{quote(mkt.id)}.yaml'):
+        obj = OtherMarketUniqueTraders(id_=mkt.id)
+        val = obj._value(mkt)
+        data_regression.check({'answer': val})
+
+
 @mark.depends(on=('test_OtherMarketValue', ))
-def test_AmplifiedOddsRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
+def test_AmplifiedOddsRule(cpmm1_mkt: Market, data_regression: DataRegressionFixture) -> None:
+    mkt = cpmm1_mkt
     if mkt.market.outcomeType == Outcome.BINARY:
         filename = f'rule/manifold/other/test_AmplifiedOddsRule/{quote(mkt.id)}.yaml'
         with manifold_vcr.use_cassette(filename):
@@ -52,5 +61,3 @@ def test_AmplifiedOddsRule(mkt: Market, data_regression: DataRegressionFixture) 
             )
             val = obj._value(mkt)
             data_regression.check({'answer': val})
-    else:
-        skip("Rule does not support this market type")
