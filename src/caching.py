@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from concurrent.futures import Future, ThreadPoolExecutor
 from os import getenv
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, Generic, TypeVar
 
 import requests_cache
 
@@ -17,10 +17,10 @@ if CACHE:
     requests_cache.install_cache(expire_after=360, allowable_methods=('GET', ))
     executor = ThreadPoolExecutor(thread_name_prefix="ManifoldMarketManagerWorker_")
 else:
-    class Deferred(Future[T]):
+    class Deferred(Future, Generic[T]):
         """Dummy future class for use in testing."""
 
-        def __init__(self, func: Callable[[...], T], *args: Any, **kwargs: Any) -> None:
+        def __init__(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> None:
             """Store func and arguments."""
             self.deferred_func = func
             self.args = args
