@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from concurrent.futures import Future, ThreadPoolExecutor
 from os import getenv
+from sys import version_info
 from typing import TYPE_CHECKING, Generic, TypeVar
 
 import requests_cache
@@ -17,7 +18,12 @@ if CACHE:
     requests_cache.install_cache(expire_after=360, allowable_methods=('GET', ))
     executor = ThreadPoolExecutor(thread_name_prefix="ManifoldMarketManagerWorker_")
 else:
-    class Deferred(Future, Generic[T]):
+    if version_info < (3, 9):  # I hate this
+        deferred_subclass = (Future, Generic[T])  # type: ignore
+    else:
+        deferred_subclass = (Future[T], )
+
+    class Deferred(*deferred_subclass):
         """Dummy future class for use in testing."""
 
         def __init__(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> None:
