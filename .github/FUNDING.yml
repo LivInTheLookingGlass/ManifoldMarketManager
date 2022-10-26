@@ -1,4 +1,7 @@
 github: LivInTheLookingGlass
 patreon: LivInTheLookingGlass
 liberapay: LivInTheLookingGlass
-custom: ["bitcoin:1CPHXRn8SYQYTxSgXFESG28WrwXKbb69HU", "ethereum:0xDb7FD6A1eDeA6E46fF9A9AdD0De4dFd6aCD5fBD2", "https://venmo.com/?txn=pay&recipients=LivInTheLookingGlass"]
+custom: 
+   - bitcoin:1CPHXRn8SYQYTxSgXFESG28WrwXKbb69HU
+   - ethereum:0xDb7FD6A1eDeA6E46fF9A9AdD0De4dFd6aCD5fBD2
+   - https://venmo.com/?txn=pay&recipients=LivInTheLookingGlass
