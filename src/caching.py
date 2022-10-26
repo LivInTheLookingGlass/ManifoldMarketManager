@@ -4,12 +4,12 @@ from __future__ import annotations
 from concurrent.futures import Future, ThreadPoolExecutor
 from os import getenv
 from sys import version_info
-from typing import TYPE_CHECKING, Generic, TypeVar
+from typing import TYPE_CHECKING, Generic, TypeVar, cast
 
 import requests_cache
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Callable
+    from typing import Any, Callable, Optional
 
 T = TypeVar("T")
 
@@ -18,12 +18,14 @@ if CACHE:
     requests_cache.install_cache(expire_after=360, allowable_methods=('GET', ))
     executor = ThreadPoolExecutor(thread_name_prefix="ManifoldMarketManagerWorker_")
 else:
-    if version_info < (3, 9):  # I hate this
-        deferred_subclass = (Future, Generic[T])  # type: ignore
+    if version_info >= (3, 9):  # I hate this
+        _Future = Future
     else:
-        deferred_subclass = (Future[T], )
+        class _Future(Future, Generic[T]):  # type: ignore
+            def result(self, timeout: Optional[float] = None) -> T:
+                return cast(T, super().result(timeout))
 
-    class Deferred(*deferred_subclass):
+    class Deferred(_Future[T]):
         """Dummy future class for use in testing."""
 
         def __init__(self, func: Callable[..., T], *args: Any, **kwargs: Any) -> None:
@@ -33,10 +35,10 @@ else:
             self.kwargs = kwargs
             super().__init__()
 
-        def result(self, *args: Any, **kwargs: Any) -> T:
+        def result(self, timeout: Optional[float] = None) -> T:
             """Execute the deferred function and return its value."""
             self.set_result(self.deferred_func(*self.args, **self.kwargs))
-            return super().result(*args, **kwargs)
+            return super().result(timeout)
 
 
 def parallel(func: Callable[..., T], *args: Any, **kwargs: Any) -> Future[T]:
