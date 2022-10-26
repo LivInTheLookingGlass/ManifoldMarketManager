@@ -1,32 +1,21 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
-# See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
-  # The python orb contains a set of prepackaged CircleCI configuration you can use repeatedly in your configuration files
-  # Orb commands and jobs help you with common scripting around a language/tool
-  # so you dont have to copy and paste it everywhere.
-  # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
   python: circleci/python@1.5.0
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+workflows:
+  standard:
+    jobs:
+      - build-and-test-3-08
+      - build-and-test-3-09
+      - build-and-test-3-10
+      - build-and-test-pypy3
+      - lint
+
 jobs:
-  build-and-test-3-08: # This is the name of the job, feel free to change it to better match what you're trying to do!
-    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
-    # You can specify an image from Dockerhub or use one of the convenience images from CircleCI's Developer Hub
-    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
-    # The executor is the environment in which the steps below will be executed - below will use a python 3.10.2 container
-    # Change the version below to your required version of python
+  build-and-test-3-08: &test-template
     docker:
       - image: cimg/python:3.8
-    # Checkout the code as the first step. This is a dedicated CircleCI step.
-    # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
-    # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
-    # Then run your tests!
-    # CircleCI will report the results back to your VCS provider.
     steps:
       - checkout
       - run:
@@ -37,102 +26,34 @@ jobs:
               touch env_personal.sh
       - run:
           name: Run build script
-          # This assumes pytest is installed via the install-package step above
           command: make build
       - run:
           name: Run tests
-          # This assumes pytest is installed via the install-package step above
           command: make test LINT=false MYPY=false
       - run:
           name: Upload coverage report
-          # This assumes pytest is installed via the install-package step above
           command: make upload_coverage
       - store_artifacts:
           path: ./dist/
 
-  build-and-test-3-09: # This is the name of the job, feel free to change it to better match what you're trying to do!
-    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
-    # You can specify an image from Dockerhub or use one of the convenience images from CircleCI's Developer Hub
-    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
-    # The executor is the environment in which the steps below will be executed - below will use a python 3.10.2 container
-    # Change the version below to your required version of python
+  build-and-test-3-09:
+    <<: *test-template
     docker:
       - image: cimg/python:3.9
-    # Checkout the code as the first step. This is a dedicated CircleCI step.
-    # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
-    # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
-    # Then run your tests!
-    # CircleCI will report the results back to your VCS provider.
-    steps:
-      - checkout
-      - run:
-          name: Initialize submodules
-          command: |-
-              git submodule update --init
-              mkdir -p logs
-              touch env_personal.sh
-      - run:
-          name: Run build script
-          # This assumes pytest is installed via the install-package step above
-          command: make build
-      - run:
-          name: Run tests
-          # This assumes pytest is installed via the install-package step above
-          command: make test LINT=false MYPY=false
-      - run:
-          name: Upload coverage report
-          # This assumes pytest is installed via the install-package step above
-          command: make upload_coverage
-      - store_artifacts:
-          path: ./dist/
-  build-and-test-3-10: # This is the name of the job, feel free to change it to better match what you're trying to do!
-    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
-    # You can specify an image from Dockerhub or use one of the convenience images from CircleCI's Developer Hub
-    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
-    # The executor is the environment in which the steps below will be executed - below will use a python 3.10.2 container
-    # Change the version below to your required version of python
+
+  build-and-test-3-10:
+    <<: *test-template
     docker:
       - image: cimg/python:3.10
-    # Checkout the code as the first step. This is a dedicated CircleCI step.
-    # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
-    # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
-    # Then run your tests!
-    # CircleCI will report the results back to your VCS provider.
-    steps:
-      - checkout
-      - run:
-          name: Initialize submodules
-          command: |-
-              git submodule update --init
-              mkdir -p logs
-              touch env_personal.sh
-      - run:
-          name: Run build script
-          # This assumes pytest is installed via the install-package step above
-          command: make build
-      - run:
-          name: Run tests
-          # This assumes pytest is installed via the install-package step above
-          command: make test LINT=false MYPY=false
-      - run:
-          name: Upload coverage report
-          # This assumes pytest is installed via the install-package step above
-          command: make upload_coverage
-      - store_artifacts:
-          path: ./dist/
-  build-and-test-pypy3: # This is the name of the job, feel free to change it to better match what you're trying to do!
-    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
-    # You can specify an image from Dockerhub or use one of the convenience images from CircleCI's Developer Hub
-    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
-    # The executor is the environment in which the steps below will be executed - below will use a python 3.10.2 container
-    # Change the version below to your required version of python
+
+  build-and-test-3-11:
+    <<: *test-template
     docker:
-      - image: cimg/python:3.10
-    # Checkout the code as the first step. This is a dedicated CircleCI step.
-    # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
-    # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
-    # Then run your tests!
-    # CircleCI will report the results back to your VCS provider.
+      - image: cimg/python:3.11
+
+  build-and-test-pypy3:
+    docker:
+      - image: cimg/python:3.10.
     steps:
       - checkout
       - run:
@@ -152,7 +73,6 @@ jobs:
               touch env_personal.sh
       - run:
           name: Run build script
-          # This assumes pytest is installed via the install-package step above
           command: |-
               source ./miniconda/bin/activate
               conda activate pypy
@@ -160,33 +80,21 @@ jobs:
               make build PY=python
       - run:
           name: Run tests
-          # This assumes pytest is installed via the install-package step above
           command: |-
               source ./miniconda/bin/activate
               conda activate pypy
               make test LINT=false MYPY=false PY=python
       - run:
           name: Upload coverage report
-          # This assumes pytest is installed via the install-package step above
           command: |-
               source ./miniconda/bin/activate
               conda activate pypy
               make upload_coverage
       - store_artifacts:
           path: ./dist/
-  lint: # This is the name of the job, feel free to change it to better match what you're trying to do!
-    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
-    # You can specify an image from Dockerhub or use one of the convenience images from CircleCI's Developer Hub
-    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
-    # The executor is the environment in which the steps below will be executed - below will use a python 3.10.2 container
-    # Change the version below to your required version of python
+  lint:
     docker:
       - image: cimg/python:3.10
-    # Checkout the code as the first step. This is a dedicated CircleCI step.
-    # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
-    # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
-    # Then run your tests!
-    # CircleCI will report the results back to your VCS provider.
     steps:
       - checkout
       - run:
@@ -197,17 +105,4 @@ jobs:
               touch env_personal.sh
       - run:
           name: Run linter / type checking
-          # This assumes pytest is installed via the install-package step above
           command: make test LINT=only
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
-workflows:
-  standard: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
-    jobs:
-      - build-and-test-3-08
-      - build-and-test-3-09
-      - build-and-test-3-10
-      - build-and-test-pypy3
-      - lint
