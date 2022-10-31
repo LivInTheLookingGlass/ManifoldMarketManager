@@ -170,7 +170,7 @@ The goal of this project is to make a Manifold agent that can manage various for
 
 ## Dependencies
 
-![A graph of my application's dependencies](./src.png)
+![A graph of my application's dependencies](./ManifoldMarketManager.png)
 
 ## JSON Examples
 
