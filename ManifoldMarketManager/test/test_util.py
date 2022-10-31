@@ -66,8 +66,8 @@ def test_prob_to_num_cpmm1(
 
 
 @mark.depends(on=(
-    'src/test/test_util.py::test_pool_to_prob_cpmm1',
-    'src/test/test_util.py::test_prob_to_num_cpmm1'
+    'test_pool_to_prob_cpmm1',
+    'test_prob_to_num_cpmm1'
 ))
 def test_pool_to_num_cpmm1(
     cpmm1_mkt: Market, data_regression: DataRegressionFixture, benchmark: BenchmarkFixture

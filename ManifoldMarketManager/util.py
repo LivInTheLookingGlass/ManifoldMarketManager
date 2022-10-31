@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from functools import lru_cache
 from hashlib import blake2b
 from importlib import import_module
 from itertools import count
@@ -18,12 +17,14 @@ from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
 from pymanifold.utils.math import number_to_prob_cpmm1  # noqa: F401
 
-from .consts import EnvironmentVariable, Outcome
+from .consts import Outcome
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Callable, Collection, Iterable, Mapping, MutableSequence, Sequence, Type, TypeVar, Union
+    from typing import (Any, Callable, Collection, Iterable, Mapping, MutableSequence, Optional, Sequence, Type,
+                        TypeVar, Union)
 
     from . import Market, Rule
+    from .account import Account
 
     ModJSONType = Union[int, float, bool, str, None, Rule[Any], Sequence['ModJSONType'], Mapping[str, 'ModJSONType']]
     ModJSONDict = Mapping[str, ModJSONType]
@@ -164,11 +165,11 @@ def require_env(*env: str) -> Callable[[Callable[..., T]], Callable[..., T]]:
     return bar
 
 
-@lru_cache(maxsize=None)
-@require_env(EnvironmentVariable.ManifoldAPIKey)
-def get_client() -> ManifoldClient:
+def get_client(account: Optional[Account] = None) -> ManifoldClient:
     """Return a (possibly non-unique) Manifold client."""
-    return ManifoldClient(getenv("ManifoldAPIKey"))
+    if not account:
+        return ManifoldClient()
+    return ManifoldClient(account.ManifoldToken)
 
 
 def explain_abstract(time_rules: Iterable[Rule[Any]], value_rules: Iterable[Rule[Any]], **kwargs: Any) -> str:

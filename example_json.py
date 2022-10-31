@@ -8,19 +8,19 @@ from json import dump, load
 from re import match
 from typing import TYPE_CHECKING
 
-from src.application import register_db
-from src.market import Market
-from src.rule import get_rule
-from src.util import DictDeserializable, explain_abstract, get_client
+from ManifoldMarketManager.application import register_db
+from ManifoldMarketManager.market import Market
+from ManifoldMarketManager.rule import get_rule
+from ManifoldMarketManager.util import DictDeserializable, explain_abstract, get_client
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any, Optional
 
     from pymanifold.types import JSONDict
 
-    from src import Rule
-    from src.consts import OutcomeType
-    from src.rule import ResolutionValueRule
+    from ManifoldMarketManager import Rule
+    from ManifoldMarketManager.consts import OutcomeType
+    from ManifoldMarketManager.rule import ResolutionValueRule
 
 
 def main():
@@ -158,28 +158,23 @@ class CreationRequest:
 
     def create(self):
         """Create a market, given its request object."""
-        client = get_client()
-        if self.manifold.outcomeType == "FREE_RESPONSE":  # requires extra actions
-            market = client.create_free_response_market(**self.manifold.to_dict())
-            for answer, weight in self.initial_values.items():
-                client.create_bet(market.id, weight, answer)
+        account = Account.from_env()
+        client = get_client(account)
 
-        elif self.manifold.outcomeType in ("BINARY", "PSEUDO_NUMERIC", "MULTIPLE_CHOICE"):  # simple markets
-            func = {
-                "BINARY": client.create_binary_market,
-                "PSEUDO_NUMERIC": client.create_numeric_market,
-                "MULTIPLE_CHOICE": client.create_multiple_choice_market
-            }[self.manifold.outcomeType]
-            market = func(**self.manifold.to_dict())
-
-        else:
-            raise ValueError()
+        func = {
+            "BINARY": client.create_binary_market,
+            "PSEUDO_NUMERIC": client.create_numeric_market,
+            "MULTIPLE_CHOICE": client.create_multiple_choice_market,
+            "FREE_RESPONSE": client.create_free_response_market,
+        }[self.manifold.outcomeType]
+        market = func(**self.manifold.to_dict())
 
         return Market(
             client.get_market_by_id(market.id),
             do_resolve_rules=self.time_rules,
             resolve_to_rules=self.value_rules,
-            notes=self.notes
+            notes=self.notes,
+            account=account
         )
 
 
