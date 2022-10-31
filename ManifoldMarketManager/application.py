@@ -29,8 +29,8 @@ if __version_info__ < (20, 0, 0, "alpha", 1):
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CallbackQueryHandler
 
-from src import market, require_env
-from src.consts import EnvironmentVariable, MarketStatus, Response
+from . import market, require_env
+from .consts import EnvironmentVariable, MarketStatus, Response
 
 if TYPE_CHECKING:  # pragma: no cover
     from sqlite3 import Connection
@@ -38,7 +38,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from telegram import Update
     from telegram.ext import ContextTypes
 
-    from src import Market
+    from . import Market
 
 logger = getLogger(__name__)
 

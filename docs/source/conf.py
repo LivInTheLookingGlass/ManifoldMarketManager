@@ -17,8 +17,7 @@ from sys import path as sys_path
 
 sys_path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from src import VERSION  # noqa: E402
-modules['ManifoldMarketManager'] = modules['src']
+from ManifoldMarketManager import VERSION  # noqa: E402
 
 
 # -- Project information -----------------------------------------------------
