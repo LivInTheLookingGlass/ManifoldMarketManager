@@ -32,24 +32,25 @@ class ThisToOtherConverter(ManifoldMarketMixin):
     def api_market(self, client: Optional[ManifoldClient] = None, market: Optional[Market] = None) -> APIMarket:
         """Return an APIMarket object associated with this rule's market."""
         assert market is not None
+        market.refresh()
         return market.market
 
 
-class ThisMarketClosed(ThisToOtherConverter, OtherMarketClosed):
+class ThisMarketClosed(OtherMarketClosed, ThisToOtherConverter):
     """A rule that checks whether its associated market is closed."""
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return "If this market reaches its close date\n"
 
 
-class CurrentValueRule(ThisToOtherConverter, OtherMarketValue[T]):
+class CurrentValueRule(OtherMarketValue[T], ThisToOtherConverter):
     """Resolve to the current market-consensus value."""
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return "Resolves to the current market value\n"
 
 
-class UniqueTradersRule(ThisToOtherConverter, OtherMarketUniqueTraders):
+class UniqueTradersRule(OtherMarketUniqueTraders, ThisToOtherConverter):
     """Resolve to the current number of unique traders."""
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:

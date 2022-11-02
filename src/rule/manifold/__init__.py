@@ -25,7 +25,7 @@ __all__ = ('this', 'other', 'user', 'ManifoldMarketMixin')
 class ManifoldMarketMixin:
     """A mixin class that holds the access to a Manifold market."""
 
-    id_: str = ''
+    id_: str = None  # type: ignore[assignment]
     slug: Optional[str] = None
     url: Optional[str] = None
 
@@ -33,11 +33,12 @@ class ManifoldMarketMixin:
         """Ensure we have at least the id."""
         if hasattr(super(), '__attrs_post_init__'):
             super().__attrs_post_init__()  # type: ignore
-        if self.id_:
+        if self.id_ is not None:
             return
         elif self.slug:
             slug = self.slug
         else:
+            breakpoint()
             slug = self.slug = cast(str, self.url).split("/")[-1]
         self.id_ = get_client().get_market_by_slug(slug).id
 
