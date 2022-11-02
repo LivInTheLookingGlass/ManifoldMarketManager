@@ -38,7 +38,6 @@ class ManifoldMarketMixin:
         elif self.slug:
             slug = self.slug
         else:
-            breakpoint()
             slug = self.slug = cast(str, self.url).split("/")[-1]
         self.id_ = get_client().get_market_by_slug(slug).id
 
