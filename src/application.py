@@ -139,7 +139,6 @@ def watch_reply(conn: Connection, id_: int, mkt: Market, console_only: bool = Fa
     """Watch for a reply from the bot manager in order to check the bot's work."""
     text = (f"Hey, we need to resolve {id_} to {mkt.resolve_to()}. It currently has a value of {mkt.current_answer()}."
             f"This market is called: {mkt.market.question}\n\n")
-    text += mkt.explain_abstract()
     try:
         text += "\n\n" + mkt.explain_specific()
     except Exception:
@@ -187,7 +186,7 @@ def main(refresh: bool = False, console_only: bool = False) -> None:
         logger.info(msg)
         if check:
             check = mkt.should_resolve()
-            msg = f'  - [{"x" if check else " "}] Is elligible to resolve (to {mkt.resolve_to()})?'
+            msg = f'  - [{"x" if check else " "}] Is elligible to resolve?'
             print(msg)
             logger.info(msg)
             if check:
