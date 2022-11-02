@@ -16,6 +16,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from pymanifold.lib import ManifoldClient
     from pymanifold.types import Market as APIMarket
 
+    from ...market import Market
+
 __all__ = ('this', 'other', 'user', 'ManifoldMarketMixin')
 
 
@@ -39,15 +41,17 @@ class ManifoldMarketMixin:
             slug = self.slug = cast(str, self.url).split("/")[-1]
         self.id_ = get_client().get_market_by_slug(slug).id
 
-    def api_market(self, client: Optional[ManifoldClient] = None) -> APIMarket:
+    def api_market(self, client: Optional[ManifoldClient] = None, market: Optional[Market] = None) -> APIMarket:
         """Return an APIMarket object associated with this rule's market."""
         if client is None:
             client = get_client()
         return client.get_market_by_id(self.id_)
 
-    def f_api_market(self, client: Optional[ManifoldClient] = None) -> Future[APIMarket]:
+    def f_api_market(
+        self, client: Optional[ManifoldClient] = None, market: Optional[Market] = None
+    ) -> Future[APIMarket]:
         """Return a Futures which resolves to the APIMarket object associated with this rule's market."""
-        return parallel(self.api_market, client)
+        return parallel(self.api_market, client, market)
 
 
 from . import other, this, user  # noqa: E402

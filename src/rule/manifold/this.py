@@ -2,71 +2,58 @@
 
 from __future__ import annotations
 
-from time import time
 from typing import TYPE_CHECKING, Mapping, Union, cast
 
 from attrs import Factory, define
 
 from ... import Rule
-from ...consts import (AnyResolution, BinaryResolution, FreeResponseResolution, MultipleChoiceResolution, Outcome,
-                       PseudoNumericResolution)
-from ...util import fibonacci, market_to_answer_map, normalize_mapping, pool_to_number_cpmm1
-from ..abstract import AbstractRule
+from ...consts import (BinaryResolution, FreeResponseResolution, MultipleChoiceResolution, Outcome,
+                       PseudoNumericResolution, T)
+from ...util import fibonacci, market_to_answer_map, normalize_mapping
+from . import ManifoldMarketMixin
+from .other import OtherMarketClosed, OtherMarketUniqueTraders, OtherMarketValue
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, ClassVar
+    from typing import Any, ClassVar, Optional
+
+    from pymanifold.lib import ManifoldClient
+    from pymanifold.types import Market as APIMarket
 
     from ...market import Market
 
 
-@define(slots=False)
-class ThisMarketClosed(AbstractRule[bool]):
+class ThisToOtherConverter(ManifoldMarketMixin):
+    """A mixin class that converts market accesses to reuse `other` code."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Ensure that we override the market fetch methods."""
+        super().__init__(id_="N/A")
+
+    def api_market(self, client: Optional[ManifoldClient] = None, market: Optional[Market] = None) -> APIMarket:
+        """Return an APIMarket object associated with this rule's market."""
+        assert market is not None
+        return market.market
+
+
+class ThisMarketClosed(ThisToOtherConverter, OtherMarketClosed):
     """A rule that checks whether its associated market is closed."""
 
-    _explainer_stub: ClassVar[str] = "If this market reaches its close date"
-
-    def _value(self, market: Market) -> bool:
-        market.refresh()
-        assert market.market.closeTime is not None
-        return bool(market.market.closeTime < time() * 1000)
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        return "If this market reaches its close date\n"
 
 
-@define(slots=False)
-class CurrentValueRule(AbstractRule[AnyResolution]):
+class CurrentValueRule(ThisToOtherConverter, OtherMarketValue[T]):
     """Resolve to the current market-consensus value."""
 
-    _explainer_stub: ClassVar[str] = "Resolves to the current market value"
-
-    def _value(self, market: Market) -> float | dict[Any, float]:
-        market.refresh()
-        if market.market.outcomeType == Outcome.BINARY:
-            assert market.market.probability is not None
-            return market.market.probability * 100
-        elif market.market.outcomeType == Outcome.PSEUDO_NUMERIC:
-            assert isinstance(market.market.pool, Mapping)
-            assert market.market.p
-            return pool_to_number_cpmm1(
-                market.market.pool['YES'],
-                market.market.pool['NO'],
-                market.market.p,
-                float(market.market.min or 0),
-                float(market.market.max or 0),
-                bool(market.market.isLogScale)
-            )
-        return market_to_answer_map(market)
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        return "Resolves to the current market value\n"
 
 
-@define(slots=False)
-class UniqueTradersRule(AbstractRule[int]):
-    """Resolve to the current market-consensus value."""
+class UniqueTradersRule(ThisToOtherConverter, OtherMarketUniqueTraders):
+    """Resolve to the current number of unique traders."""
 
-    _explainer_stub: ClassVar[str] = "Resolves to the current number of unique traders"
-
-    def _value(self, market: Market) -> int:
-        market.refresh()
-        return len(
-            {bet.userId for bet in market.market.bets} - {None}
-        )
+    def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
+        return "Resolves to the current number of unique traders\n"
 
 
 @define(slots=False)
@@ -92,8 +79,7 @@ class FibonacciValueRule(Rule[Union[float, Mapping[int, float]]]):
         return ret
 
 
-@define(slots=False)
-class RoundValueRule(CurrentValueRule, Rule[Union[BinaryResolution, PseudoNumericResolution]]):
+class RoundValueRule(CurrentValueRule[Union[BinaryResolution, PseudoNumericResolution]]):
     """Resolve to the current market-consensus value, but rounded."""
 
     _explainer_stub: ClassVar[str] = "Resolves to round(MKT)"

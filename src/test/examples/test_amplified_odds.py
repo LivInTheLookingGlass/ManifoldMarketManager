@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pytest import fixture
+from pytest import fixture, mark
 
 from ...market import Market
 from ...util import get_client
@@ -13,13 +13,11 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from .. import PytestRequest
 
-client = get_client()
-
 # slug -> everything else
 examples: dict[str, Any] = {
     'amplified-odds-100x-will-a-nuclear-4acd2868830b': {
         'market': None,
-        'client': client,
+        'client': None,
         'do_resolve_rules': [[
             'manifold.other.OtherMarketResolved',
             {'id_': 'jsqfBFbbIyP4X40L6VSo'}
@@ -40,11 +38,15 @@ examples: dict[str, Any] = {
 def amplified_example(request: PytestRequest[str]) -> Market:
     with manifold_vcr.use_cassette(f'examples/amplified_odds/fetch/{request.param}.yaml'):
         ret = Market.from_dict(examples[request.param])
+        ret.client = client = get_client()
         ret.market = client.get_market_by_slug(request.param)
         ret.market.isResolved = False
         return ret
 
 
+@mark.depends(on=(
+    "src/test/rule/manifold/test_other.py::test_AmplifiedOddsRule",
+))
 def test_AmplifiedOddsMarket(amplified_example: Market) -> None:
     with manifold_vcr.use_cassette(f'examples/amplified_odds/{amplified_example.id}.yaml'):
         if amplified_example.should_resolve():

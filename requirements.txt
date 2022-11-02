@@ -15,6 +15,7 @@ twine
 flake8 < 5
 markdown >= 3.3
 numpy
+py  # needed for pytest-benchmark
 pytest
 pytest-benchmark
 pytest-cov
