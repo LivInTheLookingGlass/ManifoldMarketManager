@@ -12,7 +12,7 @@ bump2version
 twine
 
 # Tests
-flake8 < 5
+flake8 < 6
 markdown >= 3.3
 numpy
 py  # needed for pytest-benchmark
