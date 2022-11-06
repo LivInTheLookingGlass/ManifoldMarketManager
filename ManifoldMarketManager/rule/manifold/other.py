@@ -85,13 +85,17 @@ class OtherMarketValue(Rule[T], ManifoldMarketMixin):
     def _binary_value(self, market: Market, mkt: APIMarket | None = None) -> float:
         if mkt is None:
             mkt = self.api_market(market=market)
-        if mkt.isResolved:
-            if mkt.resolution == "YES":
-                return True
-            elif mkt.resolution == "NO":
-                return False
-            return cast(float, mkt.resolutionProbability)
-        return cast(float, mkt.probability)
+
+        if mkt.resolution == "YES":
+            ret: float = True
+        elif mkt.resolution == "NO":
+            ret = False
+        elif mkt.resolutionProbability is not None:
+            ret = mkt.resolutionProbability
+        else:
+            ret = cast(float, mkt.probability)
+        assert ret is not None
+        return ret
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return (f"{'  ' * indent}- Resolved (or current, if not resolved) value of `{self.id_}` "
