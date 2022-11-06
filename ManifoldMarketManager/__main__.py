@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from logging import DEBUG, INFO, basicConfig, getLogger
 from os import getenv
+
 from .application import parse_args
 
 args = parse_args()

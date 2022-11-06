@@ -7,12 +7,12 @@ from random import randrange
 from secrets import token_hex
 from typing import TYPE_CHECKING, Any, List, Mapping, cast
 
+from pymanifold.utils.math import pool_to_number_cpmm1, pool_to_prob_cpmm1, prob_to_number_cpmm1
 from pytest import mark, raises
 
 from .. import Rule
 from ..consts import Outcome
-from ..util import (explain_abstract, fibonacci, market_to_answer_map, pool_to_number_cpmm1, pool_to_prob_cpmm1,
-                    prob_to_number_cpmm1, require_env)
+from ..util import explain_abstract, fibonacci, market_to_answer_map, require_env
 from . import cpmm1_mkt, mkt
 
 if TYPE_CHECKING:  # pragma: no cover

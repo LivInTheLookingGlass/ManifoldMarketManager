@@ -47,7 +47,8 @@ if TYPE_CHECKING:  # pragma: no cover
 logger = getLogger(__name__)
 
 
-def parse_args(args=None) -> Namespace:
+def parse_args(*args: Any, **kwargs: Any) -> Namespace:
+    """Parse arguments for the CLI."""
     main_parser = ArgumentParser()
     main_parser.add_argument('--no-logging', action='store_false', dest='logging', default=True)
     main_parser.add_argument('-v', '--verbose', action='count', default=0)
@@ -169,22 +170,23 @@ def parse_args(args=None) -> Namespace:
     list_parser.add_argument('--sig-figs', action='store', type=int, default=4)
     list_parser.set_defaults(func=list_command)
 
-    args = main_parser.parse_args(args)
+    parsed: Namespace = main_parser.parse_args(*args, **kwargs)
 
-    if hasattr(args, 'all_scanners') and args.all_scanners:
-        args.scanners = AVAILABLE_SCANNERS
+    if hasattr(parsed, 'all_scanners') and parsed.all_scanners:
+        parsed.scanners = AVAILABLE_SCANNERS
 
-    return args
+    return parsed
 
 
-def print_uncaught_args(kwargs) -> None:
+def _print_uncaught_args(kwargs: dict[str, Any]) -> None:
     if getenv("DEBUG") and kwargs:
         print("Unrecognized arguments:")
         print("\n".join(f'{key}: {value}' for key, value in kwargs.items()))
 
 
-def import_command(**kwargs) -> int:
-    print_uncaught_args(kwargs)
+def import_command(**kwargs: Any) -> int:
+    """Import markets from a file without creating any."""
+    _print_uncaught_args(kwargs)
     return -1
 
 
@@ -201,9 +203,10 @@ def quick_import_command(
     index_size: int | None = None,
     pr_slug: str | None = None,
     pr_bin: bool = False,
-    **kwargs
+    **kwargs: Any
 ) -> int:
-    print_uncaught_args(kwargs)
+    """Import a single market using the old-style arguments."""
+    _print_uncaught_args(kwargs)
     if url:
         mkt = Market.from_url(url)
     elif slug:
@@ -267,18 +270,21 @@ def quick_import_command(
     return 0
 
 
-def create_command(**kwargs) -> int:
-    print_uncaught_args(kwargs)
+def create_command(**kwargs: Any) -> int:
+    """Create markets from a file, then import them."""
+    _print_uncaught_args(kwargs)
     return -1
 
 
-def quick_create_command(**kwargs) -> int:
-    print_uncaught_args(kwargs)
+def quick_create_command(**kwargs: Any) -> int:
+    """Quickly create a single market without need for a file, then import it."""
+    _print_uncaught_args(kwargs)
     return -1
 
 
-def scan_command(**kwargs) -> int:
-    print_uncaught_args(kwargs)
+def scan_command(**kwargs: Any) -> int:
+    """Scan services for markets to create."""
+    _print_uncaught_args(kwargs)
     return -1
 
 
@@ -288,15 +294,18 @@ def run_command(
     scanners: list[str] = None,  # type: ignore[assignment]
     **kwargs: Any
 ) -> int:
-    print_uncaught_args(kwargs)
+    """Go through our markets and take actions if needed."""
+    _print_uncaught_args(kwargs)
     return main(refresh, console_only) or 0
 
 
 def loop_command(
     period: float = 5,
     times: float = 5,
-    **kwargs
+    **kwargs: Any
 ) -> int:
+    """Run this service multiple times."""
+    # TODO: turn this into an event queue instead
     for i in count():
         if i > times:
             break
@@ -305,16 +314,19 @@ def loop_command(
     return 0
 
 
-def edit_command(**kwargs) -> int:
-    print_uncaught_args(kwargs)
+def edit_command(**kwargs: Any) -> int:
+    """Edit a market from a temporary file or repl."""
+    _print_uncaught_args(kwargs)
     return -1
 
 
 def remove_command(
     ids: list[int],
+    assume_yes: bool = False,
     **kwargs: Any
 ) -> int:
-    print_uncaught_args(kwargs)
+    """Remove markets from the database."""
+    _print_uncaught_args(kwargs)
     for id_ in ids:
         with register_db() as conn:
             try:
@@ -325,7 +337,8 @@ def remove_command(
             except ValueError:
                 print(f"No market with id {id_} exists.")
                 return 1
-            if input(f'Are you sure you want to remove {id_}: "{mkt.market.question}" (y/N)?').lower().startswith('y'):
+            question = f'Are you sure you want to remove {id_}: "{mkt.market.question}" (y/N)?'
+            if (assume_yes or input(question).lower().startswith('y')):
                 conn.execute(
                     "DELETE FROM markets WHERE id = ?;",
                     (id_, )
@@ -339,9 +352,10 @@ def list_command(
     stats: bool = False,
     verbose: int = 0,
     sig_figs: int = 4,
-    **kwargs
+    **kwargs: Any
 ) -> int:
-    print_uncaught_args(kwargs)
+    """List markets from the database in varying verbosity."""
+    _print_uncaught_args(kwargs)
     with register_db() as conn:
         id_: int
         mkt: Market

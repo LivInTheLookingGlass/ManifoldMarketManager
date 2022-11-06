@@ -6,11 +6,12 @@ from time import time
 from typing import TYPE_CHECKING, cast
 
 from attrs import define
+from pymanifold.utils.math import prob_to_number_cpmm1
 
 from ... import Rule
 from ...caching import parallel
 from ...consts import BinaryResolution, Outcome, T
-from ...util import market_to_answer_map, prob_to_number_cpmm1, round_sig_figs
+from ...util import market_to_answer_map, round_sig_figs
 from .. import DoResolveRule
 from ..abstract import ResolveRandomSeed
 from . import ManifoldMarketMixin
