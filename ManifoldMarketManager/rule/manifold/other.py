@@ -93,9 +93,10 @@ class OtherMarketValue(Rule[T], ManifoldMarketMixin):
             ret = False
         elif mkt.resolutionProbability is not None:
             ret = mkt.resolutionProbability
+        elif mkt.probability is not None:
+            ret = mkt.probability
         else:
-            ret = cast(float, mkt.probability)
-        assert ret is not None
+            ret = mkt.bets[-1].probAfter
         return ret
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -106,8 +107,11 @@ class OtherMarketValue(Rule[T], ManifoldMarketMixin):
         f_mkt = self.f_api_market(market=market)
         f_val = parallel(self._value, market)
         mkt = f_mkt.result()
-        ret = (f"{'  ' * indent}- Resolved (or current, if not resolved) value of `{self.id_}` "
-               f"({mkt.question}) (-> ")
+        if hasattr(self, 'id_'):
+            ret = (f"{'  ' * indent}- Resolved (or current, if not resolved) value of `{self.id_}` "
+                   f"({mkt.question}) (-> ")
+        else:
+            ret = f"{'  ' * indent}- Resolved (or current, if not resolved) value of this market (-> "
         val = f_val.result()
         if val == "CANCEL":
             ret += "CANCEL"
