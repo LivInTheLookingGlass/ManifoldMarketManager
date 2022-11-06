@@ -96,7 +96,9 @@ class OtherMarketValue(Rule[T], ManifoldMarketMixin):
         elif mkt.probability is not None:
             ret = mkt.probability
         else:
-            ret = mkt.bets[-1].probAfter
+            prob = mkt.bets[-1].probAfter
+            assert prob is not None
+            ret = prob
         return ret
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
