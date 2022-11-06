@@ -15,7 +15,8 @@ from typing import TYPE_CHECKING
 
 from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
-from pymanifold.utils.math import number_to_prob_cpmm1  # noqa: F401
+from pymanifold.utils.math import (number_to_prob_cpmm1, pool_to_number_cpmm1, pool_to_prob_cpmm1,  # noqa: F401
+                                   prob_to_number_cpmm1)
 
 from .consts import Outcome
 
@@ -114,32 +115,6 @@ def normalize_mapping(answers: Mapping[T, float]) -> dict[T, float]:
     """Take a mapping of answers and normalize it such that the sum of their weights is 1."""
     total = sum(answers.values())
     return {key: value / total for key, value in answers.items()}
-
-
-def pool_to_prob_cpmm1(yes: float, no: float, p: float) -> float:
-    """Go from a pool of YES/NO to a probability using Maniswap."""
-    if yes <= 0 or no <= 0 or not (0 < p < 1):
-        raise ValueError()
-    pno = p * no
-    return pno / ((1 - p) * yes + pno)
-
-
-def pool_to_number_cpmm1(yes: float, no: float, p: float, start: float, end: float, isLogScale: bool = False) -> float:
-    """Go from a pool of probability to a numeric answer."""
-    if start >= end:
-        raise ValueError()
-    probability = pool_to_prob_cpmm1(yes, no, p)
-    return prob_to_number_cpmm1(probability, start, end, isLogScale)
-
-
-def prob_to_number_cpmm1(probability: float, start: float, end: float, isLogScale: bool = False) -> float:
-    """Go from a probability to a numeric answer."""
-    if isLogScale:
-        ret: float = (end - start + 1)**probability + start - 1
-    else:
-        ret = start + (end - start) * probability
-    ret = max(start, min(end, ret))
-    return ret
 
 
 def round_sig_figs(num: float, sig_figs: int = 4) -> str:
