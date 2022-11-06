@@ -156,7 +156,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.7.0.4"
+VERSION = "0.8.0.1"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "DoResolveRule", "ResolutionValueRule", "Rule", "Market", "get_client", "rule",

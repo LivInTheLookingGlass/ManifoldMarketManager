@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, cast
 from pyee import EventEmitter
 from pyee.cls import evented
 
+from .account import Account
 from .caching import parallel
 from .consts import EnvironmentVariable, MarketStatus, Outcome
 from .rule import get_rule
@@ -55,8 +56,9 @@ class Market(DictDeserializable):
     """
 
     market: APIMarket = field(repr=False, compare=False)
-    client: ManifoldClient = field(default_factory=get_client, repr=False, compare=False)
+    client: ManifoldClient = field(init=False, repr=False, compare=False)
     notes: str = field(default='')
+    account: Account = field(default_factory=Account.from_env)
     do_resolve_rules: list[Rule[Optional[bool]]] = field(default_factory=list)
     resolve_to_rules: list[Rule[AnyResolution]] = field(default_factory=list)
     logger: Logger = field(init=False, default=None, hash=False, repr=False)  # type: ignore[assignment]
@@ -75,6 +77,7 @@ class Market(DictDeserializable):
 
     def __post_init__(self) -> None:
         """Initialize state that doesn't make sense to exist in the init."""
+        self.client = get_client(self.account)
         if self._after_resolve not in self.event_emitter.listeners('after_resolve'):
             self.event_emitter.add_listener('after_resolve', self._after_resolve)
         self.logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
@@ -83,6 +86,7 @@ class Market(DictDeserializable):
         """Remove sensitive/non-serializable state before dumping to database."""
         state = self.__dict__.copy()
         del state['client']
+        del state['account']
         if 'logger' in state:
             del state['logger']
         state['event_emitter'] = copy(state['event_emitter'])
@@ -93,7 +97,7 @@ class Market(DictDeserializable):
     def __setstate__(self, state: Mapping[str, Any]) -> None:
         """Rebuild sensitive/non-serializable state after retrieving from database."""
         self.__dict__.update(state)
-        self.client = get_client()
+        self.account = Account.from_env()
         if not hasattr(self, "event_emitter"):
             self.event_emitter = EventEmitter()
         self.event_emitter._lock = Lock()

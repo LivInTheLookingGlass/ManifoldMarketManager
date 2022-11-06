@@ -27,7 +27,7 @@ def field(request: PytestRequest[FieldType]) -> FieldType:
 
 
 @mark.depends(on=(
-    "src/PyManifold/tests/test_pymanifold.py::test_get_user"
+    "ManifoldMarketManager/PyManifold/tests/test_pymanifold.py::test_get_user"
 ))
 def test_user_profit(manifold_user: str, field: FieldType, data_regression: DataRegressionFixture) -> None:
     with manifold_vcr.use_cassette(f'rule/manifold/test_user_profit/{manifold_user}/{field}.yaml'):
@@ -37,7 +37,7 @@ def test_user_profit(manifold_user: str, field: FieldType, data_regression: Data
 
 
 @mark.depends(on=(
-    "src/PyManifold/tests/test_pymanifold.py::test_get_user"
+    "ManifoldMarketManager/PyManifold/tests/test_pymanifold.py::test_get_user"
 ))
 def test_user_market_volume(manifold_user: str, field: FieldType, data_regression: DataRegressionFixture) -> None:
     with manifold_vcr.use_cassette(f'rule/manifold/test_user_volume/{manifold_user}/{field}.yaml'):

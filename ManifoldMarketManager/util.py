@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from functools import lru_cache
 from hashlib import blake2b
 from importlib import import_module
 from itertools import count
@@ -16,14 +15,17 @@ from typing import TYPE_CHECKING
 
 from pymanifold.lib import ManifoldClient
 from pymanifold.types import Market as APIMarket
-from pymanifold.utils.math import number_to_prob_cpmm1  # noqa: F401
+from pymanifold.utils.math import (number_to_prob_cpmm1, pool_to_number_cpmm1, pool_to_prob_cpmm1,  # noqa: F401
+                                   prob_to_number_cpmm1)
 
-from .consts import EnvironmentVariable, Outcome
+from .consts import Outcome
 
 if TYPE_CHECKING:  # pragma: no cover
-    from typing import Any, Callable, Collection, Iterable, Mapping, MutableSequence, Sequence, Type, TypeVar, Union
+    from typing import (Any, Callable, Collection, Iterable, Mapping, MutableSequence, Optional, Sequence, Type,
+                        TypeVar, Union)
 
     from . import Market, Rule
+    from .account import Account
 
     ModJSONType = Union[int, float, bool, str, None, Rule[Any], Sequence['ModJSONType'], Mapping[str, 'ModJSONType']]
     ModJSONDict = Mapping[str, ModJSONType]
@@ -115,32 +117,6 @@ def normalize_mapping(answers: Mapping[T, float]) -> dict[T, float]:
     return {key: value / total for key, value in answers.items()}
 
 
-def pool_to_prob_cpmm1(yes: float, no: float, p: float) -> float:
-    """Go from a pool of YES/NO to a probability using Maniswap."""
-    if yes <= 0 or no <= 0 or not (0 < p < 1):
-        raise ValueError()
-    pno = p * no
-    return pno / ((1 - p) * yes + pno)
-
-
-def pool_to_number_cpmm1(yes: float, no: float, p: float, start: float, end: float, isLogScale: bool = False) -> float:
-    """Go from a pool of probability to a numeric answer."""
-    if start >= end:
-        raise ValueError()
-    probability = pool_to_prob_cpmm1(yes, no, p)
-    return prob_to_number_cpmm1(probability, start, end, isLogScale)
-
-
-def prob_to_number_cpmm1(probability: float, start: float, end: float, isLogScale: bool = False) -> float:
-    """Go from a probability to a numeric answer."""
-    if isLogScale:
-        ret: float = (end - start + 1)**probability + start - 1
-    else:
-        ret = start + (end - start) * probability
-    ret = max(start, min(end, ret))
-    return ret
-
-
 def round_sig_figs(num: float, sig_figs: int = 4) -> str:
     """Round a number to the specified number of significant figures, then return it as a str."""
     return f"%.{sig_figs}g" % (num, )
@@ -164,11 +140,11 @@ def require_env(*env: str) -> Callable[[Callable[..., T]], Callable[..., T]]:
     return bar
 
 
-@lru_cache(maxsize=None)
-@require_env(EnvironmentVariable.ManifoldAPIKey)
-def get_client() -> ManifoldClient:
+def get_client(account: Optional[Account] = None) -> ManifoldClient:
     """Return a (possibly non-unique) Manifold client."""
-    return ManifoldClient(getenv("ManifoldAPIKey"))
+    if not account:
+        return ManifoldClient()
+    return ManifoldClient(account.ManifoldToken)
 
 
 def explain_abstract(time_rules: Iterable[Rule[Any]], value_rules: Iterable[Rule[Any]], **kwargs: Any) -> str:

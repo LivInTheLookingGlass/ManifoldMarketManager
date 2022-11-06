@@ -1,5 +1,5 @@
 [submodule "PyManifold"]
-	path = src/PyManifold
+	path = ManifoldMarketManager/PyManifold
 	url = https://github.com/LivInTheLookingGlass/PyManifold
 [submodule "src/test/manifold"]
 	path = src/test/manifold

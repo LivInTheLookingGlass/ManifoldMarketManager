@@ -46,7 +46,7 @@ def VariadicRuleSubclass(request: PytestRequest[Type[VariadicRule[T]]]) -> Type[
     return request.param
 
 
-@mark.depends(on=('src/test/test_rule.py::test_import_rule', ))
+@mark.depends(on=('ManifoldMarketManager/test/test_rule.py::test_import_rule', ))
 def test_binary_rule(binary_rule: str) -> None:
     RuleSubclass = cast(Type[BinaryRule[BinaryResolution]], get_rule(binary_rule))
     mock_obj1: ResolveToValue[Optional[bool]] = ResolveToValue(None)
@@ -99,7 +99,7 @@ def test_at_time_rule_value() -> None:
         assert bool(obj.value(cast(Market, None))) is bool(idx % 2)
 
 
-@mark.depends(on=('src/test/test_util.py::test_fib', ))
+@mark.depends(on=('ManifoldMarketManager/test/test_util.py::test_fib', ))
 def test_modulus_rule(data_regression: DataRegressionFixture, limit: int = 100) -> None:
     val1: ResolveToValue[Literal['CANCEL'] | float] = ResolveToValue(1)
     val2: ResolveToValue[Literal['CANCEL'] | float] = ResolveToValue(1)

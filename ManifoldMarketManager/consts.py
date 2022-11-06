@@ -53,6 +53,8 @@ AVAILABLE_RULES = [
     "manifold.user.ResolveToUserCreatedVolume"
 ]
 
+AVAILABLE_SCANNERS: list[str] = []
+
 
 class EnvironmentVariable(str, Enum):
     """Represents an Environment Variable that is used by this program."""

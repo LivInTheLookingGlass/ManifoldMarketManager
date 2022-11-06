@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 
 from pytest import fixture, mark
 
+from ...account import Account
 from ...market import Market
-from ...util import get_client
 from .. import manifold_vcr
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -17,7 +17,7 @@ if TYPE_CHECKING:  # pragma: no cover
 examples: dict[str, Any] = {
     'amplified-odds-100x-will-a-nuclear-4acd2868830b': {
         'market': None,
-        'client': None,
+        'account': Account(ManifoldUsername='Test Case', ManifoldToken='FAKE_TOKEN'),
         'do_resolve_rules': [[
             'manifold.other.OtherMarketResolved',
             {'id_': 'jsqfBFbbIyP4X40L6VSo'}
@@ -38,14 +38,14 @@ examples: dict[str, Any] = {
 def amplified_example(request: PytestRequest[str]) -> Market:
     with manifold_vcr.use_cassette(f'examples/amplified_odds/fetch/{request.param}.yaml'):
         ret = Market.from_dict(examples[request.param])
-        ret.client = client = get_client()
-        ret.market = client.get_market_by_slug(request.param)
+        # ret.client = client = get_client()
+        ret.market = ret.client.get_market_by_slug(request.param)
         ret.market.isResolved = False
         return ret
 
 
 @mark.depends(on=(
-    "src/test/rule/manifold/test_other.py::test_AmplifiedOddsRule",
+    "ManifoldMarketManager/test/rule/manifold/test_other.py::test_AmplifiedOddsRule",
 ))
 def test_AmplifiedOddsMarket(amplified_example: Market) -> None:
     with manifold_vcr.use_cassette(f'examples/amplified_odds/{amplified_example.id}.yaml'):

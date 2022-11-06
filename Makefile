@@ -29,7 +29,7 @@ pytest_args += --flake8 --isort --pydocstyle
 endif
 
 ifeq ($(LINT),only)
-pytest_args += --ignore=./src/test --ignore=./src/PyManifold/tests
+pytest_args += --ignore=./ManifoldMarketManager/test --ignore=./ManifoldMarketManager/PyManifold/tests
 COV=false
 endif
 
@@ -38,7 +38,7 @@ pytest_args += --mypy --mypy-ignore-missing-imports
 endif
 
 ifneq ($(COV),false)
-pytest_args += --cov=src --cov-branch --cov-report=term
+pytest_args += --cov=ManifoldMarketManager --cov-branch --cov-report=term
 endif
 
 ifneq ($(https_proxy), )
@@ -80,7 +80,7 @@ test_%:
 
 .PHONY: _test
 _test:
-	@source env_personal.sh && ManifoldMarketManager_NO_CACHE=1 PYTHONPATH=${PYTHONPATH}:./src/PyManifold $(PY) -m pytest src $(pytest_args) -k 'not mypy-status' --ignore=./src/test/manifold
+	@source env_personal.sh && ManifoldMarketManager_NO_CACHE=1 PYTHONPATH=${PYTHONPATH}:./ManifoldMarketManager/PyManifold $(PY) -m pytest ManifoldMarketManager $(pytest_args) -k 'not mypy-status' --ignore=./ManifoldMarketManager/test/manifold
 
 .PHONY: dependencies
 ifeq ($(MYPY),true)
@@ -96,7 +96,7 @@ endif
 .PHONY: run_%
 # Run a specific account
 run_%: LICENSE dependencies
-	@source env_$*.sh && $(PY) -O -m src
+	@source env_$*.sh && $(PY) -O -m ManifoldMarketManager
 
 .PHONY: run
 # Run all known accounts
@@ -125,7 +125,7 @@ build: dependencies clean LICENSE
 .PHONY: clean
 # Clean up after a build
 clean:
-	@rm -rf build dist logs .benchmarks .pytest_cache src/*.egg-info test-reporter-latest-linux-amd64 .coverage .requirements.txt coverage.xml
+	@rm -rf build dist logs .benchmarks .pytest_cache ManifoldMarketManager/*.egg-info test-reporter-latest-linux-amd64 .coverage .requirements.txt coverage.xml
 	@cd docs && $(MAKE) clean $(MFLAGS)
 	@mkdir logs
 
@@ -139,7 +139,7 @@ publish: build test_all upload_coverage
 # Build a dependency graph of this package
 graph: dependencies
 	@$(PIP) install pydeps $(USER_FLAG)
-	@PYTHONPATH=${PYTHONPATH}:./src/PyManifold $(PY) -m pydeps --noshow --cluster -x src.test pytest --max-bacon 100 -T png src
+	@PYTHONPATH=${PYTHONPATH}:./ManifoldMarketManager/PyManifold $(PY) -m pydeps --noshow --cluster -x ManifoldMarketManager.test pytest --max-bacon 100 -T png ManifoldMarketManager
 
 .PHONY: import_%
 # Create one or more markets from example.json and add them to the specified account
@@ -158,7 +158,7 @@ upload_coverage: .coverage
 # Make a PyInstaller exe (status: not yet supported)
 exe:
 	$(PYTHON) -m pip install -r requirements.txt --user
-	$(PYTHON) -OO -m PyInstaller -F -n "research_bundle" $(ENTRY) --add-data src/defaults:src/defaults
+	$(PYTHON) -OO -m PyInstaller -F -n "research_bundle" $(ENTRY) --add-data ManifoldMarketManager/defaults:ManifoldMarketManager/defaults
 
 .PHONY: html
 # Make html docs (status: beta)

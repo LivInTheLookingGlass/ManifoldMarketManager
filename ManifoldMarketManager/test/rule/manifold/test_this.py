@@ -33,7 +33,10 @@ def test_OtherMarketUniqueTraders(mkt: Market, data_regression: DataRegressionFi
         data_regression.check({'answer': val})
 
 
-@mark.depends(on=('src/test/test_util.py::test_fib', 'src/test/test_util.py::test_market_to_answer_map'))
+@mark.depends(on=(
+    'ManifoldMarketManager/test/test_util.py::test_fib',
+    'ManifoldMarketManager/test/test_util.py::test_market_to_answer_map'
+))
 def test_FibonacciValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
     if mkt.market.outcomeType in Outcome.MC_LIKE():
         with manifold_vcr.use_cassette(f'rule/manifold/this/test_FibonacciValueRule/{quote(mkt.id)}.yaml'):

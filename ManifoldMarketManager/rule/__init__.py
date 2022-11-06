@@ -11,7 +11,7 @@ a rule with your plugin:
 from __future__ import annotations
 
 from importlib import import_module
-from typing import Any, Type, cast
+from typing import Any, Optional, Type, cast
 
 from attrs import define
 
@@ -32,7 +32,7 @@ def get_rule(type_: str) -> Type[Rule[Any]]:
 
 
 @define(slots=False)  # type: ignore
-class DoResolveRule(Rule[bool]):
+class DoResolveRule(Rule[Optional[bool]]):
     """The subtype of rule which determines if a market should resolve, returning a bool."""
 
 
