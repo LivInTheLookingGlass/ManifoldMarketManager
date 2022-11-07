@@ -5,5 +5,5 @@
 	path = src/test/manifold
 	url = https://github.com/LivInTheLookingGlass/manifold/
 [submodule "src/manibots"]
-	path = src/manibots
+	path = ManifoldMarketManager/manibots
 	url = git@github.com:LivInTheLookingGlass/manibots.git
