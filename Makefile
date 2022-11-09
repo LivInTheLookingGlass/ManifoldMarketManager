@@ -29,7 +29,7 @@ pytest_args += --flake8 --isort --pydocstyle
 endif
 
 ifeq ($(LINT),only)
-pytest_args += --ignore=./ManifoldMarketManager/test --ignore=./ManifoldMarketManager/PyManifold/tests
+pytest_args += --ignore=./ManifoldMarketManager/test --ignore=./ManifoldMarketManager/PyManifold/tests --ignore=./ManifoldMarketManager/manibots
 COV=false
 endif
 
@@ -80,7 +80,7 @@ test_%:
 
 .PHONY: _test
 _test:
-	@source env_personal.sh && ManifoldMarketManager_NO_CACHE=1 PYTHONPATH=${PYTHONPATH}:./ManifoldMarketManager/PyManifold $(PY) -m pytest ManifoldMarketManager $(pytest_args) -k 'not mypy-status' --ignore=./ManifoldMarketManager/test/manifold
+	@source env_personal.sh && ManifoldMarketManager_NO_CACHE=1 PYTHONPATH=${PYTHONPATH}:./ManifoldMarketManager/PyManifold $(PY) -m pytest ManifoldMarketManager $(pytest_args) -k 'not mypy-status'
 
 .PHONY: dependencies
 ifeq ($(MYPY),true)
