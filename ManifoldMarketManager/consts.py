@@ -54,6 +54,7 @@ AVAILABLE_RULES = [
 ]
 
 AVAILABLE_SCANNERS: list[str] = []
+ENV_PREFIX = "MarnifoldMarketManager"
 
 
 class EnvironmentVariable(str, Enum):
@@ -66,6 +67,8 @@ class EnvironmentVariable(str, Enum):
     TelegramAPIKey = "TelegramAPIKey"        # Optional. Run --console-only if you don't want to use a Telegram channel
     TelegramChatID = "TelegramChatID"        # Optional. See above
     LogFile = "LogFile"                      # REQUIRED. What file to put the log in
+    AccountKeys = f"{ENV_PREFIX}_KEYS"
+    NO_CACHE = f"{ENV_PREFIX}_NO_CACHE"
 
 
 class MarketStatus(Enum):

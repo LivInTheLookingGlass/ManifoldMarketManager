@@ -8,12 +8,14 @@ from typing import TYPE_CHECKING, Generic, TypeVar, cast
 
 import requests_cache
 
+from .consts import EnvironmentVariable
+
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any, Callable, Optional
 
 T = TypeVar("T")
 
-CACHE = not getenv("ManifoldMarketManager_NO_CACHE")
+CACHE = not getenv(EnvironmentVariable.NO_CACHE)
 if CACHE:
     requests_cache.install_cache(expire_after=360, allowable_methods=('GET', ))
     executor = ThreadPoolExecutor(thread_name_prefix="ManifoldMarketManagerWorker_")
