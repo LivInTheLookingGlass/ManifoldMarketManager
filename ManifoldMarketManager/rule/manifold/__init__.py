@@ -5,15 +5,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, cast
 
 from attrs import define
+from pymanifold.lib import ManifoldClient
 
 from ...caching import parallel
-from ...util import get_client
 
 if TYPE_CHECKING:  # pragma: no cover
     from concurrent.futures import Future
     from typing import Optional
 
-    from pymanifold.lib import ManifoldClient
     from pymanifold.types import Market as APIMarket
 
     from ...market import Market
@@ -39,12 +38,12 @@ class ManifoldMarketMixin:
             slug = self.slug
         else:
             slug = self.slug = cast(str, self.url).split("/")[-1]
-        self.id_ = get_client().get_market_by_slug(slug).id
+        self.id_ = ManifoldClient().get_market_by_slug(slug).id
 
     def api_market(self, client: Optional[ManifoldClient] = None, market: Optional[Market] = None) -> APIMarket:
         """Return an APIMarket object associated with this rule's market."""
         if client is None:
-            client = get_client()
+            client = ManifoldClient()
         return client.get_market_by_id(self.id_)
 
     def f_api_market(
