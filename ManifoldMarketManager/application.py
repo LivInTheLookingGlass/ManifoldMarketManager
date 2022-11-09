@@ -34,6 +34,7 @@ from telegram.ext import Application, CallbackQueryHandler
 
 from . import market, require_env
 from .consts import AVAILABLE_SCANNERS, EnvironmentVariable, MarketStatus, Response
+from .state.persistant import select_markets, update_market
 
 if TYPE_CHECKING:  # pragma: no cover
     from sqlite3 import Connection
@@ -507,7 +508,7 @@ def main(refresh: bool = False, console_only: bool = False) -> int:
     """Go through watched markets and act on rules (resolve, trade, etc)."""
     conn = register_db()
     mkt: market.Market
-    for id_, mkt, check_rate, last_checked in conn.execute("SELECT * FROM markets"):
+    for id_, mkt, check_rate, last_checked, _ in select_markets((), conn):
         msg = f"Currently checking ID {id_}: {mkt.market.question}"
         print(msg)
         logger.info(msg)

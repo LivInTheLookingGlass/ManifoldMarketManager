@@ -16,11 +16,21 @@ from ..util import require_env
 if TYPE_CHECKING:  # pragma: no cover
     from datetime import datetime
     from sqlite3 import Connection
-    from typing import Any, Iterable, Sequence
+    from typing import Any, Callable, Iterable, Sequence
 
     from ..market import Market
+    from ..util import T
 
 logger = getLogger(__name__)
+
+
+def db_wrapper(func: Callable[..., T]) -> Callable[..., T]:
+    def wrapper(*args: Any, db: Connection | None = None, **kwargs: Any) -> T:
+        if db is None:
+            with register_db() as db:
+                return func(*args, db=db, **kwargs)
+        return func(*args, db=db, **kwargs)
+    return wrapper
 
 
 @require_env(EnvironmentVariable.DBName)
@@ -58,55 +68,97 @@ def register_db() -> Connection:
     return conn
 
 
-def select_markets(keys: Sequence[bytes] = ()) -> Iterable[tuple[int, Market, float, datetime | None, Account | None]]:
+@db_wrapper
+def update_market(
+    row_id: int,
+    market: Market | None = None,
+    check_rate: float | None = None,
+    last_checked: datetime | None = None,
+    account_id: int | None = None,
+    db: Connection = None
+) -> None:
+    """Attempt to update a market in the database."""
+    assert db is not None
+    params: tuple[Any, ...] = ()
+    q_additions = []
+    if market is not None:
+        q_additions.append("market=?")
+        params += (market, )
+    if check_rate is not None:
+        q_additions.append("check_rate=?")
+        params += (check_rate, )
+    if last_checked is not None:
+        q_additions.append("last_checked=?")
+        params += (last_checked, )
+    if account_id is not None:
+        q_additions.append("account=?")
+        params += (account_id, )
+    if not params:
+        raise ValueError("you need to actually update something")
+    query = f"UPDATE markets VALUES ({', '.join(q_additions)}) WHERE id=?"
+    params += (row_id, )
+    db.execute(query, params)
+
+
+def select_markets(
+    keys: Sequence[bytes],
+    db: Connection
+) -> Iterable[tuple[int, Market, float, datetime | None, Account | None]]:
     """Attempt to load ALL market objects from the database, with their associated metadata.
 
     Requires: some number of keys if your market has encrypted accounts associated with it.
 
     Depends on: select_account()
     """
+    assert db is not None
     key_strs = getenv(EnvironmentVariable.AccountKeys, "").split(",")
     keys = (*keys, *(bytes.fromhex(x) for x in key_strs))
-    with register_db() as db:
-        row: tuple[int, Market, float, datetime | None, int | None]
-        for row in db.execute("SELECT id, market, check_rate, last_checked, account from markets"):
-            row_id, market, check_rate, last_checked, account_id = row
-            account: Account | None = None
-            if account_id is not None:
-                for key in keys:
-                    _, account = select_account(db_id=account_id, key=key)
-                    break
-            yield (row_id, market, check_rate, last_checked, account)
+    row: tuple[int, Market, float, datetime | None, int | None]
+    for row in db.execute("SELECT * from markets"):
+        row_id, market, check_rate, last_checked, *extra = row
+        account_id: int | None
+        if extra:
+            (account_id, ) = extra
+        else:
+            account_id = None
+        account: Account | None = None
+        if account_id is not None:
+            for key in keys:
+                _, account = select_account(db_id=account_id, key=key)
+                break
+        yield (row_id, market, check_rate, last_checked, account)
 
 
 @lru_cache
+@db_wrapper
 def select_account(
     db_id: int | None = None,
     manifold_id: str | None = None,
     username: str | None = None,
-    key: bytes = b''
+    key: bytes = b'',
+    db: Connection = None
 ) -> tuple[int, Account]:
     """Attempt to load and decrypt a SINGLE account object from the database.
 
     Raises an error if not exactly one is returned or if it cannot be decrypted.
     """
-    with register_db() as db:
-        query = "from accounts select id, raw_account, account, is_encrypted where "
-        params: tuple[Any, ...] = ()
+    assert db is not None
+    query = "from accounts select id, raw_account, account, is_encrypted where "
+    params: tuple[Any, ...] = ()
+    if db_id:
+        query += "ID = ? "
+        params += (db_id, )
+    if manifold_id:
         if db_id:
-            query += "ID = ? "
-            params += (db_id, )
-        if manifold_id:
-            if db_id:
-                query += ", "
-            query += "manifold_id = ? "
-            params += (manifold_id, )
-        if username:
-            if any((db_id, manifold_id)):
-                query += ", "
-            query += "username = ? "
-            params += (username, )
-        ((id_, raw_account, account, is_encrypted), )  = db.execute(query, params)
-        if is_encrypted:
-            account = Account.from_bytes(raw_account, key)
-        return (id_, account)
+            query += ", "
+        query += "manifold_id = ? "
+        params += (manifold_id, )
+    if username:
+        if any((db_id, manifold_id)):
+            query += ", "
+        query += "username = ? "
+        params += (username, )
+    ((id_, raw_account, account, is_encrypted), )  = db.execute(query, params)
+    if is_encrypted:
+        account = Account.from_bytes(raw_account, key)
+    return (id_, account)
