@@ -25,6 +25,7 @@ logger = getLogger(__name__)
 
 
 def db_wrapper(func: Callable[..., T]) -> Callable[..., T]:
+    """Wrap a function so that it automatically gets a reference to the database if one is not provided."""
     def wrapper(*args: Any, db: Connection | None = None, **kwargs: Any) -> T:
         if db is None:
             with register_db() as db:
@@ -69,13 +70,23 @@ def register_db() -> Connection:
 
 
 @db_wrapper
+def remove_markets(
+    *row_id: int,
+    db: Connection = None  # type: ignore[assignment]
+) -> None:
+    """Attempt to delete a market in the database."""
+    assert db is not None
+    db.execute(f"DELETE FROM markets WHERE {' OR '.join(['id = ?'] * len(row_id))}", row_id)
+
+
+@db_wrapper
 def update_market(
     row_id: int,
     market: Market | None = None,
     check_rate: float | None = None,
     last_checked: datetime | None = None,
     account_id: int | None = None,
-    db: Connection = None
+    db: Connection = None  # type: ignore[assignment]
 ) -> None:
     """Attempt to update a market in the database."""
     assert db is not None
@@ -95,14 +106,15 @@ def update_market(
         params += (account_id, )
     if not params:
         raise ValueError("you need to actually update something")
-    query = f"UPDATE markets VALUES ({', '.join(q_additions)}) WHERE id=?"
+    query = f"UPDATE markets SET {', '.join(q_additions)} WHERE id=?"
     params += (row_id, )
     db.execute(query, params)
 
 
+@db_wrapper
 def select_markets(
-    keys: Sequence[bytes],
-    db: Connection
+    keys: Sequence[bytes] = (),
+    db: Connection = None  # type: ignore[assignment]
 ) -> Iterable[tuple[int, Market, float, datetime | None, Account | None]]:
     """Attempt to load ALL market objects from the database, with their associated metadata.
 
@@ -136,7 +148,7 @@ def select_account(
     manifold_id: str | None = None,
     username: str | None = None,
     key: bytes = b'',
-    db: Connection = None
+    db: Connection = None  # type: ignore[assignment]
 ) -> tuple[int, Account]:
     """Attempt to load and decrypt a SINGLE account object from the database.
 
@@ -158,7 +170,7 @@ def select_account(
             query += ", "
         query += "username = ? "
         params += (username, )
-    ((id_, raw_account, account, is_encrypted), )  = db.execute(query, params)
+    ((id_, raw_account, account, is_encrypted), ) = db.execute(query, params)
     if is_encrypted:
         account = Account.from_bytes(raw_account, key)
     return (id_, account)

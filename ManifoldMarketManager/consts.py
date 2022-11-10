@@ -54,7 +54,7 @@ AVAILABLE_RULES = [
 ]
 
 AVAILABLE_SCANNERS: list[str] = []
-ENV_PREFIX = "MarnifoldMarketManager"
+ENV_PREFIX = "ManifoldMarketManager"
 
 
 class EnvironmentVariable(str, Enum):

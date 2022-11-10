@@ -34,7 +34,7 @@ from telegram.ext import Application, CallbackQueryHandler
 
 from . import market, require_env
 from .consts import AVAILABLE_SCANNERS, EnvironmentVariable, MarketStatus, Response
-from .state.persistant import select_markets, update_market
+from .state.persistant import remove_markets, select_markets, update_market
 
 if TYPE_CHECKING:  # pragma: no cover
     from sqlite3 import Connection
@@ -508,8 +508,8 @@ def main(refresh: bool = False, console_only: bool = False) -> int:
     """Go through watched markets and act on rules (resolve, trade, etc)."""
     conn = register_db()
     mkt: market.Market
-    for id_, mkt, check_rate, last_checked, _ in select_markets((), conn):
-        msg = f"Currently checking ID {id_}: {mkt.market.question}"
+    for id_, mkt, check_rate, last_checked, account in select_markets((), db=conn):
+        msg = f"Currently checking ID {id_} for account {account}: {mkt.market.question}"
         print(msg)
         logger.info(msg)
         # print(mkt.explain_abstract())
@@ -530,15 +530,15 @@ def main(refresh: bool = False, console_only: bool = False) -> int:
                 msg = "  - [x] Market resolved, removing from db"
                 print(msg)
                 logger.info(msg)
-                conn.execute(
-                    "DELETE FROM markets WHERE id = ?;",
-                    (id_, )
-                )
+                remove_markets(conn, id_)
                 conn.commit()
 
-        conn.execute(
-            "UPDATE markets SET last_checked = ?, market = ? WHERE id = ?;",
-            (datetime.now(), mkt, id_)
+        update_market(
+            row_id=id_,
+            market=mkt,
+            check_rate=check_rate,
+            last_checked=datetime.now() if check else last_checked,
+            db=conn,
         )
         conn.commit()
     conn.close()
