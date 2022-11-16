@@ -14,7 +14,7 @@ from ..util import require_env
 
 if TYPE_CHECKING:  # pragma: no cover
     from datetime import datetime
-    from sqlite3 import Connection
+    from sqlite3 import Connection, Cursor
     from typing import Any, Callable, Iterable, Sequence
 
     from ..market import Market
@@ -187,3 +187,46 @@ def select_account(
     if is_encrypted:
         account = Account.from_bytes(raw_account, key)
     return (id_, account)
+
+
+class DatabaseNamespace:
+    """Reperesent a namespace in the database for use by various rules and plugins.
+
+    This requires you to give a schema and UUID-formatted table name. If your name is not a UUID format, it will error.
+    """
+
+    def __init__(self, uuid: str, schema: dict[str, str | type]):
+        self.uuid = uuid.replace("-", "_")
+        str_schema = ", ".join(f"{name} {type_}" for name, type_ in schema.items())
+        self.execute(f"CREATE TABLE {self.uuid} IF NOT EXIST ? ({str_schema})", commit=True)
+
+    def execute(self, query: str, commit: bool = False) -> Cursor:
+        """Perform basic sanitization that I don't expect to defeat real effort unless you use this responsibly."""
+        if len(self.uuid) == 36 or ';' in query:
+            raise ValueError()
+        db = register_db()
+        ret = db.execute(query)
+        if commit:
+            db.commit()
+        return ret
+
+    def select(
+        self,
+        names: Sequence[str] = ("*", )
+    ) -> Cursor:
+        """Select from your database namespace."""
+        return self.execute(f"SELECT {', '.join(names)} FROM {self.uuid}")
+
+    def remove(
+        self,
+        names: Sequence[str] = ("*", )
+    ) -> Cursor:
+        """Remove from your database namespace."""
+        raise NotImplementedError()
+
+    def update(
+        self,
+        names: Sequence[str] = ("*", )
+    ) -> Cursor:
+        """Update values in your database namespace."""
+        raise NotImplementedError()
