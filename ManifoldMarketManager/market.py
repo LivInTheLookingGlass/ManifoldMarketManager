@@ -106,7 +106,8 @@ class Market(DictDeserializable):
     @property
     def id(self) -> str:
         """Return the ID of a market as reported by Manifold."""
-        return self.market.id
+        ret: str = self.market.id
+        return ret
 
     def refresh(self) -> None:
         """Ensure market data is recent."""
@@ -210,7 +211,7 @@ class Market(DictDeserializable):
             ret = str(val)
         return ret
 
-    def should_resolve(self, account) -> bool:
+    def should_resolve(self, account: Account) -> bool:
         """Return whether the market should resolve, according to our rules."""
         futures = [parallel(rule.value, self, account) for rule in (self.do_resolve_rules or ())]
         return any(future.result() for future in futures) and not self.market.isResolved

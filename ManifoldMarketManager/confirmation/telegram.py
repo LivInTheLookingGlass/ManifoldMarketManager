@@ -96,7 +96,7 @@ def tg_main(text: str, account: Account) -> Response:
         reply_markup = InlineKeyboardMarkup(keyboard1)
         if account.TelegramChatID is None:
             raise EnvironmentError()
-        await self.bot.send_message(text=text, reply_markup=reply_markup, chat_id=int(account.chat_id))
+        await self.bot.send_message(text=text, reply_markup=reply_markup, chat_id=int(account.TelegramChatID))
 
     application = Application.builder().token(
         cast(str, getenv(EnvironmentVariable.TelegramAPIKey))
