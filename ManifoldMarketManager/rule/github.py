@@ -15,13 +15,15 @@ from . import DoResolveRule, ResolutionValueRule
 
 if TYPE_CHECKING:  # pragma: no cover
     from concurrent.futures import Future
-    from typing import Any, Optional
+    from typing import Any, Callable, Optional, TypeVar
 
     from github3.issues import Issue
     from github3.pulls import PullRequest
 
     from ..account import Account
     from ..market import Market
+
+    T = TypeVar("T")
 
 
 def unauth_login() -> GitHub:
@@ -42,13 +44,17 @@ class GitHubIssueMixin:
     repo: str
     number: int
 
+    def f_generic(self, account: Account, func: Callable[[GitHub, str, str, int], T]) -> T:
+        """Return the request method that you feed in, and we provide the lookup info."""
+        return func(auth_login(account), self.owner, self.repo, self.number)
+
     def f_issue(self, account: Account) -> Future[Issue]:
         """Return a Future object which resolves to the relevant Issue object."""
-        return parallel(auth_login(account).issue, self.owner, self.repo, self.number)
+        return parallel(self.f_generic, account, GitHub.issue)
 
     def f_pr(self, account: Account) -> Future[PullRequest]:
         """Return a Future object which resolves to the relevant PullRequest object."""
-        return parallel(auth_login(account).pull_request, self.owner, self.repo, self.number)
+        return parallel(self.f_generic, account, GitHub.pull_request)
 
 
 @define(slots=False)
