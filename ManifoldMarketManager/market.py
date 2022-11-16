@@ -38,20 +38,20 @@ class Market(DictDeserializable):
 
     Events
     ------
-    before_check(market: Market):
-    after_check(market: Market):
+    before_check(market: Market, account: Account):
+    after_check(market: Market, account: Account):
         Called before/after a market is checked. Please don't put anything intensive in here.
 
-    before_create(market: Market):
-    after_create(market: Market):
+    before_create(market: Market, account: Account):
+    after_create(market: Market, account: Account):
         Called before/after a market is created.
 
-    before_resolve(market: Market, outcome: AnyResolution):
-    after_resolve(market: Market, outcome: AnyResolution, response: Response):
+    before_resolve(market: Market, account: Account, outcome: AnyResolution):
+    after_resolve(market: Market, account: Account, outcome: AnyResolution, response: Response):
         Called before/after a market is resolved. Please don't put anything intensive in here.
 
-    before_remove(market: Market):
-    after_remove(market: Market):
+    before_remove(market: Market, account: Account):
+    after_remove(market: Market, account: Account):
         Called before/after a market is removed from the database.
     """
 
@@ -151,8 +151,8 @@ class Market(DictDeserializable):
             env_copy[name] = rules
         return super().from_dict(env_copy)
 
-    def _after_resolve(self, market: Market, outcome: AnyResolution, response: Response) -> None:
-        self.client.create_comment(self.market, self.explain_specific(), mode='markdown')
+    def _after_resolve(self, market: Market, account: Account, outcome: AnyResolution, response: Response) -> None:
+        get_client(account).create_comment(self.market, self.explain_specific(account), mode='markdown')
 
     def explain_abstract(self, **kwargs: Any) -> str:
         """Explain how the market will resolve and decide to resolve."""
@@ -166,13 +166,13 @@ class Market(DictDeserializable):
 
         return explain_abstract(**kwargs)
 
-    def explain_specific(self, sig_figs: int = 4) -> str:
+    def explain_specific(self, account: Account, sig_figs: int = 4) -> str:
         """Explain why the market is resolving the way that it is."""
         shim = ""
         rule_: Rule[Any]
         for rule_ in self.do_resolve_rules:
-            shim += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
-        if not (self.market.isResolved or self.should_resolve()):
+            shim += rule_.explain_specific(market=self, account=account, indent=1, sig_figs=sig_figs)
+        if not (self.market.isResolved or self.should_resolve(account)):
             ret = (f"This market is not resolving, because none of the following are true:\n{shim}\nWere it to "
                    "resolve now, it would follow the decision tree below:\n")
         else:
@@ -180,13 +180,13 @@ class Market(DictDeserializable):
                    "decision tree below:\n")
         ret += "- If the human operator agrees:\n"
         for rule_ in self.resolve_to_rules:
-            ret += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
+            ret += rule_.explain_specific(market=self, account=account, indent=1, sig_figs=sig_figs)
         ret += "\nFinal Value: "
-        ret += self.__format_resolve_to(sig_figs)
+        ret += self.__format_resolve_to(sig_figs, account)
         return ret
 
-    def __format_resolve_to(self, sig_figs: int) -> str:
-        val = self.resolve_to()
+    def __format_resolve_to(self, sig_figs: int, account: Account) -> str:
+        val = self.resolve_to(account)
         if val == "CANCEL":
             ret = "CANCEL"
         elif isinstance(val, bool) or self.market.outcomeType == Outcome.BINARY:
@@ -210,12 +210,12 @@ class Market(DictDeserializable):
             ret = str(val)
         return ret
 
-    def should_resolve(self) -> bool:
+    def should_resolve(self, account) -> bool:
         """Return whether the market should resolve, according to our rules."""
-        futures = [parallel(rule.value, self) for rule in (self.do_resolve_rules or ())]
+        futures = [parallel(rule.value, self, account) for rule in (self.do_resolve_rules or ())]
         return any(future.result() for future in futures) and not self.market.isResolved
 
-    def resolve_to(self) -> AnyResolution:
+    def resolve_to(self, account: Account) -> AnyResolution:
         """Select a value to be resolved to.
 
         This is done by iterating through a series of Rules, each of which have
@@ -229,7 +229,10 @@ class Market(DictDeserializable):
         """
         assert self.market.outcomeType != "NUMERIC"
         chosen = None
-        futures = [parallel(rule.value, self, format=self.market.outcomeType) for rule in (self.resolve_to_rules or ())]
+        futures = [
+            parallel(rule.value, self, account, format=self.market.outcomeType)
+            for rule in (self.resolve_to_rules or ())
+        ]
         for f_rule in futures:
             chosen = f_rule.result()
             if chosen is not None:
@@ -238,14 +241,14 @@ class Market(DictDeserializable):
             raise RuntimeError()
         return chosen
 
-    def current_answer(self) -> AnyResolution:
+    def current_answer(self, account: Account) -> AnyResolution:
         """Return the current market consensus."""
         from .rule.manifold.this import CurrentValueRule
         assert self.market.outcomeType != "NUMERIC"
-        return CurrentValueRule().value(self, format=self.market.outcomeType)
+        return CurrentValueRule().value(self, account, format=self.market.outcomeType)
 
     @require_env(EnvironmentVariable.ManifoldAPIKey)
-    def resolve(self, override: Optional[AnyResolution] = None) -> Response:
+    def resolve(self, account: Account, override: Optional[AnyResolution] = None) -> Response:
         """Resolve this market according to our resolution rules.
 
         Returns
@@ -255,27 +258,27 @@ class Market(DictDeserializable):
         """
         _override: AnyResolution | tuple[float, float]
         if override is None:
-            _override = self.resolve_to()
+            _override = self.resolve_to(account)
         else:
             _override = override
         if _override == "CANCEL":
-            return self.cancel()
+            return self.cancel(account)
 
         if self.market.outcomeType in Outcome.MC_LIKE():
             if not isinstance(_override, Mapping):
                 raise TypeError()
             _override = {int(id_): weight for id_, weight in _override.items()}
 
-        self.event_emitter.emit('before_resolve', self, _override)
-        ret: Response = self.client.resolve_market(self.market, _override)
+        self.event_emitter.emit('before_resolve', self, account, _override)
+        ret: Response = get_client(account).resolve_market(self.market, _override)
         ret.raise_for_status()
         self.logger.info("I was resolved")
         self.market.isResolved = True
-        self.event_emitter.emit('after_resolve', self, _override, ret)
+        self.event_emitter.emit('after_resolve', self, account, _override, ret)
         return ret
 
     @require_env(EnvironmentVariable.ManifoldAPIKey)
-    def cancel(self) -> Response:
+    def cancel(self, account: Account) -> Response:
         """Cancel this market.
 
         Returns
@@ -283,7 +286,7 @@ class Market(DictDeserializable):
         Response
             How Manifold interprets our request, and some JSON data on it
         """
-        ret: Response = self.client.cancel_market(self.market)
+        ret: Response = get_client(account).cancel_market(self.market)
         ret.raise_for_status()
         self.logger.info("I was cancelled")
         self.market.isResolved = True

@@ -49,7 +49,7 @@ def amplified_example(request: PytestRequest[str]) -> Market:
 ))
 def test_AmplifiedOddsMarket(amplified_example: Market) -> None:
     with manifold_vcr.use_cassette(f'examples/amplified_odds/{amplified_example.id}.yaml'):
-        if amplified_example.should_resolve():
-            amplified_example.resolve()
+        if amplified_example.should_resolve(Account.from_env()):
+            amplified_example.resolve(Account.from_env())
         else:  # pragma: no cover
             raise RuntimeError()

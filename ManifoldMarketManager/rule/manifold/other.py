@@ -21,6 +21,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from pymanifold.types import Market as APIMarket
 
+    from ...account import Account
     from ...consts import AnyResolution
     from ...market import Market
 
@@ -29,7 +30,7 @@ if TYPE_CHECKING:  # pragma: no cover
 class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
     """A rule that checks whether another market is closed."""
 
-    def _value(self, market: Market) -> bool:
+    def _value(self, market: Market, account: Account) -> bool:
         mkt = self.api_market(market=market)
         assert mkt.closeTime is not None
         return bool(mkt.isResolved or (mkt.closeTime < time() * 1000))
@@ -42,7 +43,7 @@ class OtherMarketClosed(DoResolveRule, ManifoldMarketMixin):
 class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
     """A rule that checks whether another market is resolved."""
 
-    def _value(self, market: Market) -> bool:
+    def _value(self, market: Market, account: Account) -> bool:
         return bool(self.api_market().isResolved)
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -53,7 +54,7 @@ class OtherMarketResolved(DoResolveRule, ManifoldMarketMixin):
 class OtherMarketUniqueTraders(ManifoldMarketMixin, Rule[int]):
     """A rule that checks whether another market is resolved."""
 
-    def _value(self, market: Market) -> int:
+    def _value(self, market: Market, account: Account) -> int:
         return len(
             {bet.userId for bet in self.api_market(market=market).bets} - {None}
         )
@@ -66,7 +67,7 @@ class OtherMarketUniqueTraders(ManifoldMarketMixin, Rule[int]):
 class OtherMarketValue(Rule[T], ManifoldMarketMixin):
     """A rule that resolves to the value of another rule."""
 
-    def _value(self, market: Market) -> T:
+    def _value(self, market: Market, account: Account) -> T:
         mkt = self.api_market(market=market)
         if mkt.resolution == "CANCEL":
             ret: AnyResolution = "CANCEL"
@@ -105,9 +106,9 @@ class OtherMarketValue(Rule[T], ManifoldMarketMixin):
         return (f"{'  ' * indent}- Resolved (or current, if not resolved) value of `{self.id_}` "
                 f"({self.api_market().question}).\n")
 
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+    def _explain_specific(self, market: Market, account: Account, indent: int = 0, sig_figs: int = 4) -> str:
         f_mkt = self.f_api_market(market=market)
-        f_val = parallel(self._value, market)
+        f_val = parallel(self._value, market, account)
         mkt = f_mkt.result()
         if hasattr(self, 'id_'):
             ret = (f"{'  ' * indent}- Resolved (or current, if not resolved) value of `{self.id_}` "
@@ -160,12 +161,12 @@ class AmplifiedOddsRule(OtherMarketValue[BinaryResolution], ResolveRandomSeed):
 
     a: int = 1
 
-    def _value(self, market: Market) -> BinaryResolution:
+    def _value(self, market: Market, account: Account) -> BinaryResolution:
         val = OtherMarketValue._binary_value(self, market)
         if val is True:
             return True
         if val is False:
-            if ResolveRandomSeed._value(self, market) < (1 / self.a):
+            if ResolveRandomSeed._value(self, market, account) < (1 / self.a):
                 return False
             return "CANCEL"
         return val / (val + (1 - val) / self.a) * 100
@@ -184,9 +185,9 @@ class AmplifiedOddsRule(OtherMarketValue[BinaryResolution], ResolveRandomSeed):
         ret += f"{'  ' * indent}- Otherwise, resolve to the equivalent price of the reference market\n"
         return ret
 
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        f_val = parallel(self._value, market)
-        other_exp = parallel(OtherMarketValue._explain_specific, self, market, indent + 1, sig_figs)
+    def _explain_specific(self, market: Market, account: Account, indent: int = 0, sig_figs: int = 4) -> str:
+        f_val = parallel(self._value, market, account)
+        other_exp = parallel(OtherMarketValue._explain_specific, self, market, account, indent + 1, sig_figs)
         ret = f"{'  ' * indent}- Amplified odds: (-> "
         val = f_val.result()
         if val == "CANCEL":

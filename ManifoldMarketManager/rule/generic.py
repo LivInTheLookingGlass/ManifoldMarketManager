@@ -19,6 +19,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from concurrent.futures import Future
     from typing import Any, ClassVar, DefaultDict, Literal, MutableSequence
 
+    from ..account import Account
     from ..consts import FreeResponseResolution, MultipleChoiceResolution
     from ..market import Market
     from ..util import ModJSONDict
@@ -30,8 +31,8 @@ class NegateRule(UnaryRule[Optional[BinaryResolution]]):
 
     _explainer_stub: ClassVar[str] = "Resolve False if the below is True, and vice versa"
 
-    def _value(self, market: Market) -> bool:
-        return not self.child._value(market)
+    def _value(self, market: Market, account: Account) -> bool:
+        return not self.child._value(market, account)
 
 
 @define(slots=False)
@@ -40,8 +41,8 @@ class EitherRule(BinaryRule[Optional[BinaryResolution]]):
 
     _explainer_stub: ClassVar[str] = "Resolve True if either of the below resolves True, otherwise resolve False"
 
-    def _value(self, market: Market) -> bool:
-        return bool(self.rule1._value(market)) or bool(self.rule2._value(market))
+    def _value(self, market: Market, account: Account) -> bool:
+        return bool(self.rule1._value(market, account)) or bool(self.rule2._value(market, account))
 
 
 @define(slots=False)
@@ -50,8 +51,8 @@ class BothRule(BinaryRule[Optional[BinaryResolution]]):
 
     _explainer_stub: ClassVar[str] = "Resolve True if both of the below resolve to True, otherwise resolve False"
 
-    def _value(self, market: Market) -> bool:
-        return bool(self.rule1._value(market)) and bool(self.rule2._value(market))
+    def _value(self, market: Market, account: Account) -> bool:
+        return bool(self.rule1._value(market, account)) and bool(self.rule2._value(market, account))
 
 
 @define(slots=False)
@@ -60,8 +61,8 @@ class NANDRule(BinaryRule[Optional[BinaryResolution]]):
 
     _explainer_stub: ClassVar[str] = "Resolve True if one or more of the below resolves False, otherwise resolve False"
 
-    def _value(self, market: Market) -> bool:
-        return not (self.rule1._value(market) and self.rule2._value(market))
+    def _value(self, market: Market, account: Account) -> bool:
+        return not (self.rule1._value(market, account) and self.rule2._value(market, account))
 
 
 @define(slots=False)
@@ -70,8 +71,8 @@ class NeitherRule(BinaryRule[Optional[BinaryResolution]]):
 
     _explainer_stub: ClassVar[str] = "Resolve False if either of the below resolve to True, otherwise resolve True"
 
-    def _value(self, market: Market) -> bool:
-        return not (self.rule1._value(market) or self.rule2._value(market))
+    def _value(self, market: Market, account: Account) -> bool:
+        return not (self.rule1._value(market, account) or self.rule2._value(market, account))
 
 
 @define(slots=False)
@@ -80,8 +81,8 @@ class XORRule(BinaryRule[Optional[BinaryResolution]]):
 
     _explainer_stub: ClassVar[str] = "Resolve False if the below resolve to the same value, otherwise resolve True"
 
-    def _value(self, market: Market) -> bool:
-        return bool(bool(self.rule1._value(market)) ^ bool(self.rule2._value(market)))
+    def _value(self, market: Market, account: Account) -> bool:
+        return bool(bool(self.rule1._value(market, account)) ^ bool(self.rule2._value(market, account)))
 
 
 @define(slots=False)
@@ -90,8 +91,8 @@ class XNORRule(BinaryRule[Optional[BinaryResolution]]):
 
     _explainer_stub: ClassVar[str] = "Resolve True if the below resolve to the same value, otherwise resolve False"
 
-    def _value(self, market: Market) -> bool:
-        return bool(self.rule1._value(market)) == bool(self.rule2._value(market))
+    def _value(self, market: Market, account: Account) -> bool:
+        return bool(self.rule1._value(market, account)) == bool(self.rule2._value(market, account))
 
 
 @define(slots=False)
@@ -102,8 +103,8 @@ class ImpliesRule(BinaryRule[Optional[BinaryResolution]]):
         "Resolve True if the next line resolves False, otherwise resolves to the value of the item after"
     )
 
-    def _value(self, market: Market) -> bool:
-        return not self.rule1._value(market) or bool(self.rule2._value(market))
+    def _value(self, market: Market, account: Account) -> bool:
+        return not self.rule1._value(market, account) or bool(self.rule2._value(market, account))
 
 
 @define(slots=False)
@@ -114,9 +115,9 @@ class ConditionalRule(BinaryRule[BinaryResolution]):
         "Cancels if the next line resolves False, otherwise resolves to the value of the item after"
     )
 
-    def _value(self, market: Market) -> BinaryResolution:
-        f_val1 = parallel(self.rule1._value, market)
-        f_val2 = parallel(self.rule2._value, market)
+    def _value(self, market: Market, account: Account) -> BinaryResolution:
+        f_val1 = parallel(self.rule1._value, market, account)
+        f_val2 = parallel(self.rule2._value, market, account)
         if not f_val1.result():
             return "CANCEL"
         return f_val2.result()
@@ -128,7 +129,7 @@ class ResolveAtTime(DoResolveRule):
 
     resolve_at: datetime
 
-    def _value(self, market: Market) -> bool:
+    def _value(self, market: Market, account: Account) -> bool:
         """Return True iff the current time is after resolve_at."""
         try:
             return datetime.now(timezone.utc) >= self.resolve_at
@@ -145,7 +146,7 @@ class ResolveToValue(Generic[T], Rule[T]):
 
     resolve_value: T
 
-    def _value(self, market: Market) -> T:
+    def _value(self, market: Market, account: Account) -> T:
         return self.resolve_value
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
@@ -158,8 +159,8 @@ class ModulusRule(BinaryRule[PseudoNumericResolution]):
 
     _explainer_stub: ClassVar[str] = "A mod B, where A is the next line and B the line after"
 
-    def _value(self, market: Market) -> Literal["CANCEL"] | float:
-        val1, val2 = self.rule1._value(market), self.rule2._value(market)
+    def _value(self, market: Market, account: Account) -> Literal["CANCEL"] | float:
+        val1, val2 = self.rule1._value(market, account), self.rule2._value(market, account)
         if val1 == "CANCEL" or val2 == "CANCEL":
             return "CANCEL"
         return val1 % val2
@@ -171,10 +172,10 @@ class AdditiveRule(VariadicRule[PseudoNumericResolution]):
 
     _explainer_stub: ClassVar[str] = "The sum of the below"
 
-    def _value(self, market: Market) -> Literal["CANCEL"] | float:
+    def _value(self, market: Market, account: Account) -> Literal["CANCEL"] | float:
         """Return the sum of the underlying rules."""
         ret: float = 0
-        futures = [parallel(rule.value, market, format='PSEUDO_NUMERIC') for rule in self.rules]
+        futures = [parallel(rule.value, market, account, format='PSEUDO_NUMERIC') for rule in self.rules]
         for f_rule in futures:
             val = cast(
                 PseudoNumericResolution,
@@ -192,10 +193,10 @@ class MultiplicitiveRule(VariadicRule[PseudoNumericResolution]):
 
     _explainer_stub: ClassVar[str] = "The product of the below"
 
-    def _value(self, market: Market) -> Literal["CANCEL"] | float:
+    def _value(self, market: Market, account: Account) -> Literal["CANCEL"] | float:
         """Return the product of the underlying rules."""
         ret: float = 1
-        futures = [parallel(rule.value, market, format='PSEUDO_NUMERIC') for rule in self.rules]
+        futures = [parallel(rule.value, market, account, format='PSEUDO_NUMERIC') for rule in self.rules]
         for f_rule in futures:
             val = cast(
                 PseudoNumericResolution,
@@ -231,7 +232,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
             method = 'randrange'
         super().__init__(seed, method, *args, **kwargs)
 
-    def _value(self, market: Market) -> int:
+    def _value(self, market: Market, account: Account) -> int:
         market.refresh()
         if self.method == 'randrange':
             self.args = (self.start, self.size)
@@ -240,7 +241,7 @@ class ResolveRandomIndex(ResolveRandomSeed):
             items = [(int(idx), float(obj)) for idx, obj in market.market.pool.items() if int(idx) >= self.start]
             self.args = (range(self.start, self.start + len(items)), )
             self.kwargs["weights"] = [prob for _, prob in items]
-        return cast(int, super()._value(market))
+        return cast(int, super()._value(market, account))
 
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         ret = f"{'  ' * indent}- Resolve to a random index, given some original seed. This one operates on a "
@@ -257,7 +258,7 @@ class ResolveMultipleValues(ResolutionValueRule):
 
     shares: MutableSequence[tuple[ResolutionValueRule, float]] = Factory(list)
 
-    def _value(self, market: Market) -> FreeResponseResolution | MultipleChoiceResolution:
+    def _value(self, market: Market, account: Account) -> FreeResponseResolution | MultipleChoiceResolution:
         ret: DefaultDict[int, float] = defaultdict(float)
         for rule, part in self.shares:
             val = cast(Dict[Union[str, int], Future[float]], parallel(rule.value, market, format='FREE_RESPONSE'))

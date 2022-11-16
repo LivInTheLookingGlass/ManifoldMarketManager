@@ -5,6 +5,7 @@ from urllib.parse import quote
 
 from pytest import mark, raises, skip
 
+from ....account import Account
 from ....consts import AnyResolution, Outcome
 from ....market import Market
 from ....rule.manifold.this import (CurrentValueRule, FibonacciValueRule, PopularValueRule, RoundValueRule,
@@ -22,14 +23,14 @@ if TYPE_CHECKING:  # pragma: no cover
 def test_CurentValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
     with manifold_vcr.use_cassette(f'rule/manifold/this/test_CurrentValueRule/{quote(mkt.id)}.yaml'):
         obj: CurrentValueRule[AnyResolution] = CurrentValueRule()
-        val = obj.value(mkt)
+        val = obj.value(mkt, Account.from_env())
         data_regression.check({'answer': val})
 
 
 def test_OtherMarketUniqueTraders(mkt: Market, data_regression: DataRegressionFixture) -> None:
     with manifold_vcr.use_cassette(f'rule/manifold/this/test_UniqueTradersRule/{quote(mkt.id)}.yaml'):
         obj = UniqueTradersRule(id_=mkt.id)
-        val = obj._value(mkt)
+        val = obj._value(mkt, Account.from_env())
         data_regression.check({'answer': val})
 
 
@@ -41,11 +42,11 @@ def test_FibonacciValueRule(mkt: Market, data_regression: DataRegressionFixture)
     if mkt.market.outcomeType in Outcome.MC_LIKE():
         with manifold_vcr.use_cassette(f'rule/manifold/this/test_FibonacciValueRule/{quote(mkt.id)}.yaml'):
             obj = FibonacciValueRule()
-            val = obj.value(mkt)
+            val = obj.value(mkt, Account.from_env())
             data_regression.check({'answer': val})
     else:
         with raises(RuntimeError):
-            FibonacciValueRule().value(mkt)
+            FibonacciValueRule().value(mkt, Account.from_env())
 
 
 def test_PopularValueRule(mkt: Market, data_regression: DataRegressionFixture) -> None:
@@ -55,14 +56,14 @@ def test_PopularValueRule(mkt: Market, data_regression: DataRegressionFixture) -
             answer_to_check.append({})  # type: ignore
             while True:
                 obj = PopularValueRule(size=len(answer_to_check))
-                val = obj._value(mkt)
+                val = obj._value(mkt, Account.from_env())
                 if val == answer_to_check[-1]:
                     break
                 answer_to_check.append(val)
             data_regression.check({'answers': answer_to_check})
         else:
             with raises(RuntimeError):
-                PopularValueRule(size=1).value(mkt)
+                PopularValueRule(size=1).value(mkt, Account.from_env())
 
 
 @mark.depends(on=('test_CurentValueRule', ))
@@ -70,7 +71,7 @@ def test_RoundValueRule(mkt: Market, data_regression: DataRegressionFixture) -> 
     if mkt.market.outcomeType in Outcome.BINARY_LIKE():
         with manifold_vcr.use_cassette(f'rule/manifold/this/test_RoundValueRule/{quote(mkt.id)}.yaml'):
             obj = RoundValueRule()
-            val = obj.value(mkt)
+            val = obj.value(mkt, Account.from_env())
             data_regression.check({'answer': val})
     else:
         skip("Rule does not support this market type")
@@ -79,5 +80,5 @@ def test_RoundValueRule(mkt: Market, data_regression: DataRegressionFixture) -> 
 def test_ThisMarketClosed(mkt: Market, data_regression: DataRegressionFixture) -> None:
     with manifold_vcr.use_cassette(f'rule/manifold/this/test_ThisMarketClosed/{quote(mkt.id)}.yaml'):
         obj = ThisMarketClosed()
-        val = obj.value(mkt)
+        val = obj.value(mkt, Account.from_env())
         data_regression.check({'answer': val})

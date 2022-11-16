@@ -19,6 +19,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from pymanifold.lib import ManifoldClient
     from pymanifold.types import Market as APIMarket
 
+    from ...account import Account
     from ...market import Market
 
 
@@ -66,7 +67,7 @@ class FibonacciValueRule(Rule[Union[float, Mapping[int, float]]]):
     exclude: set[int] = Factory(set)
     min_rewarded: float = 0.0001
 
-    def _value(self, market: Market) -> float | dict[int, float]:
+    def _value(self, market: Market, account: Account) -> float | dict[int, float]:
         market.refresh()
         items = market_to_answer_map(market, self.exclude, (lambda id_, probability: probability < self.min_rewarded))
         rank = sorted(items, key=items.__getitem__)
@@ -87,13 +88,13 @@ class RoundValueRule(CurrentValueRule[Union[BinaryResolution, PseudoNumericResol
 
     _explainer_stub: ClassVar[str] = "Resolves to round(MKT)"
 
-    def _value(self, market: Market) -> float:
+    def _value(self, market: Market, account: Account) -> float:
         if market.market.outcomeType in Outcome.MC_LIKE():
             raise RuntimeError()
         elif market.market.outcomeType == Outcome.BINARY:
             assert market.market.probability
             return bool(round(market.market.probability))
-        return round(cast(float, super()._value(market)))
+        return round(cast(float, super()._value(market, account)))
 
 
 @define(slots=False)
@@ -102,7 +103,7 @@ class PopularValueRule(Rule[Union[MultipleChoiceResolution, FreeResponseResoluti
 
     size: int = 1
 
-    def _value(self, market: Market) -> FreeResponseResolution | MultipleChoiceResolution:
+    def _value(self, market: Market, account: Account) -> FreeResponseResolution | MultipleChoiceResolution:
         market.refresh()
         answers = market_to_answer_map(market)
         final_answers: dict[int, float] = {}

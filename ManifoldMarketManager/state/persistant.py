@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from functools import lru_cache
 from logging import getLogger
 from os import getenv
 from pathlib import Path
@@ -50,8 +49,8 @@ def register_db() -> Connection:
         )
         conn.execute(
             "CREATE TABLE markets "
-            "(id INTEGER PRIMARY KEY AUTOINCREMENT, market Market NOT NULL, check_rate REAL NOT NULL, "
-            "last_checked TIMESTAMP, account INTEGER REFERENCES \"accounts\" (\"id\") ON DELETE SET NULL)"
+            "(id INTEGER PRIMARY KEY AUTOINCREMENT, market Market, check_rate REAL NOT NULL, last_checked TIMESTAMP, "
+            "account INTEGER REFERENCES \"accounts\" (\"id\") ON DELETE SET NULL)"
         )
         conn.execute(
             "CREATE TABLE pending "
@@ -80,12 +79,23 @@ def remove_markets(
 
 
 @db_wrapper
+def find_account(
+    account: Account,
+    db: Connection = None  # type: ignore[assignment]
+) -> int:
+    """Find the ID of an account, if it's registered."""
+    id_, _ = select_account(username=account.ManifoldUsername, key=account.key)
+    return id_
+
+
+@db_wrapper
 def update_market(
     row_id: int,
     market: Market | None = None,
     check_rate: float | None = None,
     last_checked: datetime | None = None,
     account_id: int | None = None,
+    account: Account | None = None,
     db: Connection = None  # type: ignore[assignment]
 ) -> None:
     """Attempt to update a market in the database."""
@@ -103,6 +113,10 @@ def update_market(
         params += (last_checked, )
     if account_id is not None:
         q_additions.append("account=?")
+        params += (account_id, )
+    elif account is not None:
+        q_additions.append("account=?")
+        account_id = find_account(account, db)
         params += (account_id, )
     if not params:
         raise ValueError("you need to actually update something")
@@ -141,7 +155,6 @@ def select_markets(
         yield (row_id, market, check_rate, last_checked, account)
 
 
-@lru_cache
 @db_wrapper
 def select_account(
     db_id: int | None = None,

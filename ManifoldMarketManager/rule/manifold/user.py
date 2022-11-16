@@ -13,6 +13,7 @@ from ... import Rule
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Any, ClassVar, Literal
 
+    from ...account import Account
     from ...market import Market
 
 
@@ -30,7 +31,7 @@ class ManifoldUserRule(Rule[float]):
         assert cls.attr
         assert cls.attr_desc
 
-    def _value(self, market: Market) -> float:
+    def _value(self, market: Market, account: Account) -> float:
         user = ManifoldClient()._get_user_raw(self.user)
         return cast(float, cast(JSONDict, user[self.attr])[self.field])
 
