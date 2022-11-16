@@ -38,14 +38,14 @@ def test_get_state(mkt: Market) -> None:
 
 def test_pickling(mkt: Market) -> None:
     """Make sure Markets can be dumped to disk and reloaded."""
-    with manifold_vcr.use_cassette(f'test_market/pickle_load/{quote(mkt.id)}.yaml'):
+    with manifold_vcr.use_cassette(f'test_market/pickle_load/{quote(mkt.market.id)}.yaml'):
         new_mkt: Market = loads(dumps(mkt))
     assert_equality(mkt, new_mkt)
 
 
 def test_from_url(mkt: Market) -> None:
     """Make sure Markets can be grabbed by URL."""
-    with manifold_vcr.use_cassette(f'test_market/fetch_by_url/{quote(mkt.id)}.yaml'):
+    with manifold_vcr.use_cassette(f'test_market/fetch_by_url/{quote(mkt.market.id)}.yaml'):
         assert mkt.market.url
         mkt2 = Market.from_url(mkt.market.url)
     assert_equality(mkt, mkt2)
@@ -53,6 +53,6 @@ def test_from_url(mkt: Market) -> None:
 
 def test_from_id(mkt: Market) -> None:
     """Make sure Markets can be grabbed by ID."""
-    with manifold_vcr.use_cassette(f'test_market/fetch_by_id/{quote(mkt.id)}.yaml'):
-        mkt2 = Market.from_id(mkt.id)
+    with manifold_vcr.use_cassette(f'test_market/fetch_by_id/{quote(mkt.market.id)}.yaml'):
+        mkt2 = Market.from_id(mkt.market.id)
     assert_equality(mkt, mkt2)

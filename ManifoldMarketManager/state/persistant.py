@@ -197,6 +197,13 @@ class DatabaseNamespace:
     """
 
     def __init__(self, name: str, schema: dict[str, str | type]):
+        """Given a name and schema, get a helper object to interact with only your part of the database.
+
+        Schema should be formatted as a dictionary of names to types.
+
+        Name should be formatted as a URI that describes your table. For instance, if I was making a table to store
+        state for a scanner of OpenStreetMap tasks, I might name it `scanner.osm.projects`.
+        """
         self.uuid = uuid5(NAMESPACE_DNS, name).hex
         str_schema = ", ".join(f"{name} {type_}" for name, type_ in schema.items())
         self.execute(f"CREATE TABLE {self.uuid} IF NOT EXIST ? ({str_schema})", commit=True)

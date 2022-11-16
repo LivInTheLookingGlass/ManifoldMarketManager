@@ -340,7 +340,7 @@ def list_command(
         check_rate: float
         last_check: datetime | None
         for id_, mkt, check_rate, last_check in conn.execute("SELECT * FROM markets"):
-            info = f"Market ID: {id_} (internal), {mkt.id} (manifold)\n"
+            info = f"Market ID: {id_} (internal), {mkt.market.id} (manifold)\n"
             hours = int(check_rate)
             minutes = (check_rate - hours) // 60
             seconds = ((check_rate - hours) / 60 - minutes) // 60

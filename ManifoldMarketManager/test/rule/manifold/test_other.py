@@ -22,29 +22,29 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 def test_OtherMarketClosed(mkt: Market, data_regression: DataRegressionFixture) -> None:
-    with manifold_vcr.use_cassette(f'rule/manifold/other/test_OtherMarketClosed/{quote(mkt.id)}.yaml'):
-        obj = OtherMarketClosed(id_=mkt.id)
+    with manifold_vcr.use_cassette(f'rule/manifold/other/test_OtherMarketClosed/{quote(mkt.market.id)}.yaml'):
+        obj = OtherMarketClosed(id_=mkt.market.id)
         val = obj._value(mkt, Account.from_env())
         data_regression.check({'answer': val})
 
 
 def test_OtherMarketResolved(mkt: Market, data_regression: DataRegressionFixture) -> None:
-    with manifold_vcr.use_cassette(f'rule/manifold/other/test_OtherMarketResolved/{quote(mkt.id)}.yaml'):
-        obj = OtherMarketResolved(id_=mkt.id)
+    with manifold_vcr.use_cassette(f'rule/manifold/other/test_OtherMarketResolved/{quote(mkt.market.id)}.yaml'):
+        obj = OtherMarketResolved(id_=mkt.market.id)
         val = obj._value(mkt, Account.from_env())
         data_regression.check({'answer': val})
 
 
 def test_OtherMarketValue(mkt: Market, data_regression: DataRegressionFixture) -> None:
-    with manifold_vcr.use_cassette(f'rule/manifold/other/test_OtherMarketValue/{quote(mkt.id)}.yaml'):
-        obj: OtherMarketValue[AnyResolution] = OtherMarketValue(id_=mkt.id)
+    with manifold_vcr.use_cassette(f'rule/manifold/other/test_OtherMarketValue/{quote(mkt.market.id)}.yaml'):
+        obj: OtherMarketValue[AnyResolution] = OtherMarketValue(id_=mkt.market.id)
         val = obj._value(mkt, Account.from_env())
         data_regression.check({'answer': val})
 
 
 def test_OtherMarketUniqueTraders(mkt: Market, data_regression: DataRegressionFixture) -> None:
-    with manifold_vcr.use_cassette(f'rule/manifold/other/test_OtherMarketUniqueTraders/{quote(mkt.id)}.yaml'):
-        obj = OtherMarketUniqueTraders(id_=mkt.id)
+    with manifold_vcr.use_cassette(f'rule/manifold/other/test_OtherMarketUniqueTraders/{quote(mkt.market.id)}.yaml'):
+        obj = OtherMarketUniqueTraders(id_=mkt.market.id)
         val = obj._value(mkt, Account.from_env())
         data_regression.check({'answer': val})
 
@@ -53,11 +53,11 @@ def test_OtherMarketUniqueTraders(mkt: Market, data_regression: DataRegressionFi
 def test_AmplifiedOddsRule(cpmm1_mkt: Market, data_regression: DataRegressionFixture) -> None:
     mkt = cpmm1_mkt
     if mkt.market.outcomeType == Outcome.BINARY:
-        filename = f'rule/manifold/other/test_AmplifiedOddsRule/{quote(mkt.id)}.yaml'
+        filename = f'rule/manifold/other/test_AmplifiedOddsRule/{quote(mkt.market.id)}.yaml'
         with manifold_vcr.use_cassette(filename):
             obj = AmplifiedOddsRule(
                 seed=filename,
-                id_=mkt.id,
+                id_=mkt.market.id,
                 a=hash_to_randrange(filename.encode(), 1, 129)
             )
             val = obj._value(mkt, Account.from_env())

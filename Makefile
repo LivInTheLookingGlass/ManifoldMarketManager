@@ -17,7 +17,7 @@ MYPY?=true
 # If specified, perform benchmarking (WARNING: silently disables code coverage)
 BENCHMARK?=false
 
-pytest_args?= -vl
+pytest_args?= -vl --ignore=./ManifoldMarketManager/manibots
 
 ifeq ($(BENCHMARK),true)
 pytest_args += --benchmark-min-time=0.05 --benchmark-sort=fullname --benchmark-group-by=fullfunc --benchmark-verbose
@@ -29,7 +29,7 @@ pytest_args += --flake8 --isort --pydocstyle
 endif
 
 ifeq ($(LINT),only)
-pytest_args += --ignore=./ManifoldMarketManager/test --ignore=./ManifoldMarketManager/PyManifold/tests --ignore=./ManifoldMarketManager/manibots
+pytest_args += --ignore=./ManifoldMarketManager/test --ignore=./ManifoldMarketManager/PyManifold/tests
 COV=false
 endif
 

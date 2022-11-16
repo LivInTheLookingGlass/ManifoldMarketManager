@@ -13,11 +13,12 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from .. import PytestRequest
 
+account = Account(ManifoldUsername='Test Case', ManifoldToken='FAKE_TOKEN')
+
 # slug -> everything else
 examples: dict[str, Any] = {
     'amplified-odds-100x-will-a-nuclear-4acd2868830b': {
         'market': None,
-        'account': Account(ManifoldUsername='Test Case', ManifoldToken='FAKE_TOKEN'),
         'do_resolve_rules': [[
             'manifold.other.OtherMarketResolved',
             {'id_': 'jsqfBFbbIyP4X40L6VSo'}
@@ -48,8 +49,8 @@ def amplified_example(request: PytestRequest[str]) -> Market:
     "ManifoldMarketManager/test/rule/manifold/test_other.py::test_AmplifiedOddsRule",
 ))
 def test_AmplifiedOddsMarket(amplified_example: Market) -> None:
-    with manifold_vcr.use_cassette(f'examples/amplified_odds/{amplified_example.id}.yaml'):
-        if amplified_example.should_resolve(Account.from_env()):
-            amplified_example.resolve(Account.from_env())
+    with manifold_vcr.use_cassette(f'examples/amplified_odds/{amplified_example.market.id}.yaml'):
+        if amplified_example.should_resolve(account):
+            amplified_example.resolve(account)
         else:  # pragma: no cover
             raise RuntimeError()

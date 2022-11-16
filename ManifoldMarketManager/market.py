@@ -84,7 +84,6 @@ class Market(DictDeserializable):
         """Remove sensitive/non-serializable state before dumping to database."""
         state = self.__dict__.copy()
         del state['client']
-        del state['account']
         if 'logger' in state:
             del state['logger']
         state['event_emitter'] = copy(state['event_emitter'])
@@ -94,11 +93,7 @@ class Market(DictDeserializable):
 
     def __setstate__(self, state: Mapping[str, Any]) -> None:
         """Rebuild sensitive/non-serializable state after retrieving from database."""
-        if 'account' in state:
-            state = dict(state)
-            del state['account']
         self.__dict__.update(state)
-        self.account = Account.from_env()
         if not hasattr(self, "event_emitter"):
             self.event_emitter = EventEmitter()
         self.event_emitter._lock = Lock()
