@@ -103,22 +103,16 @@ def update_market(
     assert db is not None
     params: tuple[Any, ...] = ()
     q_additions = []
-    if market is not None:
-        q_additions.append("market=?")
-        params += (market, )
-    if check_rate is not None:
-        q_additions.append("check_rate=?")
-        params += (check_rate, )
-    if last_checked is not None:
-        q_additions.append("last_checked=?")
-        params += (last_checked, )
-    if account_id is not None:
-        q_additions.append("account=?")
-        params += (account_id, )
-    elif account is not None:
-        q_additions.append("account=?")
-        account_id = find_account(account, db)
-        params += (account_id, )
+    for name, value in {
+        "market": market,
+        "check_rate": check_rate,
+        "last_checked": last_checked,
+        "account_id": account_id,
+        "account": account,
+    }.items():
+        if value is not None:
+            q_additions.append(f"{name}=?")
+            params += (value, )
     if not params:
         raise ValueError("you need to actually update something")
     query = f"UPDATE markets SET {', '.join(q_additions)} WHERE id=?"
@@ -171,19 +165,16 @@ def select_account(
     assert db is not None
     query = "from accounts select id, raw_account, account, is_encrypted where "
     params: tuple[Any, ...] = ()
-    if db_id:
-        query += "ID = ? "
-        params += (db_id, )
-    if manifold_id:
-        if db_id:
-            query += ", "
-        query += "manifold_id = ? "
-        params += (manifold_id, )
-    if username:
-        if any((db_id, manifold_id)):
-            query += ", "
-        query += "username = ? "
-        params += (username, )
+    q_additions = []
+    for name, value in {
+        "id": db_id,
+        "manifold_id": manifold_id,
+        "username": username,
+    }.items():
+        if value is not None:
+            q_additions.append(f"{name} = ?")
+            params += (value, )
+    query += ", ".join(q_additions)
     ((id_, raw_account, account, is_encrypted), ) = db.execute(query, params)
     if is_encrypted:
         account = Account.from_bytes(raw_account, key)
