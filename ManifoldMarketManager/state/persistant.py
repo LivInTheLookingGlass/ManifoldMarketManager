@@ -7,6 +7,7 @@ from os import getenv
 from pathlib import Path
 from sqlite3 import PARSE_COLNAMES, PARSE_DECLTYPES, connect
 from typing import TYPE_CHECKING
+from uuid import NAMESPACE_DNS, uuid5
 
 from ..account import Account
 from ..consts import EnvironmentVariable
@@ -192,22 +193,22 @@ def select_account(
 class DatabaseNamespace:
     """Reperesent a namespace in the database for use by various rules and plugins.
 
-    This requires you to give a schema and UUID-formatted table name. If your name is not a UUID format, it will error.
+    This requires you to give a schema and a DNS-formatted table name
     """
 
-    def __init__(self, uuid: str, schema: dict[str, str | type]):
-        self.uuid = uuid.replace("-", "_")
+    def __init__(self, name: str, schema: dict[str, str | type]):
+        self.uuid = uuid5(NAMESPACE_DNS, name).hex
         str_schema = ", ".join(f"{name} {type_}" for name, type_ in schema.items())
         self.execute(f"CREATE TABLE {self.uuid} IF NOT EXIST ? ({str_schema})", commit=True)
 
     def execute(self, query: str, commit: bool = False) -> Cursor:
         """Perform basic sanitization that I don't expect to defeat real effort unless you use this responsibly."""
-        if len(self.uuid) == 36 or ';' in query:
+        if len(self.uuid) == 32 or ';' in query:
             raise ValueError()
-        db = register_db()
-        ret = db.execute(query)
-        if commit:
-            db.commit()
+        with register_db() as db:
+            ret = db.execute(query)
+            if commit:
+                db.commit()
         return ret
 
     def select(
