@@ -121,7 +121,7 @@ class Rule(ABC, Generic[T], DictDeserializable):
         return self._explain_specific(market, account, indent, sig_figs)
 
     def _explain_specific(self, market: Market, account: Account, indent: int = 0, sig_figs: int = 4) -> str:
-        f_val = parallel(self._value, market)
+        f_val = parallel(self._value, market, account)
         warn("Using a default specific explanation. This probably isn't what you want!")
         ret = self.explain_abstract(indent=indent).rstrip('\n')
         ret += " (-> "
@@ -159,7 +159,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.8.0.17"
+VERSION = "0.8.0.18"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "DoResolveRule", "ResolutionValueRule", "Rule", "Market", "get_client", "rule",

@@ -6,6 +6,7 @@ from pytest import fixture, mark
 
 from ...account import Account
 from ...market import Market
+from ...util import get_client
 from .. import manifold_vcr
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -19,6 +20,7 @@ account = Account(ManifoldUsername='Test Case', ManifoldToken='FAKE_TOKEN')
 examples: dict[str, Any] = {
     'amplified-odds-100x-will-a-nuclear-4acd2868830b': {
         'market': None,
+        'client': get_client(account),
         'do_resolve_rules': [[
             'manifold.other.OtherMarketResolved',
             {'id_': 'jsqfBFbbIyP4X40L6VSo'}

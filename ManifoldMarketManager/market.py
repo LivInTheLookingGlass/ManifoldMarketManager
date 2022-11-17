@@ -56,7 +56,7 @@ class Market(DictDeserializable):
     """
 
     market: APIMarket = field(repr=False, compare=False)
-    client: ManifoldClient = field(init=False, repr=False, compare=False, default_factory=get_client)
+    client: ManifoldClient = field(repr=False, compare=False, default_factory=get_client)
     notes: str = field(default='')
     do_resolve_rules: list[Rule[Optional[bool]]] = field(default_factory=list)
     resolve_to_rules: list[Rule[AnyResolution]] = field(default_factory=list)
@@ -140,7 +140,10 @@ class Market(DictDeserializable):
         return super().from_dict(env_copy)
 
     def _after_resolve(self, market: Market, account: Account, outcome: AnyResolution, response: Response) -> None:
-        get_client(account).create_comment(self.market, self.explain_specific(account), mode='markdown')
+        try:
+            get_client(account).create_comment(self.market, self.explain_specific(account), mode='markdown')
+        except Exception:
+            self.logger.exception("Could not post a comment")
 
     def explain_abstract(self, **kwargs: Any) -> str:
         """Explain how the market will resolve and decide to resolve."""
