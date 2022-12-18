@@ -27,13 +27,6 @@ def test_CurentValueRule(mkt: Market, data_regression: DataRegressionFixture) ->
         data_regression.check({'answer': val})
 
 
-def test_OtherMarketUniqueTraders(mkt: Market, data_regression: DataRegressionFixture) -> None:
-    with manifold_vcr.use_cassette(f'rule/manifold/this/test_UniqueTradersRule/{quote(mkt.market.id)}.yaml'):
-        obj = UniqueTradersRule(id_=mkt.market.id)
-        val = obj._value(mkt, Account.from_env())
-        data_regression.check({'answer': val})
-
-
 @mark.depends(on=(
     'ManifoldMarketManager/test/test_util.py::test_fib',
     'ManifoldMarketManager/test/test_util.py::test_market_to_answer_map'

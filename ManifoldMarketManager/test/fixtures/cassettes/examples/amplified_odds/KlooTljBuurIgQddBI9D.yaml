@@ -245,8 +245,6 @@ interactions:
       - Vercel
       Strict-Transport-Security:
       - max-age=63072000
-      Transfer-Encoding:
-      - chunked
       X-Matched-Path:
       - /api/v0/market/[id]
       X-Vercel-Cache:
@@ -502,8 +500,6 @@ interactions:
       - Vercel
       Strict-Transport-Security:
       - max-age=63072000
-      Transfer-Encoding:
-      - chunked
       X-Matched-Path:
       - /api/v0/market/[id]
       X-Vercel-Cache:
@@ -666,4 +662,246 @@ interactions:
     status:
       code: 500
       message: Internal Server Error
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://manifold.markets/api/v0/market/jsqfBFbbIyP4X40L6VSo
+  response:
+    body:
+      string: !!binary |
+        MUAVAAC/e1H7+kXvGydgY2wjTVN319566ZKuXXfXTv3A9ktMisEBnCyLMnoDudDhQPLv8MPh+H+X
+        A347ffv2pHmQYFlb/EBaYAFGQZCUpRnmnJvzav1NNQHZzgVMDwr28bD9cte29+dH8b9gD/LnswcK
+        XUCdfLjvQUHaiMNqtTp9t29m3cwPvLhbTT7v9PlrARTKn32JGJweERTcPf2lY9TBuO/EOk/jEPsf
+        ZppLKeq64FVVV7LnWDdHnXR4CRYUDClNUS2XdigWO+93FueIofMuoUuLzo9LnS1vNgMX/+zbrPrz
+        0hi/l6ufezzclo/36d/4Xa/nP9/exryc9m+Pjb35FBuZdUChsz4imH1JXhSNYIwxCocZYzLegYL/
+        jLVEEzd3FnUgJ9STd6RFYvXsugF7Yhzp/NjqRIwjaUDi8HciOTkhfsTPQCHpXQT1653CHCwoGFLi
+        dX3Uzmy97RejDh+Y4lLBaHky1mY6mw0ylLWY/Z/MZGW9LXBbcd30JVCYvLegLrDegJJywQWTrKmb
+        uhCM5xReb59B8bKsFoWQdZ7XhSgqKa8UpuBb3Rpr0hkUWzAmeVkJLppa1LXgnMIEii14XhWsrouy
+        ycu6qlhOIfmk7YM5zKY36QyKS0bBz6nzI/44TwgKvtyvb55egcKI3aCdiSMo6KZxzDhQOHo7jwgq
+        LyRflJIJIQpW8ZrCMbtKLr76OURQjIKJTxi9PWIPKoUZKQSM3s7baq03EE2WO5SXMq8KWVUljR4D
+        726rY3qZesfOkbzgRSPquqLQY+yCmRDoCyTKsvf2Iia1oH4lx5h00Lugp6HES/g7AX0qBd9cwQnk
+        whEjSZ683j6b7AQ8okskDTq5866JpPNua8KIPUnerWbrw3mPEuddljAm43ZkmsPkI0YCV3qBUYeP
+        CC9sve3h+n4Xtrj1AcmmS4Q3lOQszylQETAZfaUXViUFRLvzacCADHqefLD9osm9X9+vU2p/a/tJ
+        NbI8K7Fh1wE=
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - public, max-age=0, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - br
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 17 Dec 2022 23:24:24 GMT
+      Etag:
+      - W/"12l8utm5ovi11t"
+      Server:
+      - Vercel
+      Strict-Transport-Security:
+      - max-age=63072000
+      X-Matched-Path:
+      - /api/v0/market/[id]
+      X-Vercel-Cache:
+      - MISS
+      X-Vercel-Id:
+      - cle1::cle1::792tc-1671319464741-276ef026a889
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://manifold.markets/api/v0/market/jsqfBFbbIyP4X40L6VSo
+  response:
+    body:
+      string: !!binary |
+        MUAVAAC/e1H7+kXvGydgY2wjTVN319566ZKuXXfXTv3A9ktMisEBnCyLMnoDudDhdBD7fvi/nY4X
+        +vXftwc1DxLsFkjNa4EFGAW1krJQc85dORmWP3qK1nMB04OCfTxsv9y17f35Ufwv2IP8+eyBQhdQ
+        Jx/ue1CQNuKwWq1O3+2bWTfzAy/uVpPPO33+WgAF+LsvEYPTI4KCu6e/dIw6GNdOressD7H/YYa5
+        lKKuC15VdSX/7OvmqJMOL8GCgiGlKarl0g7FYuf9zuIcMXTeJXRp0flxqbPlzWbg4p99m1V/Xhrj
+        93L1c4+H2/LxPv0bv+v1/Ofb25iX0/7tsbE3n2Ijsw4odNZHJLMtyYuiEYwxRuEwY0zGO1Dwn7GW
+        aOLmzqIO5IR68o60SKyeXTdgT4wjnR9bnYhxJA1IHP5OJCcnxI/4GSgkvYugfr1TmIMFBUNKuu6P
+        2pmtt/1i1OEDU1xu0FuejLWZzmaDDGUtZv8nM1lZbwvcVlw3fQkUJu8tqAusN6CkXHDBJGvqpi4E
+        4zmF19tnULwsq0UhZJ3ndSGKSsorhSn4VrfGmnQGxRaMSV5WgoumFnUtOKcwgWILnlcFq+uibPKy
+        riqWU0g+aftgDrPpTTqD4pJR8HPq/Ig/zhOCgi/365unV6AwYjdoZ+IICrppHDMOFI7eziOCygvJ
+        F6VkQoiCVbymcKwukouvfg4RFKNg4hNGb4/Yg0phRgoBo7fztRrrDWSj43blpcyrQlYVpNZj0N1u
+        dUwvU+/YKZIXvGhEXVcUeoxdMBMDfQFfOqB+XSDJP2PSQe+CngagEBt/J1Dw7fSC8Oo5YiTJk9fb
+        ZyddgEd0iaRBJws+NZF03m1NGLEnyVvSbH2I+ZQ477KEMRm3I9McJh8xEqAcCZcjV3qBUYePCIp9
+        TuttD9d3tKTPkQpa3PqAZNMlwhtKcpbntBfFhES782nAgHoyTz7YfjG8/D4E976Da+Xv3X5yUUmZ
+        haTx6w==
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - public, max-age=0, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - br
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 17 Dec 2022 23:54:14 GMT
+      Etag:
+      - W/"tlc2arell811t"
+      Server:
+      - Vercel
+      Strict-Transport-Security:
+      - max-age=63072000
+      X-Matched-Path:
+      - /api/v0/market/[id]
+      X-Vercel-Cache:
+      - MISS
+      X-Vercel-Id:
+      - cle1::cle1::jhd9v-1671321254658-cd6a1bc21fab
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://manifold.markets/api/v0/market/jsqfBFbbIyP4X40L6VSo
+  response:
+    body:
+      string: !!binary |
+        MUAVAAC/e1H7+kXvGydgY2wjTVN319566ZKuXXfXTv3A9ktMisEBnCyLMnoDudDhdBD7fvi/nY4X
+        +vXftwc1DxLsFkjNa4EFGAW1krJQc85dORmWP3qK1nMB04OCfTxsv9y17f35Ufwv2IP8+eyBQhdQ
+        Jx/ue1CQNuKwWq1O3+2bWTfzAy/uVpPPO33+WgAF+LsvEYPTI4KCu6e/dIw6GNdOressD7H/YYa5
+        lKKuC15VdSX/7OvmqJMOL8GCgiGlKarl0g7FYuf9zuIcMXTeJXRp0flxqbPlzWbg4p99m1V/Xhrj
+        93L1c4+H2/LxPv0bv+v1/Ofb25iX0/7tsbE3n2Ijsw4odNZHJLMtyYuiEYwxRuEwY0zGO1Dwn7GW
+        aOLmzqIO5IR68o60SKyeXTdgT4wjnR9bnYhxJA1IHP5OJCcnxI/4GSgkvYugfr1TmIMFBUNKuu6P
+        2pmtt/1i1OEDU1xu0FuejLWZzmaDDGUtZv8nM1lZbwvcVlw3fQkUJu8tqAusN6CkXHDBJGvqpi4E
+        4zmF19tnULwsq0UhZJ3ndSGKSsorhSn4VrfGmnQGxRaMSV5WgoumFnUtOKcwgWILnlcFq+uibPKy
+        riqWU0g+aftgDrPpTTqD4pJR8HPq/Ig/zhOCgi/365unV6AwYjdoZ+IICrppHDMOFI7eziOCygvJ
+        F6VkQoiCVbymcKwukouvfg4RFKNg4hNGb4/Yg0phRgoBo7fztRrrDWSj43blpcyrQlYVpNZj0N1u
+        dUwvU+/YKZIXvGhEXVcUeoxdMBMDfQFfOqB+XSDJP2PSQe+CngagEBt/J1Dw7fSC8Oo5YiTJk9fb
+        ZyddgEd0iaRBJws+NZF03m1NGLEnyVvSbH2I+ZQ477KEMRm3I9McJh8xEqAcCZcjV3qBUYePCIp9
+        TuttD9d3tKTPkQpa3PqAZNMlwhtKcpbntBfFhES782nAgHoyTz7YfjG8/D4E976Da+Xv3X5yUUmZ
+        haTx6w==
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - public, max-age=0, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - br
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 17 Dec 2022 23:54:14 GMT
+      Etag:
+      - W/"tlc2arell811t"
+      Server:
+      - Vercel
+      Strict-Transport-Security:
+      - max-age=63072000
+      X-Matched-Path:
+      - /api/v0/market/[id]
+      X-Vercel-Cache:
+      - HIT
+      X-Vercel-Id:
+      - cle1::cle1::j4972-1671321255226-394308e6489b
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://manifold.markets/api/v0/market/jsqfBFbbIyP4X40L6VSo
+  response:
+    body:
+      string: !!binary |
+        MUAVAAC/e1H7+kXvGydgY2wjTVN319566ZKuXXfXTv3A9ktMisEBnCyLMnoDudDhdBD7fvi/nY4X
+        +vXftwc1DxLsFkjNa4EFGAW1krJQc85dORmWP3qK1nMB04OCfTxsv9y17f35Ufwv2IP8+eyBQhdQ
+        Jx/ue1CQNuKwWq1O3+2bWTfzAy/uVpPPO33+WgAF+LsvEYPTI4KCu6e/dIw6GNdOressD7H/YYa5
+        lKKuC15VdSX/7OvmqJMOL8GCgiGlKarl0g7FYuf9zuIcMXTeJXRp0flxqbPlzWbg4p99m1V/Xhrj
+        93L1c4+H2/LxPv0bv+v1/Ofb25iX0/7tsbE3n2Ijsw4odNZHJLMtyYuiEYwxRuEwY0zGO1Dwn7GW
+        aOLmzqIO5IR68o60SKyeXTdgT4wjnR9bnYhxJA1IHP5OJCcnxI/4GSgkvYugfr1TmIMFBUNKuu6P
+        2pmtt/1i1OEDU1xu0FuejLWZzmaDDGUtZv8nM1lZbwvcVlw3fQkUJu8tqAusN6CkXHDBJGvqpi4E
+        4zmF19tnULwsq0UhZJ3ndSGKSsorhSn4VrfGmnQGxRaMSV5WgoumFnUtOKcwgWILnlcFq+uibPKy
+        riqWU0g+aftgDrPpTTqD4pJR8HPq/Ig/zhOCgi/365unV6AwYjdoZ+IICrppHDMOFI7eziOCygvJ
+        F6VkQoiCVbymcKwukouvfg4RFKNg4hNGb4/Yg0phRgoBo7fztRrrDWSj43blpcyrQlYVpNZj0N1u
+        dUwvU+/YKZIXvGhEXVcUeoxdMBMDfQFfOqB+XSDJP2PSQe+CngagEBt/J1Dw7fSC8Oo5YiTJk9fb
+        ZyddgEd0iaRBJws+NZF03m1NGLEnyVvSbH2I+ZQ477KEMRm3I9McJh8xEqAcCZcjV3qBUYePCIp9
+        TuttD9d3tKTPkQpa3PqAZNMlwhtKcpbntBfFhES782nAgHoyTz7YfjG8/D4E976Da+Xv3X5yUUmZ
+        haTx6w==
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - public, max-age=0, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - br
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 17 Dec 2022 23:54:14 GMT
+      Etag:
+      - W/"tlc2arell811t"
+      Server:
+      - Vercel
+      Strict-Transport-Security:
+      - max-age=63072000
+      Transfer-Encoding:
+      - chunked
+      X-Matched-Path:
+      - /api/v0/market/[id]
+      X-Vercel-Cache:
+      - HIT
+      X-Vercel-Id:
+      - cle1::cle1::zg7sd-1671321255488-f881fda765fd
+    status:
+      code: 200
+      message: OK
 version: 1

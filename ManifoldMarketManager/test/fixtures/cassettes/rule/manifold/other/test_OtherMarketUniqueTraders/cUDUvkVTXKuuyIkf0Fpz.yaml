@@ -99,14 +99,86 @@ interactions:
       - Vercel
       Strict-Transport-Security:
       - max-age=63072000
-      Transfer-Encoding:
-      - chunked
       X-Matched-Path:
       - /api/v0/market/[id]
       X-Vercel-Cache:
       - MISS
       X-Vercel-Id:
       - cle1::cle1::cp8kb-1666723855548-0d75332603a8
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://manifold.markets/api/v0/bets?contractId=cUDUvkVTXKuuyIkf0Fpz
+  response:
+    body:
+      string: !!binary |
+        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
+        kB8M7OzIJxBOff87
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=15, public
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - br
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 17 Dec 2022 23:47:13 GMT
+      Etag:
+      - W/"b3ba9cxts3sj"
+      Server:
+      - Vercel
+      Strict-Transport-Security:
+      - max-age=63072000
+      Transfer-Encoding:
+      - chunked
+      X-Matched-Path:
+      - /api/v0/bets
+      X-Vercel-Cache:
+      - MISS
+      X-Vercel-Id:
+      - cle1::cle1::w26gv-1671320833361-f2d17ab1b017
     status:
       code: 200
       message: OK
