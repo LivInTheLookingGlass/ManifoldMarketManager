@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, cast
 
 from pytest import fixture, mark
 
+from ....account import Account
 from ....consts import FIELDS
 from ....market import Market
 from ....rule.manifold.user import ResolveToUserCreatedVolume, ResolveToUserProfit
@@ -32,7 +33,7 @@ def field(request: PytestRequest[FieldType]) -> FieldType:
 def test_user_profit(manifold_user: str, field: FieldType, data_regression: DataRegressionFixture) -> None:
     with manifold_vcr.use_cassette(f'rule/manifold/test_user_profit/{manifold_user}/{field}.yaml'):
         obj = ResolveToUserProfit(manifold_user, field)
-        val = obj._value(cast(Market, None))
+        val = obj._value(cast(Market, None), Account.from_env())
         data_regression.check({'answer': val})
 
 
@@ -42,5 +43,5 @@ def test_user_profit(manifold_user: str, field: FieldType, data_regression: Data
 def test_user_market_volume(manifold_user: str, field: FieldType, data_regression: DataRegressionFixture) -> None:
     with manifold_vcr.use_cassette(f'rule/manifold/test_user_volume/{manifold_user}/{field}.yaml'):
         obj = ResolveToUserCreatedVolume(manifold_user, field)
-        val = obj._value(cast(Market, None))
+        val = obj._value(cast(Market, None), Account.from_env())
         data_regression.check({'answer': val})

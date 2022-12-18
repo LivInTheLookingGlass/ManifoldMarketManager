@@ -17,7 +17,7 @@ MYPY?=true
 # If specified, perform benchmarking (WARNING: silently disables code coverage)
 BENCHMARK?=false
 
-pytest_args?= -vl
+pytest_args?= -vl --ignore=./ManifoldMarketManager/manibots
 
 ifeq ($(BENCHMARK),true)
 pytest_args += --benchmark-min-time=0.05 --benchmark-sort=fullname --benchmark-group-by=fullfunc --benchmark-verbose
@@ -80,7 +80,7 @@ test_%:
 
 .PHONY: _test
 _test:
-	@source env_personal.sh && ManifoldMarketManager_NO_CACHE=1 PYTHONPATH=${PYTHONPATH}:./ManifoldMarketManager/PyManifold $(PY) -m pytest ManifoldMarketManager $(pytest_args) -k 'not mypy-status' --ignore=./ManifoldMarketManager/test/manifold
+	@source env_personal.sh && ManifoldMarketManager_NO_CACHE=1 PYTHONPATH=${PYTHONPATH}:./ManifoldMarketManager/PyManifold $(PY) -m pytest ManifoldMarketManager $(pytest_args) -k 'not mypy-status'
 
 .PHONY: dependencies
 ifeq ($(MYPY),true)

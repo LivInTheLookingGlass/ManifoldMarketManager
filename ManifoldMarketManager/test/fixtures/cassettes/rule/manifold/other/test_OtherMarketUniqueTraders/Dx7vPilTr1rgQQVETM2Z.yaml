@@ -146,14 +146,104 @@ interactions:
       - Vercel
       Strict-Transport-Security:
       - max-age=63072000
-      Transfer-Encoding:
-      - chunked
       X-Matched-Path:
       - /api/v0/market/[id]
       X-Vercel-Cache:
       - MISS
       X-Vercel-Id:
       - cle1::cle1::t6dnf-1666723854115-411eabacd233
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.1
+    method: GET
+    uri: https://manifold.markets/api/v0/bets?contractId=Dx7vPilTr1rgQQVETM2Z
+  response:
+    body:
+      string: !!binary |
+        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
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '0'
+      Cache-Control:
+      - max-age=15, public
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - br
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sat, 17 Dec 2022 23:47:10 GMT
+      Etag:
+      - W/"fqpffj1rsja09"
+      Server:
+      - Vercel
+      Strict-Transport-Security:
+      - max-age=63072000
+      Transfer-Encoding:
+      - chunked
+      X-Matched-Path:
+      - /api/v0/bets
+      X-Vercel-Cache:
+      - MISS
+      X-Vercel-Id:
+      - cle1::cle1::w4swv-1671320830105-617de9a68d8d
     status:
       code: 200
       message: OK

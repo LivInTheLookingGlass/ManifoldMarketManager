@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Callable, List, Type, cast
 from pytest import fixture, mark
 
 from ... import Rule
+from ...account import Account
 from ...consts import BinaryResolution
 from ...market import Market
 from ...rule import get_rule
@@ -59,11 +60,11 @@ def test_binary_rule(binary_rule: str) -> None:
         mock_obj1.resolve_value = val1
         mock_obj2.resolve_value = val2
         expected = bool(validator(val1, val2))
-        assert bool(obj.value(mkt, refresh=True)) is expected
+        assert bool(obj.value(mkt, Account.from_env(), refresh=True)) is expected
         from_dict_val = RuleSubclass.from_dict({
             "rule1": ["generic.ResolveToValue", {"resolve_value": val1}],
             "rule2": ["generic.ResolveToValue", {"resolve_value": val2}]
-        })._value(mkt)
+        })._value(mkt, Account.from_env())
         assert from_dict_val == "CANCEL" or bool(from_dict_val) is expected
 
 
@@ -72,16 +73,16 @@ def test_negate_rule_value() -> None:
     obj = NegateRule(cast(Rule[BinaryResolution], mock_obj))
 
     mkt = cast(Market, None)
-    assert bool(obj.value(mkt, refresh=True)) is True
+    assert bool(obj.value(mkt, Account.from_env(), refresh=True)) is True
     assert NegateRule.from_dict({
         "child": ["generic.ResolveToValue", {"resolve_value": False}]
-    })._value(mkt) is True
+    })._value(mkt, Account.from_env()) is True
 
     mock_obj.resolve_value = True
-    assert bool(obj.value(mkt, refresh=True)) is False
+    assert bool(obj.value(mkt, Account.from_env(), refresh=True)) is False
     assert NegateRule.from_dict({
         "child": ["generic.ResolveToValue", {"resolve_value": True}]
-    })._value(mkt) is False
+    })._value(mkt, Account.from_env()) is False
 
 
 def test_at_time_rule_value() -> None:
@@ -96,7 +97,7 @@ def test_at_time_rule_value() -> None:
     )
     for idx, val in enumerate(values):
         obj = ResolveAtTime(val)
-        assert bool(obj.value(cast(Market, None))) is bool(idx % 2)
+        assert bool(obj.value(cast(Market, None), Account.from_env())) is bool(idx % 2)
 
 
 @mark.depends(on=('ManifoldMarketManager/test/test_util.py::test_fib', ))
@@ -117,7 +118,7 @@ def test_modulus_rule(data_regression: DataRegressionFixture, limit: int = 100) 
         assert desc != prev_desc
         assert len(desc) >= len(prev_desc)
         prev_desc = desc
-        val = rule.value(mkt, refresh=True)
+        val = rule.value(mkt, Account.from_env(), refresh=True)
         data[(x, prev)] = val
         prev = x
     data_regression.check({'answer': data})
@@ -142,5 +143,5 @@ def test_variadic_rule(
         assert desc != prev_desc
         assert len(desc) >= len(prev_desc)
         prev_desc = desc
-        data[x] = rule.value(mkt, refresh=True)
+        data[x] = rule.value(mkt, Account.from_env(), refresh=True)
     data_regression.check({'answer': data})

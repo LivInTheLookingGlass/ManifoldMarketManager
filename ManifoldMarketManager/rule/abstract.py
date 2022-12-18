@@ -18,6 +18,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from pymanifold.types import JSONDict
 
+    from ..account import Account
     from ..market import Market
     from ..util import ModJSONDict
 
@@ -39,8 +40,8 @@ class AbstractRule(Generic[T], Rule[T]):
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return f"{'  ' * indent}- {self._explainer_stub}\n"
 
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        return f"{'  ' * indent}- {self._explainer_stub} (-> {self.value(market, format='NONE')})\n"
+    def _explain_specific(self, market: Market, account: Account, indent: int = 0, sig_figs: int = 4) -> str:
+        return f"{'  ' * indent}- {self._explainer_stub} (-> {self.value(market, account, format='NONE')})\n"
 
 
 @define(slots=False)  # type: ignore
@@ -52,9 +53,9 @@ class UnaryRule(AbstractRule[T]):
     def _explain_abstract(self, indent: int = 0, **kwargs: Any) -> str:
         return super()._explain_abstract(indent, **kwargs) + self.child.explain_abstract(indent + 1, **kwargs)
 
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        return super()._explain_specific(market, indent, sig_figs) +\
-            self.child.explain_specific(market, indent + 1, sig_figs)
+    def _explain_specific(self, market: Market, account: Account, indent: int = 0, sig_figs: int = 4) -> str:
+        return super()._explain_specific(market, account, indent, sig_figs) +\
+            self.child.explain_specific(market, account, indent + 1, sig_figs)
 
     @classmethod
     def from_dict(cls, env: ModJSONDict) -> 'UnaryRule[T]':
@@ -89,10 +90,10 @@ class BinaryRule(AbstractRule[T]):
         ret += self.rule2.explain_abstract(indent + 1, **kwargs)
         return ret
 
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        ret = super()._explain_specific(market, indent, sig_figs)
-        ret += self.rule1.explain_specific(market, indent + 1, sig_figs)
-        ret += self.rule2.explain_specific(market, indent + 1, sig_figs)
+    def _explain_specific(self, market: Market, account: Account, indent: int = 0, sig_figs: int = 4) -> str:
+        ret = super()._explain_specific(market, account, indent, sig_figs)
+        ret += self.rule1.explain_specific(market, account, indent + 1, sig_figs)
+        ret += self.rule2.explain_specific(market, account, indent + 1, sig_figs)
         return ret
 
 
@@ -119,11 +120,11 @@ class VariadicRule(AbstractRule[T]):
             ret += rule.explain_abstract(indent + 1, **kwargs)
         return ret
 
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        val = round_sig_figs(cast(float, self._value(market)), sig_figs)
+    def _explain_specific(self, market: Market, account: Account, indent: int = 0, sig_figs: int = 4) -> str:
+        val = round_sig_figs(cast(float, self._value(market, account)), sig_figs)
         ret = f"{'  ' * indent}- {self._explainer_stub} (-> {val})\n"
         for rule in self.rules:
-            ret += rule.explain_specific(market, indent + 1, sig_figs)
+            ret += rule.explain_specific(market, account, indent + 1, sig_figs)
         return ret
 
 
@@ -137,7 +138,7 @@ class ResolveRandomSeed(ResolutionValueRule):
     args: Sequence[Any] = ()
     kwargs: JSONDict = Factory(dict)
 
-    def _value(self, market: Market) -> Any:
+    def _value(self, market: Market, account: Account) -> Any:
         source = Random(self.seed)
         method = getattr(source, self.method)
         for _ in range(self.rounds):

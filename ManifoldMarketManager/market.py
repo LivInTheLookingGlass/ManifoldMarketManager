@@ -38,27 +38,26 @@ class Market(DictDeserializable):
 
     Events
     ------
-    before_check(market: Market):
-    after_check(market: Market):
+    before_check(market: Market, account: Account):
+    after_check(market: Market, account: Account):
         Called before/after a market is checked. Please don't put anything intensive in here.
 
-    before_create(market: Market):
-    after_create(market: Market):
+    before_create(market: Market, account: Account):
+    after_create(market: Market, account: Account):
         Called before/after a market is created.
 
-    before_resolve(market: Market, outcome: AnyResolution):
-    after_resolve(market: Market, outcome: AnyResolution, response: Response):
+    before_resolve(market: Market, account: Account, outcome: AnyResolution):
+    after_resolve(market: Market, account: Account, outcome: AnyResolution, response: Response):
         Called before/after a market is resolved. Please don't put anything intensive in here.
 
-    before_remove(market: Market):
-    after_remove(market: Market):
+    before_remove(market: Market, account: Account):
+    after_remove(market: Market, account: Account):
         Called before/after a market is removed from the database.
     """
 
     market: APIMarket = field(repr=False, compare=False)
-    client: ManifoldClient = field(init=False, repr=False, compare=False)
+    client: ManifoldClient = field(repr=False, compare=False, default_factory=get_client)
     notes: str = field(default='')
-    account: Account = field(default_factory=Account.from_env)
     do_resolve_rules: list[Rule[Optional[bool]]] = field(default_factory=list)
     resolve_to_rules: list[Rule[AnyResolution]] = field(default_factory=list)
     logger: Logger = field(init=False, default=None, hash=False, repr=False)  # type: ignore[assignment]
@@ -77,7 +76,6 @@ class Market(DictDeserializable):
 
     def __post_init__(self) -> None:
         """Initialize state that doesn't make sense to exist in the init."""
-        self.client = get_client(self.account)
         if self._after_resolve not in self.event_emitter.listeners('after_resolve'):
             self.event_emitter.add_listener('after_resolve', self._after_resolve)
         self.logger = getLogger(f"{type(self).__qualname__}[{id(self)}]")
@@ -86,7 +84,6 @@ class Market(DictDeserializable):
         """Remove sensitive/non-serializable state before dumping to database."""
         state = self.__dict__.copy()
         del state['client']
-        del state['account']
         if 'logger' in state:
             del state['logger']
         state['event_emitter'] = copy(state['event_emitter'])
@@ -97,16 +94,10 @@ class Market(DictDeserializable):
     def __setstate__(self, state: Mapping[str, Any]) -> None:
         """Rebuild sensitive/non-serializable state after retrieving from database."""
         self.__dict__.update(state)
-        self.account = Account.from_env()
         if not hasattr(self, "event_emitter"):
             self.event_emitter = EventEmitter()
         self.event_emitter._lock = Lock()
         self.__post_init__()
-
-    @property
-    def id(self) -> str:
-        """Return the ID of a market as reported by Manifold."""
-        return self.market.id
 
     def refresh(self) -> None:
         """Ensure market data is recent."""
@@ -124,20 +115,17 @@ class Market(DictDeserializable):
     @classmethod
     def from_url(cls, url: str, *args: Any, **kwargs: Any) -> Market:
         """Reconstruct a Market object from the market url and other arguments."""
-        api_market = get_client().get_market_by_url(url)
-        return cls(api_market, *args, **kwargs)
+        return cls(get_client().get_market_by_url(url), *args, **kwargs)
 
     @classmethod
     def from_slug(cls, slug: str, *args: Any, **kwargs: Any) -> Market:
         """Reconstruct a Market object from the market slug and other arguments."""
-        api_market = get_client().get_market_by_slug(slug)
-        return cls(api_market, *args, **kwargs)
+        return cls(get_client().get_market_by_slug(slug), *args, **kwargs)
 
     @classmethod
     def from_id(cls, id: str, *args: Any, **kwargs: Any) -> Market:
         """Reconstruct a Market object from the market ID and other arguments."""
-        api_market = get_client().get_market_by_id(id)
-        return cls(api_market, *args, **kwargs)
+        return cls(get_client().get_market_by_id(id), *args, **kwargs)
 
     @classmethod
     def from_dict(cls, env: ModJSONDict) -> Market:
@@ -151,28 +139,29 @@ class Market(DictDeserializable):
             env_copy[name] = rules
         return super().from_dict(env_copy)
 
-    def _after_resolve(self, market: Market, outcome: AnyResolution, response: Response) -> None:
-        self.client.create_comment(self.market, self.explain_specific(), mode='markdown')
+    def _after_resolve(self, market: Market, account: Account, outcome: AnyResolution, response: Response) -> None:
+        try:
+            get_client(account).create_comment(self.market, self.explain_specific(account), mode='markdown')
+        except Exception:
+            self.logger.exception("Could not post a comment")
 
     def explain_abstract(self, **kwargs: Any) -> str:
         """Explain how the market will resolve and decide to resolve."""
         # set up potentially necessary information
-        if "max_" not in kwargs:
-            kwargs["max_"] = self.market.max
-        if "time_rules" not in kwargs:
-            kwargs["time_rules"] = self.do_resolve_rules
-        if "value_rules" not in kwargs:
-            kwargs["value_rules"] = self.resolve_to_rules
-
+        kwargs.update({
+            "max_": kwargs.get("max_", self.market.max),
+            "time_rules": kwargs.get("time_rules", self.do_resolve_rules),
+            "value_rules": kwargs.get("value_rules", self.resolve_to_rules),
+        })
         return explain_abstract(**kwargs)
 
-    def explain_specific(self, sig_figs: int = 4) -> str:
+    def explain_specific(self, account: Account, sig_figs: int = 4) -> str:
         """Explain why the market is resolving the way that it is."""
         shim = ""
         rule_: Rule[Any]
         for rule_ in self.do_resolve_rules:
-            shim += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
-        if not (self.market.isResolved or self.should_resolve()):
+            shim += rule_.explain_specific(market=self, account=account, indent=1, sig_figs=sig_figs)
+        if not (self.market.isResolved or self.should_resolve(account)):
             ret = (f"This market is not resolving, because none of the following are true:\n{shim}\nWere it to "
                    "resolve now, it would follow the decision tree below:\n")
         else:
@@ -180,24 +169,23 @@ class Market(DictDeserializable):
                    "decision tree below:\n")
         ret += "- If the human operator agrees:\n"
         for rule_ in self.resolve_to_rules:
-            ret += rule_.explain_specific(market=self, indent=1, sig_figs=sig_figs)
+            ret += rule_.explain_specific(market=self, account=account, indent=1, sig_figs=sig_figs)
         ret += "\nFinal Value: "
-        ret += self.__format_resolve_to(sig_figs)
+        ret += self.__format_resolve_to(sig_figs, account)
         return ret
 
-    def __format_resolve_to(self, sig_figs: int) -> str:
-        val = self.resolve_to()
+    def __format_resolve_to(self, sig_figs: int, account: Account) -> str:
+        val = self.resolve_to(account)
         if val == "CANCEL":
-            ret = "CANCEL"
+            pass
         elif isinstance(val, bool) or self.market.outcomeType == Outcome.BINARY:
             defaults: dict[AnyResolution, str] = {
                 True: "YES", 100: "YES", 100.0: "YES",
                 False: "NO"
             }
             if val in defaults:
-                ret = defaults[val]
-            else:
-                ret = round_sig_figs(cast(float, val), sig_figs) + "%"
+                return defaults[val]
+            return round_sig_figs(cast(float, val), sig_figs) + "%"
         elif self.market.outcomeType in Outcome.MC_LIKE():
             assert not isinstance(val, (float, str))
             ret = "{"
@@ -206,16 +194,15 @@ class Market(DictDeserializable):
                 ret += ", " * bool(idx)
                 ret += f"{key}: {round_sig_figs(weight * 100 / total, sig_figs)}%"
             ret += "}"
-        else:
-            ret = str(val)
-        return ret
+            return ret
+        return str(val)
 
-    def should_resolve(self) -> bool:
+    def should_resolve(self, account: Account) -> bool:
         """Return whether the market should resolve, according to our rules."""
-        futures = [parallel(rule.value, self) for rule in (self.do_resolve_rules or ())]
+        futures = [parallel(rule.value, self, account) for rule in (self.do_resolve_rules or ())]
         return any(future.result() for future in futures) and not self.market.isResolved
 
-    def resolve_to(self) -> AnyResolution:
+    def resolve_to(self, account: Account) -> AnyResolution:
         """Select a value to be resolved to.
 
         This is done by iterating through a series of Rules, each of which have
@@ -229,23 +216,26 @@ class Market(DictDeserializable):
         """
         assert self.market.outcomeType != "NUMERIC"
         chosen = None
-        futures = [parallel(rule.value, self, format=self.market.outcomeType) for rule in (self.resolve_to_rules or ())]
+        futures = [
+            parallel(rule.value, self, account, format=self.market.outcomeType)
+            for rule in (self.resolve_to_rules or ())
+        ]
         for f_rule in futures:
-            chosen = f_rule.result()
-            if chosen is not None:
-                break
-        if chosen is None:
-            raise RuntimeError()
+            if chosen is None:
+                chosen = f_rule.result()
+            else:
+                f_rule.cancel()
+        assert chosen is not None
         return chosen
 
-    def current_answer(self) -> AnyResolution:
+    def current_answer(self, account: Account) -> AnyResolution:
         """Return the current market consensus."""
         from .rule.manifold.this import CurrentValueRule
         assert self.market.outcomeType != "NUMERIC"
-        return CurrentValueRule().value(self, format=self.market.outcomeType)
+        return CurrentValueRule().value(self, account, format=self.market.outcomeType)
 
     @require_env(EnvironmentVariable.ManifoldAPIKey)
-    def resolve(self, override: Optional[AnyResolution] = None) -> Response:
+    def resolve(self, account: Account, override: Optional[AnyResolution] = None) -> Response:
         """Resolve this market according to our resolution rules.
 
         Returns
@@ -253,29 +243,30 @@ class Market(DictDeserializable):
         Response
             How Manifold interprets our request, and some JSON data on it
         """
-        _override: AnyResolution | tuple[float, float]
         if override is None:
-            _override = self.resolve_to()
-        else:
-            _override = override
-        if _override == "CANCEL":
-            return self.cancel()
+            override = self.resolve_to(account)
 
-        if self.market.outcomeType in Outcome.MC_LIKE():
-            if not isinstance(_override, Mapping):
+        if override != "CANCEL" and self.market.outcomeType in Outcome.MC_LIKE():
+            if not isinstance(override, Mapping):
                 raise TypeError()
-            _override = {int(id_): weight for id_, weight in _override.items()}
+            override = {int(id_): weight for id_, weight in override.items()}
 
-        self.event_emitter.emit('before_resolve', self, _override)
-        ret: Response = self.client.resolve_market(self.market, _override)
-        ret.raise_for_status()
-        self.logger.info("I was resolved")
-        self.market.isResolved = True
-        self.event_emitter.emit('after_resolve', self, _override, ret)
-        return ret
+        try:
+            self.logger.info("I am announcing that I will be resolved to %r", override)
+            self.event_emitter.emit('before_resolve', self, account, override)
+            self.logger.info("I am resolving to %r...", override)
+            ret: Response = get_client(account).resolve_market(self.market, override)
+            ret.raise_for_status()
+            self.logger.info("I was resolved to %r", override)
+            self.market.isResolved = True
+            self.event_emitter.emit('after_resolve', self, account, override, ret)
+            return ret
+        except Exception:
+            self.logger.exception("I encountered an error during resolution")
+            raise
 
     @require_env(EnvironmentVariable.ManifoldAPIKey)
-    def cancel(self) -> Response:
+    def cancel(self, account: Account) -> Response:
         """Cancel this market.
 
         Returns
@@ -283,11 +274,7 @@ class Market(DictDeserializable):
         Response
             How Manifold interprets our request, and some JSON data on it
         """
-        ret: Response = self.client.cancel_market(self.market)
-        ret.raise_for_status()
-        self.logger.info("I was cancelled")
-        self.market.isResolved = True
-        return ret
+        return self.resolve(account, "CANCEL")
 
     def on(self, *args, **kwargs):  # type: ignore
         """Register an event with EventEmitter."""

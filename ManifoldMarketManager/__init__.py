@@ -23,6 +23,7 @@ from attrs import define, field
 
 _sys_path.append(str(Path(__file__).parent.joinpath("PyManifold")))
 
+from .account import Account  # noqa: E402
 from .caching import parallel  # noqa: E402
 from .consts import AnyResolution, Outcome, T  # noqa: E402
 from .util import DictDeserializable  # noqa: E402
@@ -50,7 +51,8 @@ class Rule(ABC, Generic[T], DictDeserializable):
     @abstractmethod
     def _value(
         self,
-        market: Market
+        market: Market,
+        account: Account
     ) -> T:  # pragma: no cover
         ...
 
@@ -66,20 +68,21 @@ class Rule(ABC, Generic[T], DictDeserializable):
     def value(
         self,
         market: Market,
+        account: Account,
         format: Literal['NONE'] | OutcomeType = 'NONE',
         refresh: bool = False
     ) -> AnyResolution:
         """Return the resolution value of a market, appropriately formatted for its market type."""
-        ret = self._value(market)
+        ret = self._value(market, account)
         if (ret is None) or (ret == "CANCEL") or (format == 'NONE'):
             return cast(AnyResolution, ret)
         elif format in Outcome.BINARY_LIKE():
-            return self.__binary_value(market, ret)
+            return self.__binary_value(market, account, ret)
         elif format in Outcome.MC_LIKE():
-            return self.__multiple_choice_value(market, ret)
+            return self.__multiple_choice_value(market, account, ret)
         raise ValueError()
 
-    def __binary_value(self, market: Market, ret: Any) -> float:
+    def __binary_value(self, market: Market, account: Account, ret: Any) -> float:
         if not isinstance(ret, str) and isinstance(ret, Sequence):
             (ret, ) = ret
         elif isinstance(ret, Mapping) and len(ret) == 1:
@@ -92,7 +95,7 @@ class Rule(ABC, Generic[T], DictDeserializable):
 
         raise TypeError(ret, format, market)
 
-    def __multiple_choice_value(self, market: Market, ret: Any) -> Mapping[int, float]:
+    def __multiple_choice_value(self, market: Market, account: Account, ret: Any) -> Mapping[int, float]:
         if isinstance(ret, Mapping):
             ret = {int(val): share for val, share in ret.items()}
         elif isinstance(ret, (int, str)):
@@ -113,12 +116,12 @@ class Rule(ABC, Generic[T], DictDeserializable):
         """Explain how the market will resolve and decide to resolve."""
         return self._explain_abstract(indent, **kwargs)
 
-    def explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
+    def explain_specific(self, market: Market, account: Account, indent: int = 0, sig_figs: int = 4) -> str:
         """Explain why the market is resolving the way that it is."""
-        return self._explain_specific(market, indent, sig_figs)
+        return self._explain_specific(market, account, indent, sig_figs)
 
-    def _explain_specific(self, market: Market, indent: int = 0, sig_figs: int = 4) -> str:
-        f_val = parallel(self._value, market)
+    def _explain_specific(self, market: Market, account: Account, indent: int = 0, sig_figs: int = 4) -> str:
+        f_val = parallel(self._value, market, account)
         warn("Using a default specific explanation. This probably isn't what you want!")
         ret = self.explain_abstract(indent=indent).rstrip('\n')
         ret += " (-> "
@@ -156,7 +159,7 @@ register_converter("Rule", loads)
 register_adapter(market.Market, dumps)
 register_converter("Market", loads)
 
-VERSION = "0.8.0.1"
+VERSION = "0.8.0.19"
 __version_info__ = tuple(int(x) for x in VERSION.split('.'))
 __all__ = [
     "__version_info__", "VERSION", "DoResolveRule", "ResolutionValueRule", "Rule", "Market", "get_client", "rule",
